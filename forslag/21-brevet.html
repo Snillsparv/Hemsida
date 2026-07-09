@@ -732,7 +732,8 @@ form{margin-top:1.2em}
     }).catch(function(){});
   }
   if(glob){
-    if('IntersectionObserver' in window){
+    if(stilla)startaGlob();
+    else if('IntersectionObserver' in window){
       var gio=new IntersectionObserver(function(es){
         if(es.some(function(e){return e.isIntersecting;})){gio.disconnect();startaGlob();}
       },{rootMargin:'500px'});
