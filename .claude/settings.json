@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "defaultMode": "acceptEdits",
+    "allow": [
+      "Workflow",
+      "Agent",
+      "Artifact",
+      "WebFetch",
+      "WebSearch",
+      "Read",
+      "Edit",
+      "Write",
+      "Glob",
+      "Grep",
+      "Bash(git *)",
+      "Bash(node *)",
+      "Bash(npm *)",
+      "Bash(npx *)",
+      "Bash(http-server *)",
+      "Bash(NODE_PATH=*)",
+      "Bash(ls *)",
+      "Bash(mkdir *)",
+      "Bash(cp *)",
+      "Bash(mv *)",
+      "Bash(find *)",
+      "Bash(du *)",
+      "Bash(wc *)",
+      "Bash(cat *)",
+      "Bash(python3 *)",
+      "Bash(curl *)"
+    ]
+  },
+  "skipWorkflowUsageWarning": true
+}
