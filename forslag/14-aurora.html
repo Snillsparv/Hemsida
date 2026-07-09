@@ -400,6 +400,8 @@
     font-family:var(--mono);font-size:.78rem;line-height:74px;white-space:nowrap;color:rgba(163,230,255,.5);
     background:linear-gradient(160deg,rgba(34,211,238,.09),rgba(124,58,237,.08));
     border-radius:calc(var(--r-lg) - 1px) calc(var(--r-lg) - 1px) 0 0;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 90%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 8%,#000 90%,transparent);
   }
   .book .hand-strip{
     flex:none;height:74px;overflow:hidden;position:relative;border-bottom:1px solid rgba(255,255,255,.08);
@@ -407,6 +409,8 @@
     font-family:'Caveat',cursive;font-size:1.5rem;color:rgba(240,171,252,.75);
     background:linear-gradient(160deg,rgba(168,85,247,.12),rgba(244,114,182,.08));
     border-radius:calc(var(--r-lg) - 1px) calc(var(--r-lg) - 1px) 0 0;
+    -webkit-mask-image:linear-gradient(90deg,#000 82%,transparent 98%);
+    mask-image:linear-gradient(90deg,#000 82%,transparent 98%);
   }
   .book .pi-tape span{display:inline-block;padding-left:1rem;animation:tape 40s linear infinite}
   @keyframes tape{to{transform:translateX(-50%)}}
