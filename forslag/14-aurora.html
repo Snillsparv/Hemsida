@@ -241,6 +241,7 @@
     font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;color:var(--dim);
     border-top:1px solid rgba(255,255,255,.1);padding-top:.85rem;
   }
+  .hero-strip span{white-space:nowrap}
   .hero-strip b{display:block;font-weight:500;color:var(--cyan);margin-top:.15rem}
   .chip{
     position:absolute;z-index:4;font-size:.8rem;font-weight:500;color:#fff;
@@ -500,17 +501,20 @@
     .kurs-fig{order:-1;margin-top:1.4rem}
     .kurs-fig img{width:min(200px,52%)}
     .stats{grid-template-columns:repeat(2,1fr)}
+    .scroll-hint{display:none}
   }
   @media(max-width:640px){
     body{font-size:15.5px}
     .m7,.m5,.m4{grid-column:span 12}
     .tvgrid,.bgrid{grid-template-columns:1fr}
-    .chip-a{left:-.6rem}
-    .chip-b{right:-.6rem}
+    .chip-a{left:-.6rem;top:41%}
+    .chip-b{right:-.6rem;top:58%}
+    .hero-eyebrow b{display:none}
+    .hero-eyebrow{margin-bottom:1.3rem}
+    .hero-strip{font-size:.58rem;letter-spacing:.05em;left:1.1rem;right:1.1rem}
     .card-media,.m7 .card-media{height:200px}
     .hero-ctas .btn{padding:.8rem 1.25rem;font-size:.9rem}
     #hero{padding-top:6.4rem}
-    .scroll-hint{display:none}
   }
 
   /* ============ REDUCED MOTION ============ */

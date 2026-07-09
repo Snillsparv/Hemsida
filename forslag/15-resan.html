@@ -960,7 +960,11 @@ footer{border-top:1px solid var(--line);margin-top:clamp(4rem,9vh,6rem)}
       if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
     });
   }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
-  $$('.rv, .rvm').forEach(function (n) { io.observe(n); });
+  $$('.rv, .rvm').forEach(function (n) {
+    /* det som redan syns vid start ska inte vänta på scroll */
+    if (n.getBoundingClientRect().top < window.innerHeight * 0.97) n.classList.add('in');
+    else io.observe(n);
+  });
 
   /* ---------- stora årtal som räknas in ---------- */
   function fmt(n, space) {
