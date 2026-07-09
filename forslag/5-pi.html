@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jonas von Essen – Tvåfaldig världsmästare i minne</title>
+<meta name="description" content="Jonas von Essen – tvåfaldig världsmästare i minne, föreläsare och författare. 100 000 decimaler av π, gratis läroappar och föreläsningar som ingen glömmer.">
+<meta property="og:title" content="Jonas von Essen – Tvåfaldig världsmästare i minne">
+<meta property="og:description" content="100 000 decimaler av π. Alla världens länder. Och ditt namn, om vi har setts. Föreläsningar, böcker och gratis läroappar.">
+<meta property="og:image" content="assets/img/jonas_vm-md.webp">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23060608'/%3E%3Ctext x='32' y='46' font-family='Georgia,serif' font-style='italic' font-size='40' fill='%23ff9e3d' text-anchor='middle'%3E%CF%80%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/fonts.css">
+<script>document.documentElement.classList.add('js');</script>
+<style>
+/* ============ π-KATEDRALEN ============ */
+:root{
+  --bg:#060608;
+  --bg2:#0c0c12;
+  --panel:#0b0b10;
+  --ink:#ece9e2;
+  --muted:#a8a396;
+  --dim:#6b6a75;
+  --amber:#ff9e3d;
+  --amber-soft:rgba(255,158,61,.35);
+  --gold-line:rgba(255,190,120,.20);
+  --gold-line-soft:rgba(255,190,120,.10);
+  --digit:#3a3a44;
+  --serif:'Fraunces',Georgia,'Times New Roman',serif;
+  --sans:'Space Grotesk',system-ui,-apple-system,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,'Cascadia Mono',Consolas,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+html.lock{overflow:hidden}
+body{
+  background:
+    radial-gradient(1200px 700px at 78% -6%, rgba(255,158,61,.045), transparent 60%),
+    linear-gradient(180deg,var(--bg) 0%,var(--bg2) 55%,var(--bg) 100%);
+  background-color:var(--bg);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:1.0625rem;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+::selection{background:var(--amber);color:#160c02}
+a{color:var(--ink)}
+img{max-width:100%;height:auto}
+:focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:3px}
+.skip-link{position:absolute;left:-999px;top:8px;z-index:300;background:var(--amber);color:#160c02;padding:.6rem 1rem;font-family:var(--mono);font-size:.85rem;border-radius:4px}
+.skip-link:focus{left:8px}
+.wrap{max-width:1160px;margin:0 auto;padding:0 clamp(1.25rem,4vw,2.5rem)}
+section{scroll-margin-top:84px}
+em{font-style:italic}
+
+/* ---------- Loader ---------- */
+#loader{
+  position:fixed;inset:0;z-index:200;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .55s ease;cursor:pointer;
+}
+#loader.fade{opacity:0;pointer-events:none}
+.l-inner{text-align:center;font-family:var(--mono);padding:1rem}
+.l-pi{
+  font-family:var(--serif);font-style:italic;font-weight:600;
+  font-size:clamp(3.4rem,9vh,5.2rem);line-height:1;color:#1b1a22;
+  -webkit-text-stroke:1px rgba(255,190,120,.35);
+  text-shadow:0 0 60px rgba(255,158,61,.14);
+  margin-bottom:1.2rem;
+}
+.l-count{font-size:clamp(1.9rem,5.5vw,3rem);font-weight:700;color:var(--ink);letter-spacing:.04em;font-variant-numeric:tabular-nums}
+.l-count .cur{display:inline-block;width:.55em;color:var(--amber);animation:blink .7s steps(1) infinite;font-weight:400}
+@keyframes blink{50%{opacity:0}}
+.l-label{margin-top:.35rem;font-size:.78rem;letter-spacing:.32em;text-transform:uppercase;color:var(--dim)}
+.l-line{margin-top:1.6rem;font-size:.82rem;color:var(--muted);min-height:1.4em}
+.l-line .ok{color:var(--amber)}
+.l-skip{margin-top:1.9rem;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:#4c4b55}
+@media (prefers-reduced-motion:reduce){.l-count .cur{animation:none}}
+
+/* ---------- Nav ---------- */
+.topnav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(6,6,8,.78);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--gold-line-soft);
+}
+.topnav .bar{max-width:1160px;margin:0 auto;padding:.75rem clamp(1rem,4vw,2.5rem);display:flex;align-items:center;gap:1.5rem}
+.brand{font-family:var(--serif);font-style:italic;font-weight:600;font-size:1.06rem;color:var(--ink);text-decoration:none;white-space:nowrap}
+.brand .pi-mark{color:var(--amber);font-style:normal;margin-right:.4rem}
+.navlinks{display:flex;gap:1.4rem;margin-left:auto;overflow-x:auto;scrollbar-width:none;
+  -webkit-mask-image:linear-gradient(90deg,#000 92%,transparent);mask-image:linear-gradient(90deg,#000 92%,transparent)}
+@media (min-width:900px){.navlinks{-webkit-mask-image:none;mask-image:none}}
+.navlinks::-webkit-scrollbar{display:none}
+.navlinks a{
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted);text-decoration:none;padding:.35rem 0;white-space:nowrap;
+  border-bottom:1px solid transparent;transition:color .25s,border-color .25s;
+}
+.navlinks a:hover{color:var(--ink)}
+.navlinks a[aria-current="true"]{color:var(--amber);border-bottom-color:var(--amber-soft)}
+@media (max-width:640px){.topnav .bar{gap:1rem}.navlinks{gap:1rem}.navlinks a{font-size:.66rem;letter-spacing:.12em}}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden;isolation:isolate}
+.hero-pi{
+  position:absolute;z-index:1;right:max(2vw,calc(50vw - 620px));top:50%;
+  transform:translateY(-54%);
+  font-family:var(--serif);font-style:italic;font-weight:600;line-height:.9;
+  font-size:min(78vh,58vw);
+  color:#131219;
+  -webkit-text-stroke:1px rgba(255,190,120,.16);
+  text-shadow:0 0 120px rgba(255,158,61,.10);
+  user-select:none;pointer-events:none;
+  transition:transform .3s ease-out;
+}
+.hero-jonas{
+  position:absolute;z-index:2;right:clamp(1rem,7vw,9rem);bottom:0;
+  height:min(58vh,520px);width:auto;
+  filter:drop-shadow(0 0 60px rgba(255,158,61,.10)) drop-shadow(0 12px 30px rgba(0,0,0,.6));
+  pointer-events:none;
+}
+#rain{position:absolute;inset:0;z-index:3;pointer-events:none}
+.hero-content{position:relative;z-index:4;max-width:660px;padding:7.5rem 0 6rem}
+.eyebrow{
+  font-family:var(--mono);font-size:.78rem;letter-spacing:.34em;text-transform:uppercase;
+  color:var(--amber);margin-bottom:1.4rem;
+}
+.eyebrow::before{content:"";display:inline-block;width:2.2rem;height:1px;background:var(--gold-line);vertical-align:middle;margin-right:.9rem}
+.hero h1{
+  font-family:var(--serif);font-weight:600;
+  font-size:clamp(2.3rem,5.2vw,4.1rem);line-height:1.08;letter-spacing:-.01em;
+  text-wrap:balance;
+}
+.hero h1 em{font-style:italic;color:var(--amber)}
+.tagline{font-family:var(--mono);font-size:.82rem;letter-spacing:.14em;color:var(--muted);margin-top:1.5rem;text-transform:uppercase}
+.tagline b{color:var(--ink);font-weight:500}
+.ingress{color:var(--muted);max-width:33rem;margin-top:1.1rem;font-size:1.1rem}
+.cta-row{display:flex;gap:1rem;flex-wrap:wrap;margin-top:2.2rem}
+.btn{
+  display:inline-block;text-decoration:none;font-family:var(--sans);font-weight:700;
+  font-size:.98rem;padding:.85rem 1.7rem;border-radius:4px;letter-spacing:.01em;
+  transition:transform .2s,box-shadow .25s,border-color .25s,background .25s;
+}
+.btn-primary{background:var(--amber);color:#160c02;box-shadow:0 0 0 rgba(255,158,61,0)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 34px rgba(255,158,61,.35)}
+.btn-ghost{border:1px solid var(--gold-line);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--amber);transform:translateY(-2px)}
+.scroll-cue{
+  position:absolute;left:50%;bottom:1.2rem;transform:translateX(-50%);z-index:4;
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.3em;color:var(--dim);
+  text-transform:uppercase;text-align:center;pointer-events:none;
+}
+.scroll-cue::after{content:"↓";display:block;margin-top:.3rem;color:var(--amber-soft);animation:cue 2.2s ease-in-out infinite}
+@keyframes cue{50%{transform:translateY(6px)}}
+@media (prefers-reduced-motion:reduce){.scroll-cue::after{animation:none}}
+@media (max-width:900px){
+  .hero-jonas{display:none}
+  .hero-pi{right:-14vw;font-size:100vw;opacity:.85}
+}
+@media (max-width:640px){.hero-content{padding-top:6.5rem}}
+
+/* ---------- Sifferbrytare (divider) ---------- */
+.pi-divider{
+  display:flex;align-items:center;gap:1.2rem;
+  max-width:1160px;margin:0 auto;padding:clamp(2.2rem,5vw,3.6rem) clamp(1.25rem,4vw,2.5rem);
+}
+.pi-divider::before,.pi-divider::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold-line))}
+.pi-divider::after{background:linear-gradient(90deg,var(--gold-line),transparent)}
+.pi-divider span{
+  font-family:var(--mono);font-size:.88rem;letter-spacing:.42em;color:var(--digit);
+  white-space:nowrap;overflow:hidden;max-width:62%;
+}
+.pi-divider span b{color:var(--amber);font-weight:500}
+
+/* ---------- Sektionsrubriker ---------- */
+.kicker{font-family:var(--mono);font-size:.74rem;letter-spacing:.34em;text-transform:uppercase;color:var(--amber);margin-bottom:1rem}
+.kicker::before{content:"";display:inline-block;width:1.8rem;height:1px;background:var(--gold-line);vertical-align:middle;margin-right:.8rem}
+h2{font-family:var(--serif);font-weight:600;font-size:clamp(1.9rem,3.6vw,2.9rem);line-height:1.12;letter-spacing:-.01em;text-wrap:balance}
+h2 em{color:var(--amber)}
+.sect{padding:clamp(1.5rem,3vw,2.5rem) 0}
+
+/* ---------- Om mig ---------- */
+.om-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(2rem,5vw,4.5rem);align-items:center}
+.om-figure{position:relative;margin:0}
+.om-figure img{
+  display:block;width:100%;
+  -webkit-mask-image:radial-gradient(92% 92% at 50% 44%,#000 42%,transparent 73%);
+  mask-image:radial-gradient(92% 92% at 50% 44%,#000 42%,transparent 73%);
+  filter:brightness(.94) saturate(.92) contrast(1.03);
+}
+.om-figure figcaption{
+  font-family:var(--mono);font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);
+  text-align:center;margin-top:.1rem;
+}
+.om-text .lead{font-family:var(--serif);font-style:italic;font-size:1.35rem;line-height:1.45;color:var(--ink);margin:1.4rem 0 1rem}
+.om-text p{color:var(--muted);margin-bottom:1rem}
+.chips{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.6rem;padding:0;list-style:none}
+.chips li{
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+  border:1px solid var(--gold-line);color:var(--muted);padding:.42rem .85rem;border-radius:999px;
+}
+.chips li b{color:var(--amber);font-weight:500}
+@media (max-width:860px){
+  .om-grid{grid-template-columns:1fr}
+  .om-figure{max-width:420px;margin:0 auto}
+}
+
+/* ---------- Meriter ---------- */
+.merit-grid{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,7fr);gap:clamp(2rem,5vw,4.5rem);align-items:start}
+.merit-side{position:sticky;top:96px}
+.merit-figure{position:relative;margin:0}
+.merit-figure img{
+  display:block;width:100%;
+  -webkit-mask-image:radial-gradient(120% 110% at 50% 45%,#000 50%,transparent 78%);
+  mask-image:radial-gradient(120% 110% at 50% 45%,#000 50%,transparent 78%);
+  filter:brightness(1.02) contrast(1.02);
+}
+.merit-figure figcaption{font-family:var(--mono);font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);text-align:center;margin-top:.2rem}
+.merit-quote{
+  font-family:var(--serif);font-style:italic;font-size:1.18rem;line-height:1.5;color:var(--muted);
+  border-left:1px solid var(--gold-line);padding-left:1.2rem;margin-top:1.8rem;
+}
+.merit-quote b{color:var(--amber);font-weight:600}
+.chapters{list-style:none;margin-top:.6rem}
+.chapter{
+  display:grid;grid-template-columns:4.4rem minmax(0,1fr);gap:1.2rem;
+  padding:1.35rem 0;border-top:1px solid var(--gold-line-soft);
+}
+.chapter:last-child{border-bottom:1px solid var(--gold-line-soft)}
+.roman{
+  font-family:var(--serif);font-style:italic;font-weight:600;font-size:1.7rem;line-height:1.2;
+  color:var(--amber);text-align:right;opacity:.9;
+}
+.chapter h3{font-family:var(--serif);font-weight:600;font-size:1.22rem;line-height:1.3;letter-spacing:.005em}
+.chapter .yr{font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;color:var(--amber);white-space:nowrap;margin-left:.55rem;vertical-align:.14em}
+.chapter p{color:var(--muted);font-size:.98rem;margin-top:.35rem}
+.tv-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin-top:2.4rem}
+.tv-card{
+  display:block;text-decoration:none;border:1px solid var(--gold-line-soft);border-radius:6px;
+  padding:1.1rem 1.2rem;background:rgba(255,255,255,.012);
+  transition:border-color .25s,transform .2s;
+}
+.tv-card:hover{border-color:var(--amber);transform:translateY(-2px)}
+.tv-card .tv-k{font-family:var(--mono);font-size:.64rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim)}
+.tv-card .tv-t{font-family:var(--serif);font-weight:600;font-size:1.02rem;line-height:1.35;margin:.45rem 0 .55rem}
+.tv-card .tv-l{font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;color:var(--amber)}
+@media (max-width:900px){
+  .merit-grid{grid-template-columns:1fr}
+  .merit-side{position:static;max-width:420px;margin:0 auto}
+  .tv-row{grid-template-columns:1fr}
+}
+
+/* ---------- HITTA DIG SJÄLV I π ---------- */
+.pi-sektion{position:relative;text-align:center;padding:clamp(3rem,7vw,5.5rem) 0}
+.pi-sektion .halo{
+  position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(620px 380px at 50% 34%,rgba(255,158,61,.06),transparent 70%);
+}
+.pi-sektion .kicker::before{display:none}
+.pi-sektion h2{font-size:clamp(2.2rem,4.6vw,3.6rem)}
+.pi-sektion h2 .pi-char{font-style:italic;color:var(--amber);text-shadow:0 0 40px rgba(255,158,61,.35)}
+.pi-intro{color:var(--muted);max-width:36rem;margin:1.2rem auto 0}
+.pi-form{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;margin-top:2.2rem}
+.pi-input{
+  font-family:var(--mono);font-size:clamp(1.4rem,3.4vw,1.9rem);letter-spacing:.42em;text-indent:.42em;
+  width:min(15ch,72vw);text-align:center;
+  background:rgba(255,255,255,.02);border:1px solid var(--gold-line);border-radius:6px;
+  color:var(--ink);padding:.7rem .4rem;caret-color:var(--amber);
+  transition:border-color .25s,box-shadow .25s;
+}
+.pi-input:focus{outline:none;border-color:var(--amber);box-shadow:0 0 30px rgba(255,158,61,.15)}
+.pi-input::placeholder{color:#43424c}
+.pi-btn{
+  font-family:var(--sans);font-weight:700;font-size:1rem;cursor:pointer;
+  background:var(--amber);color:#160c02;border:0;border-radius:6px;padding:.7rem 1.6rem;
+  transition:transform .2s,box-shadow .25s;
+}
+.pi-btn:hover{transform:translateY(-2px);box-shadow:0 6px 30px rgba(255,158,61,.35)}
+.pi-hint{font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin-top:.9rem}
+#piResult{min-height:2rem;margin-top:2.6rem}
+.pi-out{opacity:0;transform:translateY(14px)}
+.js .pi-out.show{opacity:1;transform:none;transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+@media (prefers-reduced-motion:reduce){.js .pi-out{opacity:1;transform:none;transition:none}}
+.pi-verdict{font-family:var(--serif);font-weight:600;font-size:clamp(1.4rem,3vw,2rem);line-height:1.3;text-wrap:balance;max-width:38rem;margin:0 auto}
+.pi-verdict .pos{color:var(--amber);font-variant-numeric:tabular-nums}
+.pi-verdict em{font-style:italic}
+.pi-strip-wrap{margin-top:1.8rem}
+.pi-strip{
+  font-family:var(--mono);font-size:clamp(1.05rem,2.6vw,1.55rem);letter-spacing:.18em;
+  white-space:nowrap;display:flex;justify-content:center;overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent);
+  padding:.5rem 0;
+}
+.pi-strip .ctx{color:#5c5b66}
+.pi-strip .hit{
+  color:var(--amber);font-weight:700;
+  text-shadow:0 0 16px rgba(255,158,61,.65),0 0 44px rgba(255,158,61,.3);
+}
+.js .pi-strip .hit{animation:hitGlow 2.6s ease-in-out infinite}
+@keyframes hitGlow{50%{text-shadow:0 0 26px rgba(255,158,61,.95),0 0 70px rgba(255,158,61,.45)}}
+@media (prefers-reduced-motion:reduce){.js .pi-strip .hit{animation:none}}
+.pi-ruler{font-family:var(--mono);font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;color:var(--dim);margin-top:.5rem}
+.pi-ruler b{color:var(--muted);font-weight:500}
+.pi-extra{font-size:.95rem;color:var(--muted);margin-top:1.3rem;max-width:34rem;margin-left:auto;margin-right:auto}
+.pi-note{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;color:var(--dim);margin-top:3rem}
+.pi-note::before{content:"— ";color:var(--amber-soft)}
+
+/* ---------- Projekt ---------- */
+.proj-intro{color:var(--muted);max-width:34rem;margin-top:1.2rem}
+.proj-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.4rem;margin-top:2.6rem}
+.proj-card{
+  display:flex;flex-direction:column;border:1px solid var(--gold-line-soft);border-radius:8px;
+  background:linear-gradient(180deg,rgba(255,255,255,.018),rgba(255,255,255,0));
+  overflow:hidden;text-decoration:none;
+  transition:border-color .3s,transform .25s,box-shadow .3s;
+}
+.proj-card:hover{border-color:var(--amber-soft);transform:translateY(-4px);box-shadow:0 18px 50px rgba(0,0,0,.5)}
+.proj-media{aspect-ratio:1;position:relative;background:radial-gradient(90% 90% at 50% 45%,#101018,#08080c);border-bottom:1px solid var(--gold-line-soft)}
+.proj-media img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.85) saturate(.92)}
+.proj-media img.contain{object-fit:contain;padding:1.4rem;filter:drop-shadow(0 10px 24px rgba(0,0,0,.55))}
+.proj-media #glob{position:absolute;inset:0;width:100%;height:100%}
+.proj-body{padding:1.3rem 1.4rem 1.5rem;display:flex;flex-direction:column;flex:1}
+.proj-body h3{font-family:var(--mono);font-weight:500;font-size:.95rem;letter-spacing:.08em;color:var(--amber)}
+.proj-body p{color:var(--muted);font-size:.95rem;margin-top:.6rem;flex:1}
+.proj-go{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink);margin-top:1.1rem}
+.proj-go::after{content:" ↗";color:var(--amber)}
+.glob-tip{position:absolute;left:50%;bottom:.7rem;transform:translateX(-50%);font-family:var(--mono);font-size:.62rem;letter-spacing:.24em;text-transform:uppercase;color:var(--dim);pointer-events:none;white-space:nowrap}
+@media (max-width:960px){.proj-grid{grid-template-columns:1fr;max-width:460px;margin-left:auto;margin-right:auto}}
+
+/* ---------- Kurs ---------- */
+.kurs-box{
+  position:relative;border:1px solid var(--gold-line);border-radius:10px;overflow:hidden;
+  padding:clamp(2.5rem,6vw,4.5rem) clamp(1.5rem,5vw,4rem);
+  text-align:center;
+  background:
+    radial-gradient(700px 320px at 50% 0%,rgba(255,158,61,.09),transparent 70%),
+    linear-gradient(180deg,#0b0b11,#08080c);
+}
+.kurs-box h2{font-style:italic;font-size:clamp(2.1rem,4.4vw,3.3rem)}
+.kurs-box .kicker{justify-content:center}
+.kurs-box .kicker::before{display:none}
+.kurs-box p{color:var(--muted);max-width:32rem;margin:1.2rem auto 0}
+.kurs-box .btn{margin-top:2rem;font-size:1.05rem;padding:1rem 2.4rem}
+.kurs-jonas{position:absolute;right:clamp(-2rem,1vw,2.5rem);bottom:0;height:78%;max-height:340px;width:auto;filter:drop-shadow(0 10px 30px rgba(0,0,0,.6));pointer-events:none}
+@media (max-width:900px){.kurs-jonas{display:none}}
+
+/* ---------- Kontakt ---------- */
+.kontakt-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(2.5rem,6vw,5rem);align-items:start;margin-top:2.4rem}
+.kontakt-pitch p{color:var(--muted);margin-top:1rem}
+.kontakt-pitch .lead{font-family:var(--serif);font-style:italic;font-size:1.3rem;line-height:1.5;color:var(--ink)}
+.social{list-style:none;display:flex;flex-wrap:wrap;gap:1rem;margin-top:1.8rem}
+.social a{
+  display:flex;align-items:center;gap:.55rem;text-decoration:none;
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
+  border:1px solid var(--gold-line-soft);border-radius:999px;padding:.5rem 1rem;
+  transition:border-color .25s,color .25s;
+}
+.social a:hover{border-color:var(--amber);color:var(--ink)}
+.social svg{width:15px;height:15px;fill:var(--amber)}
+.kform{position:relative}
+.kform label{display:block;font-family:var(--mono);font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;color:var(--dim);margin:1.2rem 0 .4rem}
+.kform input,.kform textarea{
+  width:100%;background:rgba(255,255,255,.02);border:1px solid var(--gold-line-soft);border-radius:6px;
+  color:var(--ink);font-family:var(--sans);font-size:1rem;padding:.75rem .9rem;
+  transition:border-color .25s,box-shadow .25s;
+}
+.kform input:focus,.kform textarea:focus{outline:none;border-color:var(--amber);box-shadow:0 0 24px rgba(255,158,61,.12)}
+.kform textarea{min-height:130px;resize:vertical}
+.kform .btn{border:0;cursor:pointer;margin-top:1.4rem}
+.kform-done{
+  display:none;border:1px solid var(--gold-line);border-radius:8px;padding:2rem;text-align:center;
+  font-family:var(--serif);font-style:italic;font-size:1.25rem;line-height:1.5;
+}
+.kform-done b{color:var(--amber)}
+.kform.sent form{display:none}
+.kform.sent .kform-done{display:block}
+.kontakt-ner{height:140px;width:auto;display:block;margin:0 2rem -.5rem auto;filter:drop-shadow(0 6px 18px rgba(0,0,0,.5))}
+@media (max-width:860px){.kontakt-grid{grid-template-columns:1fr}}
+
+/* ---------- Footer ---------- */
+footer{border-top:1px solid var(--gold-line-soft);margin-top:clamp(3rem,7vw,5rem)}
+.foot{max-width:1160px;margin:0 auto;padding:2.2rem clamp(1.25rem,4vw,2.5rem) 2.8rem;display:flex;flex-wrap:wrap;gap:1.4rem;align-items:center;justify-content:space-between}
+.foot p, .foot a{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;color:var(--dim)}
+.foot a{text-decoration:none;transition:color .25s}
+.foot a:hover{color:var(--amber)}
+.foot .flinks{display:flex;gap:1.2rem;flex-wrap:wrap}
+.foot .credit{width:100%;text-align:center;color:#4c4b55;letter-spacing:.2em}
+
+/* ---------- Reveal (laddningskaskad – robust utan scroll) ---------- */
+.js .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+.js .reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .js .reveal{opacity:1;transform:none;transition:none}
+  .btn,.tv-card,.proj-card,.pi-btn{transition:none}
+}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Hoppa till innehållet</a>
+
+<!-- ===== LADDSKÄRM ===== -->
+<div id="loader" hidden aria-hidden="true">
+  <div class="l-inner">
+    <div class="l-pi">π</div>
+    <div class="l-count"><span id="lnum">0</span><span class="cur">▊</span></div>
+    <div class="l-label">decimaler i minne</div>
+    <div class="l-line" id="lline">&nbsp;</div>
+    <div class="l-skip">klicka för att hoppa över</div>
+  </div>
+</div>
+
+<header class="topnav">
+  <div class="bar">
+    <a class="brand" href="#top"><span class="pi-mark">π</span>Jonas von Essen</a>
+    <nav class="navlinks" aria-label="Sektioner">
+      <a href="#om">Om</a>
+      <a href="#meriter">Meriter</a>
+      <a href="#pi">Hitta dig i <span style="text-transform:none">π</span></a>
+      <a href="#projekt">Appar</a>
+      <a href="#kurs">Kurs</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="top" aria-label="Introduktion">
+  <div class="hero-pi" id="heroPi" aria-hidden="true">π</div>
+  <img class="hero-jonas" src="../assets/img/hej.webp" alt="" loading="lazy" decoding="async">
+  <canvas id="rain" aria-hidden="true"></canvas>
+  <div class="wrap" style="width:100%">
+    <div class="hero-content">
+      <p class="eyebrow">Jonas von Essen · Göteborg</p>
+      <h1>100 000 decimaler av π. Alla världens länder. <em>Och ditt namn, om vi har setts.</em></h1>
+      <p class="tagline"><b>Tvåfaldig världsmästare i minne</b> · Föreläsare · Frågesportsnörd</p>
+      <p class="ingress">Jag tävlar i att minnas saker – och i att säga dem snyggt. Däremellan bygger jag gratis appar som gör det lättare att lära sig.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#projekt">Se vad jag byggt</a>
+        <a class="btn btn-ghost" href="#kontakt">Boka föreläsning</a>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-cue" aria-hidden="true">3.14159&hellip;</div>
+</section>
+
+<div class="pi-divider" aria-hidden="true"><span><b>3.</b>1415926535&thinsp;8979323846&thinsp;2643383279&thinsp;5028841971</span></div>
+
+<!-- ===== OM MIG ===== -->
+<section id="om" class="sect">
+  <div class="wrap om-grid">
+    <figure class="om-figure reveal">
+      <img src="../assets/img/foto-siffervagg-md.webp" alt="Jonas von Essen ler framför en vägg täckt av handskrivna pi-decimaler" loading="lazy" decoding="async">
+      <figcaption>Foto: Jessica Ahrling</figcaption>
+    </figure>
+    <div class="om-text reveal" style="--d:.1s">
+      <p class="kicker">01 · Om mig</p>
+      <h2>Hjärnan klarar mer <em>än man tror.</em></h2>
+      <p class="lead">Jag heter Jonas von Essen och 2013 blev jag – som förste svensk någonsin – världsmästare i minne. 2014 försvarade jag titeln.</p>
+      <p>Sedan dess har jag gjort det till mitt jobb att visa vad hjärnan klarar: i TV-studior, föreläsningssalar, böcker och appar. Jag har memorerat 100&nbsp;000 decimaler av pi, lärt mig hela Talang-publikens namn och vunnit en miljon på Postkodmiljonären.</p>
+      <p>När jag inte tävlar i att minnas saker tävlar jag i att formulera dem – som färsk svensk mästare i poetry slam och Göteborgsmästare i ordvitsar.</p>
+      <ul class="chips">
+        <li>Göteborg</li>
+        <li>Föreläsare &amp; författare</li>
+        <li><b>3</b> gratis läroappar</li>
+        <li><b>2×</b> VM-guld</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="pi-divider" aria-hidden="true"><span>6939937510&thinsp;5820974944&thinsp;5923078164&thinsp;0628620899</span></div>
+
+<!-- ===== MERITER ===== -->
+<section id="meriter" class="sect">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="kicker">02 · Meriter</p>
+      <h2>Tio kapitel ur ett <em>ovanligt</em> minne</h2>
+    </div>
+    <div class="merit-grid" style="margin-top:2.6rem">
+      <div class="merit-side reveal">
+        <figure class="merit-figure">
+          <img src="../assets/img/foto-fokus-md.webp" alt="Jonas i djup koncentration vid ett bord i ett mörkt rum, fingrarna mot tinningarna" loading="lazy" decoding="async">
+          <figcaption>Ur Memory Games</figcaption>
+        </figure>
+        <p class="merit-quote">Ett minnespalats är bara ett hus man aldrig städar. <b>Mitt har 100&nbsp;000 rum.</b></p>
+      </div>
+      <div>
+        <ol class="chapters">
+          <li class="chapter reveal">
+            <span class="roman" aria-hidden="true">I</span>
+            <div>
+              <h3>2× Världsmästare i minne <span class="yr">2013 · 2014</span></h3>
+              <p>London 2013 och Haikou, Kina 2014. Sveriges förste världsmästare i minne.</p>
+            </div>
+          </li>
+          <li class="chapter reveal">
+            <span class="roman" aria-hidden="true">II</span>
+            <div>
+              <h3>100&nbsp;000 π-decimaler <span class="yr">2020</span></h3>
+              <p>Först i världen att klara ett verifierat test på alla 100&nbsp;000. Europarekord i uppläsning: 24&nbsp;063 decimaler i rad.</p>
+            </div>
+          </li>
+          <li class="chapter reveal">
+            <span class="roman" aria-hidden="true">III</span>
+            <div>
+              <h3>Talang, TV4 <span class="yr">2018</span></h3>
+              <p>Golden buzzer av David Batra efter att ha lärt sig hela publikens namn. Finalist.</p>
+            </div>
+          </li>
+          <li class="chapter reveal">
+            <span class="roman" aria-hidden="true">IV</span>
+            <div>
+              <h3>Postkodmiljonären <span class="yr">2023</span></h3>
+              <p>Svarade rätt på miljonfrågan – en av endast 13 genom tiderna i Sverige.</p>
+            </div>
+          </li>
+          <li class="chapter reveal">
+            <span class="roman" aria-hidden="true">V</span>
+            <div>
+              <h3>Svensk mästare i Poetry Slam <span class="yr">2026</span></h3>
+              <p>Att minnas är en sak. Att säga det snyggt är en annan.</p>
+            </div>
+          </li>
+          <li class="chapter reveal">
+            <span class="roman" aria-hidden="true">VI</span>
+            <div>
+              <h3>Göteborgsmästare i ordvitsar <span class="yr">2026</span></h3>
+              <p>Och klar för SM-final. Ordvitsnivå: farligt hög.</p>
+            </div>
+          </li>
+          <li class="chapter reveal">
+            <span class="roman" aria-hidden="true">VII</span>
+            <div>
+              <h3>5× Svensk mästare i pubquiz</h3>
+              <p>Med laget ”Glenns över sjö och strand”.</p>
+            </div>
+          </li>
+          <li class="chapter reveal">
+            <span class="roman" aria-hidden="true">VIII</span>
+            <div>
+              <h3>Fler TV-segrar <span class="yr">2020 · 2021</span></h3>
+              <p>Vann Smartare än en femteklassare, besegrade expertpanelen i Muren (SVT) och vann sin utmaning i kinesiska The Brain – bland annat 200 numrerade valnötter.</p>
+            </div>
+          </li>
+          <li class="chapter reveal">
+            <span class="roman" aria-hidden="true">IX</span>
+            <div>
+              <h3>Författare</h3>
+              <p>”Så får du ett superminne” (Semic, ny utgåva 2024), ”Bli ett minnesgeni!” (2019) och ”Pi-boken 2.0” (2020) – den sista med alla 100&nbsp;000 decimalerna.</p>
+            </div>
+          </li>
+          <li class="chapter reveal">
+            <span class="roman" aria-hidden="true">X</span>
+            <div>
+              <h3>Högskoleprovet <span class="yr">2021</span></h3>
+              <p>2.0 tolv gånger. 160 rätt av 160 år 2021 – som ende i landet.</p>
+            </div>
+          </li>
+        </ol>
+        <div class="tv-row">
+          <a class="tv-card reveal" href="https://www.youtube.com/watch?v=PtqSFf3cO04" target="_blank" rel="noopener">
+            <span class="tv-k">TV4 · Talang</span>
+            <span class="tv-t" style="display:block">Jonas memorerar 500 namn på två timmar</span>
+            <span class="tv-l">Se klippet på YouTube</span>
+          </a>
+          <a class="tv-card reveal" style="--d:.08s" href="https://www.youtube.com/results?search_query=jonas+von+essen+postkodmiljon%C3%A4ren" target="_blank" rel="noopener">
+            <span class="tv-k">Postkodmiljonären</span>
+            <span class="tv-t" style="display:block">Miljonfrågan – och svaret</span>
+            <span class="tv-l">Se klippet på YouTube</span>
+          </a>
+          <a class="tv-card reveal" style="--d:.16s" href="https://www.youtube.com/@BlueberryClubSparven" target="_blank" rel="noopener">
+            <span class="tv-k">Gratis lektion</span>
+            <span class="tv-t" style="display:block">Lär dig världens 10 största länder på 5 minuter</span>
+            <span class="tv-l">Se på YouTube</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="pi-divider" aria-hidden="true"><span>8628034825&thinsp;3421170679&thinsp;8214808651&thinsp;3282306647</span></div>
+
+<!-- ===== HITTA DIG SJÄLV I π (signaturdetalj) ===== -->
+<section id="pi" class="pi-sektion">
+  <div class="halo" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="reveal">
+      <p class="kicker">03 · Interludium</p>
+      <h2>Hitta dig själv i <span class="pi-char">π</span></h2>
+      <p class="pi-intro">Någonstans bland de första 100&nbsp;000 decimalerna bor ditt födelsedatum. Skriv det som sex siffror – dag, månad, år – så letar jag upp din adress.</p>
+    </div>
+    <form class="pi-form reveal" id="piForm" style="--d:.1s" novalidate>
+      <label class="skip-link" for="piInput">Ditt födelsedatum, sex siffror: dag, månad, år</label>
+      <input class="pi-input" id="piInput" name="datum" inputmode="numeric" autocomplete="bday" maxlength="8" placeholder="DDMMÅÅ" aria-describedby="piHint">
+      <button class="pi-btn" type="submit">Sök i π</button>
+    </form>
+    <p class="pi-hint" id="piHint">t.ex. 090785 för den 9 juli 1985</p>
+    <div id="piResult" aria-live="polite"></div>
+    <p class="pi-note">Jonas kan de här 100&nbsp;000 utantill. Du behöver bara komma ihåg var du bor.</p>
+  </div>
+</section>
+
+<div class="pi-divider" aria-hidden="true"><span>0938446095&thinsp;5058223172&thinsp;5359408128&thinsp;4811174502</span></div>
+
+<!-- ===== PROJEKT ===== -->
+<section id="projekt" class="sect">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="kicker">04 · Jag bygger också saker</p>
+      <h2>Tre appar, <em>noll kronor.</em></h2>
+      <p class="proj-intro">Jag bygger dem för att det är kul – och för att bra inlärning inte ska kosta.</p>
+    </div>
+    <div class="proj-grid">
+      <a class="proj-card reveal" href="https://jonasgeografi.se" target="_blank" rel="noopener">
+        <div class="proj-media">
+          <canvas id="glob" aria-label="Interaktiv jordglob – dra för att snurra"></canvas>
+          <span class="glob-tip" aria-hidden="true">Dra i globen</span>
+        </div>
+        <div class="proj-body">
+          <h3>jonasgeografi.se</h3>
+          <p>Lär dig alla världens länder på en snurrbar jordglob där varje land är ett eget litet konstverk. Utforska, quizza och res jorden runt – med minnesknep för varje land.</p>
+          <span class="proj-go">Besök appen</span>
+        </div>
+      </a>
+      <a class="proj-card reveal" style="--d:.1s" href="https://hpakuten.se" target="_blank" rel="noopener">
+        <div class="proj-media">
+          <img src="../assets/img/bild_hp-md.webp" alt="Högskoleprovshäften uppradade" loading="lazy" decoding="async">
+        </div>
+        <div class="proj-body">
+          <h3>hpakuten.se</h3>
+          <p>Gratis träning inför högskoleprovet: simulera gamla prov på tid, videogenomgångar och minnestekniker. Från Sveriges kanske mest rutinerade HP-skrivare.</p>
+          <span class="proj-go">Besök appen</span>
+        </div>
+      </a>
+      <a class="proj-card reveal" style="--d:.2s" href="https://www.gångertabellen.se" target="_blank" rel="noopener">
+        <div class="proj-media">
+          <img class="contain" src="../assets/img/jonas-gangertabellen-md.webp" alt="Jonas med häpen min och händerna vid huvudet" loading="lazy" decoding="async">
+        </div>
+        <div class="proj-body">
+          <h3>gångertabellen.se</h3>
+          <p>Gångertabellen är lättare än den ser ut: med rätt knep är det bara sex tal kvar att memorera. Quiz, minnesbilder och smart repetition – utan inloggning.</p>
+          <span class="proj-go">Besök appen</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="pi-divider" aria-hidden="true"><span>8410270193&thinsp;8521105559&thinsp;6446229489&thinsp;5493038196</span></div>
+
+<!-- ===== KURS ===== -->
+<section id="kurs" class="sect">
+  <div class="wrap">
+    <div class="kurs-box reveal">
+      <img class="kurs-jonas" src="../assets/img/upp.webp" alt="" loading="lazy" decoding="async">
+      <p class="kicker">05 · Onlinekurs</p>
+      <h2>Skaffa ett superminne!</h2>
+      <p>Lär dig metoderna jag använder – i din egen takt, hur många gånger du vill. Namn, glosor, tal, presentationer: samma teknik, ditt tempo.</p>
+      <a class="btn btn-primary" href="https://kurs.jonasvonessen.se" target="_blank" rel="noopener">Till kursen</a>
+    </div>
+  </div>
+</section>
+
+<div class="pi-divider" aria-hidden="true"><span>4428810975&thinsp;6659334461&thinsp;2847564823&thinsp;3786783165</span></div>
+
+<!-- ===== KONTAKT ===== -->
+<section id="kontakt" class="sect">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="kicker">06 · Följ mig &amp; kontakt</p>
+      <h2>Boka ett <em>oförglömligt</em> event</h2>
+    </div>
+    <div class="kontakt-grid">
+      <div class="kontakt-pitch reveal">
+        <p class="lead">Vill du boka en föreläsning? Skriv en rad! Jag lovar att komma ihåg den.</p>
+        <p>Föreläsningar om minne, motivation och inlärning – för skolor, företag och scener som vill ha något publiken faktiskt minns dagen efter. Eller följ mig där det händer:</p>
+        <p style="font-family:var(--mono);font-size:.78rem;letter-spacing:.06em;color:var(--dim);margin-top:2rem;border-left:1px solid var(--gold-line);padding-left:1rem">PS. Boka i god tid – kalendern är det enda av mina minnen som blir fullt.</p>
+        <ul class="social">
+          <li><a href="https://www.instagram.com/jonasvonessen/" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.9.07 1.2.06 1.8.25 2.2.42.6.22 1 .48 1.4.9.4.4.7.9.9 1.4.2.4.4 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c0 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.9.7-1.4.9-.4.2-1 .4-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2 0-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.9-.9-1.4-.2-.4-.4-1-.4-2.2-.1-1.3-.1-1.7-.1-4.9s0-3.6.1-4.9c0-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.9-.7 1.4-.9.4-.2 1-.4 2.2-.4 1.3-.1 1.7-.1 4.9-.1M12 0C8.7 0 8.3 0 7 .07 5.8.13 4.9.33 4.1.63c-.8.3-1.5.73-2.2 1.4C1.2 2.7.8 3.4.5 4.2.2 5 .1 5.8 0 7.1 0 8.3 0 8.7 0 12s0 3.7.07 5c.06 1.3.26 2.1.56 2.9.3.8.73 1.5 1.4 2.2.7.7 1.4 1.1 2.2 1.4.8.3 1.6.5 2.9.6 1.3 0 1.7 0 5 0s3.7 0 5-.07c1.3-.06 2.1-.26 2.9-.56.8-.3 1.5-.73 2.2-1.4.7-.7 1.1-1.4 1.4-2.2.3-.8.5-1.6.6-2.9 0-1.3 0-1.7 0-5s0-3.7-.07-5c-.06-1.3-.26-2.1-.56-2.9-.3-.8-.73-1.5-1.4-2.2-.7-.7-1.4-1.1-2.2-1.4-.8-.3-1.6-.5-2.9-.6C15.7 0 15.3 0 12 0zm0 5.8a6.2 6.2 0 1 0 0 12.4 6.2 6.2 0 0 0 0-12.4zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.4-11.8a1.44 1.44 0 1 0 0 2.9 1.44 1.44 0 0 0 0-2.9z"/></svg>
+            Instagram</a></li>
+          <li><a href="https://www.tiktok.com/@jonasvonessen" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.6 6.7a4.8 4.8 0 0 1-3.8-4.4V1.8h-3.3v13.2a2.8 2.8 0 1 1-2.8-2.8c.3 0 .6 0 .8.1V8.9a6.1 6.1 0 1 0 5.3 6V8.6a8 8 0 0 0 4.6 1.4V6.8l-.8-.1z"/></svg>
+            TikTok</a></li>
+          <li><a href="https://www.youtube.com/@BlueberryClubSparven" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12c0 2 .2 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1c.3-1.9.5-3.8.5-5.8s-.2-3.9-.5-5.8zM9.6 15.6V8.4L15.8 12l-6.2 3.6z"/></svg>
+            YouTube</a></li>
+        </ul>
+      </div>
+      <div class="kform reveal" style="--d:.1s" id="kformWrap">
+        <img class="kontakt-ner" src="../assets/img/ner.webp" alt="" loading="lazy" decoding="async">
+        <!-- FORMSPREE: när ID finns, byt till <form action="https://formspree.io/f/DITT-FORMSPREE-ID" method="POST"> och ta bort JS-preventDefault -->
+        <form id="kform" novalidate>
+          <label for="f-namn">Namn</label>
+          <input id="f-namn" name="namn" type="text" autocomplete="name" required>
+          <label for="f-epost">E-post</label>
+          <input id="f-epost" name="epost" type="email" autocomplete="email" required>
+          <label for="f-medd">Meddelande</label>
+          <textarea id="f-medd" name="meddelande" required></textarea>
+          <button class="btn btn-primary" type="submit">Skicka</button>
+        </form>
+        <div class="kform-done" role="status">Tack! <b>Ditt meddelande är mottaget i andanom.</b><br>Formuläret kopplas snart – mejla mig så länge.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="foot">
+    <p>© 2026 Jonas von Essen</p>
+    <nav class="flinks" aria-label="Externa länkar">
+      <a href="https://jonasgeografi.se" target="_blank" rel="noopener">jonasgeografi.se</a>
+      <a href="https://hpakuten.se" target="_blank" rel="noopener">hpakuten.se</a>
+      <a href="https://www.gångertabellen.se" target="_blank" rel="noopener">gångertabellen.se</a>
+      <a href="https://kurs.jonasvonessen.se" target="_blank" rel="noopener">kurs.jonasvonessen.se</a>
+    </nav>
+    <p class="credit">Foto: Jessica Ahrling · Memory Games &nbsp;·&nbsp; 3.14159 26535 89793 &hellip;</p>
+  </div>
+</footer>
+
+<script src="../assets/globe.js" defer></script>
+<script>
+(function(){
+'use strict';
+var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+var PI200 = '1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679821480865132823066470938446095505822317253594081284811174502841027019385211055596446229489549303819';
+
+/* ================= LADDSKÄRM ================= */
+(function loader(){
+  var el = document.getElementById('loader');
+  var seen = false;
+  try { seen = !!sessionStorage.getItem('pi5loaderSeen'); } catch(e){}
+  var noloader = new URLSearchParams(location.search).has('noloader');
+  if (seen || noloader || reduced) { el.remove(); return; }
+  try { sessionStorage.setItem('pi5loaderSeen','1'); } catch(e){}
+  el.hidden = false;
+  document.documentElement.classList.add('lock');
+  var num = document.getElementById('lnum');
+  var line = document.getElementById('lline');
+  var lines = [
+    'startar jonas.exe <span class="ok">…… OK</span>',
+    'laddar minnespalats <span class="ok">…… 100%</span>',
+    'länder inlästa <span class="ok">…… 197/197</span>',
+    'kalibrerar ordvitsnivå <span class="ok">…… farligt hög</span>',
+    'välkommen in!'
+  ];
+  var COUNT_T = 2000, HOLD = 450, t0 = null, done = false, raf = 0;
+  function fmt(n){ return n.toLocaleString('sv-SE'); }
+  function frame(ts){
+    if (done) return;
+    if (t0 === null) t0 = ts;
+    var t = Math.min((ts - t0) / COUNT_T, 1);
+    /* easeInOutCubic: rivstart i mitten, kort odometer-landning på slutet */
+    var e = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    num.textContent = fmt(Math.round(e * 100000));
+    var li = t < 1 ? Math.min(Math.floor(t * 4), 3) : 4; /* "välkommen in!" först vid 100 000 */
+    if (line.dataset.i !== String(li)) { line.dataset.i = String(li); line.innerHTML = lines[li]; }
+    if (t < 1) raf = requestAnimationFrame(frame);
+    else { num.textContent = fmt(100000); setTimeout(finish, HOLD); }
+  }
+  function finish(){
+    if (done) return;
+    done = true;
+    cancelAnimationFrame(raf);
+    num.textContent = fmt(100000);
+    el.classList.add('fade');
+    document.documentElement.classList.remove('lock');
+    setTimeout(function(){ el.remove(); }, 650);
+  }
+  el.addEventListener('click', finish);
+  window.addEventListener('keydown', finish, { once:true });
+  raf = requestAnimationFrame(frame);
+})();
+
+/* ================= SIFFERREGN (hero-canvas) ================= */
+(function rain(){
+  var canvas = document.getElementById('rain');
+  var hero = canvas.closest('.hero');
+  var piEl = document.getElementById('heroPi');
+  if (!canvas || !canvas.getContext) return;
+  var ctx = canvas.getContext('2d');
+  var COUNT = 110;
+  var w = 0, h = 0, parts = [], visible = true, raf = 0, running = false;
+  var mx = 0, my = 0, tmx = 0, tmy = 0; // parallax lerp
+
+  function resize(){
+    var r = hero.getBoundingClientRect();
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = r.width; h = r.height;
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  function spawn(i, fromTop){
+    var z = Math.random();
+    parts[i] = {
+      x: Math.random() * w,
+      y: fromTop ? -30 - Math.random() * 60 : Math.random() * h,
+      z: z,
+      v: 0.1 + z * 0.42,
+      size: 10 + z * 16,
+      ch: PI200.charAt((Math.random() * PI200.length) | 0),
+      a: 0.14 + z * 0.5,
+      amber: Math.random() < 0.05
+    };
+  }
+  function draw(){
+    ctx.clearRect(0, 0, w, h);
+    for (var i = 0; i < COUNT; i++){
+      var p = parts[i];
+      var px = p.x + mx * p.z * 46;
+      var py = p.y + my * p.z * 22;
+      ctx.font = p.size + 'px "JetBrains Mono", monospace';
+      if (p.amber) ctx.fillStyle = 'rgba(255,158,61,' + (p.a * 0.75).toFixed(3) + ')';
+      else {
+        var g = Math.round(44 + p.z * 42);
+        ctx.fillStyle = 'rgba(' + g + ',' + g + ',' + (g + 12) + ',' + p.a.toFixed(3) + ')';
+      }
+      ctx.fillText(p.ch, px, py);
+    }
+  }
+  function step(){
+    if (!running) return;
+    mx += (tmx - mx) * 0.06;
+    my += (tmy - my) * 0.06;
+    for (var i = 0; i < COUNT; i++){
+      var p = parts[i];
+      p.y += p.v;
+      if (p.y > h + 30) spawn(i, true);
+    }
+    draw();
+    raf = requestAnimationFrame(step);
+  }
+  function start(){
+    if (running || reduced || !visible || document.hidden) return;
+    running = true;
+    raf = requestAnimationFrame(step);
+  }
+  function stop(){ running = false; cancelAnimationFrame(raf); }
+
+  resize();
+  for (var i = 0; i < COUNT; i++) spawn(i, false);
+  if (reduced) { mx = my = 0; draw(); } // statisk stillbild
+  else start();
+
+  window.addEventListener('resize', function(){ resize(); for (var i = 0; i < COUNT; i++) spawn(i, false); if (reduced) draw(); });
+  document.addEventListener('visibilitychange', function(){ document.hidden ? stop() : start(); });
+  if ('IntersectionObserver' in window){
+    new IntersectionObserver(function(en){
+      visible = en[0].isIntersecting;
+      visible ? start() : stop();
+    }).observe(hero);
+  }
+  if (!reduced){
+    hero.addEventListener('mousemove', function(ev){
+      var r = hero.getBoundingClientRect();
+      tmx = ((ev.clientX - r.left) / r.width - 0.5) * 2;
+      tmy = ((ev.clientY - r.top) / r.height - 0.5) * 2;
+      if (piEl) piEl.style.transform = 'translateY(-54%) translate(' + (tmx * -12) + 'px,' + (tmy * -8) + 'px)';
+    });
+    hero.addEventListener('mouseleave', function(){
+      tmx = tmy = 0;
+      if (piEl) piEl.style.transform = 'translateY(-54%)';
+    });
+  }
+})();
+
+/* ================= REVEAL-KASKAD + AKTIV NAV ================= */
+(function observers(){
+  var revs = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+  if (reduced){
+    revs.forEach(function(el){ el.classList.add('in'); });
+  } else {
+    var started = false;
+    var cascade = function(){
+      if (started) return;
+      started = true;
+      revs.forEach(function(el, i){
+        setTimeout(function(){ el.classList.add('in'); }, Math.min(i * 55, 650));
+      });
+    };
+    if (document.readyState === 'complete') cascade();
+    else window.addEventListener('load', cascade);
+    setTimeout(cascade, 2200); /* säkerhetsnät */
+  }
+  var links = document.querySelectorAll('.navlinks a');
+  var map = {};
+  links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+  if ('IntersectionObserver' in window){
+    var nio = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if (e.isIntersecting){
+          links.forEach(function(a){ a.removeAttribute('aria-current'); });
+          var a = map[e.target.id];
+          if (a) a.setAttribute('aria-current','true');
+        }
+      });
+    }, { rootMargin: '-40% 0px -52% 0px' });
+    ['om','meriter','pi','projekt','kurs','kontakt'].forEach(function(id){
+      var s = document.getElementById(id);
+      if (s) nio.observe(s);
+    });
+  }
+})();
+
+/* ================= JORDGLOB (lazy) ================= */
+(function globe(){
+  var el = document.getElementById('glob');
+  if (!el) return;
+  var inited = false;
+  function init(){
+    if (inited || typeof JonasGlobe === 'undefined') return;
+    inited = true;
+    JonasGlobe.create(el, '../assets/globe-data.json', {
+      mode: 'dots',
+      dotColor: '#c9a05e',
+      lineColor: 'rgba(201,160,94,.4)',
+      graticule: 'rgba(255,190,120,.07)',
+      rim: 'rgba(255,158,61,.20)',
+      sphereFill: 'rgba(10,10,15,.92)',
+      markerColor: '#ff9e3d',
+      speed: 0.028
+    });
+  }
+  if ('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(es){
+      if (es[0].isIntersecting && typeof JonasGlobe !== 'undefined'){ init(); io.disconnect(); }
+    }, { rootMargin: '400px' });
+    io.observe(el);
+  }
+  /* säkerhetsnät: initiera strax efter full laddning oavsett scroll */
+  window.addEventListener('load', function(){ setTimeout(init, 700); }, { once:true });
+})();
+
+/* ================= LAZY-BILDER: hämta resten efter load ================= */
+window.addEventListener('load', function(){
+  setTimeout(function(){
+    document.querySelectorAll('img[loading="lazy"]').forEach(function(img){
+      if (!img.complete || img.naturalWidth === 0) img.loading = 'eager';
+    });
+  }, 600);
+}, { once:true });
+
+/* ================= HITTA DIG SJÄLV I π ================= */
+(function piFinder(){
+  var form = document.getElementById('piForm');
+  var input = document.getElementById('piInput');
+  var out = document.getElementById('piResult');
+  var digits = null, loading = null;
+
+  function loadPi(){
+    if (digits) return Promise.resolve(digits);
+    if (!loading){
+      loading = fetch('../assets/pi-100k.txt')
+        .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+        .then(function(t){
+          digits = t.replace(/[^0-9]/g, '').slice(1); // släng heltalsdelen "3"
+          return digits;
+        })
+        .catch(function(err){ loading = null; throw err; });
+    }
+    return loading;
+  }
+  function countOcc(hay, needle){
+    var c = 0, i = hay.indexOf(needle);
+    while (i !== -1){ c++; i = hay.indexOf(needle, i + 1); }
+    return c;
+  }
+  function fmt(n){ return n.toLocaleString('sv-SE'); }
+  function esc(s){ return s.replace(/[&<>"]/g, function(c){ return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]; }); }
+  function show(html){
+    out.innerHTML = '<div class="pi-out">' + html + '</div>';
+    var el = out.firstChild;
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ el.classList.add('show'); }); });
+  }
+  function strip(pi, idx, len){
+    var CTX = 16;
+    var a = Math.max(0, idx - CTX);
+    var b = Math.min(pi.length, idx + len + CTX);
+    var pre = pi.slice(a, idx), hit = pi.slice(idx, idx + len), post = pi.slice(idx + len, b);
+    return '<div class="pi-strip-wrap">' +
+      '<div class="pi-strip" aria-hidden="true">' +
+        '<span class="ctx">' + (a > 0 ? '…' : '3.') + esc(pre) + '</span>' +
+        '<span class="hit">' + esc(hit) + '</span>' +
+        '<span class="ctx">' + esc(post) + (b < pi.length ? '…' : '') + '</span>' +
+      '</div>' +
+      '<p class="pi-ruler">decimal <b>' + fmt(a + 1) + '</b> — <b>' + fmt(b) + '</b> av 100&nbsp;000</p>' +
+    '</div>';
+  }
+  function search(q){
+    show('<p class="pi-verdict" style="color:var(--muted)"><em>Bläddrar i minnespalatset&hellip;</em></p>');
+    loadPi().then(function(pi){
+      var idx = pi.indexOf(q);
+      if (idx !== -1){
+        var n = countOcc(pi, q);
+        show(
+          '<p class="pi-verdict">Ditt datum bor på decimal <span class="pos">' + fmt(idx + 1) + '</span>.</p>' +
+          strip(pi, idx, q.length) +
+          '<p class="pi-extra">' + esc(q) + ' dyker upp ' + (n === 1
+            ? '<b>exakt en gång</b> bland de första 100&nbsp;000 decimalerna. En adress helt för dig själv.'
+            : fmt(n) + ' gånger bland de första 100&nbsp;000 decimalerna – det här är din första.') + '</p>'
+        );
+        return;
+      }
+      var q4 = q.slice(0, 4);
+      var idx4 = pi.indexOf(q4);
+      if (idx4 !== -1){
+        show(
+          '<p class="pi-verdict">Hela ditt datum är <em>för unikt</em> för de första 100&nbsp;000 decimalerna – precis som du.</p>' +
+          '<p class="pi-extra">Men dag och månad, <b style="color:var(--amber)">' + esc(q4) + '</b>, bor på decimal <b style="color:var(--amber)">' + fmt(idx4 + 1) + '</b>:</p>' +
+          strip(pi, idx4, 4)
+        );
+      } else {
+        show('<p class="pi-verdict">Varken ' + esc(q) + ' eller ' + esc(q4) + ' finns bland de första 100&nbsp;000 decimalerna. Du är bokstavligen <em>en på hundratusen.</em></p>');
+      }
+    }).catch(function(){
+      show('<p class="pi-verdict" style="color:var(--muted)">Minnespalatset svarar inte just nu – decimalerna kunde inte laddas. Prova igen om en stund.</p>');
+    });
+  }
+  form.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    var raw = (input.value || '').replace(/[^0-9]/g, '');
+    if (raw.length !== 6){
+      show('<p class="pi-verdict" style="color:var(--muted)">Sex siffror behöver jag – dag, månad, år. <em>Till exempel 090785 för den 9 juli 1985.</em></p>');
+      input.focus();
+      return;
+    }
+    input.value = raw;
+    search(raw);
+  });
+})();
+
+/* ================= KONTAKTFORMULÄR ================= */
+(function kontakt(){
+  var form = document.getElementById('kform');
+  var wrap = document.getElementById('kformWrap');
+  if (!form) return;
+  form.addEventListener('submit', function(ev){
+    ev.preventDefault(); // FORMSPREE: ta bort denna rad när action-URL är på plats
+    wrap.classList.add('sent');
+  });
+})();
+})();
+</script>
+</body>
+</html>

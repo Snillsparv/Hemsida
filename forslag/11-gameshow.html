@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jonas von Essen – Tvåfaldig världsmästare i minne</title>
+<meta name="description" content="Jonas von Essen – tvåfaldig världsmästare i minne, föreläsare och författare från Göteborg. Boka en föreläsning, testa hans gratis läroappar och lär dig minnesteknik.">
+<meta property="og:title" content="Jonas von Essen – Tvåfaldig världsmästare i minne">
+<meta property="og:description" content="Kvällens deltagare: tvåfaldig världsmästare i minne, miljonvinnare i Postkodmiljonären och byggare av gratis läroappar.">
+<meta property="og:image" content="../assets/img/jonas_vm-md.webp">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%23061032'/%3E%3Cpath%20d='M32%2010l6.1%2013.2%2014.4%201.7-10.7%209.9%202.9%2014.2L32%2042l-12.7%207%202.9-14.2-10.7-9.9%2014.4-1.7z'%20fill='%23f5c451'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/fonts.css">
+<style>
+/* ============================================================
+   FÖRSLAG 11 — "GAMESHOW: kvällens huvudperson"
+   Djup studioblå, spotlights, guld & magenta. En studio i
+   världsklass — mycket mörk luft mellan ljuspunkterna.
+   ============================================================ */
+:root{
+  --bg-1:#0a1a4a;
+  --bg-2:#061032;
+  --bg-3:#040a20;
+  --gold:#f5c451;
+  --gold-hi:#ffdf9a;
+  --gold-soft:rgba(245,196,81,.14);
+  --gold-line:rgba(245,196,81,.32);
+  --mag:#b44cf0;
+  --mag-soft:rgba(180,76,240,.14);
+  --green:#3ddc84;
+  --ink:#f3f5ff;
+  --muted:rgba(224,231,255,.8);
+  --dim:rgba(200,210,250,.6);
+  --panel:linear-gradient(180deg,rgba(12,24,72,.72),rgba(6,12,40,.85));
+  --panel-line:rgba(140,160,255,.18);
+  --mono:'JetBrains Mono',ui-monospace,'Cascadia Mono',monospace;
+  --sans:'Space Grotesk',system-ui,-apple-system,sans-serif;
+  --serif:'Fraunces',Georgia,serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:clip}
+body{
+  font-family:var(--sans);
+  color:var(--ink);
+  background:
+    radial-gradient(1100px 700px at 18% -8%, rgba(180,76,240,.13), transparent 62%),
+    radial-gradient(1300px 800px at 82% -4%, rgba(245,196,81,.09), transparent 58%),
+    linear-gradient(180deg,var(--bg-1) 0%, var(--bg-2) 42%, var(--bg-3) 100%);
+  background-color:var(--bg-3);
+  font-size:16.5px;
+  line-height:1.6;
+  overflow-x:hidden;
+}
+body.is-loading{overflow:hidden}
+img{max-width:100%;display:block}
+a{color:var(--gold);text-decoration:none}
+a:hover{text-decoration:underline;text-underline-offset:3px}
+::selection{background:var(--gold);color:#221600}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1160px;margin-inline:auto;padding-inline:clamp(1.2rem,4vw,2rem)}
+section{position:relative;padding-block:clamp(4.5rem,9vw,7.5rem);scroll-margin-top:4.5rem}
+.mono{font-family:var(--mono)}
+
+/* ---------- knappar ---------- */
+.btn{
+  display:inline-flex;align-items:center;gap:.55em;
+  padding:.95rem 1.7rem;border-radius:999px;border:0;cursor:pointer;
+  font-family:var(--sans);font-weight:700;font-size:.9rem;
+  letter-spacing:.08em;text-transform:uppercase;
+  transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+.btn:hover{text-decoration:none;transform:translateY(-2px)}
+.btn-gold{
+  background:linear-gradient(180deg,var(--gold-hi),var(--gold));color:#241800;
+  box-shadow:0 10px 30px -10px rgba(245,196,81,.55);
+}
+.btn-gold:hover{box-shadow:0 14px 36px -10px rgba(245,196,81,.7)}
+.btn-ghost{background:transparent;border:1px solid var(--gold-line);color:var(--gold)}
+.btn-ghost:hover{background:var(--gold-soft)}
+
+/* ---------- laddskärm: SÄNDNING OM 3-2-1 ---------- */
+#loader{
+  position:fixed;inset:0;z-index:1000;
+  display:flex;align-items:center;justify-content:center;
+  background:
+    radial-gradient(900px 480px at 50% -12%, rgba(180,76,240,.16), transparent 60%),
+    radial-gradient(1100px 620px at 50% 118%, rgba(245,196,81,.08), transparent 60%),
+    linear-gradient(180deg,#081239,#040a20);
+  transition:opacity .55s ease, visibility .55s ease;
+  cursor:pointer;
+}
+#loader.done{opacity:0;visibility:hidden;pointer-events:none}
+.ld-box{width:min(600px,88vw)}
+.ld-lines{
+  font-family:var(--mono);font-size:clamp(.78rem,2.6vw,.95rem);line-height:1.7;
+  color:rgba(206,217,255,.85);min-height:5.2em;white-space:pre-wrap;
+}
+.ld-cursor{display:inline-block;width:.6ch;height:1.05em;vertical-align:-.18em;background:var(--gold);animation:ld-blink .9s steps(2,start) infinite}
+@keyframes ld-blink{to{visibility:hidden}}
+.ld-stage{display:flex;align-items:flex-end;justify-content:space-between;gap:1.5rem;margin-top:1.6rem;flex-wrap:wrap}
+.ld-count-label{font-family:var(--mono);font-size:.72rem;letter-spacing:.34em;color:var(--dim);text-transform:uppercase}
+.ld-count{
+  font-weight:700;font-size:clamp(3.4rem,12vw,5.6rem);line-height:1;color:#fff;
+  min-height:1em;min-width:1.2ch;letter-spacing:.02em;
+  text-shadow:0 0 44px rgba(245,196,81,.4);
+}
+.ld-count.tick{animation:ld-pop .32s ease}
+@keyframes ld-pop{0%{transform:scale(1.22);opacity:.4}100%{transform:scale(1);opacity:1}}
+.ld-onair{
+  font-family:var(--mono);font-weight:700;font-size:clamp(.9rem,3vw,1.15rem);
+  letter-spacing:.42em;text-indent:.42em;padding:.7em 1.2em;border-radius:10px;
+  color:rgba(255,110,130,.32);border:2px solid rgba(255,110,130,.22);
+  transition:color .25s,border-color .25s,box-shadow .25s,background .25s;
+}
+.ld-onair.on{
+  color:#ff6178;border-color:#ff6178;background:rgba(255,80,105,.1);
+  box-shadow:0 0 34px -6px rgba(255,90,115,.65), inset 0 0 18px -8px rgba(255,90,115,.5);
+}
+.ld-skip{margin-top:2.2rem;font-family:var(--mono);font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(190,200,240,.42)}
+
+/* ---------- toppnav ---------- */
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(5,11,34,.86);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(140,160,255,.13);
+}
+.topbar-in{display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:58px;padding-block:.5rem}
+.brand{display:flex;align-items:center;gap:.7rem;font-family:var(--mono);font-weight:700;font-size:.8rem;letter-spacing:.2em;color:#fff;white-space:nowrap}
+.brand:hover{text-decoration:none;color:var(--gold)}
+.brand .star{color:var(--gold)}
+.live-chip{display:inline-flex;align-items:center;gap:.45em;font-family:var(--mono);font-size:.6rem;letter-spacing:.26em;color:rgba(255,120,140,.9);border:1px solid rgba(255,110,130,.35);border-radius:999px;padding:.32em .8em .32em .7em}
+.live-chip i{width:6px;height:6px;border-radius:50%;background:#ff6178;animation:live 2.6s ease-in-out infinite}
+@keyframes live{0%,100%{opacity:1}50%{opacity:.35}}
+.nav-links{display:flex;gap:clamp(.9rem,2.4vw,1.9rem);list-style:none;flex-wrap:wrap;justify-content:flex-end}
+.nav-links a{
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--dim);padding:.4em .1em;border-bottom:2px solid transparent;
+  transition:color .18s, border-color .18s;
+}
+.nav-links a:hover{color:var(--gold);text-decoration:none}
+.nav-links a.active{color:var(--gold);border-bottom-color:var(--gold)}
+@media(max-width:760px){
+  .live-chip span{display:none}
+  .brand em{display:none}
+}
+@media(max-width:520px){
+  .topbar-in{flex-wrap:wrap;justify-content:center}
+}
+
+/* ---------- ljuskäglor & konfettistänk ---------- */
+.beam{position:absolute;top:-4%;height:92%;pointer-events:none;opacity:.85}
+.beam-gold{background:linear-gradient(180deg,rgba(245,196,81,.15),rgba(245,196,81,0) 74%);clip-path:polygon(40% 0,60% 0,100% 100%,0 100%)}
+.beam-mag{background:linear-gradient(180deg,rgba(180,76,240,.14),rgba(180,76,240,0) 70%);clip-path:polygon(42% 0,58% 0,100% 100%,0 100%)}
+.beam-white{background:linear-gradient(180deg,rgba(210,225,255,.1),rgba(210,225,255,0) 70%);clip-path:polygon(44% 0,56% 0,100% 100%,0 100%)}
+.sparkle{
+  position:absolute;inset:0;pointer-events:none;opacity:.9;
+  background-image:
+    radial-gradient(circle 2px at 12% 24%, rgba(245,196,81,.7) 60%, transparent 61%),
+    radial-gradient(circle 1.6px at 26% 62%, rgba(255,255,255,.45) 60%, transparent 61%),
+    radial-gradient(circle 2.2px at 38% 14%, rgba(180,76,240,.55) 60%, transparent 61%),
+    radial-gradient(circle 1.4px at 55% 38%, rgba(245,196,81,.5) 60%, transparent 61%),
+    radial-gradient(circle 2px at 68% 10%, rgba(255,255,255,.4) 60%, transparent 61%),
+    radial-gradient(circle 1.6px at 79% 46%, rgba(245,196,81,.6) 60%, transparent 61%),
+    radial-gradient(circle 2.4px at 90% 20%, rgba(180,76,240,.45) 60%, transparent 61%),
+    radial-gradient(circle 1.4px at 47% 78%, rgba(245,196,81,.4) 60%, transparent 61%),
+    radial-gradient(circle 1.8px at 8% 84%, rgba(180,76,240,.4) 60%, transparent 61%),
+    radial-gradient(circle 1.5px at 94% 74%, rgba(255,255,255,.35) 60%, transparent 61%);
+}
+
+/* ---------- hero ---------- */
+.hero{padding-top:clamp(3.5rem,7vw,6rem);padding-bottom:clamp(4rem,8vw,6.5rem);overflow:hidden}
+.hero .beam-1{left:4%;width:min(30vw,380px);transform:rotate(10deg)}
+.hero .beam-2{right:2%;width:min(32vw,420px);transform:rotate(-9deg)}
+.hero .beam-3{left:38%;width:min(24vw,320px)}
+.hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:clamp(2.2rem,5vw,4.5rem);align-items:center;position:relative}
+.eyebrow{font-family:var(--mono);font-size:.66rem;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);margin-bottom:1.6rem}
+.eyebrow b{color:var(--mag);font-weight:400}
+.kicker{
+  display:inline-block;font-family:var(--mono);font-size:.78rem;font-weight:700;
+  letter-spacing:.4em;text-indent:.4em;text-transform:uppercase;color:var(--gold);
+  border:1px solid var(--gold-line);border-radius:999px;padding:.55em 1.3em;
+  background:var(--gold-soft);margin-bottom:1.4rem;
+  box-shadow:0 0 30px -10px rgba(245,196,81,.5);
+}
+h1{
+  font-size:clamp(2.7rem,7vw,4.9rem);font-weight:700;line-height:.98;
+  letter-spacing:.015em;text-transform:uppercase;
+  text-shadow:0 0 60px rgba(245,196,81,.22);
+}
+h1 span{
+  display:block;
+  background:linear-gradient(100deg,#ffe9b6 0%,var(--gold) 45%,#e0a92e 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.tagline{margin-top:1.3rem;font-weight:500;font-size:clamp(.95rem,2vw,1.08rem);color:var(--ink);letter-spacing:.02em}
+.tagline b{color:var(--gold);font-weight:500}
+.ingress{margin-top:1rem;max-width:34rem;color:var(--muted);font-size:1.02rem}
+.cta-row{display:flex;gap:.9rem;margin-top:2.1rem;flex-wrap:wrap}
+
+.hero-photo{position:relative;max-width:470px;justify-self:center;width:100%;margin:0}
+.hero-photo::before{ /* spotlight-kägla ovanför fotot */
+  content:"";position:absolute;left:12%;right:12%;top:-24%;height:60%;
+  background:linear-gradient(180deg,rgba(245,196,81,.2),rgba(245,196,81,0) 82%);
+  clip-path:polygon(43% 0,57% 0,100% 100%,0 100%);pointer-events:none;
+}
+.hero-photo img{
+  border-radius:18px;border:1px solid var(--gold-line);
+  box-shadow:0 40px 90px -30px rgba(2,6,20,.9), 0 0 70px -20px rgba(245,196,81,.3);
+}
+.plate{
+  position:absolute;left:1.1rem;right:1.1rem;bottom:-1.05rem;
+  background:linear-gradient(180deg,rgba(14,25,72,.97),rgba(8,14,44,.97));
+  border:1px solid var(--gold-line);border-radius:10px;
+  padding:.6rem 1rem;text-align:center;
+  font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;
+  color:#ffe6ac;box-shadow:0 14px 30px -14px rgba(2,6,20,.9);
+}
+
+/* ---------- frågekortet (wow-detalj 2) ---------- */
+.quiz{position:relative;margin-top:clamp(4rem,8vw,6rem)}
+.quiz-card{
+  position:relative;background:rgba(7,14,44,.78);
+  border:1px solid rgba(140,160,255,.22);border-radius:22px;
+  padding:clamp(1.6rem,4vw,2.6rem);padding-top:clamp(2.4rem,5vw,3.2rem);
+  box-shadow:0 40px 100px -40px rgba(2,5,18,.95), inset 0 0 80px -50px rgba(120,140,255,.35);
+}
+.quiz-tag{
+  position:absolute;top:-1rem;left:50%;transform:translateX(-50%);
+  white-space:nowrap;font-family:var(--mono);font-size:.68rem;font-weight:700;
+  letter-spacing:.26em;text-transform:uppercase;color:#241800;
+  background:linear-gradient(180deg,var(--gold-hi),var(--gold));
+  padding:.55em 1.4em;border-radius:999px;
+  box-shadow:0 10px 26px -8px rgba(245,196,81,.6);
+}
+.quiz-q{
+  text-align:center;font-size:clamp(1.5rem,3.6vw,2.3rem);font-weight:700;
+  letter-spacing:.02em;margin-bottom:clamp(1.6rem,3.5vw,2.2rem);
+}
+.quiz-grid{display:grid;grid-template-columns:1fr 1fr;gap:.9rem 1.1rem;max-width:920px;margin-inline:auto}
+@media(max-width:680px){.quiz-grid{grid-template-columns:1fr}}
+.ans{
+  position:relative;display:block;width:100%;background:none;border:0;padding:0;
+  cursor:pointer;font:inherit;color:var(--ink);text-align:left;
+}
+.ans .lz{
+  display:block;position:relative;padding:2px;
+  clip-path:polygon(24px 0,calc(100% - 24px) 0,100% 50%,calc(100% - 24px) 100%,24px 100%,0 50%);
+  background:linear-gradient(180deg,rgba(175,192,255,.5),rgba(110,130,210,.28));
+  transition:background .18s ease, filter .18s ease, transform .18s ease;
+}
+.ans .lz-in{
+  display:flex;align-items:center;gap:.7rem;min-height:3.6rem;
+  padding:.8rem 2.2rem .8rem 2.4rem;
+  clip-path:polygon(23px 0,calc(100% - 23px) 0,100% 50%,calc(100% - 23px) 100%,23px 100%,0 50%);
+  background:linear-gradient(180deg,#0e1d59,#091238);
+  transition:background .18s ease;
+}
+.ans-key{font-family:var(--mono);font-weight:700;color:var(--gold);font-size:1rem;flex:0 0 auto}
+.ans-text{font-size:.98rem;font-weight:500;line-height:1.3}
+.ans-mark{margin-left:auto;font-family:var(--mono);font-size:.72rem;font-weight:700;letter-spacing:.1em;opacity:0;flex:0 0 auto;transition:opacity .2s}
+.ans:hover .lz,.ans:focus-visible .lz{
+  background:linear-gradient(180deg,rgba(245,196,81,.85),rgba(224,169,46,.55));
+  filter:drop-shadow(0 0 14px rgba(245,196,81,.35));transform:translateY(-2px);
+}
+.ans:hover .lz-in,.ans:focus-visible .lz-in{background:linear-gradient(180deg,#14246b,#0c1546)}
+.ans.is-right .lz{background:linear-gradient(180deg,rgba(97,230,158,.9),rgba(35,160,96,.7));filter:drop-shadow(0 0 12px rgba(61,220,132,.3))}
+.ans.is-right .lz-in{background:linear-gradient(180deg,rgba(16,66,42,.96),rgba(10,42,28,.96))}
+.ans.is-right .ans-key{color:var(--green)}
+.ans.is-right .ans-mark{opacity:1;color:var(--green)}
+.ans.is-gold .lz{background:linear-gradient(180deg,#ffe9b6,var(--gold));filter:drop-shadow(0 0 18px rgba(245,196,81,.55))}
+.ans.is-gold .lz-in{background:linear-gradient(180deg,rgba(84,60,8,.94),rgba(56,39,5,.96))}
+.ans.is-gold .ans-key,.ans.is-gold .ans-text{color:#ffedbf}
+.ans.is-gold .ans-mark{opacity:1;color:var(--gold-hi)}
+.ans[disabled]{cursor:default}
+.quiz-feedback{
+  min-height:1.6em;margin-top:1.4rem;text-align:center;
+  font-family:var(--mono);font-size:.82rem;letter-spacing:.06em;color:#8beeb0;
+}
+.quiz-card.won .quiz-feedback{color:var(--gold-hi);text-shadow:0 0 22px rgba(245,196,81,.4)}
+.quiz-hint{margin-top:.9rem;text-align:center;font-family:var(--serif);font-style:italic;font-size:.95rem;color:var(--dim)}
+
+/* ---------- sektionsrubriker som programsegment ---------- */
+.seg{text-align:center;margin-bottom:clamp(2.6rem,6vw,4rem)}
+.seg-plate{
+  display:inline-block;font-family:var(--mono);font-size:.68rem;font-weight:700;
+  letter-spacing:.34em;text-indent:.34em;text-transform:uppercase;color:var(--gold);
+  border:1px solid var(--gold-line);border-radius:999px;padding:.5em 1.3em;
+  background:var(--gold-soft);
+}
+.seg h2{
+  margin-top:1.1rem;font-size:clamp(1.8rem,4.2vw,2.9rem);font-weight:700;
+  text-transform:uppercase;letter-spacing:.05em;line-height:1.05;
+  text-shadow:0 0 44px rgba(245,196,81,.18);
+}
+.seg-sub{margin-top:.8rem;font-family:var(--serif);font-style:italic;font-size:1.05rem;color:var(--muted)}
+
+/* ---------- om mig ---------- */
+#om,#kontakt{overflow:hidden}
+#om .beam-om{left:8%;width:min(26vw,320px);transform:rotate(12deg)}
+.om-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(2.2rem,5vw,4.5rem);align-items:center}
+.om-photo{position:relative;max-width:400px;width:100%;justify-self:center;margin:0}
+.om-photo img{
+  border-radius:16px;border:1px solid rgba(140,160,255,.25);
+  box-shadow:0 34px 80px -28px rgba(2,6,20,.9);
+}
+.om-photo::after{ /* mjuk studiovinjett över fotot */
+  content:"";position:absolute;inset:0;border-radius:16px;pointer-events:none;
+  background:linear-gradient(180deg,rgba(6,16,50,.22),transparent 30%,transparent 70%,rgba(6,16,50,.4));
+}
+.om-photo .plate{z-index:2}
+.om-photo figcaption.credit{position:absolute;top:.7rem;right:.9rem;z-index:2;font-family:var(--mono);font-size:.58rem;letter-spacing:.12em;color:rgba(255,255,255,.55);text-transform:uppercase}
+.om-copy p{color:var(--muted);margin-bottom:1rem;max-width:36rem}
+.om-copy p b{color:var(--ink);font-weight:500}
+.chips{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.5rem;list-style:none}
+.chips li{
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;
+  color:#ffe6ac;border:1px solid var(--gold-line);border-radius:6px;
+  padding:.5em .9em;background:rgba(245,196,81,.07);
+}
+
+/* ---------- meriter: poängväggen + odometrar ---------- */
+#meriter::before{
+  content:"";position:absolute;left:50%;top:0;transform:translateX(-50%);
+  width:min(900px,90vw);height:420px;pointer-events:none;
+  background:radial-gradient(55% 60% at 50% 0%,rgba(245,196,81,.12),transparent 72%);
+}
+.scorewall{display:grid;grid-template-columns:1fr;gap:1rem;margin-bottom:1rem}
+@media(min-width:640px){.scorewall{grid-template-columns:1fr 1fr}}
+@media(min-width:1000px){.scorewall{grid-template-columns:repeat(4,1fr)}}
+.score{
+  position:relative;border-radius:16px;padding:1.5rem 1.4rem 1.35rem;
+  background:var(--panel);border:1px solid var(--panel-line);
+  transition:border-color .5s ease, box-shadow .5s ease;
+}
+.score::before{ /* LED-prickraster */
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;border-radius:inherit;
+  background-image:radial-gradient(rgba(140,160,255,.13) 1px,transparent 1.5px);
+  background-size:13px 13px;
+}
+.score.lit{
+  border-color:rgba(245,196,81,.42);
+  box-shadow:0 0 48px -14px rgba(245,196,81,.4), inset 0 0 40px -24px rgba(245,196,81,.55);
+}
+.score-no{position:absolute;top:.75rem;right:.95rem;font-family:var(--mono);font-size:.56rem;letter-spacing:.22em;color:rgba(170,185,240,.45)}
+.score-val{
+  position:relative;font-family:var(--mono);font-weight:700;line-height:1;
+  font-size:clamp(2.1rem,3.2vw,2.9rem);color:var(--gold);
+  text-shadow:0 0 22px rgba(245,196,81,.4);
+  display:flex;align-items:baseline;gap:.18em;flex-wrap:wrap;
+}
+.score-unit{font-size:.42em;font-weight:700;letter-spacing:.14em;color:#ffe6ac;text-transform:uppercase}
+.score-label{position:relative;margin-top:.85rem;font-family:var(--mono);font-size:.68rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:rgba(220,229,255,.85)}
+.score-sub{position:relative;margin-top:.3rem;font-size:.8rem;color:var(--dim)}
+.score.jackpot{grid-column:1/-1;text-align:center;padding-block:2.2rem 1.9rem;border-color:rgba(180,76,240,.35)}
+.score.jackpot .score-val{justify-content:center;font-size:clamp(2.9rem,7vw,4.7rem);gap:.2em}
+.score.jackpot::after{
+  content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+  background:radial-gradient(60% 90% at 50% 0%,rgba(180,76,240,.16),transparent 65%);
+}
+.score.jackpot .score-label{letter-spacing:.3em}
+.jackpot-tag{
+  position:absolute;top:-.05rem;left:50%;transform:translate(-50%,-50%);
+  font-family:var(--mono);font-size:.6rem;font-weight:700;letter-spacing:.3em;text-indent:.3em;
+  color:#fbe4ff;border:1px solid rgba(180,76,240,.55);background:#1c0b33;
+  padding:.5em 1.2em;border-radius:999px;z-index:3;
+}
+/* odometersiffror */
+.odo{display:inline-flex}
+.odo-cell{display:inline-block;width:1ch;height:1em;overflow:hidden;vertical-align:top}
+.odo-strip{display:block;transform:translateY(0);will-change:transform;
+  transition-property:transform;transition-timing-function:cubic-bezier(.13,.71,.16,1)}
+.odo-strip span{display:block;height:1em;line-height:1;text-align:center}
+.odo-sep{display:inline-block;width:.4ch}
+
+/* meritkorten */
+.merits{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1rem;margin-top:2.2rem}
+.merit{
+  position:relative;background:var(--panel);border:1px solid var(--panel-line);
+  border-radius:14px;padding:1.25rem 1.3rem;
+  transition:border-color .2s ease, transform .2s ease;
+}
+.merit:hover{border-color:var(--gold-line);transform:translateY(-3px)}
+.merit-year{
+  position:absolute;top:1.05rem;right:1.1rem;
+  font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.14em;color:var(--gold);
+}
+.merit h3{font-size:1rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding-right:3.2rem;line-height:1.25}
+.merit p{margin-top:.5rem;font-size:.88rem;color:var(--muted);line-height:1.55}
+/* kameramonitorer */
+.monitors{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:2.4rem}
+@media(max-width:680px){.monitors{grid-template-columns:1fr}}
+.monitor{position:relative;margin:0;border-radius:14px;overflow:hidden;border:1px solid var(--panel-line)}
+.monitor img{width:100%;aspect-ratio:16/10;object-fit:cover}
+.monitor figcaption{
+  position:absolute;left:0;right:0;bottom:0;padding:.7rem 1rem;
+  background:linear-gradient(180deg,transparent,rgba(3,7,22,.92) 55%);
+  font-family:var(--mono);font-size:.64rem;letter-spacing:.18em;text-transform:uppercase;color:#ffe6ac;
+}
+.monitor .rec{color:#ff8296}
+
+/* ---------- repriser (sett på tv) ---------- */
+.clips{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
+.clip{
+  display:flex;flex-direction:column;gap:.9rem;padding:1.4rem;border-radius:16px;
+  background:var(--panel);border:1px solid var(--panel-line);color:var(--ink);
+  transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.clip:hover{transform:translateY(-4px);border-color:var(--gold-line);text-decoration:none;box-shadow:0 20px 50px -24px rgba(245,196,81,.35)}
+.clip-top{display:flex;align-items:center;justify-content:space-between}
+.play{
+  display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;
+  border:1px solid var(--gold-line);background:var(--gold-soft);flex:0 0 auto;
+}
+.play svg{width:15px;height:15px;fill:var(--gold);margin-left:2px}
+.clip-src{font-family:var(--mono);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim)}
+.clip h3{font-size:1.02rem;font-weight:700;line-height:1.3}
+.clip-cta{margin-top:auto;font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+
+/* ---------- projekt: kvällens priser ---------- */
+#projekt::before{
+  content:"";position:absolute;left:50%;top:0;transform:translateX(-50%);
+  width:min(1000px,94vw);height:380px;pointer-events:none;
+  background:radial-gradient(50% 60% at 50% 0%,rgba(180,76,240,.1),transparent 70%);
+}
+.prizes{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+@media(max-width:980px){.prizes{grid-template-columns:1fr;max-width:520px;margin-inline:auto}}
+.prize{
+  display:flex;flex-direction:column;border-radius:18px;overflow:hidden;
+  background:var(--panel);border:1px solid var(--panel-line);
+  transition:border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+.prize:hover{border-color:var(--gold-line);transform:translateY(-4px);box-shadow:0 30px 70px -30px rgba(245,196,81,.3)}
+.stage{
+  position:relative;aspect-ratio:1/.92;display:grid;place-items:end center;overflow:hidden;
+  background:linear-gradient(180deg,rgba(4,9,30,.35),rgba(3,7,24,.9));
+}
+.stage::before{ /* ljus underifrån */
+  content:"";position:absolute;left:0;right:0;bottom:0;height:62%;pointer-events:none;z-index:1;
+  background:radial-gradient(58% 58% at 50% 100%,rgba(245,196,81,.22),transparent 74%);
+}
+.stage::after{ /* podiets ljuslist */
+  content:"";position:absolute;left:14%;right:14%;bottom:9px;height:8px;border-radius:50%;z-index:2;
+  background:radial-gradient(50% 100% at 50% 50%,rgba(255,223,154,.85),rgba(245,196,81,0) 72%);
+}
+.prize-tag{
+  position:absolute;top:.9rem;left:.9rem;z-index:3;
+  font-family:var(--mono);font-size:.6rem;font-weight:700;letter-spacing:.24em;text-indent:.24em;
+  color:#241800;background:linear-gradient(180deg,var(--gold-hi),var(--gold));
+  border-radius:999px;padding:.5em 1em;
+}
+.stage .glob-holder{width:min(82%,300px);margin-bottom:1.4rem;position:relative;z-index:2}
+.stage .glob-holder canvas{width:100%;aspect-ratio:1;display:block}
+.stage .stage-cutout{position:relative;z-index:2;max-height:88%;width:auto;object-fit:contain;filter:drop-shadow(0 18px 30px rgba(2,5,16,.75))}
+.stage .stage-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.94}
+.stage .stage-photo+.photo-shade{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(4,9,30,.45),transparent 40%,rgba(3,7,24,.55))}
+.prize-body{display:flex;flex-direction:column;gap:.55rem;padding:1.4rem 1.4rem 1.5rem;flex:1}
+.prize-body h3{font-size:1.14rem;font-weight:700;letter-spacing:.01em}
+.prize-body h3 .tld{color:var(--gold)}
+.prize-body p{font-size:.9rem;color:var(--muted);line-height:1.55}
+.prize-link{
+  margin-top:auto;padding-top:.9rem;font-family:var(--mono);font-size:.7rem;font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--gold);
+}
+.prize-link:hover{color:var(--gold-hi)}
+.projekt-intro{max-width:44rem;margin:-1.4rem auto clamp(2.4rem,5vw,3.4rem);text-align:center;font-family:var(--serif);font-style:italic;font-size:1.12rem;color:var(--muted)}
+
+/* ---------- kurs: bonusrondan ---------- */
+#kurs{padding-block:clamp(3.5rem,7vw,5.5rem)}
+.kurs-box{
+  position:relative;max-width:920px;margin-inline:auto;text-align:center;
+  padding:clamp(3rem,7vw,4.6rem) clamp(1.6rem,5vw,3.6rem);
+  border:1px solid rgba(245,196,81,.42);border-radius:26px;
+  background:
+    radial-gradient(110% 100% at 50% 0%,rgba(180,76,240,.16),transparent 55%),
+    linear-gradient(180deg,rgba(15,27,82,.92),rgba(7,13,42,.96));
+  box-shadow:0 40px 100px -46px rgba(245,196,81,.45), inset 0 0 60px -34px rgba(245,196,81,.4);
+}
+.bulbs{
+  position:absolute;left:22px;right:22px;height:8px;pointer-events:none;
+  background-image:radial-gradient(circle 3px at 13px 4px,var(--gold-hi) 2.1px,rgba(245,196,81,.16) 2.8px,transparent 3.6px);
+  background-size:26px 8px;background-repeat:repeat-x;
+  animation:bulbshift 1.7s steps(2,end) infinite;
+}
+.bulbs.top{top:12px}.bulbs.bottom{bottom:12px}
+@keyframes bulbshift{to{background-position-x:26px}}
+.kurs-kicker{font-family:var(--mono);font-size:.66rem;font-weight:700;letter-spacing:.36em;text-indent:.36em;text-transform:uppercase;color:var(--mag);margin-bottom:1.2rem}
+.kurs-box h2{font-size:clamp(1.9rem,4.6vw,3.1rem);text-transform:uppercase;letter-spacing:.04em;line-height:1.06;text-shadow:0 0 44px rgba(245,196,81,.25)}
+.kurs-box h2 span{color:var(--gold)}
+.kurs-sub{margin:1.1rem auto 0;max-width:34rem;font-family:var(--serif);font-style:italic;font-size:1.08rem;color:var(--muted)}
+.kurs-cta{display:flex;align-items:center;justify-content:center;gap:1.1rem;margin-top:2.2rem;flex-wrap:wrap}
+.kurs-arrow{display:inline-flex;align-items:center;gap:.6rem;font-family:var(--mono);font-size:.74rem;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--gold)}
+.kurs-arrow .ch{display:inline-block;font-size:1.05rem;animation:chev 1.4s ease-in-out infinite;opacity:.3}
+.kurs-arrow .ch:nth-child(2){animation-delay:.18s}
+.kurs-arrow .ch:nth-child(3){animation-delay:.36s}
+@keyframes chev{0%,70%,100%{opacity:.25}25%{opacity:1}}
+.kurs-note{margin-top:1.3rem;font-family:var(--mono);font-size:.64rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+
+/* ---------- kontakt: ring in till studion ---------- */
+#kontakt::before{
+  content:"";position:absolute;right:6%;top:0;width:min(30vw,360px);height:70%;pointer-events:none;
+  background:linear-gradient(180deg,rgba(180,76,240,.1),transparent 72%);
+  clip-path:polygon(42% 0,58% 0,100% 100%,0 100%);transform:rotate(-8deg);
+}
+.kontakt-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:clamp(2.2rem,5vw,4rem);align-items:start}
+@media(max-width:880px){.kontakt-grid{grid-template-columns:1fr}}
+.kontakt-copy>p{color:var(--muted);max-width:32rem;margin-bottom:1.1rem}
+.kontakt-copy .oforglomlig{font-family:var(--serif);font-style:italic;font-size:1.12rem;color:var(--ink)}
+.follow-label{font-family:var(--mono);font-size:.66rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin:1.8rem 0 .9rem}
+.socials{display:flex;gap:.8rem;list-style:none}
+.socials a{
+  display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:50%;
+  border:1px solid var(--panel-line);color:var(--muted);background:rgba(10,20,60,.5);
+  transition:color .18s, border-color .18s, transform .18s, background .18s;
+}
+.socials a:hover{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft);transform:translateY(-3px);text-decoration:none}
+.socials svg{width:20px;height:20px;fill:currentColor}
+.kontakt-photo{position:relative;margin:2.2rem 0 0;max-width:380px;border-radius:14px;overflow:hidden;border:1px solid var(--panel-line)}
+.kontakt-photo img{width:100%;aspect-ratio:16/10;object-fit:cover;object-position:50% 18%}
+.kontakt-photo figcaption{
+  position:absolute;left:0;right:0;bottom:0;padding:.65rem 1rem;
+  background:linear-gradient(180deg,transparent,rgba(3,7,22,.92) 55%);
+  font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:#ffe6ac;
+}
+.form-panel{
+  position:relative;background:var(--panel);border:1px solid var(--panel-line);
+  border-radius:20px;padding:clamp(1.5rem,3.5vw,2.2rem);
+}
+.form-head{display:flex;align-items:center;gap:.6rem;font-family:var(--mono);font-size:.66rem;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem}
+.form-head i{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 10px rgba(61,220,132,.8);animation:live 2.6s ease-in-out infinite}
+.field{margin-bottom:1.1rem}
+.field label{display:block;font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);margin-bottom:.45rem}
+.field input,.field textarea{
+  width:100%;padding:.85rem 1rem;border-radius:10px;color:var(--ink);
+  background:rgba(4,9,28,.72);border:1px solid rgba(140,160,255,.22);
+  font-family:var(--sans);font-size:.95rem;
+  transition:border-color .18s, box-shadow .18s;
+}
+.field input:focus-visible,.field textarea:focus-visible{
+  outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(245,196,81,.18);
+}
+.field textarea{resize:vertical;min-height:130px}
+.form-done{
+  display:none;margin-top:1.2rem;padding:1rem 1.2rem;border-radius:12px;
+  border:1px solid rgba(61,220,132,.4);background:rgba(61,220,132,.08);
+  font-size:.92rem;color:#b6f4ce;
+}
+.form-panel.sent form>*:not(.form-done){display:none}
+.form-panel.sent .form-done{display:block}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid rgba(140,160,255,.12);padding:3rem 0 3.4rem;text-align:center}
+.foot-sign{font-family:var(--mono);font-size:.62rem;letter-spacing:.34em;text-indent:.34em;text-transform:uppercase;color:var(--dim)}
+.foot-copy{margin-top:1rem;font-size:.9rem;color:var(--muted)}
+.foot-links{display:flex;gap:1.4rem;justify-content:center;flex-wrap:wrap;margin-top:1.1rem;list-style:none}
+.foot-links a{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;color:var(--dim)}
+.foot-links a:hover{color:var(--gold)}
+.foot-credit{margin-top:1.4rem;font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;color:rgba(170,185,240,.4)}
+
+/* ---------- responsivt ---------- */
+@media(max-width:920px){
+  .hero-grid{grid-template-columns:1fr;text-align:center}
+  .hero-copy .ingress{margin-inline:auto}
+  .cta-row{justify-content:center}
+  .hero-photo{max-width:400px;margin-top:1.4rem}
+  .om-grid{grid-template-columns:1fr}
+  .om-copy{max-width:38rem;margin-inline:auto}
+}
+@media(max-width:480px){
+  .ans .lz-in{padding-inline:1.9rem 1.6rem;min-height:3.3rem}
+  .ans-text{font-size:.9rem}
+  .kurs-cta{flex-direction:column}
+}
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<!-- ================= LADDSKÄRM ================= -->
+<div id="loader" aria-hidden="true">
+  <div class="ld-box">
+    <div class="ld-lines" id="ldLines"><span class="ld-cursor" id="ldCursor"></span></div>
+    <div class="ld-stage">
+      <div>
+        <div class="ld-count-label" id="ldCountLabel">&nbsp;</div>
+        <div class="ld-count" id="ldCount">&nbsp;</div>
+      </div>
+      <div class="ld-onair" id="ldOnair">ON&nbsp;AIR</div>
+    </div>
+    <p class="ld-skip">klick eller valfri tangent hoppar över</p>
+  </div>
+</div>
+<noscript><style>#loader{display:none}</style></noscript>
+
+<!-- ================= TOPPNAV ================= -->
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="brand" href="#hero"><span class="star" aria-hidden="true">★</span>JONAS&nbsp;VON&nbsp;ESSEN</a>
+    <span class="live-chip" aria-hidden="true"><i></i><span>DIREKT&nbsp;·&nbsp;STUDIO&nbsp;A</span></span>
+    <nav aria-label="Huvudmeny">
+      <ul class="nav-links">
+        <li><a href="#om">Om</a></li>
+        <li><a href="#meriter">Meriter</a></li>
+        <li><a href="#projekt">Projekt</a></li>
+        <li><a href="#kurs">Kurs</a></li>
+        <li><a href="#kontakt">Kontakt</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ================= HERO ================= -->
+<section id="hero" class="hero">
+  <div class="beam beam-gold beam-1" aria-hidden="true"></div>
+  <div class="beam beam-mag beam-2" aria-hidden="true"></div>
+  <div class="beam beam-white beam-3" aria-hidden="true"></div>
+  <div class="sparkle" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">IKVÄLL · DIREKT FRÅN GÖTEBORG · <b>BÄSTA SÄNDNINGSTID</b></p>
+        <p class="kicker">Kvällens deltagare</p>
+        <h1>Jonas <span>von Essen</span></h1>
+        <p class="tagline">Tvåfaldig världsmästare i minne <b>·</b> Föreläsare <b>·</b> Frågesportsnörd</p>
+        <p class="ingress">Jag tävlar i att minnas saker – och i att säga dem snyggt. Däremellan bygger jag gratis appar som gör det lättare att lära sig.</p>
+        <div class="cta-row">
+          <a class="btn btn-gold" href="#projekt">Se vad jag byggt</a>
+          <a class="btn btn-ghost" href="#kontakt">Boka föreläsning</a>
+        </div>
+      </div>
+
+      <figure class="hero-photo">
+        <img src="../assets/img/jonas_pkm-md.webp" alt="Jonas von Essen står på sin stol med armarna i luften i Postkodmiljonärens studio" width="700" height="700" fetchpriority="high">
+        <figcaption class="plate">Postkodmiljonären 2023 — ja, det där är miljonfrågan</figcaption>
+      </figure>
+    </div>
+
+    <!-- WOW-DETALJ 2: SVARSALTERNATIVEN -->
+    <div class="quiz" id="quiz">
+      <div class="quiz-card" id="quizCard">
+        <p class="quiz-tag" id="quizTag">Fråga 1 · för 1&#8239;000&#8239;000 kr</p>
+        <h2 class="quiz-q">Vem är Jonas von Essen?</h2>
+        <div class="quiz-grid" role="group" aria-label="Svarsalternativ">
+          <button class="ans" type="button" data-msg="RÄTT! London 2013 &amp; Haikou 2014 … men det är mer.">
+            <span class="lz"><span class="lz-in"><span class="ans-key" aria-hidden="true">A:</span><span class="ans-text">Tvåfaldig världsmästare i minne</span><span class="ans-mark" aria-hidden="true">✓ RÄTT</span></span></span>
+          </button>
+          <button class="ans" type="button" data-msg="RÄTT! Färskt SM-guld 2026, faktiskt … men det är mer.">
+            <span class="lz"><span class="lz-in"><span class="ans-key" aria-hidden="true">B:</span><span class="ans-text">Svensk mästare i poetry slam</span><span class="ans-mark" aria-hidden="true">✓ RÄTT</span></span></span>
+          </button>
+          <button class="ans" type="button" data-msg="RÄTT! En av endast 13 genom tiderna … men det är mer.">
+            <span class="lz"><span class="lz-in"><span class="ans-key" aria-hidden="true">C:</span><span class="ans-text">Miljonvinnare i Postkodmiljonären</span><span class="ans-mark" aria-hidden="true">✓ RÄTT</span></span></span>
+          </button>
+          <button class="ans" type="button" data-final="true" data-msg="RÄTT SVAR! D – alla ovanstående. JACKPOT! Vi går direkt till poängväggen …">
+            <span class="lz"><span class="lz-in"><span class="ans-key" aria-hidden="true">D:</span><span class="ans-text">Alla ovanstående</span><span class="ans-mark" aria-hidden="true">★ JACKPOT</span></span></span>
+          </button>
+        </div>
+        <p class="quiz-feedback" id="quizFeedback" aria-live="polite"></p>
+        <p class="quiz-hint" id="quizHint">Ta den tid du behöver. Publiken har hela kvällen på sig.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= OM MIG ================= -->
+<section id="om">
+  <div class="beam beam-gold beam-om" aria-hidden="true"></div>
+  <div class="wrap">
+    <header class="seg">
+      <p class="seg-plate">Ronda 1</p>
+      <h2>Lär känna deltagaren</h2>
+      <p class="seg-sub">”Berätta lite om dig själv, Jonas.”</p>
+    </header>
+    <div class="om-grid">
+      <figure class="om-photo">
+        <img src="../assets/img/foto-siffervagg-md.webp" alt="Jonas von Essen ler framför en vägg täckt av handskrivna pi-decimaler" width="580" height="800" loading="lazy">
+        <figcaption class="credit">Foto: Jessica Ahrling</figcaption>
+        <figcaption class="plate">Deltagare 001 · Göteborg</figcaption>
+      </figure>
+      <div class="om-copy">
+        <p>Jag heter Jonas von Essen och 2013 blev jag – som förste svensk någonsin – <b>världsmästare i minne</b>. 2014 försvarade jag titeln. Sedan dess har jag gjort det till mitt jobb att visa att hjärnan klarar mer än man tror: i TV-studior, föreläsningssalar, böcker och appar.</p>
+        <p>Jag har memorerat <b>100&#8239;000 decimaler av pi</b>, lärt mig hela Talang-publikens namn och vunnit en miljon på Postkodmiljonären. När jag inte tävlar i att minnas saker tävlar jag i att formulera dem – som färsk <b>svensk mästare i poetry slam</b> och Göteborgsmästare i ordvitsar.</p>
+        <ul class="chips" aria-label="Snabbfakta">
+          <li>Göteborg</li>
+          <li>Föreläsare &amp; författare</li>
+          <li>3 gratis läroappar</li>
+          <li>2× VM-guld</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MERITER ================= -->
+<section id="meriter">
+  <div class="wrap">
+    <header class="seg">
+      <p class="seg-plate">Ronda 2</p>
+      <h2>Meriterna</h2>
+      <p class="seg-sub">Poängväggen. Allt är på riktigt, inget är retuscherat.</p>
+    </header>
+
+    <!-- WOW-DETALJ 1: ODOMETERN -->
+    <div class="scorewall" id="scorewall">
+      <div class="score jackpot">
+        <span class="jackpot-tag">Jackpot</span>
+        <p class="score-no" aria-hidden="true">PANEL 01</p>
+        <p class="score-val"><span class="odo-val">1&#8239;000&#8239;000</span> <span class="score-unit">kr</span></p>
+        <p class="score-label">Postkodmiljonären 2023</p>
+        <p class="score-sub">Rätt på miljonfrågan – en av endast 13 genom tiderna i Sverige.</p>
+      </div>
+      <div class="score">
+        <p class="score-no" aria-hidden="true">PANEL 02</p>
+        <p class="score-val"><span class="odo-val">100&#8239;000</span></p>
+        <p class="score-label">π-decimaler i minne</p>
+        <p class="score-sub">Först i världen att klara ett verifierat test på alla 100&#8239;000 (2020).</p>
+      </div>
+      <div class="score">
+        <p class="score-no" aria-hidden="true">PANEL 03</p>
+        <p class="score-val"><span class="odo-val">24&#8239;063</span></p>
+        <p class="score-label">π-decimaler i rad</p>
+        <p class="score-sub">Europarekord i uppläsning, utan att tappa tråden.</p>
+      </div>
+      <div class="score">
+        <p class="score-no" aria-hidden="true">PANEL 04</p>
+        <p class="score-val"><span class="odo-val">2</span> <span class="score-unit">VM-guld</span></p>
+        <p class="score-label">Världsmästare i minne</p>
+        <p class="score-sub">London 2013 &amp; Haikou, Kina 2014. Sveriges förste.</p>
+      </div>
+      <div class="score">
+        <p class="score-no" aria-hidden="true">PANEL 05</p>
+        <p class="score-val"><span class="odo-val">160</span> <span class="score-unit">av 160</span></p>
+        <p class="score-label">Högskoleprovet 2021</p>
+        <p class="score-sub">Alla rätt – som ende i landet. 2.0 tolv gånger.</p>
+      </div>
+    </div>
+
+    <div class="merits">
+      <article class="merit">
+        <p class="merit-year">2013–14</p>
+        <h3>2× Världsmästare i minne</h3>
+        <p>London 2013 och Haikou, Kina 2014. Sveriges förste världsmästare i minne – och han försvarade titeln.</p>
+      </article>
+      <article class="merit">
+        <p class="merit-year">2018</p>
+        <h3>Talang (TV4)</h3>
+        <p>Golden buzzer av David Batra efter att ha lärt sig hela publikens namn. Finalist.</p>
+      </article>
+      <article class="merit">
+        <p class="merit-year">2026</p>
+        <h3>Svensk mästare i poetry slam</h3>
+        <p>Minnesmästaren tävlar även i att säga saker snyggt. Med guldresultat.</p>
+      </article>
+      <article class="merit">
+        <p class="merit-year">2026</p>
+        <h3>Göteborgsmästare i ordvitsar</h3>
+        <p>Och klar för SM-final. Ordvitsnivå: farligt hög, enligt teknikerna i kontrollrummet.</p>
+      </article>
+      <article class="merit">
+        <p class="merit-year">5×</p>
+        <h3>Svensk mästare i pubquiz</h3>
+        <p>Med laget ”Glenns över sjö och strand”. Fem SM-titlar och räknar.</p>
+      </article>
+      <article class="merit">
+        <p class="merit-year">2020–21</p>
+        <h3>Fler TV-segrar</h3>
+        <p>Vann Smartare än en femteklassare (2020), besegrade expertpanelen i Muren (SVT, 2021) och klarade sin utmaning i kinesiska The Brain – bland annat 200 numrerade valnötter.</p>
+      </article>
+      <article class="merit">
+        <p class="merit-year">3 böcker</p>
+        <h3>Författare</h3>
+        <p>”Så får du ett superminne” (Semic), ”Bli ett minnesgeni!” och ”Pi-boken 2.0” – den med alla 100&#8239;000 decimalerna.</p>
+      </article>
+      <article class="merit">
+        <p class="merit-year">12×</p>
+        <h3>Högskoleprovet</h3>
+        <p>2.0 tolv gånger. År 2021 dessutom 160 rätt av 160 – som ende i landet.</p>
+      </article>
+      <article class="merit">
+        <p class="merit-year">2020</p>
+        <h3>100&#8239;000 π-decimaler</h3>
+        <p>Först i världen att klara ett verifierat test på alla 100&#8239;000. Europarekord i uppläsning: 24&#8239;063 i rad.</p>
+      </article>
+    </div>
+
+    <div class="monitors">
+      <figure class="monitor">
+        <img src="../assets/img/jonas_vm-md.webp" alt="Jonas von Essen med VM-pokalen och svenska flaggan runt axlarna" loading="lazy">
+        <figcaption><span class="rec">●</span> KAMERA 1 · VM-guld, London 2013</figcaption>
+      </figure>
+      <figure class="monitor">
+        <img src="../assets/img/jonas_smartare-md.webp" alt="Jonas von Essen gör ett jublande luftskutt i TV-studion" loading="lazy">
+        <figcaption><span class="rec">●</span> KAMERA 2 · Smartare än en femteklassare, 2020</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ================= REPRISER / SETT PÅ TV ================= -->
+<section id="klipp">
+  <div class="wrap">
+    <header class="seg">
+      <p class="seg-plate">Repriser</p>
+      <h2>Sett på TV</h2>
+      <p class="seg-sub">Tre klipp för dig som missade sändningen.</p>
+    </header>
+    <div class="clips">
+      <a class="clip" href="https://www.youtube.com/watch?v=PtqSFf3cO04" target="_blank" rel="noopener">
+        <span class="clip-top"><span class="play" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3 1.5v13L14 8z"/></svg></span><span class="clip-src">Talang · TV4</span></span>
+        <h3>Jonas memorerar 500 namn på två timmar</h3>
+        <span class="clip-cta">Se klippet på YouTube ↗</span>
+      </a>
+      <a class="clip" href="https://www.youtube.com/results?search_query=jonas+von+essen+postkodmiljon%C3%A4ren" target="_blank" rel="noopener">
+        <span class="clip-top"><span class="play" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3 1.5v13L14 8z"/></svg></span><span class="clip-src">Postkodmiljonären</span></span>
+        <h3>Miljonfrågan</h3>
+        <span class="clip-cta">Se klippet på YouTube ↗</span>
+      </a>
+      <a class="clip" href="https://www.youtube.com/@BlueberryClubSparven" target="_blank" rel="noopener">
+        <span class="clip-top"><span class="play" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3 1.5v13L14 8z"/></svg></span><span class="clip-src">Gratis lektion</span></span>
+        <h3>Lär dig världens 10 största länder på 5 minuter</h3>
+        <span class="clip-cta">Se klippet på YouTube ↗</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROJEKT: KVÄLLENS PRISER ================= -->
+<section id="projekt">
+  <div class="wrap">
+    <header class="seg">
+      <p class="seg-plate">Ronda 3</p>
+      <h2>Kvällens priser</h2>
+    </header>
+    <p class="projekt-intro">”Tre appar, noll kronor. Jag bygger dem för att det är kul – och för att bra inlärning inte ska kosta. Allt på podierna kan du vinna. Genom att klicka.”</p>
+    <div class="prizes">
+
+      <article class="prize">
+        <div class="stage">
+          <span class="prize-tag">Pris nr 1</span>
+          <div class="glob-holder">
+            <canvas id="glob" aria-label="Interaktiv jordglob där varje land är prickat i guld – dra för att snurra"></canvas>
+          </div>
+        </div>
+        <div class="prize-body">
+          <h3>jonasgeografi<span class="tld">.se</span></h3>
+          <p>Lär dig alla världens länder på en snurrbar jordglob där varje land är ett eget litet konstverk. Utforska, quizza och res jorden runt – med minnesknep för varje land.</p>
+          <a class="prize-link" href="https://jonasgeografi.se" target="_blank" rel="noopener">Hämta priset ↗</a>
+        </div>
+      </article>
+
+      <article class="prize">
+        <div class="stage">
+          <span class="prize-tag">Pris nr 2</span>
+          <img class="stage-photo" src="../assets/img/bild_hp-md.webp" alt="Provhäften och svarsblankett från högskoleprovet" loading="lazy">
+          <span class="photo-shade" aria-hidden="true"></span>
+        </div>
+        <div class="prize-body">
+          <h3>hpakuten<span class="tld">.se</span></h3>
+          <p>Gratis träning inför högskoleprovet: simulera gamla prov på tid, videogenomgångar och minnestekniker. Från Sveriges kanske mest rutinerade HP-skrivare.</p>
+          <a class="prize-link" href="https://hpakuten.se" target="_blank" rel="noopener">Hämta priset ↗</a>
+        </div>
+      </article>
+
+      <article class="prize">
+        <div class="stage">
+          <span class="prize-tag">Pris nr 3</span>
+          <img class="stage-cutout" src="../assets/img/jonas-gangertabellen-md.webp" alt="Jonas von Essen gör en förbluffad mind blown-gest" loading="lazy">
+        </div>
+        <div class="prize-body">
+          <h3>gångertabellen<span class="tld">.se</span></h3>
+          <p>Gångertabellen är lättare än den ser ut: med rätt knep är det bara sex tal kvar att memorera. Quiz, minnesbilder och smart repetition – utan inloggning.</p>
+          <a class="prize-link" href="https://www.gångertabellen.se" target="_blank" rel="noopener">Hämta priset ↗</a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= KURS: BONUSRONDAN ================= -->
+<section id="kurs">
+  <div class="wrap">
+    <div class="kurs-box">
+      <span class="bulbs top" aria-hidden="true"></span>
+      <p class="kurs-kicker">Bonusrondan</p>
+      <h2>Vill du också sitta här?<br><span>Skaffa ett superminne!</span></h2>
+      <p class="kurs-sub">Onlinekurs i minnesteknik: lär dig metoderna jag använder – i din egen takt, hur många gånger du vill.</p>
+      <div class="kurs-cta">
+        <span class="kurs-arrow" aria-hidden="true">Anmäl dig <span class="ch">❯</span><span class="ch">❯</span><span class="ch">❯</span></span>
+        <a class="btn btn-gold" href="https://kurs.jonasvonessen.se" target="_blank" rel="noopener">Till kursen</a>
+      </div>
+      <p class="kurs-note">Sidans finaste vinst delas ut dygnet runt.</p>
+      <span class="bulbs bottom" aria-hidden="true"></span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= KONTAKT ================= -->
+<section id="kontakt">
+  <div class="wrap">
+    <header class="seg">
+      <p class="seg-plate">Sista segmentet</p>
+      <h2>Ring in till studion</h2>
+      <p class="seg-sub">Linjerna är öppna. Publiken väntar.</p>
+    </header>
+    <div class="kontakt-grid">
+      <div class="kontakt-copy">
+        <p class="oforglomlig">Vill du boka Jonas till ett oförglömligt event? Skriv en rad!</p>
+        <p>Föreläsningar om minne och inlärning för företag, skolor och scener – alltid smart, varmt och med farligt hög ordvitsnivå. Frågor om böckerna, apparna eller samarbeten går lika bra.</p>
+        <p class="follow-label">Följ mig</p>
+        <ul class="socials">
+          <li><a href="https://www.instagram.com/jonasvonessen/" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.8.07 1.2.05 1.9.24 2.3.4.6.23 1 .5 1.5.94.44.45.71.87.94 1.46.16.44.35 1.1.4 2.3.06 1.27.07 1.65.07 4.83s0 3.56-.07 4.83c-.05 1.2-.24 1.86-.4 2.3-.23.6-.5 1-.94 1.46-.45.44-.87.71-1.46.94-.44.16-1.1.35-2.3.4-1.27.06-1.65.07-4.83.07s-3.56 0-4.83-.07c-1.2-.05-1.86-.24-2.3-.4a3.9 3.9 0 0 1-1.46-.94 3.9 3.9 0 0 1-.94-1.46c-.16-.44-.35-1.1-.4-2.3C2.2 15.56 2.2 15.18 2.2 12s0-3.56.07-4.83c.05-1.2.24-1.86.4-2.3.23-.6.5-1 .94-1.46.45-.44.87-.71 1.46-.94.44-.16 1.1-.35 2.3-.4C8.44 2.2 8.82 2.2 12 2.2Zm0 1.8c-3.13 0-3.5 0-4.74.07-1.14.05-1.76.24-2.17.4-.55.21-.94.47-1.35.88-.4.4-.67.8-.88 1.35-.16.41-.35 1.03-.4 2.17-.06 1.24-.07 1.6-.07 4.74s0 3.5.07 4.74c.05 1.14.24 1.76.4 2.17.21.55.47.94.88 1.35.4.4.8.67 1.35.88.41.16 1.03.35 2.17.4 1.24.06 1.6.07 4.74.07s3.5 0 4.74-.07c1.14-.05 1.76-.24 2.17-.4.55-.21.94-.47 1.35-.88.4-.4.67-.8.88-1.35.16-.41.35-1.03.4-2.17.06-1.24.07-1.6.07-4.74s0-3.5-.07-4.74c-.05-1.14-.24-1.76-.4-2.17a3.6 3.6 0 0 0-.88-1.35c-.4-.4-.8-.67-1.35-.88-.41-.16-1.03-.35-2.17-.4C15.5 4 15.13 4 12 4Zm0 3a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 1.8a3.2 3.2 0 1 0 0 6.4 3.2 3.2 0 0 0 0-6.4Zm5.2-3.1a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4Z"/></svg>
+          </a></li>
+          <li><a href="https://www.tiktok.com/@jonasvonessen" target="_blank" rel="noopener" aria-label="TikTok">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.6 8.6a6.6 6.6 0 0 1-4.5-1.8v7.6a6 6 0 1 1-6-6c.34 0 .68.03 1 .09v3.3a2.9 2.9 0 1 0 2 2.75V2.4h3a4.7 4.7 0 0 0 .12 1.02 4.66 4.66 0 0 0 2.05 2.99 4.6 4.6 0 0 0 2.33.75Z"/></svg>
+          </a></li>
+          <li><a href="https://www.youtube.com/@BlueberryClubSparven" target="_blank" rel="noopener" aria-label="YouTube">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.76-1.77C18.25 5 12 5 12 5s-6.25 0-7.84.43A2.5 2.5 0 0 0 2.4 7.2 26.2 26.2 0 0 0 2 12c0 1.62.13 3.23.4 4.8a2.5 2.5 0 0 0 1.76 1.77C5.75 19 12 19 12 19s6.25 0 7.84-.43a2.5 2.5 0 0 0 1.76-1.77c.27-1.57.4-3.18.4-4.8s-.13-3.23-.4-4.8ZM10 15.2V8.8l5.5 3.2Z"/></svg>
+          </a></li>
+        </ul>
+        <figure class="kontakt-photo">
+          <img src="../assets/img/foto-scen-md.webp" alt="Jonas von Essen på scen med headsetmikrofon i blått scenljus" loading="lazy">
+          <figcaption><span style="color:#ff8296">●</span> Direktlinje till scenen</figcaption>
+        </figure>
+      </div>
+
+      <div class="form-panel">
+        <p class="form-head"><i aria-hidden="true"></i>Linje 1 · Öppen</p>
+        <!-- FORMSPREE: ersätt action med https://formspree.io/f/DITT-FORMSPREE-ID och ta bort JS-fallbacken när backend är kopplad -->
+        <form id="kontaktForm" action="#" method="post" novalidate>
+          <div class="field">
+            <label for="f-namn">Namn</label>
+            <input id="f-namn" name="namn" type="text" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="f-epost">E-post</label>
+            <input id="f-epost" name="epost" type="email" autocomplete="email" required>
+          </div>
+          <div class="field">
+            <label for="f-medd">Meddelande</label>
+            <textarea id="f-medd" name="meddelande" required></textarea>
+          </div>
+          <button class="btn btn-gold" type="submit">Skicka</button>
+          <p class="form-done" role="status">Tack! Formuläret kopplas snart – mejla mig så länge, så hörs vi. Svar utlovas innan nästa avsnitt.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="wrap">
+    <p class="foot-sign">— Slut på sändningen · tack för ikväll —</p>
+    <p class="foot-copy">© 2026 Jonas von Essen</p>
+    <ul class="foot-links">
+      <li><a href="https://jonasgeografi.se" target="_blank" rel="noopener">jonasgeografi.se</a></li>
+      <li><a href="https://hpakuten.se" target="_blank" rel="noopener">hpakuten.se</a></li>
+      <li><a href="https://www.gångertabellen.se" target="_blank" rel="noopener">gångertabellen.se</a></li>
+      <li><a href="https://kurs.jonasvonessen.se" target="_blank" rel="noopener">Skaffa ett superminne – kursen</a></li>
+    </ul>
+    <p class="foot-credit">Foto: Jessica Ahrling · Produktion: Studio A, Göteborg</p>
+  </div>
+</footer>
+
+<script src="../assets/globe.js"></script>
+<script>
+(function(){
+  'use strict';
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var $ = function(s,c){ return (c||document).querySelector(s); };
+  var $$ = function(s,c){ return Array.prototype.slice.call((c||document).querySelectorAll(s)); };
+
+  /* ============ 0. LADDSKÄRM: SÄNDNING OM 3-2-1 ============ */
+  (function(){
+    var loader = $('#loader');
+    if(!loader) return;
+    var noloader = new URLSearchParams(location.search).has('noloader');
+    var seen = false;
+    try { seen = sessionStorage.getItem('jve11-loader') === '1'; } catch(e){}
+    var timers = [];
+    var done = false;
+
+    function finish(instant){
+      if(done) return; done = true;
+      timers.forEach(clearTimeout);
+      document.body.classList.remove('is-loading');
+      if(instant){ loader.remove(); }
+      else { loader.classList.add('done'); setTimeout(function(){ loader.remove(); }, 650); }
+      window.removeEventListener('keydown', onSkip, true);
+    }
+    function onSkip(){ finish(true); }
+
+    if(noloader || seen || reduced){ finish(true); return; }
+
+    try { sessionStorage.setItem('jve11-loader','1'); } catch(e){}
+    document.body.classList.add('is-loading');
+    loader.addEventListener('pointerdown', onSkip);
+    window.addEventListener('keydown', onSkip, true);
+
+    var linesEl = $('#ldLines'), cursor = $('#ldCursor');
+    var countEl = $('#ldCount'), countLabel = $('#ldCountLabel'), onair = $('#ldOnair');
+    var lines = [
+      '> studio: GÖTEBORG A1 .......... klar',
+      '> deltagare: jonas.exe ......... laddad',
+      '> ordvitsnivå .................. farligt hög'
+    ];
+    var t = 0;
+    function at(ms, fn){ timers.push(setTimeout(fn, ms)); }
+
+    lines.forEach(function(line){
+      for(var i=1;i<=line.length;i++){
+        (function(i, line){
+          at(t + i*7, function(){
+            var full = linesEl.getAttribute('data-done') || '';
+            linesEl.childNodes[0] && linesEl.removeChild(linesEl.childNodes[0]);
+            linesEl.textContent = full + line.slice(0,i);
+            linesEl.appendChild(cursor);
+          });
+        })(i, line);
+      }
+      t += line.length*7 + 60;
+      (function(line){
+        at(t, function(){
+          linesEl.setAttribute('data-done', (linesEl.getAttribute('data-done')||'') + line + '\n');
+        });
+      })(line);
+    });
+
+    t += 120;
+    at(t, function(){ countLabel.textContent = 'SÄNDNING OM'; });
+    ['3','2','1'].forEach(function(n, i){
+      at(t + i*340, function(){
+        countEl.textContent = n;
+        countEl.classList.remove('tick');
+        void countEl.offsetWidth;
+        countEl.classList.add('tick');
+      });
+    });
+    t += 3*340 + 60;
+    at(t, function(){ onair.classList.add('on'); countEl.textContent = '•'; countLabel.textContent = 'VI SÄNDER'; });
+    at(t + 430, function(){ finish(false); });
+  })();
+
+  /* ============ 1. QUIZ: SVARSALTERNATIVEN (wow 2) ============ */
+  (function(){
+    var card = $('#quizCard');
+    if(!card) return;
+    var answers = $$('.ans', card);
+    var feedback = $('#quizFeedback');
+    var hint = $('#quizHint');
+    var won = false;
+
+    function confetti(){
+      if(reduced) return;
+      var c = document.createElement('canvas');
+      c.className = 'confetti-canvas';
+      c.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;z-index:900;pointer-events:none';
+      c.setAttribute('aria-hidden','true');
+      document.body.appendChild(c);
+      var dpr = Math.min(window.devicePixelRatio||1, 2);
+      var W = c.width = innerWidth*dpr, H = c.height = innerHeight*dpr;
+      var ctx = c.getContext('2d');
+      var cols = ['#f5c451','#ffdf9a','#b44cf0','#ffffff','#e0a92e'];
+      var P = [];
+      for(var i=0;i<150;i++){
+        P.push({
+          x: Math.random()*W,
+          y: -H*0.25*Math.random() - 12*dpr,
+          w: (4+Math.random()*5)*dpr,
+          h: (7+Math.random()*7)*dpr,
+          vy: (2.4+Math.random()*3.4)*dpr,
+          vx: (-1+Math.random()*2)*dpr,
+          rot: Math.random()*Math.PI,
+          vr: -0.12+Math.random()*0.24,
+          col: cols[i%cols.length]
+        });
+      }
+      var start = performance.now();
+      (function frame(now){
+        var dt = now - start;
+        ctx.clearRect(0,0,W,H);
+        var alive = false;
+        P.forEach(function(p){
+          p.x += p.vx + Math.sin((now/300)+p.rot)*0.6*dpr;
+          p.y += p.vy;
+          p.rot += p.vr;
+          if(p.y < H + 30*dpr) alive = true;
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+          ctx.fillStyle = p.col;
+          ctx.globalAlpha = dt > 1900 ? Math.max(0, 1-(dt-1900)/500) : 1;
+          ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+          ctx.restore();
+        });
+        if(alive && dt < 2400) requestAnimationFrame(frame);
+        else c.remove();
+      })(start);
+    }
+
+    answers.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        if(won) return;
+        if(btn.dataset.final === 'true'){
+          won = true;
+          card.classList.add('won');
+          answers.forEach(function(b){
+            b.classList.remove('is-right');
+            b.classList.add('is-gold');
+            b.setAttribute('disabled','');
+          });
+          feedback.textContent = btn.dataset.msg;
+          if(hint) hint.textContent = 'Publiken står upp. Regin gråter. Vi klipper till Ronda 2.';
+          confetti();
+          setTimeout(function(){
+            var m = $('#meriter');
+            if(m) m.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+          }, 700);
+        } else {
+          btn.classList.add('is-right');
+          feedback.textContent = btn.dataset.msg;
+        }
+      });
+    });
+  })();
+
+  /* ============ 2. ODOMETERN: poängväggen (wow 1) ============ */
+  (function(){
+    var vals = $$('.odo-val');
+    if(!vals.length) return;
+    if(reduced || !('IntersectionObserver' in window)) return; // värden står redan i klartext
+
+    vals.forEach(function(el){
+      var text = el.textContent;
+      el.textContent = '';
+      el.classList.add('odo');
+      var di = 0;
+      Array.prototype.forEach.call(text, function(ch){
+        if(/\d/.test(ch)){
+          var cell = document.createElement('span');
+          cell.className = 'odo-cell';
+          var strip = document.createElement('span');
+          strip.className = 'odo-strip';
+          var loops = Math.min(1 + di, 4);      // senare hjul snurrar fler varv
+          var seq = '';
+          for(var l=0;l<loops;l++) seq += '0123456789';
+          seq += ch;                            // …och stannar på rätt siffra
+          for(var k=0;k<seq.length;k++){
+            var d = document.createElement('span');
+            d.textContent = seq[k];
+            strip.appendChild(d);
+          }
+          strip.dataset.end = String(-(seq.length-1));
+          strip.style.transitionDuration = (1.05 + di*0.22).toFixed(2) + 's';
+          strip.style.transitionDelay = (di*0.06).toFixed(2) + 's';
+          cell.appendChild(strip);
+          el.appendChild(cell);
+          di++;
+        } else {
+          var sep = document.createElement('span');
+          sep.className = 'odo-sep';
+          sep.textContent = ch;
+          el.appendChild(sep);
+        }
+      });
+      el.setAttribute('role','img');            // skärmläsare får det
+      el.setAttribute('aria-label', text);      // färdiga talet direkt
+    });
+
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(!entry.isIntersecting) return;
+        var panel = entry.target;
+        io.unobserve(panel);
+        setTimeout(function(){ panel.classList.add('lit'); }, 150);
+        $$('.odo-strip', panel).forEach(function(strip){
+          requestAnimationFrame(function(){
+            strip.style.transform = 'translateY(' + strip.dataset.end + 'em)';
+          });
+        });
+      });
+    }, { threshold: 0.35 });
+    $$('.score').forEach(function(p){ io.observe(p); });
+  })();
+
+  /* ============ 3. GLOBEN: lazy-init på prispodiet ============ */
+  (function(){
+    var canvas = $('#glob');
+    if(!canvas || typeof JonasGlobe === 'undefined') return;
+    var started = false;
+    function boot(){
+      if(started) return; started = true;
+      JonasGlobe.create(canvas, '../assets/globe-data.json', {
+        mode: 'both',
+        dotColor: '#f5c451',
+        lineColor: 'rgba(245,196,81,.5)',
+        graticule: 'rgba(150,130,255,.12)',
+        rim: 'rgba(245,196,81,.26)',
+        sphereFill: 'rgba(7,13,38,.9)',
+        markerColor: '#ff6ec7'
+      });
+    }
+    if('IntersectionObserver' in window){
+      var io = new IntersectionObserver(function(entries, obs){
+        entries.forEach(function(e){
+          if(e.isIntersecting){ obs.disconnect(); boot(); }
+        });
+      }, { rootMargin: '360px' });
+      io.observe(canvas);
+    } else boot();
+  })();
+
+  /* ============ 4. AKTIV SEKTION I NAV ============ */
+  (function(){
+    var links = $$('.nav-links a');
+    if(!links.length || !('IntersectionObserver' in window)) return;
+    var map = {};
+    links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        links.forEach(function(a){ a.classList.remove('active'); });
+        var id = e.target.id === 'klipp' ? 'meriter' : e.target.id;
+        if(map[id]) map[id].classList.add('active');
+      });
+    }, { rootMargin: '-42% 0px -52% 0px' });
+    ['hero','om','meriter','klipp','projekt','kurs','kontakt'].forEach(function(id){
+      var s = document.getElementById(id);
+      if(s) io.observe(s);
+    });
+  })();
+
+  /* ============ 5. KONTAKTFORMULÄR (ingen backend ännu) ============ */
+  (function(){
+    var form = $('#kontaktForm');
+    if(!form) return;
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      form.closest('.form-panel').classList.add('sent');
+    });
+  })();
+})();
+</script>
+</body>
+</html>

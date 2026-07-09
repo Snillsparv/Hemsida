@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jonas von Essen – Tvåfaldig världsmästare i minne</title>
+<meta name="description" content="Jonas von Essen – tvåfaldig världsmästare i minne, föreläsare och författare från Göteborg. 100 000 decimaler av pi, gratis läroappar och onlinekursen Skaffa ett superminne.">
+<meta property="og:title" content="Jonas von Essen – Tvåfaldig världsmästare i minne">
+<meta property="og:description" content="Minnesfenomenet från Göteborg: 2× världsmästare i minne, 100 000 decimaler av pi, föreläsare, författare och byggare av gratis läroappar.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="../assets/img/jonas_vm-md.webp">
+<meta name="theme-color" content="#8e1f1f">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='12'%20fill='%238e1f1f'/%3E%3Ccircle%20cx='32'%20cy='32'%20r='25'%20fill='none'%20stroke='%23c9a227'%20stroke-width='2.5'/%3E%3Ctext%20x='32'%20y='44'%20font-family='Georgia,serif'%20font-size='34'%20text-anchor='middle'%20fill='%23efe6d4'%3E%CF%80%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/fonts.css">
+<script>
+/* Laddskärmsvakt: visa bara vid första besöket per session, aldrig med ?noloader
+   eller när användaren föredrar reducerad rörelse. Körs före CSS målas upp. */
+(function () {
+  var show = true;
+  try {
+    if (location.search.indexOf('noloader') > -1) show = false;
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) show = false;
+    if (sessionStorage.getItem('jve8-loader')) show = false;
+  } catch (e) {}
+  if (show) document.documentElement.classList.add('show-loader');
+})();
+</script>
+<style>
+/* ============================================================
+   VARIETÉAFFISCHEN — Jonas von Essen
+   Åldrat papper, djupröd, guld, nästan-svart. Rye + Fraunces.
+   ============================================================ */
+:root{
+  --paper:#efe6d4;
+  --paper-dim:#e6dabf;
+  --ink:#241d16;
+  --ink-soft:#4a3d2e;
+  --red:#8e1f1f;
+  --red-deep:#5c1111;
+  --red-dark:#3f0c0c;
+  --gold:#c9a227;
+  --gold-bright:#e3bd4f;
+  --gold-pale:#f0d98a;
+  --cream:#f6efdd;
+  --rye:'Rye', 'Fraunces', Georgia, serif;
+  --serif:'Fraunces', Georgia, 'Times New Roman', serif;
+  --mono:'JetBrains Mono', 'Courier New', monospace;
+  --bdim1:rgba(146,110,44,.85);
+  --bdim2:rgba(146,110,44,.30);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+}
+body{
+  margin:0;
+  color:var(--ink);
+  font-family:var(--serif);
+  font-size:1.0625rem;
+  line-height:1.65;
+  background:
+    radial-gradient(1200px 600px at 50% -200px, rgba(142,31,31,.25), transparent 70%),
+    #191008;
+}
+img{max-width:100%;height:auto;display:block}
+a{color:var(--red)}
+a:hover{color:var(--red-deep)}
+:focus-visible{outline:3px solid var(--red);outline-offset:2px;border-radius:2px}
+.on-dark :focus-visible, .on-dark:focus-visible{outline-color:var(--gold-bright)}
+.skiplink{
+  position:absolute;left:-999px;top:8px;z-index:200;background:var(--ink);color:var(--cream);
+  padding:.5em 1em;font-family:var(--mono);font-size:.85rem;
+}
+.skiplink:focus{left:8px}
+
+/* ---------- affischen på den mörka teaterväggen ---------- */
+.stage{padding:clamp(10px,2.5vw,36px) clamp(6px,2vw,24px)}
+.poster{
+  position:relative;
+  max-width:1060px;
+  margin:0 auto;
+  border:3px solid var(--ink);
+  box-shadow:0 24px 70px rgba(0,0,0,.55), 0 4px 16px rgba(0,0,0,.4);
+  background:
+    radial-gradient(1100px 700px at 88% -120px, rgba(201,162,39,.10), transparent 62%),
+    radial-gradient(760px 540px at -80px 22%, rgba(142,31,31,.06), transparent 60%),
+    radial-gradient(560px 420px at 108% 55%, rgba(126,94,40,.08), transparent 65%),
+    radial-gradient(420px 300px at 8% 84%, rgba(126,94,40,.07), transparent 60%),
+    radial-gradient(300px 220px at 72% 99%, rgba(142,31,31,.05), transparent 60%),
+    var(--paper);
+}
+/* pappersgrän + vinjett */
+.poster::before{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:
+    repeating-linear-gradient(104deg, rgba(96,70,34,.028) 0 2px, transparent 2px 7px),
+    repeating-linear-gradient(-98deg, rgba(96,70,34,.022) 0 3px, transparent 3px 11px);
+}
+.poster::after{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
+  box-shadow:inset 0 0 110px rgba(92,64,28,.18), inset 0 0 12px rgba(92,64,28,.12);
+}
+/* dubbellinjer-ram med guld */
+.frame{position:absolute;inset:8px;border:1px solid rgba(201,162,39,.85);pointer-events:none;z-index:40}
+.frame::before{content:"";position:absolute;inset:3px;border:2px solid var(--ink)}
+.rosette{position:absolute;width:38px;height:38px;z-index:41;pointer-events:none}
+.rosette.tl{top:-11px;left:-11px}
+.rosette.tr{top:-11px;right:-11px}
+.rosette.bl{bottom:-11px;left:-11px}
+.rosette.br{bottom:-11px;right:-11px}
+@media (max-width:640px){
+  .frame{inset:5px}
+  .rosette{width:28px;height:28px}
+  .rosette.tl{top:-9px;left:-9px}.rosette.tr{top:-9px;right:-9px}
+  .rosette.bl{bottom:-9px;left:-9px}.rosette.br{bottom:-9px;right:-9px}
+}
+
+/* ---------- typografiska basdelar ---------- */
+.misreg{text-shadow:1.4px 1px 0 rgba(142,31,31,.32), -1.2px -.8px 0 rgba(201,162,39,.38)}
+.misreg-dark{text-shadow:1.4px 1px 0 rgba(0,0,0,.5), -1.2px -.8px 0 rgba(201,162,39,.5)}
+.overline{
+  font-family:var(--serif);font-weight:600;font-style:normal;
+  text-transform:uppercase;letter-spacing:.32em;font-size:.78rem;
+  color:var(--red);margin:0 0 .5rem;
+}
+.section-h{
+  font-family:var(--serif);font-weight:600;text-transform:uppercase;
+  letter-spacing:.06em;line-height:1.12;
+  font-size:clamp(1.7rem,4vw,2.5rem);
+  margin:0 0 1rem;
+}
+section{position:relative;z-index:2}
+.wrap{padding:clamp(2.6rem,6vw,4.4rem) clamp(1.2rem,4.5vw,3.6rem)}
+
+/* ornamentavdelare */
+.divider{display:flex;align-items:center;gap:14px;max-width:520px;margin:0 auto;padding:0 clamp(1.2rem,4.5vw,3.6rem)}
+.divider span{flex:1;height:5px;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);opacity:.55}
+.divider b{width:11px;height:11px;background:var(--gold);border:1.5px solid var(--ink);transform:rotate(45deg);flex:none}
+
+/* ---------- glödlampsrader (WOW) ---------- */
+.bulbs{
+  position:relative;height:16px;flex:none;
+  background-image:radial-gradient(circle 3.4px at 9px 8px, var(--bdim1) 0 1.7px, var(--bdim2) 2.5px, transparent 3.4px);
+  background-size:18px 16px;background-repeat:repeat;
+}
+.bulbs i{
+  position:absolute;inset:0;display:block;
+  background-image:radial-gradient(circle 8.5px at 9px 8px, #fff7da 0 1.8px, #ffd977 2.8px, rgba(255,186,77,.55) 4.4px, rgba(255,166,52,.16) 6.6px, transparent 8.4px);
+  background-size:54px 16px;background-repeat:repeat;
+  animation:chase 1.08s linear infinite;
+}
+.bulbs i:nth-child(2){background-position-x:18px;animation-delay:-.36s}
+.bulbs i:nth-child(3){background-position-x:36px;animation-delay:-.72s}
+@keyframes chase{0%,28%{opacity:1}36%,90%{opacity:.07}100%{opacity:1}}
+.bulbs.v{
+  width:16px;height:auto;
+  background-image:radial-gradient(circle 3.4px at 8px 9px, var(--bdim1) 0 1.7px, var(--bdim2) 2.5px, transparent 3.4px);
+  background-size:16px 18px;
+}
+.bulbs.v i{
+  background-image:radial-gradient(circle 8.5px at 8px 9px, #fff7da 0 1.8px, #ffd977 2.8px, rgba(255,186,77,.55) 4.4px, rgba(255,166,52,.16) 6.6px, transparent 8.4px);
+  background-size:16px 54px;
+}
+.bulbs.v i:nth-child(2){background-position-x:0;background-position-y:18px}
+.bulbs.v i:nth-child(3){background-position-x:0;background-position-y:36px}
+@media (prefers-reduced-motion: reduce){
+  .bulbs i{animation:none !important;opacity:1}
+}
+
+/* ---------- toppnav ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  padding:.55rem clamp(1rem,3.5vw,2.4rem);
+  background:linear-gradient(rgba(239,230,212,.985),rgba(239,230,212,.985)), var(--paper);
+  border-bottom:2px solid var(--ink);
+  box-shadow:0 1px 0 rgba(201,162,39,.8);
+}
+.brand{
+  font-family:var(--serif);font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  font-size:.95rem;color:var(--ink);text-decoration:none;white-space:nowrap;
+}
+.brand b{color:var(--red)}
+.topnav{display:flex;flex-wrap:wrap;gap:.15rem .35rem;justify-content:flex-end}
+.topnav a{
+  font-family:var(--serif);font-weight:600;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink);text-decoration:none;padding:.35em .55em;border-bottom:2px solid transparent;
+}
+.topnav a:hover{color:var(--red)}
+.topnav a.active{color:var(--red);border-bottom-color:var(--gold)}
+@media (max-width:720px){
+  .topbar{flex-direction:column;gap:.15rem;padding-bottom:.45rem}
+  .topnav{justify-content:center}
+  .topnav a{font-size:.7rem;letter-spacing:.1em;padding:.25em .4em}
+}
+
+/* ---------- HERO ---------- */
+.hero{text-align:center;padding-top:clamp(1.6rem,3.5vw,2.6rem);padding-bottom:2.6rem;overflow:hidden}
+.hero .bulbs{max-width:620px;margin:0 auto}
+.hero-ribbon{
+  display:inline-block;margin:1.1rem auto .9rem;
+  background:var(--red);color:var(--cream);
+  font-family:var(--serif);font-weight:600;letter-spacing:.3em;text-transform:uppercase;
+  font-size:clamp(.72rem,1.6vw,.85rem);
+  padding:.5em 2.6em .55em;
+  clip-path:polygon(0 0,100% 0,calc(100% - 14px) 50%,100% 100%,0 100%,14px 50%);
+}
+.hero h1{margin:0 0 1rem;line-height:1.02}
+.hero h1 .rye-word{
+  display:block;font-family:var(--rye);font-weight:400;
+  font-size:clamp(1.4rem,7.4vw,4.05rem);
+  letter-spacing:.01em;color:var(--red);text-transform:uppercase;
+}
+.hero h1 .name{
+  display:block;margin-top:.35rem;
+  font-family:var(--serif);font-weight:600;text-transform:uppercase;letter-spacing:.1em;
+  font-size:clamp(1.5rem,4.4vw,2.7rem);color:var(--ink);
+}
+.sunwrap{position:relative;width:min(300px,72vw);margin:1.6rem auto 0}
+.sunburst{
+  position:absolute;inset:-19% -34%;z-index:0;pointer-events:none;
+  background:repeating-conic-gradient(from 0deg at 50% 50%, rgba(201,162,39,.21) 0 5deg, rgba(201,162,39,0) 5deg 12.857deg);
+  -webkit-mask:radial-gradient(closest-side, #000 0 52%, transparent 74%);
+  mask:radial-gradient(closest-side, #000 0 52%, transparent 74%);
+  animation:sunspin 90s linear infinite;
+}
+@keyframes sunspin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion: reduce){.sunburst{animation:none}}
+.oval{position:relative;z-index:1;margin:0}
+.oval .ring{
+  border-radius:50%;background:var(--cream);
+  border:1px solid var(--ink);padding:7px;
+  box-shadow:0 10px 24px rgba(36,29,22,.22);
+}
+.oval .pic{
+  position:relative;border-radius:50%;overflow:hidden;
+  border:3px solid var(--gold);aspect-ratio:4/5;
+}
+.oval img{width:100%;height:100%;object-fit:cover;filter:sepia(.48) contrast(1.04) saturate(.9)}
+.oval .pic::after{
+  content:"";position:absolute;inset:0;border-radius:50%;
+  box-shadow:inset 0 0 46px rgba(36,22,10,.55), inset 0 0 10px rgba(36,22,10,.3);
+}
+.oval figcaption{
+  margin-top:.55rem;font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--ink-soft);text-align:center;
+}
+.tagline{
+  margin:1.4rem 0 .4rem;
+  font-family:var(--serif);font-weight:600;text-transform:uppercase;letter-spacing:.2em;
+  font-size:clamp(.78rem,1.9vw,.95rem);color:var(--ink);
+}
+.lede{max-width:34em;margin:.4rem auto 1.5rem;font-style:italic;font-size:clamp(1rem,2.2vw,1.15rem);color:var(--ink-soft)}
+.ctas{display:flex;gap:.9rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.6rem}
+.btn{
+  display:inline-block;text-decoration:none;cursor:pointer;
+  font-family:var(--serif);font-weight:600;text-transform:uppercase;letter-spacing:.16em;
+  font-size:.88rem;padding:.85em 1.7em;
+  border:2px solid var(--ink);
+  box-shadow:0 0 0 3px var(--paper), 0 0 0 4px var(--gold);
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.btn-red{background:var(--red);color:var(--cream)}
+.btn-red:hover{background:var(--red-deep);color:var(--cream);transform:translateY(-2px)}
+.btn-ghost{background:transparent;color:var(--ink)}
+.btn-ghost:hover{background:rgba(36,29,22,.07);color:var(--ink);transform:translateY(-2px)}
+.hero-note{
+  margin:1.5rem auto 0;font-family:var(--mono);font-size:.64rem;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--ink-soft);
+}
+
+/* ---------- OM ---------- */
+.om-grid{max-width:760px;margin:0 auto;text-align:center}
+.om-grid p.bio{text-align:left;margin:.4rem 0 1.4rem}
+.chips{display:flex;flex-wrap:wrap;gap:.55rem;justify-content:center;padding:0;margin:0;list-style:none}
+.chips li{
+  font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;
+  border:1px solid var(--ink);padding:.5em .95em;background:var(--cream);
+  box-shadow:2px 2px 0 rgba(36,29,22,.16);
+}
+.chips li b{color:var(--red);font-weight:700}
+
+/* ---------- MERITER ---------- */
+.meriter-head{text-align:center;margin-bottom:2.2rem}
+.meriter-head .rye-line{
+  font-family:var(--rye);font-weight:400;text-transform:uppercase;color:var(--red);
+  font-size:clamp(2rem,5.6vw,3.4rem);line-height:1.05;display:block;
+}
+.meriter-head .sub-line{
+  display:block;font-family:var(--serif);font-style:italic;font-weight:400;
+  font-size:clamp(1.1rem,2.6vw,1.5rem);color:var(--ink-soft);margin-top:.4rem;text-transform:none;letter-spacing:0;
+}
+.banns{display:flex;flex-direction:column;gap:1.7rem;max-width:860px;margin:0 auto}
+.bann-item{transform:rotate(-.4deg)}
+.bann-item:nth-child(even){transform:rotate(.4deg)}
+.bann-row{display:flex;align-items:center}
+.bann{
+  flex:1;position:relative;background:linear-gradient(175deg,#962626,#7c1919);color:var(--cream);
+  padding:.9rem 2.6rem .95rem;text-align:center;
+  clip-path:polygon(0 0,100% 0,calc(100% - 22px) 50%,100% 100%,0 100%,22px 50%);
+}
+.bann .shout{
+  display:inline-block;margin-right:.6em;
+  font-family:var(--serif);font-weight:600;letter-spacing:.18em;color:var(--gold-bright);
+  text-transform:uppercase;font-size:clamp(.78rem,1.8vw,.95rem);
+}
+.bann .claim{
+  font-family:var(--serif);font-weight:600;text-transform:uppercase;letter-spacing:.05em;
+  font-size:clamp(1.05rem,2.8vw,1.5rem);line-height:1.25;
+}
+.bann .claim .pi{text-transform:none}
+.bann-lg .claim{font-size:clamp(1.2rem,3.4vw,1.8rem)}
+.medal{
+  flex:none;width:64px;height:64px;margin-left:-24px;z-index:2;position:relative;
+  border-radius:50%;background:radial-gradient(circle at 34% 30%, var(--gold-pale), var(--gold) 58%, #a8851d);
+  border:2px solid var(--ink);
+  box-shadow:inset 0 0 0 3px rgba(239,230,212,.75), 2px 3px 0 rgba(36,29,22,.25);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-family:var(--serif);font-weight:600;color:var(--ink);line-height:1.05;
+}
+.medal .yr{font-size:.95rem;letter-spacing:.02em}
+.medal .yr2{font-size:.78rem;opacity:.85}
+.bann-sub{
+  margin:.55rem 2.2rem 0;text-align:center;font-style:italic;color:var(--ink-soft);
+  font-size:clamp(.85rem,2vw,.95rem);
+}
+@media (max-width:520px){
+  .bann{padding:.8rem 1.9rem .85rem}
+  .bann .shout{display:block;margin:0 0 .15em}
+  .medal{width:54px;height:54px;margin-left:-18px}
+  .medal .yr{font-size:.8rem}.medal .yr2{font-size:.68rem}
+  .bann-sub{margin:.55rem .6rem 0}
+}
+
+/* programblad */
+.program{max-width:860px;margin:2.8rem auto 0}
+.program-h{
+  display:flex;align-items:center;gap:14px;margin-bottom:1.1rem;
+  font-family:var(--serif);font-weight:600;text-transform:uppercase;letter-spacing:.28em;
+  font-size:.8rem;color:var(--ink);
+}
+.program-h::before,.program-h::after{content:"";flex:1;height:5px;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);opacity:.5}
+.program ul{list-style:none;margin:0;padding:0;columns:2;column-gap:3rem}
+.program li{display:flex;align-items:baseline;gap:.5rem;break-inside:avoid;padding:.34rem 0;font-size:.95rem}
+.program li .t{font-weight:400}
+.program li .dots{flex:1;min-width:20px;border-bottom:2px dotted rgba(36,29,22,.38);transform:translateY(-4px)}
+.program li .y{font-weight:600;color:var(--red);font-size:.9rem;white-space:nowrap}
+@media (max-width:720px){.program ul{columns:1}}
+
+/* tv-stubbar */
+.stubs{max-width:860px;margin:2.6rem auto 0}
+.stubs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.stub{
+  display:block;text-decoration:none;color:var(--ink);
+  background:var(--cream);border:1px solid var(--ink);
+  padding:.9rem 1.2rem 1rem;position:relative;
+  -webkit-mask:
+    linear-gradient(#000 0 0) 10px 0/calc(100% - 20px) 100% no-repeat,
+    radial-gradient(circle 4.5px at 0 50%, transparent 4px, #000 4.5px) 0 0/10px 18px repeat-y,
+    radial-gradient(circle 4.5px at 100% 50%, transparent 4px, #000 4.5px) 100% 0/10px 18px repeat-y;
+  mask:
+    linear-gradient(#000 0 0) 10px 0/calc(100% - 20px) 100% no-repeat,
+    radial-gradient(circle 4.5px at 0 50%, transparent 4px, #000 4.5px) 0 0/10px 18px repeat-y,
+    radial-gradient(circle 4.5px at 100% 50%, transparent 4px, #000 4.5px) 100% 0/10px 18px repeat-y;
+  transition:transform .15s ease;
+}
+.stub:hover{transform:translateY(-3px) rotate(-.4deg);color:var(--ink)}
+.stub .no{font-family:var(--mono);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--red);display:block;margin-bottom:.3rem}
+.stub .tt{font-family:var(--serif);font-weight:600;font-size:.98rem;line-height:1.3;display:block}
+.stub .go{display:block;margin-top:.45rem;font-size:.8rem;font-style:italic;color:var(--ink-soft)}
+@media (max-width:720px){.stubs-grid{grid-template-columns:1fr}}
+
+/* ---------- SIDOATTRAKTIONER ---------- */
+#projekt .head{text-align:center;margin-bottom:2.2rem}
+#projekt .rye-line{
+  font-family:var(--rye);text-transform:uppercase;color:var(--red);
+  font-size:clamp(1.7rem,5.2vw,3.1rem);line-height:1.08;display:block;
+}
+#projekt .intro{max-width:34em;margin:.8rem auto 0;font-style:italic;color:var(--ink-soft)}
+.attr-feature{
+  display:grid;grid-template-columns:1.02fr 1fr;gap:clamp(1.4rem,3.5vw,2.6rem);
+  align-items:center;max-width:940px;margin:0 auto 2.2rem;
+}
+.tent{position:relative}
+.tent .flag{
+  position:absolute;left:50%;top:-24px;width:30px;height:15px;background:var(--gold);
+  clip-path:polygon(0 0,100% 50%,0 100%);z-index:2;
+}
+.tent .flag::before{content:"";position:absolute;left:-3px;top:0;width:3px;height:26px;background:var(--ink)}
+.tent .roof{
+  height:40px;background:linear-gradient(#a72a2a,var(--red));
+  clip-path:polygon(50% 0,100% 100%,0 100%);
+}
+.tent .awning{
+  height:27px;margin-top:-1px;position:relative;z-index:1;
+  background:repeating-linear-gradient(90deg, var(--red) 0 24px, var(--paper-dim) 24px 48px);
+  -webkit-mask:
+    linear-gradient(#000 0 0) 0 0/100% calc(100% - 9px) no-repeat,
+    radial-gradient(circle 9px at 12px 0, #000 8.5px, transparent 9px) 0 100%/24px 9px repeat-x;
+  mask:
+    linear-gradient(#000 0 0) 0 0/100% calc(100% - 9px) no-repeat,
+    radial-gradient(circle 9px at 12px 0, #000 8.5px, transparent 9px) 0 100%/24px 9px repeat-x;
+}
+.tent-inner{
+  margin-top:-9px;
+  background:radial-gradient(circle at 50% 32%, #43281a, #1c110b 74%);
+  border:2px solid var(--ink);
+  padding:clamp(1.2rem,3vw,2rem) clamp(1.2rem,3vw,2rem) 1rem;
+  box-shadow:inset 0 0 40px rgba(0,0,0,.55);
+}
+.tent-inner canvas{width:100%;max-width:400px;margin:0 auto;aspect-ratio:1;display:block}
+.tent-sign{
+  margin:.7rem 0 0;text-align:center;
+  font-family:var(--serif);font-weight:600;text-transform:uppercase;letter-spacing:.3em;
+  font-size:.72rem;color:var(--gold-bright);
+}
+.tent-hint{
+  margin:.35rem 0 0;text-align:center;font-family:var(--mono);
+  font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(240,217,138,.55);
+}
+.attr-copy h3{margin:0 0 .5rem}
+.attr-copy p{margin:.4rem 0 1rem}
+.attr-h{
+  font-family:var(--serif);font-weight:600;font-size:clamp(1.25rem,2.6vw,1.6rem);
+  text-transform:none;letter-spacing:.01em;
+}
+.attr-h .dom{color:var(--red)}
+.attr-link{
+  display:inline-block;font-weight:600;font-style:italic;text-decoration:none;
+  border-bottom:2px solid var(--gold);padding-bottom:1px;
+}
+.attr-link:hover{border-bottom-color:var(--red)}
+.attr-cards{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;max-width:940px;margin:0 auto}
+.tik{
+  position:relative;background:var(--cream);border:1px solid var(--ink);
+  padding:1.2rem 1.5rem 1.4rem;
+  -webkit-mask:
+    linear-gradient(#000 0 0) 12px 0/calc(100% - 24px) 100% no-repeat,
+    radial-gradient(circle 5.5px at 0 50%, transparent 5px, #000 5.5px) 0 0/12px 22px repeat-y,
+    radial-gradient(circle 5.5px at 100% 50%, transparent 5px, #000 5.5px) 100% 0/12px 22px repeat-y;
+  mask:
+    linear-gradient(#000 0 0) 12px 0/calc(100% - 24px) 100% no-repeat,
+    radial-gradient(circle 5.5px at 0 50%, transparent 5px, #000 5.5px) 0 0/12px 22px repeat-y,
+    radial-gradient(circle 5.5px at 100% 50%, transparent 5px, #000 5.5px) 100% 0/12px 22px repeat-y;
+}
+.tik .no{font-family:var(--mono);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--red);display:block;margin-bottom:.6rem}
+.tik .imgbox{border:1px solid var(--ink);background:var(--paper-dim);padding:5px;margin-bottom:.9rem}
+.tik .imgbox .inner{border:2px solid var(--gold);overflow:hidden;position:relative}
+.tik .imgbox img{width:100%;height:190px;object-fit:cover;filter:sepia(.4) contrast(1.02) saturate(.9)}
+.tik .imgbox.cutout .inner{
+  background:
+    repeating-conic-gradient(from 0deg at 50% 62%, rgba(201,162,39,.14) 0 6deg, transparent 6deg 15deg),
+    radial-gradient(circle at 50% 62%, rgba(201,162,39,.28), transparent 62%),
+    linear-gradient(#e9dcc0,#e2d2b0);
+}
+.tik .imgbox.cutout img{filter:none;object-fit:contain;padding:6px 14px 0}
+.tik h3{margin:0 0 .4rem}
+.tik p{margin:.3rem 0 .9rem;font-size:.98rem}
+@media (max-width:820px){
+  .attr-feature{grid-template-columns:1fr}
+  .attr-cards{grid-template-columns:1fr}
+  .tik .imgbox img{height:210px}
+}
+
+/* ---------- BÖCKER ---------- */
+.bok-grid{
+  display:grid;grid-template-columns:minmax(230px,330px) 1fr;
+  gap:clamp(1.6rem,4vw,3rem);align-items:start;max-width:940px;margin:0 auto;
+}
+.bok-figure{margin:0;position:relative}
+.bok-frame{
+  background:var(--cream);border:2px solid var(--ink);padding:9px;
+  box-shadow:4px 5px 0 rgba(36,29,22,.2);
+  transform:rotate(-1.1deg);
+}
+.bok-frame .inner{border:3px double var(--gold);padding:4px;background:var(--red-dark)}
+.bok-frame img{width:100%;filter:sepia(.22) contrast(1.03)}
+.bok-figure figcaption{
+  margin-top:.6rem;font-family:var(--mono);font-size:.62rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink-soft);text-align:center;
+}
+.bok-list{list-style:none;margin:1.2rem 0 0;padding:0}
+.bok-list li{
+  padding:1rem 0;border-top:1px solid rgba(36,29,22,.28);
+  display:flex;gap:1rem;align-items:baseline;
+}
+.bok-list li:last-child{border-bottom:1px solid rgba(36,29,22,.28)}
+.bok-list .y{
+  flex:none;font-family:var(--serif);font-weight:600;color:var(--paper);
+  background:var(--red);padding:.15em .6em;font-size:.85rem;letter-spacing:.04em;
+}
+.bok-list h3{margin:0;font-size:1.1rem;font-weight:600;display:inline}
+.bok-list p{margin:.25rem 0 0;font-size:.95rem;color:var(--ink-soft)}
+@media (max-width:820px){
+  .bok-grid{grid-template-columns:1fr}
+  .bok-figure{max-width:320px;margin:0 auto}
+}
+
+/* ---------- KURS (marquee-banner + rivbar biljett) ---------- */
+.kurs-outer{padding:clamp(2.6rem,6vw,4.4rem) clamp(1rem,4vw,3.2rem)}
+.kurs-banner{
+  --bdim1:rgba(255,200,110,.5);
+  --bdim2:rgba(255,200,110,.16);
+  position:relative;max-width:900px;margin:0 auto;
+  background:
+    radial-gradient(620px 300px at 50% 0%, rgba(201,162,39,.14), transparent 70%),
+    linear-gradient(178deg,#6c1616,#4a0e0e 65%,#3f0c0c);
+  border:2px solid var(--ink);
+  box-shadow:0 0 0 4px var(--paper), 0 0 0 5px var(--gold), 0 18px 40px rgba(36,20,8,.35);
+  padding:clamp(2.6rem,6vw,3.4rem) clamp(1.8rem,6vw,4rem);
+  text-align:center;color:var(--cream);
+}
+.kurs-banner .bulbs{position:absolute}
+.kurs-banner .bulbs.top{top:9px;left:34px;right:34px}
+.kurs-banner .bulbs.bottom{bottom:9px;left:34px;right:34px}
+.kurs-banner .bulbs.left{left:9px;top:34px;bottom:34px}
+.kurs-banner .bulbs.right{right:9px;top:34px;bottom:34px}
+.kurs-banner .overline{color:var(--gold-bright)}
+.kurs-rye{
+  display:block;font-family:var(--rye);text-transform:uppercase;
+  font-size:clamp(2.1rem,6vw,3.6rem);line-height:1;color:var(--gold-bright);
+  margin:0;
+}
+.kurs-sub{
+  display:block;font-family:var(--serif);font-style:italic;
+  font-size:clamp(1.05rem,2.6vw,1.45rem);color:var(--cream);margin-top:.45rem;
+}
+.kurs-pitch{max-width:33em;margin:1.1rem auto 1.8rem;color:#f0e6cf;font-size:clamp(.98rem,2.2vw,1.08rem)}
+.kurs-pitch b{color:var(--gold-pale);font-weight:600}
+/* biljetten */
+.ticket-zone{display:flex;justify-content:center}
+.ticket{
+  display:inline-flex;align-items:stretch;text-decoration:none;color:var(--ink);
+  position:relative;isolation:isolate;
+  filter:drop-shadow(3px 5px 0 rgba(0,0,0,.35));
+  transition:transform .18s ease;
+}
+.ticket:hover{transform:translateY(-2px)}
+.t-main{
+  display:flex;flex-direction:column;justify-content:center;gap:.15rem;
+  background:linear-gradient(100deg,#f6efdd,#efe3c6);
+  border:2px solid var(--ink);
+  padding:.95rem 1.6rem .95rem 1.9rem;text-align:left;
+  -webkit-mask:
+    linear-gradient(#000 0 0) 10px 0/calc(100% - 10px) 100% no-repeat,
+    radial-gradient(circle 5px at 0 50%, transparent 4.5px, #000 5px) 0 0/10px 19px repeat-y;
+  mask:
+    linear-gradient(#000 0 0) 10px 0/calc(100% - 10px) 100% no-repeat,
+    radial-gradient(circle 5px at 0 50%, transparent 4.5px, #000 5px) 0 0/10px 19px repeat-y;
+  clip-path:polygon(0 0,100% 0,100% 20%,100% 40%,100% 60%,100% 80%,100% 100%,0 100%);
+  transition:clip-path .4s ease;
+}
+.t-main .big{font-family:var(--serif);font-weight:600;text-transform:uppercase;letter-spacing:.14em;font-size:1.05rem}
+.t-main .small{font-family:var(--mono);font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft)}
+.t-stub{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.2rem;
+  background:linear-gradient(100deg,#efe3c6,#e7d7b2);
+  border:2px solid var(--ink);border-left:2px dashed rgba(36,29,22,.65);
+  padding:.95rem 1.1rem;min-width:86px;
+  -webkit-mask:
+    linear-gradient(#000 0 0) 0 0/calc(100% - 10px) 100% no-repeat,
+    radial-gradient(circle 5px at 100% 50%, transparent 4.5px, #000 5px) 100% 0/10px 19px repeat-y;
+  mask:
+    linear-gradient(#000 0 0) 0 0/calc(100% - 10px) 100% no-repeat,
+    radial-gradient(circle 5px at 100% 50%, transparent 4.5px, #000 5px) 100% 0/10px 19px repeat-y;
+  transform-origin:8% 100%;
+  transition:transform .18s ease;
+}
+.t-stub .e{font-family:var(--serif);font-weight:600;letter-spacing:.24em;font-size:.72rem;text-transform:uppercase;color:var(--red)}
+.t-stub .n{font-family:var(--mono);font-size:.56rem;letter-spacing:.1em;color:var(--ink-soft)}
+.ticket:hover .t-stub{transform:rotate(4deg) translate(2px,-1px)}
+.ticket.torn .t-main{
+  clip-path:polygon(0 0,100% 0,98.4% 20%,100.8% 40%,98.2% 60%,100.8% 80%,98.8% 100%,0 100%);
+}
+.ticket.torn .t-stub{animation:tearoff .62s cubic-bezier(.45,.05,.85,.4) forwards}
+@keyframes tearoff{
+  18%{transform:rotate(7deg) translate(5px,-2px);opacity:1}
+  100%{transform:rotate(52deg) translate(110px,150px);opacity:0}
+}
+.kurs-note{
+  margin:1.5rem 0 0;font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;
+  text-transform:uppercase;color:rgba(240,217,138,.7);
+}
+@media (prefers-reduced-motion: reduce){
+  .ticket:hover{transform:none}
+  .ticket:hover .t-stub{transform:none}
+}
+@media (max-width:480px){
+  .kurs-banner .bulbs.left,.kurs-banner .bulbs.right{display:none}
+  .t-main{padding:.85rem 1.1rem .85rem 1.5rem}
+  .t-stub{min-width:72px;padding:.85rem .8rem}
+}
+
+/* ---------- KONTAKT ---------- */
+.kontakt-grid{
+  display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(1.8rem,4.5vw,3.4rem);
+  max-width:940px;margin:0 auto;align-items:start;
+}
+.kontakt-intro p{margin:.4rem 0 1rem}
+.scen-figure{margin:1.4rem 0 0}
+.scen-frame{
+  border:2px solid var(--ink);padding:6px;background:var(--cream);
+  box-shadow:4px 5px 0 rgba(36,29,22,.18);transform:rotate(.8deg);
+}
+.scen-frame .inner{border:2px solid var(--gold);overflow:hidden}
+.scen-frame img{width:100%;height:230px;object-fit:cover;object-position:50% 20%;filter:sepia(.68) contrast(1.06) saturate(.9) brightness(1.04)}
+.scen-figure figcaption{
+  margin-top:.55rem;font-family:var(--mono);font-size:.62rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink-soft);text-align:center;
+}
+.socials{display:flex;gap:.8rem;margin-top:1.5rem}
+.socials a{
+  width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:var(--cream);border:2px solid var(--ink);color:var(--ink);
+  box-shadow:0 0 0 2px var(--paper), 0 0 0 3px var(--gold);
+  transition:transform .15s ease, background .15s ease;
+}
+.socials a:hover{transform:translateY(-3px);background:var(--gold-pale);color:var(--ink)}
+.socials svg{width:21px;height:21px;display:block}
+/* telegramformulär */
+.telegram{
+  background:var(--cream);border:2px solid var(--ink);
+  box-shadow:0 0 0 3px var(--paper), 0 0 0 4px var(--gold), 5px 7px 0 rgba(36,29,22,.18);
+  padding:1.4rem 1.5rem 1.6rem;position:relative;
+}
+.telegram .tg-head{
+  display:flex;justify-content:space-between;align-items:baseline;gap:1rem;
+  border-bottom:2px solid var(--ink);padding-bottom:.6rem;margin-bottom:1rem;
+}
+.telegram .tg-head b{
+  font-family:var(--serif);font-weight:600;text-transform:uppercase;letter-spacing:.24em;font-size:.85rem;
+}
+.telegram .tg-head span{font-family:var(--mono);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+.telegram label{
+  display:block;font-family:var(--serif);font-weight:600;text-transform:uppercase;
+  letter-spacing:.18em;font-size:.68rem;margin:.9rem 0 .25rem;color:var(--ink);
+}
+.telegram input,.telegram textarea{
+  width:100%;border:1px solid var(--ink);background:#fbf6e9;color:var(--ink);
+  font-family:var(--serif);font-size:1rem;padding:.6em .7em;border-radius:0;
+}
+.telegram textarea{min-height:120px;resize:vertical}
+.telegram input:focus-visible,.telegram textarea:focus-visible{outline:3px solid var(--red);outline-offset:1px}
+.telegram .send-row{display:flex;align-items:center;gap:1rem;margin-top:1.2rem;flex-wrap:wrap}
+.tack{
+  border:2px dashed var(--red);background:#f7efdb;padding:1rem 1.2rem;margin-top:1.1rem;
+  font-style:italic;
+}
+.tack b{font-style:normal}
+@media (max-width:820px){
+  .kontakt-grid{grid-template-columns:1fr}
+  .scen-figure{max-width:420px}
+}
+
+/* ---------- FOOTER ---------- */
+.footer{
+  position:relative;z-index:2;background:var(--ink);color:#d8cdb8;
+  padding:1.8rem clamp(1.2rem,4vw,3.6rem) 2.2rem;margin-top:1rem;
+  border-top:3px solid var(--gold);
+  font-size:.9rem;
+}
+.footer .f-top{display:flex;flex-wrap:wrap;gap:.4rem 1.6rem;justify-content:center;margin-bottom:.9rem}
+.footer a{color:var(--gold-pale);text-decoration:none;border-bottom:1px solid rgba(240,217,138,.35)}
+.footer a:hover{color:#fff;border-bottom-color:#fff}
+.footer .f-c{
+  text-align:center;font-family:var(--mono);font-size:.62rem;letter-spacing:.16em;
+  text-transform:uppercase;color:#9a8d75;line-height:2;
+}
+
+/* ---------- LADDSKÄRM: teater-marquee ---------- */
+#loader{display:none}
+.show-loader #loader{
+  display:block;position:fixed;inset:0;z-index:100;overflow:hidden;
+  background:#170b09;
+}
+.show-loader.lock{overflow:hidden}
+.curt{
+  position:absolute;top:0;bottom:0;width:51%;z-index:1;
+  background:
+    linear-gradient(rgba(0,0,0,.42), rgba(0,0,0,.1) 30%, rgba(0,0,0,.45)),
+    repeating-linear-gradient(90deg, #5c1010 0 22px, #7c1b1b 22px 40px, #490d0d 40px 62px);
+  box-shadow:inset 0 -40px 60px rgba(0,0,0,.5);
+  transition:transform .5s cubic-bezier(.6,.05,.5,1);
+}
+.curt-l{left:0;border-right:6px solid #2c0707}
+.curt-r{right:0;border-left:6px solid #2c0707}
+#loader.done .curt-l{transform:translateX(-102%)}
+#loader.done .curt-r{transform:translateX(102%)}
+.marquee{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;
+  width:min(560px,92vw);
+  background:linear-gradient(#241512,#170d0a);
+  border:3px solid var(--gold);
+  box-shadow:0 0 0 3px #1a0e0b, 0 0 60px rgba(255,180,80,.14), 0 24px 60px rgba(0,0,0,.6);
+  padding:14px 16px 18px;text-align:center;
+  transition:opacity .4s ease, transform .4s ease;
+}
+#loader.done .marquee{opacity:0;transform:translate(-50%,-54%)}
+.marquee .bulbs{--bdim1:rgba(255,190,100,.4);--bdim2:rgba(255,190,100,.12);margin:0 2px}
+.m-name{
+  margin:.9rem 0 .5rem;font-family:var(--rye);text-transform:uppercase;
+  font-size:clamp(1.5rem,6vw,2.6rem);line-height:1.15;letter-spacing:.04em;
+  color:#4a3418;
+}
+.m-name span{transition:color .18s ease, text-shadow .18s ease}
+.m-name span.on{
+  color:#ffe9ab;
+  text-shadow:0 0 4px rgba(255,220,140,.9), 0 0 18px rgba(255,180,70,.65);
+}
+.m-name .sp{display:inline-block;width:.45em}
+.m-sub{
+  font-family:var(--serif);font-style:italic;color:#c8a86a;font-size:.85rem;margin:0 0 .8rem;
+}
+.m-lines{
+  text-align:left;max-width:340px;margin:0 auto;
+  font-family:var(--mono);font-size:.66rem;letter-spacing:.04em;color:#d8b06a;
+  min-height:3.4em;
+}
+.m-lines p{margin:.22em 0;opacity:0;transform:translateY(3px);transition:opacity .25s ease, transform .25s ease}
+.m-lines p.on{opacity:1;transform:none}
+.m-hint{
+  margin:.9rem 0 0;font-family:var(--mono);font-size:.56rem;letter-spacing:.24em;
+  text-transform:uppercase;color:rgba(216,176,106,.55);
+}
+@media (max-width:480px){.m-lines{font-size:.56rem;max-width:290px}}
+</style>
+</head>
+<body>
+
+<a class="skiplink" href="#om">Hoppa till innehållet</a>
+
+<!-- ==================== LADDSKÄRM (marquee) ==================== -->
+<div id="loader" aria-hidden="true">
+  <div class="curt curt-l"></div>
+  <div class="curt curt-r"></div>
+  <div class="marquee">
+    <div class="bulbs" ><i></i><i></i><i></i></div>
+    <p class="m-name" id="mName"></p>
+    <p class="m-sub">ridån går upp om ett ögonblick</p>
+    <div class="m-lines" id="mLines">
+      <p>&gt; minnespalatset dammas av ..... KLART</p>
+      <p>&gt; π-decimaler på lager ......... 100 000</p>
+      <p>&gt; publik i salongen: DU ........ välkommen!</p>
+    </div>
+    <p class="m-hint">klicka eller tryck valfri tangent för att kliva in</p>
+    <div class="bulbs"><i></i><i></i><i></i></div>
+  </div>
+</div>
+
+<div class="stage">
+<div class="poster">
+  <div class="frame" aria-hidden="true"></div>
+
+  <!-- hörnrosetter -->
+  <svg aria-hidden="true" style="position:absolute;width:0;height:0" viewBox="0 0 40 40">
+    <defs>
+      <g id="ros">
+        <circle cx="20" cy="20" r="17" fill="#efe6d4" stroke="#241d16" stroke-width="1.6"/>
+        <g fill="#c9a227" stroke="#241d16" stroke-width="1.1">
+          <path d="M20 20 q5.5 -7 0 -13 q-5.5 6 0 13"/>
+          <path d="M20 20 q5.5 -7 0 -13 q-5.5 6 0 13" transform="rotate(45 20 20)"/>
+          <path d="M20 20 q5.5 -7 0 -13 q-5.5 6 0 13" transform="rotate(90 20 20)"/>
+          <path d="M20 20 q5.5 -7 0 -13 q-5.5 6 0 13" transform="rotate(135 20 20)"/>
+          <path d="M20 20 q5.5 -7 0 -13 q-5.5 6 0 13" transform="rotate(180 20 20)"/>
+          <path d="M20 20 q5.5 -7 0 -13 q-5.5 6 0 13" transform="rotate(225 20 20)"/>
+          <path d="M20 20 q5.5 -7 0 -13 q-5.5 6 0 13" transform="rotate(270 20 20)"/>
+          <path d="M20 20 q5.5 -7 0 -13 q-5.5 6 0 13" transform="rotate(315 20 20)"/>
+        </g>
+        <circle cx="20" cy="20" r="4.2" fill="#8e1f1f" stroke="#241d16" stroke-width="1.2"/>
+      </g>
+    </defs>
+  </svg>
+  <svg class="rosette tl" viewBox="0 0 40 40" aria-hidden="true"><use href="#ros"/></svg>
+  <svg class="rosette tr" viewBox="0 0 40 40" aria-hidden="true"><use href="#ros"/></svg>
+  <svg class="rosette bl" viewBox="0 0 40 40" aria-hidden="true"><use href="#ros"/></svg>
+  <svg class="rosette br" viewBox="0 0 40 40" aria-hidden="true"><use href="#ros"/></svg>
+
+  <!-- ==================== NAV ==================== -->
+  <header class="topbar">
+    <a class="brand" href="#topp">Jonas <b>von Essen</b></a>
+    <nav class="topnav" aria-label="Sidnavigation">
+      <a href="#om">Om</a>
+      <a href="#meriter">Meriter</a>
+      <a href="#projekt">Attraktioner</a>
+      <a href="#bocker">Böcker</a>
+      <a href="#kurs">Kurs</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+  </header>
+
+  <main id="topp">
+
+    <!-- ==================== HERO ==================== -->
+    <section class="hero wrap" aria-label="Presentation">
+      <div class="bulbs" aria-hidden="true"><i></i><i></i><i></i></div>
+      <p class="hero-ribbon">Direkt från Göteborg</p>
+      <h1>
+        <span class="rye-word misreg">Minnesfenomenet</span>
+        <span class="name">Jonas von Essen</span>
+      </h1>
+      <div class="sunwrap">
+        <div class="sunburst" aria-hidden="true"></div>
+        <figure class="oval">
+          <div class="ring"><div class="pic">
+            <img src="../assets/img/foto-flin-rod-md.webp" alt="Jonas von Essen ler busigt mot kameran" width="664" height="800" fetchpriority="high">
+          </div></div>
+          <figcaption>Foto: Stefan Edetoft</figcaption>
+        </figure>
+      </div>
+      <p class="tagline">Tvåfaldig världsmästare i minne · Föreläsare · Frågesportsnörd</p>
+      <p class="lede">”Jag tävlar i att minnas saker – och i att säga dem snyggt. Däremellan bygger jag gratis appar som gör det lättare att lära sig.”</p>
+      <div class="ctas">
+        <a class="btn btn-red" href="#projekt">Se vad jag byggt</a>
+        <a class="btn btn-ghost" href="#kontakt">Boka föreläsning</a>
+      </div>
+      <div class="bulbs" aria-hidden="true"><i></i><i></i><i></i></div>
+      <p class="hero-note">Fri entré · Inga förkunskaper · Medtag hjärna</p>
+    </section>
+
+    <div class="divider" aria-hidden="true"><span></span><b></b><span></span></div>
+
+    <!-- ==================== OM ==================== -->
+    <section class="wrap" id="om" aria-label="Om Jonas">
+      <div class="om-grid">
+        <p class="overline">Akt I</p>
+        <h2 class="section-h misreg">Vem är denne man?</h2>
+        <p class="bio">Jag heter Jonas von Essen och 2013 blev jag – som förste svensk någonsin – världsmästare
+        i minne. 2014 försvarade jag titeln. Sedan dess har jag gjort det till mitt jobb att visa att hjärnan
+        klarar mer än man tror: i TV-studior, föreläsningssalar, böcker och appar. Jag har memorerat
+        100&nbsp;000 decimaler av pi, lärt mig hela Talang-publikens namn och vunnit en miljon på
+        Postkodmiljonären. När jag inte tävlar i att minnas saker tävlar jag i att formulera dem – som färsk
+        svensk mästare i poetry slam och Göteborgsmästare i ordvitsar.</p>
+        <ul class="chips">
+          <li><b>Göteborg</b></li>
+          <li>Föreläsare &amp; författare</li>
+          <li>3 gratis läroappar</li>
+          <li><b>2×</b> VM-guld</li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="divider" aria-hidden="true"><span></span><b></b><span></span></div>
+
+    <!-- ==================== MERITER ==================== -->
+    <section class="wrap" id="meriter" aria-label="Meriter">
+      <header class="meriter-head">
+        <p class="overline">Akt II · Häpnadsväckande nummer</p>
+        <h2 style="margin:0">
+          <span class="rye-line misreg">Otroligt</span>
+          <span class="sub-line">…men sant! Varje ord nedan är faktagranskat.</span>
+        </h2>
+      </header>
+
+      <div class="banns">
+        <div class="bann-item">
+          <div class="bann-row">
+            <div class="bann bann-lg">
+              <span class="shout">Sensation!</span>
+              <span class="claim">2× världsmästare i minne</span>
+            </div>
+            <div class="medal" aria-hidden="true"><span class="yr">2013</span><span class="yr2">2014</span></div>
+          </div>
+          <p class="bann-sub">London 2013 &amp; Haikou, Kina 2014 — Sveriges förste världsmästare i minne.</p>
+        </div>
+
+        <div class="bann-item">
+          <div class="bann-row">
+            <div class="bann">
+              <span class="shout">Bevittna!</span>
+              <span class="claim">100 000 decimaler av <span class="pi">π</span>!</span>
+            </div>
+            <div class="medal" aria-hidden="true"><span class="yr">2020</span></div>
+          </div>
+          <p class="bann-sub">Först i världen att klara ett verifierat test på alla 100&nbsp;000 · Europarekord i uppläsning: 24&nbsp;063 i rad.</p>
+        </div>
+
+        <div class="bann-item">
+          <div class="bann-row">
+            <div class="bann">
+              <span class="shout">Häpna!</span>
+              <span class="claim">500 namn på två timmar!</span>
+            </div>
+            <div class="medal" aria-hidden="true"><span class="yr">2018</span></div>
+          </div>
+          <p class="bann-sub">Talang (TV4) — golden buzzer av David Batra efter att ha lärt sig hela publikens namn. Finalist.</p>
+        </div>
+
+        <div class="bann-item">
+          <div class="bann-row">
+            <div class="bann">
+              <span class="shout">Ofattbart!</span>
+              <span class="claim">En miljon kronor — rätt svar!</span>
+            </div>
+            <div class="medal" aria-hidden="true"><span class="yr">2023</span></div>
+          </div>
+          <p class="bann-sub">Postkodmiljonären — en av endast 13 genom tiderna i Sverige som klarat miljonfrågan.</p>
+        </div>
+      </div>
+
+      <div class="program">
+        <h3 class="program-h">Ur programbladet</h3>
+        <ul>
+          <li><span class="t">Svensk mästare i poetry slam</span><span class="dots"></span><span class="y">2026</span></li>
+          <li><span class="t">Göteborgsmästare i ordvitsar — klar för SM-final</span><span class="dots"></span><span class="y">2026</span></li>
+          <li><span class="t">Svensk mästare i pubquiz, med ”Glenns över sjö och strand”</span><span class="dots"></span><span class="y">5×</span></li>
+          <li><span class="t">Vann Smartare än en femteklassare</span><span class="dots"></span><span class="y">2020</span></li>
+          <li><span class="t">Besegrade expertpanelen i Muren (SVT)</span><span class="dots"></span><span class="y">2021</span></li>
+          <li><span class="t">Vann sin utmaning i kinesiska The Brain — bl.a. 200 numrerade valnötter</span><span class="dots"></span><span class="y">&nbsp;</span></li>
+          <li><span class="t">Högskoleprovet: 2.0 tolv gånger · 160/160 som ende i landet</span><span class="dots"></span><span class="y">2021</span></li>
+          <li><span class="t">Författare till tre böcker — se Litterära underverk nedan</span><span class="dots"></span><span class="y">&nbsp;</span></li>
+        </ul>
+      </div>
+
+      <div class="stubs">
+        <h3 class="program-h">Se med egna ögon</h3>
+        <div class="stubs-grid">
+          <a class="stub" href="https://www.youtube.com/watch?v=PtqSFf3cO04" target="_blank" rel="noopener">
+            <span class="no">Klipp nr 1 · Talang</span>
+            <span class="tt">Jonas memorerar 500 namn på två timmar</span>
+            <span class="go">Se klippet på YouTube →</span>
+          </a>
+          <a class="stub" href="https://www.youtube.com/results?search_query=jonas+von+essen+postkodmiljon%C3%A4ren" target="_blank" rel="noopener">
+            <span class="no">Klipp nr 2 · Postkodmiljonären</span>
+            <span class="tt">Miljonfrågan — och det rätta svaret</span>
+            <span class="go">Se klippet på YouTube →</span>
+          </a>
+          <a class="stub" href="https://www.youtube.com/@BlueberryClubSparven" target="_blank" rel="noopener">
+            <span class="no">Klipp nr 3 · Gratis lektion</span>
+            <span class="tt">Lär dig världens 10 största länder på 5 minuter</span>
+            <span class="go">Se klippet på YouTube →</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider" aria-hidden="true"><span></span><b></b><span></span></div>
+
+    <!-- ==================== SIDOATTRAKTIONER ==================== -->
+    <section class="wrap" id="projekt" aria-label="Projekt och appar">
+      <header class="head">
+        <p class="overline">Akt III · Jag bygger också saker</p>
+        <h2 style="margin:0"><span class="rye-line misreg">Sidoattraktioner</span></h2>
+        <p class="intro">Tre appar, noll kronor. Jag bygger dem för att det är kul – och för att bra inlärning inte ska kosta.</p>
+      </header>
+
+      <div class="attr-feature">
+        <div class="tent">
+          <i class="flag" aria-hidden="true"></i>
+          <div class="roof" aria-hidden="true"></div>
+          <div class="awning" aria-hidden="true"></div>
+          <div class="tent-inner">
+            <canvas id="glob" aria-label="Snurrbar jordglob där varje land visas som gyllene prickar"></canvas>
+            <p class="tent-sign">Den magiska jordgloben</p>
+            <p class="tent-hint">Snurra själv — dra i den!</p>
+          </div>
+        </div>
+        <div class="attr-copy">
+          <span class="no" style="font-family:var(--mono);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--red)">Attraktion nr 1</span>
+          <h3 class="attr-h"><span class="dom">jonasgeografi.se</span> — hela världen i din hand</h3>
+          <p>Lär dig alla världens länder på en snurrbar jordglob där varje land är ett eget litet konstverk.
+          Utforska, quizza och res jorden runt – med minnesknep för varje land.</p>
+          <a class="attr-link" href="https://jonasgeografi.se" target="_blank" rel="noopener">Kliv in i montern: jonasgeografi.se →</a>
+        </div>
+      </div>
+
+      <div class="attr-cards">
+        <article class="tik">
+          <span class="no">Attraktion nr 2</span>
+          <div class="imgbox"><div class="inner">
+            <img src="../assets/img/bild_hp-md.webp" alt="Provhäften och svarshäfte från högskoleprovet" width="700" height="391" loading="lazy">
+          </div></div>
+          <h3 class="attr-h"><span class="dom">hpakuten.se</span></h3>
+          <p>Gratis träning inför högskoleprovet: simulera gamla prov på tid, videogenomgångar och
+          minnestekniker. Från Sveriges kanske mest rutinerade HP-skrivare.</p>
+          <a class="attr-link" href="https://hpakuten.se" target="_blank" rel="noopener">Öva gratis på hpakuten.se →</a>
+        </article>
+        <article class="tik">
+          <span class="no">Attraktion nr 3</span>
+          <div class="imgbox cutout"><div class="inner">
+            <img src="../assets/img/jonas-gangertabellen-md.webp" alt="Jonas gör en häpen mind blown-gest med händerna" width="700" height="579" loading="lazy" style="height:190px">
+          </div></div>
+          <h3 class="attr-h"><span class="dom">gångertabellen.se</span></h3>
+          <p>Gångertabellen är lättare än den ser ut: med rätt knep är det bara sex tal kvar att memorera.
+          Quiz, minnesbilder och smart repetition – utan inloggning.</p>
+          <a class="attr-link" href="https://www.gångertabellen.se" target="_blank" rel="noopener">Räkna hem det på gångertabellen.se →</a>
+        </article>
+      </div>
+    </section>
+
+    <div class="divider" aria-hidden="true"><span></span><b></b><span></span></div>
+
+    <!-- ==================== BÖCKER ==================== -->
+    <section class="wrap" id="bocker" aria-label="Böcker">
+      <div class="bok-grid">
+        <figure class="bok-figure">
+          <div class="bok-frame"><div class="inner">
+            <img src="../assets/img/foto-knut-rod-md.webp" alt="Jonas tittar storögt på ett snöre knutet i rosett runt sitt pekfinger" width="611" height="800" loading="lazy">
+          </div></div>
+          <figcaption>Omslagsfotot till boken · Foto: Stefan Edetoft</figcaption>
+        </figure>
+        <div>
+          <p class="overline">Akt IV · För läskunniga</p>
+          <h2 class="section-h misreg">Litterära underverk</h2>
+          <p>Allt jag vet om att minnas – nedtecknat, så att du slipper knyta snören runt fingrarna.
+          Tre böcker, från nybörjarknep till samtliga hundratusen decimaler.</p>
+          <ul class="bok-list">
+            <li>
+              <span class="y">2024</span>
+              <div>
+                <h3>Så får du ett superminne</h3>
+                <p>Semic, ny utgåva. Handboken som lär dig minnesteknikerna från grunden.</p>
+              </div>
+            </li>
+            <li>
+              <span class="y">2019</span>
+              <div>
+                <h3>Bli ett minnesgeni!</h3>
+                <p>Minnesträning för unga hjärnor – och för alla andra.</p>
+              </div>
+            </li>
+            <li>
+              <span class="y">2020</span>
+              <div>
+                <h3>Pi-boken 2.0</h3>
+                <p>Alla 100&nbsp;000 decimaler, svart på vitt. Världens mest onödiga och nödvändiga bok.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== KURS ==================== -->
+    <section class="kurs-outer" id="kurs" aria-label="Onlinekursen Skaffa ett superminne">
+      <div class="kurs-banner on-dark">
+        <div class="bulbs top" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="bulbs bottom" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="bulbs v left" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="bulbs v right" aria-hidden="true"><i></i><i></i><i></i></div>
+
+        <p class="overline">Slutnumret · Onlinekurs</p>
+        <h2 style="margin:0">
+          <span class="kurs-rye misreg-dark">Ikväll!</span>
+          <span class="kurs-sub">…och alla andra kvällar: <b style="font-style:normal">Skaffa ett superminne!</b></span>
+        </h2>
+        <p class="kurs-pitch">Lär dig metoderna jag använder – <b>i din egen takt, hur många gånger du vill</b>.
+        Minnespalats, siffror, namn och glosor: hela verktygslådan, förklarad utan trolleri.</p>
+
+        <div class="ticket-zone">
+          <a class="ticket on-dark" id="kursTicket" href="https://kurs.jonasvonessen.se" target="_blank" rel="noopener">
+            <span class="t-main">
+              <span class="big">Till kursen</span>
+              <span class="small">kurs.jonasvonessen.se · gäller för alltid</span>
+            </span>
+            <span class="t-stub" aria-hidden="true">
+              <span class="e">Entré</span>
+              <span class="n">Nr 3,14159</span>
+            </span>
+          </a>
+        </div>
+        <p class="kurs-note">Riv av din biljett — ingen dörrvakt, inga återlämningskrav</p>
+      </div>
+    </section>
+
+    <!-- ==================== KONTAKT ==================== -->
+    <section class="wrap" id="kontakt" aria-label="Kontakt och sociala medier">
+      <div style="text-align:center;margin-bottom:2.2rem">
+        <p class="overline">Efter föreställningen</p>
+        <h2 class="section-h misreg" style="margin-bottom:.4rem">Boka &amp; säg hej</h2>
+      </div>
+      <div class="kontakt-grid">
+        <div class="kontakt-intro">
+          <p><b>Vill du boka en föreläsning?</b> Skriv en rad – så ordnar vi ett oförglömligt event.
+          Jag föreläser om minne, motivation och inlärning: alltid med publiken på scen och
+          namnen inlärda innan pausen.</p>
+          <p>Frågor om böckerna, apparna eller kursen? Samma lucka, samma glada svar.</p>
+          <figure class="scen-figure">
+            <div class="scen-frame"><div class="inner">
+              <img src="../assets/img/foto-scen-md.webp" alt="Jonas på scen med headsetmikrofon, mitt i en föreläsning" width="800" height="800" loading="lazy">
+            </div></div>
+            <figcaption>Kvällens huvudnummer, mitt i akten</figcaption>
+          </figure>
+          <div class="socials">
+            <a href="https://www.instagram.com/jonasvonessen/" target="_blank" rel="noopener" aria-label="Jonas på Instagram">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.2" fill="currentColor" stroke="none"/></svg>
+            </a>
+            <a href="https://www.tiktok.com/@jonasvonessen" target="_blank" rel="noopener" aria-label="Jonas på TikTok">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.6 3c.4 2.1 1.7 3.4 3.9 3.6v2.8c-1.5 0-2.8-.4-3.9-1.2v5.6c0 4.2-3.1 6.6-6.5 5.9-2.7-.5-4.6-3-4.3-5.8.3-3 2.8-5 5.9-4.7v2.9c-.4-.1-.8-.1-1.2 0-1.4.3-2.2 1.4-2 2.8.2 1.2 1.3 2.1 2.6 2 1.4-.1 2.3-1 2.3-2.6V3h3.2z"/></svg>
+            </a>
+            <a href="https://www.youtube.com/@BlueberryClubSparven" target="_blank" rel="noopener" aria-label="Jonas på YouTube">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.6 7.2c-.2-1.1-.9-1.9-2-2.1C17.8 4.7 12 4.7 12 4.7s-5.8 0-7.6.4c-1.1.2-1.8 1-2 2.1C2 9 2 12 2 12s0 3 .4 4.8c.2 1.1.9 1.9 2 2.1 1.8.4 7.6.4 7.6.4s5.8 0 7.6-.4c1.1-.2 1.8-1 2-2.1.4-1.8.4-4.8.4-4.8s0-3-.4-4.8zM10 15.2V8.8l5.5 3.2L10 15.2z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Formspree: byt action till https://formspree.io/f/DITT-FORMSPREE-ID och ta bort JS-fallbacken nedan -->
+        <form class="telegram" id="kontaktForm" novalidate>
+          <div class="tg-head">
+            <b>Telegram till Jonas</b>
+            <span>Porto betalt</span>
+          </div>
+          <label for="f-namn">Namn</label>
+          <input id="f-namn" name="namn" type="text" autocomplete="name" required>
+          <label for="f-epost">E-post</label>
+          <input id="f-epost" name="epost" type="email" autocomplete="email" required>
+          <label for="f-medd">Meddelande</label>
+          <textarea id="f-medd" name="meddelande" required placeholder="T.ex. datum, plats och publik – jag lovar att komma ihåg det."></textarea>
+          <div class="send-row">
+            <button class="btn btn-red" type="submit">Skicka</button>
+            <span style="font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)">Svar inom kort — det glöms inte bort</span>
+          </div>
+          <div class="tack" id="formTack" hidden aria-live="polite">
+            <b>Tack!</b> Formuläret kopplas snart – mejla mig så länge, så återkommer jag snabbare än du hinner säga 3,14159265358979.
+          </div>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer">
+    <div class="f-top">
+      <a href="https://jonasgeografi.se" target="_blank" rel="noopener">jonasgeografi.se</a>
+      <a href="https://hpakuten.se" target="_blank" rel="noopener">hpakuten.se</a>
+      <a href="https://www.gångertabellen.se" target="_blank" rel="noopener">gångertabellen.se</a>
+      <a href="https://kurs.jonasvonessen.se" target="_blank" rel="noopener">Skaffa ett superminne — kursen</a>
+    </div>
+    <p class="f-c">
+      © 2026 Jonas von Essen · Affischen är en kärleksfull pastisch — siffrorna är på riktigt<br>
+      Foto: Stefan Edetoft (porträtten i röd ton)
+    </p>
+  </footer>
+</div><!-- /poster -->
+</div><!-- /stage -->
+
+<script src="../assets/globe.js"></script>
+<script>
+(function () {
+  'use strict';
+  var rmQuery = window.matchMedia ? matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
+
+  /* ---------------- LADDSKÄRM ---------------- */
+  var root = document.documentElement;
+  var loader = document.getElementById('loader');
+  if (root.classList.contains('show-loader') && loader) {
+    try { sessionStorage.setItem('jve8-loader', '1'); } catch (e) {}
+    root.classList.add('lock');
+    var nameEl = document.getElementById('mName');
+    var letters = 'JONAS VON ESSEN'.split('');
+    var spans = [];
+    letters.forEach(function (ch) {
+      var s = document.createElement('span');
+      if (ch === ' ') { s.className = 'sp'; s.innerHTML = '&nbsp;'; }
+      else s.textContent = ch;
+      nameEl.appendChild(s);
+      spans.push(s);
+    });
+    var lines = document.querySelectorAll('#mLines p');
+    var timers = [];
+    var finished = false;
+
+    function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+    function lightAll() {
+      spans.forEach(function (s) { s.classList.add('on'); });
+      lines.forEach(function (p) { p.classList.add('on'); });
+    }
+    function finish() {
+      if (finished) return;
+      finished = true;
+      timers.forEach(clearTimeout);
+      lightAll();
+      loader.classList.add('done');
+      root.classList.remove('lock');
+      setTimeout(function () {
+        loader.style.display = 'none';
+        root.classList.remove('show-loader');
+      }, 560);
+      window.removeEventListener('keydown', finish);
+      loader.removeEventListener('click', finish);
+    }
+
+    // bokstäverna tänds i sekvens
+    spans.forEach(function (s, i) {
+      later(function () { s.classList.add('on'); }, 220 + i * 58);
+    });
+    // boot-raderna
+    later(function () { lines[0] && lines[0].classList.add('on'); }, 1250);
+    later(function () { lines[1] && lines[1].classList.add('on'); }, 1600);
+    later(function () { lines[2] && lines[2].classList.add('on'); }, 1950);
+    // klart
+    later(finish, 2500);
+    // säkerhetsnät
+    later(finish, 4200);
+
+    loader.addEventListener('click', finish);
+    window.addEventListener('keydown', finish);
+  }
+
+  /* ---------------- RIV EN BILJETT ---------------- */
+  var ticket = document.getElementById('kursTicket');
+  if (ticket) {
+    ticket.addEventListener('click', function (e) {
+      if (rmQuery.matches) return;                    // reduced motion: direktlänk
+      if (ticket.classList.contains('torn')) { e.preventDefault(); return; }
+      e.preventDefault();
+      ticket.classList.add('torn');
+      setTimeout(function () {
+        window.open(ticket.href, '_blank', 'noopener');
+        setTimeout(function () { ticket.classList.remove('torn'); }, 1400);
+      }, 640);
+    });
+  }
+
+  /* ---------------- KONTAKTFORMULÄR ---------------- */
+  var form = document.getElementById('kontaktForm');
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var tack = document.getElementById('formTack');
+      if (tack) { tack.hidden = false; tack.setAttribute('tabindex', '-1'); tack.focus({ preventScroll: false }); }
+      var btn = form.querySelector('button[type="submit"]');
+      if (btn) { btn.disabled = true; btn.textContent = 'Skickat!'; }
+    });
+  }
+
+  /* ---------------- GLOBEN (lazy) ---------------- */
+  var globCanvas = document.getElementById('glob');
+  var globDone = false;
+  function initGlobe() {
+    if (globDone || !globCanvas || !window.JonasGlobe) return;
+    globDone = true;
+    JonasGlobe.create(globCanvas, '../assets/globe-data.json', {
+      mode: 'both',
+      dotColor: '#e3bd4f',
+      lineColor: 'rgba(201,162,39,.5)',
+      graticule: 'rgba(227,189,79,.10)',
+      rim: 'rgba(227,189,79,.32)',
+      sphereFill: 'rgba(22,12,8,.92)',
+      markerColor: '#ff8c5a'
+    }).catch(function () {});
+  }
+  if ('IntersectionObserver' in window && globCanvas) {
+    var gio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { initGlobe(); gio.disconnect(); }
+      });
+    }, { rootMargin: '400px 0px' });
+    gio.observe(globCanvas);
+  } else {
+    initGlobe();
+  }
+
+  /* ---------------- AKTIV SEKTION I NAV ---------------- */
+  var navLinks = document.querySelectorAll('.topnav a');
+  var map = {};
+  navLinks.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
+  if ('IntersectionObserver' in window) {
+    var sio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          navLinks.forEach(function (a) { a.classList.remove('active'); });
+          var link = map[en.target.id];
+          if (link) link.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-38% 0px -55% 0px' });
+    ['om', 'meriter', 'projekt', 'bocker', 'kurs', 'kontakt'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) sio.observe(el);
+    });
+  }
+})();
+</script>
+</body>
+</html>
