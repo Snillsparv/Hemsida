@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jonas von Essen – Tvåfaldig världsmästare i minne</title>
+<meta name="description" content="Jonas von Essen – tvåfaldig världsmästare i minne, föreläsare och författare från Göteborg. Gratis läroappar, böcker och onlinekursen Skaffa ett superminne.">
+<meta property="og:title" content="Jonas von Essen – Tvåfaldig världsmästare i minne">
+<meta property="og:description" content="100 000 decimaler av π. Alla världens länder. Föreläsare, författare och byggare av gratis läroappar.">
+<meta property="og:image" content="../assets/img/jonas_vm-md.webp">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2367e8f9'/%3E%3Cstop offset='.55' stop-color='%23818cf8'/%3E%3Cstop offset='1' stop-color='%23e879f9'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='15' fill='%23090b16'/%3E%3Crect x='1' y='1' width='62' height='62' rx='14' fill='none' stroke='rgba(255,255,255,.2)'/%3E%3Ctext x='32' y='46' font-size='38' text-anchor='middle' fill='url(%23g)' font-family='Georgia,serif'%3Eπ%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/fonts.css">
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    --bg:#07080f;
+    --ink:#eef1fd;
+    --mut:rgba(206,216,246,.74);
+    --dim:rgba(206,216,246,.55);
+    --line:rgba(255,255,255,.12);
+    --indigo:#818cf8; --cyan:#67e8f9; --violet:#c084fc; --pink:#f0abfc; --rosa:#fb7185;
+    --grad:linear-gradient(94deg,#a5b4fc 0%,#67e8f9 46%,#f0abfc 100%);
+    --grad-btn:linear-gradient(135deg,#4f46e5 0%,#7c3aed 52%,#db2777 115%);
+    --r-lg:26px; --r-md:20px; --r-sm:14px;
+    --ease:cubic-bezier(.22,1,.36,1);
+    --mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
+    --sans:'Space Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;scroll-padding-top:104px}
+  html.lock{overflow:hidden}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:16.5px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  ::selection{background:rgba(129,140,248,.4);color:#fff}
+  img{max-width:100%;height:auto;display:block}
+  a{color:inherit}
+  :focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px}
+  .skip{position:absolute;left:-9999px;top:0;z-index:5000;background:#101528;color:#fff;padding:.7rem 1.2rem;border-radius:0 0 12px 0}
+  .skip:focus{left:0}
+
+  /* ============ AURORA ============ */
+  /* täcker HELA dokumentet (absolute, inte fixed) så färgstämningen skiftar med scroll;
+     parallax-lagret flyttar wrapparna, keyframes driver blobbarna */
+  .aurora{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .aur-w{position:absolute;will-change:transform}
+  .blob{position:absolute;inset:0;border-radius:50%;will-change:transform}
+  .g-indigo{background:radial-gradient(closest-side,rgba(79,70,229,.58),rgba(79,70,229,.2) 46%,transparent 72%)}
+  .g-cyan{background:radial-gradient(closest-side,rgba(34,211,238,.46),rgba(34,211,238,.14) 46%,transparent 72%)}
+  .g-violet{background:radial-gradient(closest-side,rgba(168,85,247,.48),rgba(168,85,247,.15) 46%,transparent 72%)}
+  .g-pink{background:radial-gradient(closest-side,rgba(244,114,182,.36),rgba(244,114,182,.11) 46%,transparent 72%)}
+  .aw1{top:-320px;left:-14vw;width:74vmax;height:64vmax}
+  .aw2{top:220px;right:-26vw;width:68vmax;height:60vmax}
+  .aw3{top:16%;left:-16vw;width:72vmax;height:62vmax}
+  .aw4{top:27%;right:-20vw;width:56vmax;height:50vmax}
+  .aw5{top:42%;left:-8vw;width:64vmax;height:56vmax}
+  .aw6{top:57%;right:-18vw;width:66vmax;height:58vmax}
+  .aw7{top:74%;left:-14vw;width:70vmax;height:60vmax}
+  .aw8{top:86%;right:-14vw;width:56vmax;height:50vmax}
+  .aur-w:nth-child(odd) .blob{animation:drift1 56s ease-in-out infinite alternate}
+  .aur-w:nth-child(even) .blob{animation:drift2 68s ease-in-out infinite alternate}
+  .aw2 .blob{animation-delay:-18s}.aw3 .blob{animation:drift3 74s ease-in-out -31s infinite alternate}
+  .aw4 .blob{animation-delay:-9s}.aw5 .blob{animation:drift4 48s ease-in-out -22s infinite alternate}
+  .aw6 .blob{animation-delay:-40s}.aw7 .blob{animation:drift3 62s ease-in-out -12s infinite alternate}
+  .aw8 .blob{animation-delay:-27s}
+  @keyframes drift1{from{transform:translate3d(-6%,-4%,0) scale(1) rotate(0deg)}to{transform:translate3d(9%,7%,0) scale(1.16) rotate(14deg)}}
+  @keyframes drift2{from{transform:translate3d(7%,5%,0) scale(1.1)}to{transform:translate3d(-10%,-6%,0) scale(.9)}}
+  @keyframes drift3{from{transform:translate3d(-5%,6%,0) scale(.94)}to{transform:translate3d(8%,-8%,0) scale(1.14)}}
+  @keyframes drift4{from{transform:translate3d(5%,-7%,0) scale(1.05)}to{transform:translate3d(-8%,8%,0) scale(.88)}}
+
+  /* kornbrus över allt */
+  body::after{
+    content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opacity:.032;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ============ GLAS ============ */
+  .glass{
+    position:relative;
+    background:linear-gradient(165deg,rgba(255,255,255,.075),rgba(255,255,255,.028) 55%,rgba(255,255,255,.05));
+    border:1px solid var(--line);
+    border-radius:var(--r-lg);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 20px 60px -30px rgba(0,0,0,.7);
+    backdrop-filter:blur(12px) saturate(1.35);
+    -webkit-backdrop-filter:blur(12px) saturate(1.35);
+  }
+  @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+    .glass{background:linear-gradient(165deg,#121526,#0c0f1d 60%,#101324)}
+  }
+  /* ljusreflex på kanten som följer pekaren (sätts via --mx/--my/--ro i JS) */
+  .glass::before{
+    content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;
+    background:radial-gradient(240px circle at var(--mx,50%) var(--my,-120px),rgba(255,255,255,.65),rgba(163,205,255,.18) 45%,transparent 70%);
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;
+    opacity:var(--ro,0);transition:opacity .45s ease;
+  }
+
+  /* ============ LAYOUT ============ */
+  .shell{position:relative;z-index:1;width:min(1160px,92vw);margin:0 auto}
+  section{padding:clamp(4rem,9vh,7rem) 0;position:relative}
+  .eyebrow{
+    font-family:var(--mono);font-size:.72rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--cyan);display:flex;align-items:center;gap:.8rem;margin-bottom:1.1rem;
+  }
+  .eyebrow::before{content:"";width:26px;height:1px;background:linear-gradient(90deg,var(--cyan),transparent)}
+  h2{font-size:clamp(1.9rem,3.6vw,2.7rem);font-weight:700;letter-spacing:-.02em;line-height:1.12;margin-bottom:1rem}
+  .lead{color:var(--mut);max-width:56ch;font-size:1.06rem}
+  .gtx{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+  /* ============ NAV ============ */
+  .nav{
+    position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:300;
+    display:flex;align-items:center;gap:.15rem;
+    padding:.5rem .6rem;border-radius:999px;
+    transition:padding .45s var(--ease),background-color .45s ease,box-shadow .45s ease;
+    white-space:nowrap;max-width:94vw;
+  }
+  .nav.mini{padding:.3rem .45rem;box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 14px 44px -14px rgba(0,0,0,.85)}
+  .nav a{
+    text-decoration:none;font-size:.86rem;font-weight:500;color:var(--mut);
+    padding:.44rem .85rem;border-radius:999px;transition:color .25s,background-color .25s;
+  }
+  .nav a:hover{color:#fff}
+  .nav a.active{color:#fff;background:rgba(255,255,255,.1)}
+  .nav .brand{
+    display:flex;align-items:center;gap:.5rem;font-weight:700;color:#fff;font-size:.9rem;
+    padding:.44rem .9rem .44rem .6rem;letter-spacing:-.01em;
+  }
+  .brand i{width:9px;height:9px;border-radius:50%;background:var(--grad-btn);box-shadow:0 0 12px rgba(168,85,247,.9);flex:none}
+  .nav .cta{
+    background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.14);margin-left:.35rem;
+  }
+  .nav .cta:hover{background:rgba(255,255,255,.17)}
+  @media(max-width:760px){
+    .nav .brand span{display:none}
+    .nav .brand{padding:.44rem .35rem .44rem .55rem}
+    .nav a{padding:.4rem .6rem;font-size:.8rem}
+    .nav .cta{display:none}
+    html{scroll-padding-top:86px}
+  }
+  @media(max-width:380px){.nav a{padding:.38rem .48rem;font-size:.76rem}}
+
+  /* ============ KNAPPAR ============ */
+  .btn{
+    display:inline-flex;align-items:center;gap:.55rem;text-decoration:none;font-weight:600;font-size:.95rem;
+    padding:.85rem 1.55rem;border-radius:999px;transition:transform .3s var(--ease),box-shadow .3s ease,background-color .25s;
+    border:0;cursor:pointer;font-family:var(--sans);
+  }
+  .btn-primary{
+    background:var(--grad-btn);color:#fff;position:relative;
+    box-shadow:0 10px 34px -8px rgba(124,58,237,.55),inset 0 1px 0 rgba(255,255,255,.25);
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 44px -8px rgba(160,60,240,.65),inset 0 1px 0 rgba(255,255,255,.25)}
+  .btn-ghost{
+    background:rgba(255,255,255,.06);color:#fff;border:1px solid var(--line);
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  }
+  .btn-ghost:hover{transform:translateY(-2px);background:rgba(255,255,255,.11)}
+  .btn svg{flex:none}
+
+  /* ============ LOADER ============ */
+  #loader{
+    position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:1.2rem;
+    background:rgba(7,8,15,.42);
+    backdrop-filter:blur(26px) saturate(1.2);-webkit-backdrop-filter:blur(26px) saturate(1.2);
+    transition:opacity .75s ease,backdrop-filter .75s ease,-webkit-backdrop-filter .75s ease;
+  }
+  @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+    #loader{background:rgba(7,8,15,.94)}
+  }
+  #loader.done{opacity:0;backdrop-filter:blur(0px) saturate(1);-webkit-backdrop-filter:blur(0px) saturate(1);pointer-events:none}
+  #loader[hidden]{display:none}
+  .term{
+    width:min(600px,94vw);border-radius:18px;overflow:hidden;
+    transition:transform .75s var(--ease),opacity .6s ease;
+  }
+  #loader.done .term{transform:scale(.94) translateY(-8px);opacity:0}
+  .term-bar{
+    display:flex;align-items:center;gap:.45rem;padding:.7rem 1rem;
+    border-bottom:1px solid rgba(255,255,255,.09);
+  }
+  .term-bar i{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.16)}
+  .term-bar i:nth-child(1){background:rgba(251,113,133,.55)}
+  .term-bar i:nth-child(2){background:rgba(250,204,21,.45)}
+  .term-bar i:nth-child(3){background:rgba(52,211,153,.5)}
+  .term-title{margin-left:auto;font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;color:var(--dim)}
+  .term-body{
+    font-family:var(--mono);font-size:.82rem;line-height:1.9;color:#aabce4;
+    padding:1.1rem 1.25rem 1.3rem;min-height:242px;
+  }
+  .term-body .ok{color:#67e8f9}
+  .term-body .warm{color:#f0abfc}
+  .term-body .row{white-space:pre-wrap;word-break:break-word}
+  .cursor{display:inline-block;width:.55em;height:1.05em;background:var(--cyan);vertical-align:-.18em;margin-left:2px;animation:blink .85s steps(1) infinite;box-shadow:0 0 10px rgba(103,232,249,.8)}
+  @keyframes blink{50%{opacity:0}}
+  .term-skip{padding:.5rem 1.25rem .9rem;font-family:var(--mono);font-size:.64rem;letter-spacing:.16em;color:var(--dim);text-transform:uppercase}
+
+  /* ============ HERO ============ */
+  #hero{min-height:100svh;display:flex;align-items:center;padding-top:7.5rem;padding-bottom:4rem}
+  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:3.5rem;align-items:center;width:100%}
+  .hero-eyebrow{
+    display:inline-flex;align-items:center;gap:.6rem;font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--mut);border:1px solid var(--line);border-radius:999px;padding:.5rem 1rem;
+    background:rgba(255,255,255,.045);margin-bottom:1.6rem;
+  }
+  .hero-eyebrow b{color:var(--cyan);font-weight:500}
+  .pulse{width:7px;height:7px;border-radius:50%;background:#34d399;box-shadow:0 0 0 0 rgba(52,211,153,.6);animation:pulse 2.4s ease-out infinite}
+  @keyframes pulse{70%{box-shadow:0 0 0 9px rgba(52,211,153,0)}100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}}
+  h1{font-size:clamp(2.35rem,5.2vw,4.05rem);line-height:1.06;letter-spacing:-.028em;font-weight:700;margin-bottom:1.4rem}
+  .hero-tags{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.3rem;font-size:.85rem;color:var(--mut)}
+  .hero-tags span{border:1px solid var(--line);background:rgba(255,255,255,.04);border-radius:999px;padding:.32rem .8rem}
+  .hero-ingress{color:var(--mut);max-width:46ch;font-size:1.08rem;margin-bottom:2rem}
+  .hero-ctas{display:flex;flex-wrap:wrap;gap:.9rem;align-items:center}
+
+  .hero-vis{position:relative;justify-self:center;width:min(400px,100%)}
+  .hero-panel{
+    position:absolute;left:0;right:0;bottom:0;height:64%;border-radius:30px;z-index:1;
+  }
+  .hero-panel .hp-glow{
+    position:absolute;inset:0;border-radius:inherit;overflow:hidden;
+  }
+  .hero-panel .hp-glow::before{
+    content:"";position:absolute;left:50%;top:58%;width:130%;aspect-ratio:1;transform:translate(-50%,-50%);
+    background:radial-gradient(closest-side,rgba(124,58,237,.4),rgba(34,211,238,.14) 55%,transparent 75%);
+  }
+  .hero-jonas{
+    position:relative;z-index:2;width:78%;margin:0 auto;filter:drop-shadow(0 24px 44px rgba(3,4,10,.7));
+    -webkit-mask-image:linear-gradient(180deg,#000 84%,transparent 98%);
+    mask-image:linear-gradient(180deg,#000 84%,transparent 98%);
+  }
+  .hero-strip{
+    position:absolute;z-index:3;left:1.4rem;right:1.4rem;bottom:1.25rem;display:flex;justify-content:space-between;gap:1rem;
+    font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;color:var(--dim);
+    border-top:1px solid rgba(255,255,255,.1);padding-top:.85rem;
+  }
+  .hero-strip b{display:block;font-weight:500;color:var(--cyan);margin-top:.15rem}
+  .chip{
+    position:absolute;z-index:4;font-size:.8rem;font-weight:500;color:#fff;
+    padding:.52rem .95rem;border-radius:999px;white-space:nowrap;
+    background:linear-gradient(160deg,rgba(255,255,255,.1),rgba(255,255,255,.04));
+    border:1px solid var(--line);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 14px 30px -12px rgba(0,0,0,.8);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  }
+  .chip i{font-style:normal;margin-right:.35rem}
+  .chip-a{top:23%;left:-3.2rem;animation:float 7s ease-in-out infinite}
+  .chip-b{top:44%;right:-3.4rem;animation:float 8.5s ease-in-out -2.4s infinite}
+  .chip-c{bottom:-1.55rem;left:6%;animation:float 7.6s ease-in-out -4.8s infinite}
+  @keyframes float{50%{transform:translateY(-9px)}}
+  .scroll-hint{
+    position:absolute;bottom:1.6rem;left:50%;transform:translateX(-50%);
+    font-family:var(--mono);font-size:.64rem;letter-spacing:.28em;color:var(--dim);text-transform:uppercase;
+    display:flex;flex-direction:column;align-items:center;gap:.55rem;text-decoration:none;
+  }
+  .scroll-hint::after{content:"";width:1px;height:34px;background:linear-gradient(rgba(255,255,255,.5),transparent);animation:sh 2.2s ease-in-out infinite}
+  @keyframes sh{50%{transform:translateY(6px);opacity:.4}}
+
+  /* entrélyft */
+  .hr{opacity:0}
+  body.ready .hr{animation:rise .95s var(--ease) both;animation-delay:var(--d,0s)}
+  @keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+
+  /* reveal vid scroll */
+  .rv{opacity:0;transform:translateY(22px);transition:opacity .8s ease,transform .8s var(--ease);transition-delay:var(--d,0s)}
+  .rv.in{opacity:1;transform:none}
+
+  /* ============ OM ============ */
+  .om-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:3rem;align-items:center}
+  .figure{position:relative;border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 70px -30px rgba(0,0,0,.8)}
+  .figure img{width:100%;height:100%;object-fit:cover}
+  .figure::after{content:"";position:absolute;inset:0;background:linear-gradient(200deg,rgba(34,211,238,.12),transparent 38%,rgba(7,8,15,.05) 62%,rgba(7,8,15,.62));pointer-events:none}
+  .figure figcaption{
+    position:absolute;left:1.1rem;bottom:.95rem;z-index:2;font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;color:rgba(255,255,255,.62);
+  }
+  .om-photo{aspect-ratio:29/36}
+  .om-quote{
+    position:absolute;top:1.1rem;left:1.1rem;right:1.1rem;z-index:2;font-family:var(--mono);font-size:.72rem;line-height:1.7;color:rgba(230,240,255,.85);
+  }
+  .om-quote b{color:var(--cyan);font-weight:500}
+  .om-text p{color:var(--mut);margin-bottom:1.1rem}
+  .om-text p strong{color:var(--ink);font-weight:600}
+  .facts{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:1.4rem}
+  .facts span{
+    font-size:.84rem;color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:.4rem .95rem;
+    background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.03));
+  }
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:3.6rem}
+  .stat{padding:1.5rem 1.4rem 1.35rem;border-radius:var(--r-md);text-align:left}
+  .stat b{font-size:clamp(1.9rem,3.2vw,2.6rem);font-weight:700;letter-spacing:-.03em;display:block;line-height:1.1;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .stat span{font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);display:block;margin-top:.55rem}
+
+  /* ============ MERITER ============ */
+  .mgrid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px;margin-top:2.6rem}
+  .m7{grid-column:span 7}.m5{grid-column:span 5}.m4{grid-column:span 4}
+  .card{
+    display:flex;flex-direction:column;
+    transition:transform .45s var(--ease),border-color .45s ease,box-shadow .45s ease;
+    --acc:130,140,248;
+  }
+  .card:hover{
+    transform:translateY(-5px);
+    border-color:rgba(var(--acc),.55);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 24px 60px -24px rgba(var(--acc),.38),0 20px 60px -30px rgba(0,0,0,.7);
+  }
+  .acc-cyan{--acc:103,232,249}.acc-violet{--acc:192,132,252}.acc-pink{--acc:244,114,182}.acc-indigo{--acc:129,140,248}
+  .card-media{position:relative;height:230px;flex:none;overflow:hidden;border-radius:calc(var(--r-lg) - 1px) calc(var(--r-lg) - 1px) 0 0}
+  .card-media img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+  .card:hover .card-media img{transform:scale(1.045)}
+  .card-media::after{content:"";position:absolute;inset:0;background:linear-gradient(rgba(7,8,15,0) 45%,rgba(9,11,20,.88));}
+  .card-media .credit{position:absolute;right:.8rem;bottom:.55rem;z-index:2;font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:rgba(255,255,255,.5)}
+  .badge{
+    position:absolute;top:.9rem;left:.9rem;z-index:2;font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;
+    color:#fff;padding:.32rem .7rem;border-radius:999px;background:rgba(9,11,20,.55);border:1px solid rgba(255,255,255,.16);
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  }
+  .card-body{padding:1.4rem 1.5rem 1.5rem;display:flex;flex-direction:column;gap:.55rem;flex:1}
+  .card-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:rgb(var(--acc));display:flex;align-items:center;gap:.5rem}
+  .card-kicker::before{content:"";width:7px;height:7px;border-radius:2px;background:rgb(var(--acc));box-shadow:0 0 10px rgba(var(--acc),.9);flex:none}
+  .card h3{font-size:1.22rem;font-weight:700;letter-spacing:-.015em;line-height:1.25}
+  .card p{font-size:.92rem;color:var(--mut)}
+  .card p b{color:var(--ink);font-weight:600}
+  .m7 .card-media{height:280px}
+  .m7 h3{font-size:1.5rem}
+  .m5 .card-media{height:300px}
+  .ghost{
+    position:absolute;right:1.15rem;bottom:.35rem;z-index:0;pointer-events:none;user-select:none;
+    font-weight:700;font-size:4.8rem;letter-spacing:-.05em;line-height:1;
+    background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
+    opacity:.14;transition:opacity .45s ease;
+  }
+  .card:hover .ghost{opacity:.26}
+
+  /* ============ TV ============ */
+  .tvgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:2.4rem}
+  .tv{
+    text-decoration:none;padding:1.5rem 1.5rem 1.4rem;display:flex;flex-direction:column;gap:.7rem;
+    transition:transform .45s var(--ease),border-color .45s ease,box-shadow .45s ease;--acc:103,232,249;
+  }
+  .tv:hover{transform:translateY(-5px);border-color:rgba(var(--acc),.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 24px 60px -24px rgba(var(--acc),.35)}
+  .tv .play{
+    width:42px;height:42px;border-radius:50%;display:grid;place-items:center;flex:none;
+    background:linear-gradient(150deg,rgba(var(--acc),.28),rgba(var(--acc),.08));border:1px solid rgba(var(--acc),.4);
+  }
+  .tv .play svg{fill:rgb(var(--acc));margin-left:2px}
+  .tv h3{font-size:1.06rem;font-weight:600;line-height:1.35}
+  .tv .src{font-family:var(--mono);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+  .tv .go{margin-top:auto;font-size:.85rem;font-weight:500;color:rgb(var(--acc));display:flex;align-items:center;gap:.4rem}
+
+  /* ============ PROJEKT ============ */
+  .pgrid{display:grid;grid-template-columns:1.35fr 1fr;gap:18px;margin-top:2.6rem}
+  .proj{display:flex;flex-direction:column;text-decoration:none;
+    transition:transform .45s var(--ease),border-color .45s ease,box-shadow .45s ease;--acc:103,232,249}
+  .proj:hover{transform:translateY(-5px);border-color:rgba(var(--acc),.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 26px 66px -26px rgba(var(--acc),.4)}
+  .proj-globe{grid-row:span 2}
+  .globe-stage{position:relative;padding:1.6rem 1.6rem .4rem;flex:1;display:flex;align-items:center;justify-content:center}
+  .globe-stage::before{
+    content:"";position:absolute;left:50%;top:50%;width:82%;aspect-ratio:1;transform:translate(-50%,-50%);
+    background:radial-gradient(closest-side,rgba(34,211,238,.16),rgba(168,85,247,.08) 55%,transparent 75%);pointer-events:none;
+  }
+  #glob{width:100%;max-width:470px;aspect-ratio:1;display:block;cursor:grab;position:relative}
+  #glob:active{cursor:grabbing}
+  .globe-hint{position:absolute;left:0;right:0;bottom:.7rem;text-align:center;font-family:var(--mono);font-size:.63rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+  .proj-body{padding:1.5rem 1.7rem 1.7rem;display:flex;flex-direction:column;gap:.6rem}
+  .proj-body h3{font-size:1.3rem;font-weight:700;letter-spacing:-.015em;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+  .proj-body h3 .url{font-family:var(--mono);font-weight:500;font-size:.72rem;letter-spacing:.06em;color:rgb(var(--acc));border:1px solid rgba(var(--acc),.35);border-radius:999px;padding:.22rem .65rem;background:rgba(var(--acc),.08)}
+  .proj-body p{font-size:.93rem;color:var(--mut)}
+  .proj-go{margin-top:.4rem;font-size:.88rem;font-weight:600;color:rgb(var(--acc));display:flex;align-items:center;gap:.45rem}
+  .proj-media{position:relative;height:190px;flex:none;overflow:hidden;border-radius:calc(var(--r-lg) - 1px) calc(var(--r-lg) - 1px) 0 0}
+  .proj-media img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+  .proj:hover .proj-media img{transform:scale(1.045)}
+  .proj-media::after{content:"";position:absolute;inset:0;background:linear-gradient(rgba(7,8,15,.04) 40%,rgba(9,11,20,.85))}
+  .proj-media.pm-cut{display:flex;align-items:flex-end;justify-content:center;background:radial-gradient(120% 130% at 50% 118%,rgba(219,39,119,.3),rgba(124,58,237,.16) 45%,transparent 78%)}
+  .proj-media.pm-cut img{width:auto;height:92%;object-fit:contain;transform-origin:bottom}
+  .proj-media.pm-cut::after{background:none}
+  .free-pill{position:absolute;top:.9rem;right:.9rem;z-index:2;font-family:var(--mono);font-size:.64rem;letter-spacing:.16em;color:#0affc2;padding:.3rem .7rem;border-radius:999px;background:rgba(9,20,18,.6);border:1px solid rgba(52,211,153,.4)}
+
+  /* ============ BÖCKER ============ */
+  .bgrid{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:18px;margin-top:2.4rem}
+  .book{overflow:hidden;display:flex;flex-direction:column;--acc:244,114,182;
+    transition:transform .45s var(--ease),border-color .45s ease,box-shadow .45s ease}
+  .book:hover{transform:translateY(-5px);border-color:rgba(var(--acc),.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 24px 60px -24px rgba(var(--acc),.35)}
+  .bgrid{align-items:start}
+  .book-media{position:relative;height:220px;flex:none;overflow:hidden;border-radius:calc(var(--r-lg) - 1px) calc(var(--r-lg) - 1px) 0 0}
+  .book-media img{width:100%;height:100%;object-fit:cover;object-position:50% 42%}
+  .book-media::after{content:"";position:absolute;inset:0;background:linear-gradient(rgba(7,8,15,0) 40%,rgba(9,11,20,.9))}
+  .book-media .credit{position:absolute;right:.8rem;bottom:.55rem;z-index:2;font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:rgba(255,255,255,.5)}
+  .book-body{padding:1.35rem 1.5rem 1.5rem;display:flex;flex-direction:column;gap:.5rem;flex:1}
+  .book h3{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:1.35rem;letter-spacing:.005em}
+  .book .meta{font-family:var(--mono);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+  .book p{font-size:.91rem;color:var(--mut)}
+  .book .pi-tape{
+    flex:none;height:74px;overflow:hidden;position:relative;border-bottom:1px solid rgba(255,255,255,.08);
+    font-family:var(--mono);font-size:.78rem;line-height:74px;white-space:nowrap;color:rgba(163,230,255,.5);
+    background:linear-gradient(160deg,rgba(34,211,238,.09),rgba(124,58,237,.08));
+    border-radius:calc(var(--r-lg) - 1px) calc(var(--r-lg) - 1px) 0 0;
+  }
+  .book .hand-strip{
+    flex:none;height:74px;overflow:hidden;position:relative;border-bottom:1px solid rgba(255,255,255,.08);
+    display:flex;align-items:center;padding:0 1.4rem;white-space:nowrap;
+    font-family:'Caveat',cursive;font-size:1.5rem;color:rgba(240,171,252,.75);
+    background:linear-gradient(160deg,rgba(168,85,247,.12),rgba(244,114,182,.08));
+    border-radius:calc(var(--r-lg) - 1px) calc(var(--r-lg) - 1px) 0 0;
+  }
+  .book .pi-tape span{display:inline-block;padding-left:1rem;animation:tape 40s linear infinite}
+  @keyframes tape{to{transform:translateX(-50%)}}
+  .book .pi-tape b{color:var(--cyan);font-weight:500}
+
+  /* ============ KURS ============ */
+  .kurs-banner{
+    display:grid;grid-template-columns:1.35fr .65fr;align-items:end;gap:1rem;border-radius:32px;
+  }
+  .kurs-banner::after{
+    content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+    background:
+      radial-gradient(90% 130% at 82% 112%,rgba(219,39,119,.34),transparent 55%),
+      radial-gradient(75% 120% at 4% -18%,rgba(34,211,238,.24),transparent 60%),
+      radial-gradient(60% 100% at 50% 118%,rgba(124,58,237,.3),transparent 65%);
+  }
+  .kurs-text{padding:clamp(1.8rem,4.5vw,3.4rem);position:relative;z-index:2}
+  .kurs-text h2{margin-bottom:.8rem}
+  .kurs-text .lead{margin-bottom:1.8rem}
+  .kurs-cta{position:relative;display:inline-flex}
+  .kurs-cta::before{
+    content:"";position:absolute;inset:-8px -14px;border-radius:999px;filter:blur(22px);z-index:-1;
+    background:linear-gradient(135deg,rgba(79,70,229,.55),rgba(219,39,119,.5));opacity:.75;
+    animation:ctaGlow 3.6s ease-in-out infinite;
+  }
+  @keyframes ctaGlow{50%{opacity:.4}}
+  .kurs-note{display:block;margin-top:1.1rem;font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;color:var(--dim)}
+  .kurs-fig{position:relative;z-index:2;align-self:end;display:flex;justify-content:center}
+  .kurs-fig img{width:min(240px,80%);filter:drop-shadow(0 20px 40px rgba(3,4,10,.7))}
+
+  /* ============ KONTAKT ============ */
+  .kgrid{display:grid;grid-template-columns:1fr 1.1fr;gap:3rem;align-items:start;margin-top:2.4rem}
+  .kleft p{color:var(--mut);margin-bottom:1.4rem;max-width:44ch}
+  .socials{display:flex;gap:.8rem;margin-bottom:2rem}
+  .soc{
+    width:52px;height:52px;border-radius:16px;display:grid;place-items:center;color:var(--ink);
+    transition:transform .35s var(--ease),border-color .35s,box-shadow .35s;
+  }
+  .soc:hover{transform:translateY(-4px);border-color:rgba(103,232,249,.5);box-shadow:0 16px 36px -16px rgba(103,232,249,.4)}
+  .soc svg{width:21px;height:21px;fill:currentColor}
+  .kfig{max-width:360px}
+  .kfig .figure{aspect-ratio:4/3}
+  .kfig img{object-position:50% 18%}
+  .kform{padding:clamp(1.5rem,3vw,2.2rem)}
+  .kform h3{font-size:1.2rem;margin-bottom:1.3rem;display:flex;align-items:center;gap:.6rem}
+  .kform h3::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--grad-btn);box-shadow:0 0 12px rgba(168,85,247,.8)}
+  .field{margin-bottom:1.05rem}
+  .field label{display:block;font-family:var(--mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin-bottom:.45rem}
+  .field input,.field textarea{
+    width:100%;background:rgba(7,9,18,.55);border:1px solid var(--line);border-radius:14px;color:var(--ink);
+    font-family:var(--sans);font-size:.96rem;padding:.85rem 1rem;transition:border-color .3s,box-shadow .3s;
+  }
+  .field input:focus,.field textarea:focus{outline:none;border-color:rgba(103,232,249,.65);box-shadow:0 0 0 3px rgba(103,232,249,.14)}
+  .field textarea{min-height:128px;resize:vertical}
+  .form-done{display:none;text-align:center;padding:2.6rem 1rem}
+  .form-done .big{font-size:2.4rem;margin-bottom:.6rem}
+  .form-done h4{font-size:1.25rem;margin-bottom:.5rem}
+  .form-done p{color:var(--mut);font-size:.95rem}
+  form.sent .form-live{display:none}
+  form.sent .form-done{display:block}
+
+  /* ============ FOOTER ============ */
+  footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.08);margin-top:3rem;background:linear-gradient(rgba(7,8,15,.2),rgba(5,6,11,.7))}
+  .foot{width:min(1160px,92vw);margin:0 auto;padding:2.6rem 0 2.8rem;display:flex;flex-wrap:wrap;gap:1.6rem;align-items:center;justify-content:space-between}
+  .foot-links{display:flex;flex-wrap:wrap;gap:.4rem 1.4rem;font-size:.86rem}
+  .foot-links a{color:var(--mut);text-decoration:none;transition:color .25s}
+  .foot-links a:hover{color:#fff}
+  .foot-meta{width:100%;display:flex;flex-wrap:wrap;gap:.5rem 1.6rem;justify-content:space-between;font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;color:rgba(206,216,246,.42)}
+  .foot .brandline{display:flex;align-items:center;gap:.6rem;font-weight:700}
+  .foot .brandline i{width:9px;height:9px;border-radius:50%;background:var(--grad-btn);box-shadow:0 0 12px rgba(168,85,247,.9)}
+
+  /* ============ RESPONSIVT ============ */
+  @media(max-width:1024px){
+    .m7,.m5{grid-column:span 6}
+    .m4{grid-column:span 6}
+  }
+  @media(max-width:900px){
+    .hero-grid{grid-template-columns:1fr;gap:4.2rem}
+    .hero-vis{width:min(340px,86%)}
+    .om-grid,.kgrid{grid-template-columns:1fr;gap:2.4rem}
+    .om-photo{max-width:440px}
+    .pgrid{grid-template-columns:1fr}
+    .proj-globe{grid-row:auto}
+    .tvgrid{grid-template-columns:1fr 1fr}
+    .bgrid{grid-template-columns:1fr 1fr}
+    .kurs-banner{grid-template-columns:1fr}
+    .kurs-fig{order:-1;margin-top:1.4rem}
+    .kurs-fig img{width:min(200px,52%)}
+    .stats{grid-template-columns:repeat(2,1fr)}
+  }
+  @media(max-width:640px){
+    body{font-size:15.5px}
+    .m7,.m5,.m4{grid-column:span 12}
+    .tvgrid,.bgrid{grid-template-columns:1fr}
+    .chip-a{left:-.6rem}
+    .chip-b{right:-.6rem}
+    .card-media,.m7 .card-media{height:200px}
+    .hero-ctas .btn{padding:.8rem 1.25rem;font-size:.9rem}
+    #hero{padding-top:6.4rem}
+    .scroll-hint{display:none}
+  }
+
+  /* ============ REDUCED MOTION ============ */
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    .blob,.chip,.pulse,.scroll-hint::after,.kurs-cta::before,.cursor,.book .pi-tape span{animation:none !important}
+    .hr,body.ready .hr{animation:none !important;opacity:1}
+    .rv{opacity:1;transform:none;transition:none}
+    .card,.tv,.proj,.book,.soc,.btn,.card-media img,.proj-media img{transition:none}
+    .card:hover,.tv:hover,.proj:hover,.book:hover{transform:none}
+    .glass::before{display:none}
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Hoppa till innehållet</a>
+
+<!-- AURORA -->
+<div class="aurora" aria-hidden="true">
+  <div class="aur-w aw1" data-depth="-0.05"><div class="blob g-indigo"></div></div>
+  <div class="aur-w aw2" data-depth="0.04"><div class="blob g-cyan"></div></div>
+  <div class="aur-w aw3" data-depth="-0.08"><div class="blob g-violet"></div></div>
+  <div class="aur-w aw4" data-depth="0.06"><div class="blob g-pink"></div></div>
+  <div class="aur-w aw5" data-depth="-0.045"><div class="blob g-cyan"></div></div>
+  <div class="aur-w aw6" data-depth="0.07"><div class="blob g-indigo"></div></div>
+  <div class="aur-w aw7" data-depth="-0.06"><div class="blob g-violet"></div></div>
+  <div class="aur-w aw8" data-depth="0.05"><div class="blob g-pink"></div></div>
+</div>
+
+<!-- LADDSKÄRM -->
+<div id="loader" aria-hidden="true">
+  <div class="term glass">
+    <div class="term-bar"><i></i><i></i><i></i><span class="term-title">jonas.exe — boot</span></div>
+    <div class="term-body" id="termBody"></div>
+    <div class="term-skip">tryck valfri tangent för att hoppa över</div>
+  </div>
+</div>
+
+<header>
+  <nav class="nav glass" aria-label="Huvudmeny">
+    <a class="brand" href="#hero" aria-label="Till toppen"><i></i><span>Jonas von Essen</span></a>
+    <a href="#om" data-nav="om">Om</a>
+    <a href="#meriter" data-nav="meriter">Meriter</a>
+    <a href="#projekt" data-nav="projekt">Projekt</a>
+    <a href="#kurs" data-nav="kurs">Kurs</a>
+    <a href="#kontakt" data-nav="kontakt" class="cta">Boka föreläsning</a>
+  </nav>
+</header>
+
+<main id="main">
+
+  <!-- ============ HERO ============ -->
+  <section id="hero">
+    <div class="shell">
+      <div class="hero-grid">
+        <div>
+          <p class="hero-eyebrow hr" style="--d:.05s"><span class="pulse" aria-hidden="true"></span>Jonas von Essen <b>· Göteborg · minne: 100&nbsp;%</b></p>
+          <h1 class="hr" style="--d:.15s"><span class="gtx">100&nbsp;000 decimaler av π.</span> Alla världens länder. Och ditt namn, om vi har setts.</h1>
+          <div class="hero-tags hr" style="--d:.25s" role="list">
+            <span role="listitem">Tvåfaldig världsmästare i minne</span>
+            <span role="listitem">Föreläsare</span>
+            <span role="listitem">Frågesportsnörd</span>
+          </div>
+          <p class="hero-ingress hr" style="--d:.33s">Jag tävlar i att minnas saker – och i att säga dem snyggt. Däremellan bygger jag gratis appar som gör det lättare att lära sig.</p>
+          <div class="hero-ctas hr" style="--d:.42s">
+            <a class="btn btn-primary" href="#projekt">Se vad jag byggt
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            <a class="btn btn-ghost" href="#kontakt">Boka föreläsning</a>
+          </div>
+        </div>
+        <div class="hero-vis hr" style="--d:.3s">
+          <div class="hero-panel glass"><div class="hp-glow" aria-hidden="true"></div></div>
+          <img class="hero-jonas" src="../assets/img/hej.webp" alt="Jonas von Essen vinkar glatt" width="431" height="720" fetchpriority="high">
+          <div class="hero-strip" aria-hidden="true">
+            <span>π-decimaler<b>100 000</b></span>
+            <span>länder<b>197/197</b></span>
+            <span>ordvitsnivå<b>farligt hög</b></span>
+          </div>
+          <span class="chip chip-a"><i aria-hidden="true">🏆</i>2× VM-guld i minne</span>
+          <span class="chip chip-b"><i aria-hidden="true">🧠</i>SM-guld · Poetry slam</span>
+          <span class="chip chip-c"><i aria-hidden="true">✨</i>Golden buzzer · Talang</span>
+        </div>
+      </div>
+    </div>
+    <a class="scroll-hint" href="#om" aria-label="Scrolla ner till Om mig">scrolla</a>
+  </section>
+
+  <!-- ============ OM ============ -->
+  <section id="om">
+    <div class="shell">
+      <div class="om-grid">
+        <figure class="figure om-photo rv">
+          <img src="../assets/img/foto-galen-forskare-md.webp" alt="Jonas gör en galen hjärnforskar-min med klohänder mot mörkblå bakgrund" loading="lazy" width="575" height="800">
+          <p class="om-quote" aria-hidden="true">&gt; hjärna.kapacitet <b>…större än du tror</b></p>
+          <figcaption>Foto: Stefan Edetoft</figcaption>
+        </figure>
+        <div class="om-text">
+          <p class="eyebrow rv">01 · Om mig</p>
+          <h2 class="rv">Hjärnan klarar mer <span class="gtx">än man tror.</span></h2>
+          <p class="rv">Jag heter Jonas von Essen och 2013 blev jag – som förste svensk någonsin – <strong>världsmästare i minne</strong>. 2014 försvarade jag titeln. Sedan dess har jag gjort det till mitt jobb att visa vad hjärnan klarar: i TV-studior, föreläsningssalar, böcker och appar.</p>
+          <p class="rv" style="--d:.08s">Jag har memorerat <strong>100&nbsp;000 decimaler av pi</strong>, lärt mig hela Talang-publikens namn och vunnit en miljon på Postkodmiljonären. När jag inte tävlar i att minnas saker tävlar jag i att formulera dem – som färsk svensk mästare i poetry slam och Göteborgsmästare i ordvitsar.</p>
+          <div class="facts rv" style="--d:.16s" role="list">
+            <span role="listitem">📍 Göteborg</span>
+            <span role="listitem">Föreläsare &amp; författare</span>
+            <span role="listitem">3 gratis läroappar</span>
+            <span role="listitem">2× VM-guld</span>
+          </div>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat glass rv"><b>2×</b><span>Världsmästare i minne</span></div>
+        <div class="stat glass rv" style="--d:.08s"><b>100&nbsp;000</b><span>π-decimaler · verifierade</span></div>
+        <div class="stat glass rv" style="--d:.16s"><b>197</b><span>länder i huvudet</span></div>
+        <div class="stat glass rv" style="--d:.24s"><b>160/160</b><span>på högskoleprovet 2021</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MERITER ============ -->
+  <section id="meriter">
+    <div class="shell">
+      <p class="eyebrow rv">02 · Meriter</p>
+      <h2 class="rv">Saker jag lyckats <span class="gtx">komma ihåg.</span></h2>
+      <p class="lead rv">Tolv år av tävlingar, TV-studior och rekord – här är höjdpunkterna.</p>
+
+      <div class="mgrid">
+        <article class="glass card m7 acc-indigo rv">
+          <div class="card-media">
+            <img src="../assets/img/jonas_vm-md.webp" alt="Jonas med VM-pokalen, svensk flagga över axlarna" loading="lazy" width="700" height="700" style="object-position:50% 18%">
+            <span class="badge">London 2013 · Haikou 2014</span>
+          </div>
+          <div class="card-body">
+            <p class="card-kicker">World Memory Championships</p>
+            <h3>2× Världsmästare i minne</h3>
+            <p>Sveriges förste världsmästare i minne – och året därpå försvarade han titeln i Kina. <b>Två raka VM-guld.</b></p>
+          </div>
+        </article>
+
+        <article class="glass card m5 acc-cyan rv" style="--d:.08s">
+          <div class="card-media">
+            <img src="../assets/img/foto-siffervagg-md.webp" alt="Jonas ler framför en vägg täckt av handskrivna pi-decimaler" loading="lazy" width="580" height="800" style="object-position:50% 24%">
+            <span class="badge">2020</span>
+            <span class="credit">Foto: Jessica Ahrling</span>
+          </div>
+          <div class="card-body">
+            <p class="card-kicker">π · världsunikt</p>
+            <h3>100&nbsp;000 decimaler av π</h3>
+            <p>Först i världen att klara ett verifierat test på alla 100&nbsp;000. Europarekord i uppläsning: <b>24&nbsp;063 decimaler i rad</b>.</p>
+          </div>
+        </article>
+
+        <article class="glass card m4 acc-pink rv">
+          <div class="card-body">
+            <p class="card-kicker">TV4 · Talang 2018</p>
+            <h3>Golden buzzer &amp; final</h3>
+            <p>Lärde sig hela publikens namn – David Batra tryckte på <b>golden buzzer</b> direkt. Finalist.</p>
+          </div>
+          <span class="ghost" aria-hidden="true">500</span>
+        </article>
+
+        <article class="glass card m4 acc-violet rv" style="--d:.07s">
+          <div class="card-media" style="height:160px">
+            <img src="../assets/img/jonas_pkm-md.webp" alt="Jonas står på stolen i vild triumf i Postkodmiljonären" loading="lazy" width="700" height="700" style="object-position:50% 22%">
+            <span class="badge">2023</span>
+          </div>
+          <div class="card-body">
+            <p class="card-kicker">Postkodmiljonären</p>
+            <h3>Rätt på miljonfrågan</h3>
+            <p>En av endast <b>13 genom tiderna</b> i Sverige som svarat rätt hela vägen.</p>
+          </div>
+        </article>
+
+        <article class="glass card m4 acc-cyan rv" style="--d:.14s">
+          <div class="card-body">
+            <p class="card-kicker">Högskoleprovet</p>
+            <h3>2.0 – tolv gånger</h3>
+            <p>Maxresultat tolv gånger, och 2021 <b>160 av 160 rätt – som ende i landet</b>.</p>
+          </div>
+          <span class="ghost" aria-hidden="true">2.0</span>
+        </article>
+
+        <article class="glass card m4 acc-violet rv">
+          <div class="card-body">
+            <p class="card-kicker">Scen · 2026</p>
+            <h3>SM-guld i poetry slam</h3>
+            <p>Svensk mästare i poetry slam – och <b>Göteborgsmästare i ordvitsar</b>, klar för SM-final.</p>
+          </div>
+          <span class="ghost" aria-hidden="true">SM</span>
+        </article>
+
+        <article class="glass card m4 acc-indigo rv" style="--d:.07s">
+          <div class="card-body">
+            <p class="card-kicker">Quiz · 5× SM-guld</p>
+            <h3>Svensk mästare i pubquiz</h3>
+            <p>Fem SM-titlar med laget <b>”Glenns över sjö och strand”</b>.</p>
+          </div>
+          <span class="ghost" aria-hidden="true">5×</span>
+        </article>
+
+        <article class="glass card m4 acc-pink rv" style="--d:.14s">
+          <div class="card-body">
+            <p class="card-kicker">Fler TV-segrar</p>
+            <h3>Smartare, Muren &amp; The Brain</h3>
+            <p>Vann <b>Smartare än en femteklassare</b> (2020), besegrade expertpanelen i <b>Muren</b> (SVT, 2021) och klarade utmaningen i kinesiska <b>The Brain</b> – bland annat 200 numrerade valnötter.</p>
+          </div>
+        </article>
+      </div>
+
+      <!-- Sett på TV -->
+      <div style="margin-top:4.2rem">
+        <p class="eyebrow rv">Sett på TV · klipp</p>
+        <div class="tvgrid">
+          <a class="glass tv rv" href="https://www.youtube.com/watch?v=PtqSFf3cO04" target="_blank" rel="noopener">
+            <span class="play" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M6 3.5v17l14-8.5z"/></svg></span>
+            <span class="src">Talang · TV4</span>
+            <h3>Jonas memorerar 500 namn på två timmar</h3>
+            <span class="go">Se klippet på YouTube <span aria-hidden="true">↗</span></span>
+          </a>
+          <a class="glass tv rv" style="--d:.08s;--acc:192,132,252" href="https://www.youtube.com/results?search_query=jonas+von+essen+postkodmiljon%C3%A4ren" target="_blank" rel="noopener">
+            <span class="play" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M6 3.5v17l14-8.5z"/></svg></span>
+            <span class="src">Postkodmiljonären</span>
+            <h3>Miljonfrågan – hela vägen till en miljon</h3>
+            <span class="go">Se klippet på YouTube <span aria-hidden="true">↗</span></span>
+          </a>
+          <a class="glass tv rv" style="--d:.16s;--acc:244,114,182" href="https://www.youtube.com/@BlueberryClubSparven" target="_blank" rel="noopener">
+            <span class="play" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M6 3.5v17l14-8.5z"/></svg></span>
+            <span class="src">Gratis lektion</span>
+            <h3>Lär dig världens 10 största länder på 5 minuter</h3>
+            <span class="go">Se klippet på YouTube <span aria-hidden="true">↗</span></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROJEKT ============ -->
+  <section id="projekt">
+    <div class="shell">
+      <p class="eyebrow rv">03 · Projekt</p>
+      <h2 class="rv">Jag bygger också <span class="gtx">saker.</span></h2>
+      <p class="lead rv">Tre appar, noll kronor. Jag bygger dem för att det är kul – och för att bra inlärning inte ska kosta.</p>
+
+      <div class="pgrid">
+        <article class="glass proj proj-globe rv">
+          <div class="globe-stage">
+            <canvas id="glob" aria-label="Interaktiv jordglob – dra för att snurra"></canvas>
+            <p class="globe-hint">dra i globen · den snurrar själv</p>
+          </div>
+          <div class="proj-body">
+            <span class="free-pill">100 % gratis</span>
+            <h3>Alla världens länder <span class="url">jonasgeografi.se</span></h3>
+            <p>Lär dig alla världens länder på en snurrbar jordglob där varje land är ett eget litet konstverk. Utforska, quizza och res jorden runt – med minnesknep för varje land.</p>
+            <a class="proj-go" href="https://jonasgeografi.se" target="_blank" rel="noopener">Öppna jonasgeografi.se <span aria-hidden="true">↗</span></a>
+          </div>
+        </article>
+
+        <article class="glass proj acc-indigo rv" style="--d:.08s;--acc:129,140,248">
+          <div class="proj-media">
+            <img src="../assets/img/bild_hp-md.webp" alt="Högskoleprovshäften och svarsblankett med blyertspenna" loading="lazy" width="700" height="391">
+            <span class="free-pill">100 % gratis</span>
+          </div>
+          <div class="proj-body">
+            <h3>Plugga till HP <span class="url">hpakuten.se</span></h3>
+            <p>Gratis träning inför högskoleprovet: simulera gamla prov på tid, videogenomgångar och minnestekniker. Från Sveriges kanske mest rutinerade HP-skrivare.</p>
+            <a class="proj-go" href="https://hpakuten.se" target="_blank" rel="noopener">Öppna hpakuten.se <span aria-hidden="true">↗</span></a>
+          </div>
+        </article>
+
+        <article class="glass proj rv" style="--d:.16s;--acc:244,114,182">
+          <div class="proj-media pm-cut">
+            <img src="../assets/img/jonas-gangertabellen-md.webp" alt="Jonas gör en mind blown-gest" loading="lazy" width="700" height="579">
+            <span class="free-pill">100 % gratis</span>
+          </div>
+          <div class="proj-body">
+            <h3>Sex tal kvar <span class="url">gångertabellen.se</span></h3>
+            <p>Gångertabellen är lättare än den ser ut: med rätt knep är det bara sex tal kvar att memorera. Quiz, minnesbilder och smart repetition – utan inloggning.</p>
+            <a class="proj-go" href="https://www.gångertabellen.se" target="_blank" rel="noopener">Öppna gångertabellen.se <span aria-hidden="true">↗</span></a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BÖCKER ============ -->
+  <section id="bocker">
+    <div class="shell">
+      <p class="eyebrow rv">04 · Böcker</p>
+      <h2 class="rv">Tre böcker om att <span class="gtx">minnas mera.</span></h2>
+      <div class="bgrid">
+        <article class="glass book rv">
+          <div class="book-media">
+            <img src="../assets/img/foto-knut-rod-md.webp" alt="Jonas tittar storögt på ett snöre knutet i rosett runt pekfingret" loading="lazy" width="611" height="800">
+            <span class="credit">Foto: Stefan Edetoft</span>
+          </div>
+          <div class="book-body">
+            <p class="meta">Semic · ny utgåva 2024</p>
+            <h3>Så får du ett superminne</h3>
+            <p>Handboken i minnesteknik – metoderna som tog Jonas till två VM-guld.</p>
+          </div>
+        </article>
+        <article class="glass book rv" style="--d:.08s;--acc:129,140,248">
+          <div class="hand-strip" aria-hidden="true">namn · glosor · tal · kartor · ansikten · listor…</div>
+          <div class="book-body">
+            <p class="meta">2019</p>
+            <h3>Bli ett minnesgeni!</h3>
+            <p>Minnesteknikerna för alla åldrar – lekfullt, konkret och fullt av knep som fastnar.</p>
+          </div>
+        </article>
+        <article class="glass book rv" style="--d:.16s;--acc:103,232,249">
+          <div class="pi-tape" aria-hidden="true"><span id="piTape"><b>π =</b> 3.14159265358979323846…</span></div>
+          <div class="book-body">
+            <p class="meta">2020</p>
+            <h3>Pi-boken 2.0</h3>
+            <p>Alla 100&nbsp;000 decimaler, svart på vitt. Världens kanske nördigaste bok.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ KURS ============ -->
+  <section id="kurs">
+    <div class="shell">
+      <div class="glass kurs-banner rv">
+        <div class="kurs-text">
+          <p class="eyebrow">05 · Onlinekurs</p>
+          <h2>Skaffa ett <span class="gtx">superminne!</span></h2>
+          <p class="lead">Lär dig metoderna jag använder – i din egen takt, hur många gånger du vill. Från minnespalats till π-teknik.</p>
+          <span class="kurs-cta"><a class="btn btn-primary" href="https://kurs.jonasvonessen.se" target="_blank" rel="noopener">Till kursen
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></span>
+          <span class="kurs-note">kurs.jonasvonessen.se · onlinekurs i minnesteknik</span>
+        </div>
+        <div class="kurs-fig">
+          <img src="../assets/img/stark.webp" alt="Jonas spänner musklerna, nöjd" loading="lazy" width="501" height="720">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ KONTAKT ============ -->
+  <section id="kontakt">
+    <div class="shell">
+      <p class="eyebrow rv">06 · Följ mig &amp; kontakt</p>
+      <h2 class="rv">Boka ett <span class="gtx">oförglömligt</span> event.</h2>
+      <div class="kgrid">
+        <div class="kleft">
+          <p class="rv">Vill du boka en föreläsning, ett TV-inslag eller bara säga hej? Skriv en rad – jag lovar att komma ihåg den. Och följ gärna med bakom kulisserna:</p>
+          <div class="socials rv" style="--d:.08s">
+            <a class="glass soc" href="https://www.instagram.com/jonasvonessen/" target="_blank" rel="noopener" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.72 3.72 0 0 1-1.38-.9 3.72 3.72 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.21 15.58 2.2 15.2 2.2 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.21 8.8 2.2 12 2.2m0-2.2C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63a5.9 5.9 0 0 0-2.13 1.38A5.9 5.9 0 0 0 .63 4.14C.33 4.9.13 5.78.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.31.8.72 1.47 1.38 2.13a5.9 5.9 0 0 0 2.13 1.38c.76.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56a5.9 5.9 0 0 0 2.13-1.38 5.9 5.9 0 0 0 1.38-2.13c.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91a5.9 5.9 0 0 0-1.38-2.13A5.9 5.9 0 0 0 19.86.63c-.76-.3-1.64-.5-2.91-.56C15.67.01 15.26 0 12 0zm0 5.84A6.16 6.16 0 1 0 18.16 12 6.16 6.16 0 0 0 12 5.84zm0 10.15A4 4 0 1 1 16 12a4 4 0 0 1-4 3.99zm7.85-10.4a1.44 1.44 0 1 1-1.44-1.44 1.44 1.44 0 0 1 1.44 1.44z"/></svg>
+            </a>
+            <a class="glass soc" href="https://www.tiktok.com/@jonasvonessen" target="_blank" rel="noopener" aria-label="TikTok">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
+            </a>
+            <a class="glass soc" href="https://www.youtube.com/@BlueberryClubSparven" target="_blank" rel="noopener" aria-label="YouTube">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.19a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.5A3.02 3.02 0 0 0 .5 6.19C0 8.07 0 12 0 12s0 3.93.5 5.81a3.02 3.02 0 0 0 2.12 2.14c1.88.5 9.38.5 9.38.5s7.5 0 9.38-.5a3.02 3.02 0 0 0 2.12-2.14C24 15.93 24 12 24 12s0-3.93-.5-5.81zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
+            </a>
+          </div>
+          <figure class="figure kfig rv" style="--d:.16s">
+            <img src="../assets/img/foto-scen-narbild-md.webp" alt="Jonas på scen med headset-mikrofon, turkost bokeh-ljus i bakgrunden" loading="lazy" width="533" height="800">
+            <figcaption>På scen · Foto: Annika Berglund</figcaption>
+          </figure>
+        </div>
+        <!-- FORMSPREE: byt action till https://formspree.io/f/DITT_FORMSPREE_ID och ta bort JS-fallbacken nedan -->
+        <form class="glass kform rv" style="--d:.1s" id="contactForm" novalidate>
+          <div class="form-live">
+            <h3>Skriv en rad</h3>
+            <div class="field">
+              <label for="f-namn">Namn</label>
+              <input id="f-namn" name="namn" type="text" autocomplete="name" required>
+            </div>
+            <div class="field">
+              <label for="f-epost">E-post</label>
+              <input id="f-epost" name="epost" type="email" autocomplete="email" required>
+            </div>
+            <div class="field">
+              <label for="f-medd">Meddelande</label>
+              <textarea id="f-medd" name="meddelande" required placeholder="Berätta om ditt event – eller utmana mig i frågesport."></textarea>
+            </div>
+            <button class="btn btn-primary" type="submit">Skicka
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+          </div>
+          <div class="form-done" role="status">
+            <p class="big" aria-hidden="true">🧠✨</p>
+            <h4>Tack! Jag glömmer det inte.</h4>
+            <p>Formuläret kopplas snart – mejla mig så länge, så hörs vi.</p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="foot">
+    <p class="brandline"><i aria-hidden="true"></i>Jonas von Essen</p>
+    <nav class="foot-links" aria-label="Externa länkar">
+      <a href="https://jonasgeografi.se" target="_blank" rel="noopener">jonasgeografi.se</a>
+      <a href="https://hpakuten.se" target="_blank" rel="noopener">hpakuten.se</a>
+      <a href="https://www.gångertabellen.se" target="_blank" rel="noopener">gångertabellen.se</a>
+      <a href="https://kurs.jonasvonessen.se" target="_blank" rel="noopener">Kursen: Skaffa ett superminne</a>
+    </nav>
+    <div class="foot-meta">
+      <span>© 2026 Jonas von Essen · Göteborg</span>
+      <span>Foto: Stefan Edetoft · Jessica Ahrling · Annika Berglund</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../assets/globe.js" defer></script>
+<script>
+(function(){
+  'use strict';
+  var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var finePointer = matchMedia('(pointer: fine)').matches;
+  var qs = new URLSearchParams(location.search);
+
+  /* ---------- LADDSKÄRM ---------- */
+  var loader = document.getElementById('loader');
+  var docEl = document.documentElement;
+  var seen = false;
+  try { seen = sessionStorage.getItem('aurora-boot') === '1'; } catch(e){}
+  var skipLoader = reduced || seen || qs.has('noloader');
+
+  function openPage(){
+    document.body.classList.add('ready');
+  }
+  function closeLoader(instant){
+    try { sessionStorage.setItem('aurora-boot','1'); } catch(e){}
+    docEl.classList.remove('lock');
+    if (instant) { loader.hidden = true; openPage(); return; }
+    loader.classList.add('done');
+    openPage();
+    setTimeout(function(){ loader.hidden = true; }, 850);
+  }
+
+  if (skipLoader) {
+    closeLoader(true);
+  } else {
+    docEl.classList.add('lock');
+    var body = document.getElementById('termBody');
+    var lines = [
+      ['> startar jonas.exe .................. ', 'OK', 'ok'],
+      ['> laddar minnespalats ................ ', '100%', 'ok'],
+      ['> π-decimaler i minne: 100 000 ....... ', 'verifierade', 'ok'],
+      ['> länder inlästa: 197/197 ............ ', 'klart', 'ok'],
+      ['> kalibrerar ordvitsnivå ............. ', 'farligt hög', 'warm'],
+      ['> välkommen in!', '', '']
+    ];
+    var li = 0, ci = 0, closed = false, timer = 0;
+    var row = null, cur = document.createElement('span');
+    cur.className = 'cursor';
+
+    function newRow(){
+      row = document.createElement('div');
+      row.className = 'row';
+      body.appendChild(row);
+      row.appendChild(cur);
+    }
+    function typeStep(){
+      if (closed) return;
+      if (li >= lines.length) { timer = setTimeout(finish, 420); return; }
+      if (!row) newRow();
+      var L = lines[li];
+      if (ci < L[0].length) {
+        var chunk = L[0].slice(ci, ci + 2);
+        ci += 2;
+        row.insertBefore(document.createTextNode(chunk), cur);
+        timer = setTimeout(typeStep, 11);
+      } else {
+        if (L[1]) {
+          var st = document.createElement('span');
+          st.className = L[2];
+          st.textContent = L[1];
+          row.insertBefore(st, cur);
+        }
+        li++; ci = 0; row = null;
+        timer = setTimeout(typeStep, li === lines.length ? 160 : 105);
+      }
+    }
+    function finish(){
+      if (closed) return;
+      closed = true;
+      clearTimeout(timer);
+      closeLoader(false);
+      removeEventListener('keydown', finish);
+      loader.removeEventListener('click', finish);
+    }
+    loader.addEventListener('click', finish);
+    addEventListener('keydown', finish);
+    setTimeout(typeStep, 260);
+    setTimeout(finish, 3400); /* säkerhetsnät */
+  }
+
+  /* ---------- AURORA-PARALLAX (rAF-throttlad) ---------- */
+  if (!reduced) {
+    var wraps = Array.prototype.slice.call(document.querySelectorAll('.aur-w'));
+    var depths = wraps.map(function(w){ return parseFloat(w.dataset.depth) || 0; });
+    var ticking = false;
+    var onScroll = function(){
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function(){
+        var y = scrollY;
+        for (var i = 0; i < wraps.length; i++) {
+          wraps[i].style.transform = 'translate3d(' + (y * depths[i] * 0.4).toFixed(1) + 'px,' + (y * depths[i]).toFixed(1) + 'px,0)';
+        }
+        ticking = false;
+      });
+    };
+    addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  /* ---------- LJUSREFLEX PÅ GLASKANTER (endast pekare) ---------- */
+  if (finePointer && !reduced) {
+    var cards = Array.prototype.slice.call(document.querySelectorAll('.glass'));
+    var px = 0, py = 0, raf = 0;
+    var paint = function(){
+      raf = 0;
+      for (var i = 0; i < cards.length; i++) {
+        var c = cards[i];
+        var r = c.getBoundingClientRect();
+        if (r.bottom < -160 || r.top > innerHeight + 160) continue;
+        var x = px - r.left, y = py - r.top;
+        if (x > -170 && x < r.width + 170 && y > -170 && y < r.height + 170) {
+          c.style.setProperty('--mx', x + 'px');
+          c.style.setProperty('--my', y + 'px');
+          c.style.setProperty('--ro', '1');
+        } else if (c.style.getPropertyValue('--ro') === '1') {
+          c.style.setProperty('--ro', '0');
+        }
+      }
+    };
+    addEventListener('pointermove', function(e){
+      px = e.clientX; py = e.clientY;
+      if (!raf) raf = requestAnimationFrame(paint);
+    }, { passive: true });
+  }
+
+  /* ---------- REVEAL VID SCROLL ---------- */
+  var rvs = Array.prototype.slice.call(document.querySelectorAll('.rv'));
+  if (reduced || !('IntersectionObserver' in window)) {
+    rvs.forEach(function(el){ el.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    rvs.forEach(function(el){ io.observe(el); });
+    /* Robusthetsnät: om ingen interaktion sker (t.ex. skärmdump, uppläsning,
+       utskrift) visas allt innehåll ändå efter en kort stund. Första gesten
+       avbryter nätet så scroll-reveal behålls för riktiga besökare. */
+    var revealAll = setTimeout(function(){
+      rvs.forEach(function(el){ el.classList.add('in'); });
+    }, 700);
+    var cancelNet = function(){ clearTimeout(revealAll); };
+    ['wheel','touchstart','keydown','pointerdown','scroll'].forEach(function(ev){
+      addEventListener(ev, cancelNet, { once: true, passive: true });
+    });
+  }
+
+  /* ---------- NAV: krymp + aktiv sektion ---------- */
+  var nav = document.querySelector('.nav');
+  var lastMini = false, navTick = false;
+  addEventListener('scroll', function(){
+    if (navTick) return;
+    navTick = true;
+    requestAnimationFrame(function(){
+      var mini = scrollY > 50;
+      if (mini !== lastMini) { nav.classList.toggle('mini', mini); lastMini = mini; }
+      navTick = false;
+    });
+  }, { passive: true });
+
+  var navLinks = {};
+  Array.prototype.forEach.call(document.querySelectorAll('[data-nav]'), function(a){
+    navLinks[a.dataset.nav] = a;
+  });
+  var secIO = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if (!en.isIntersecting) return;
+      var id = en.target.id === 'bocker' ? 'projekt' : en.target.id;
+      for (var k in navLinks) navLinks[k].classList.toggle('active', k === id);
+    });
+  }, { rootMargin: '-38% 0px -55% 0px' });
+  ['om','meriter','projekt','bocker','kurs','kontakt'].forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) secIO.observe(el);
+  });
+
+  /* ---------- GLOBEN (lazy-init) ---------- */
+  var globCanvas = document.getElementById('glob');
+  var globStarted = false;
+  function startGlobe(){
+    if (globStarted || !window.JonasGlobe) return;
+    globStarted = true;
+    JonasGlobe.create(globCanvas, '../assets/globe-data.json', {
+      mode: 'both',
+      dotColor: '#22d3ee',
+      lineColor: 'rgba(34,211,238,.5)',
+      graticule: 'rgba(148,163,255,.09)',
+      rim: 'rgba(129,140,248,.32)',
+      sphereFill: 'rgba(9,12,26,.72)',
+      markerColor: '#c084fc'
+    });
+  }
+  function globeWhenReady(){
+    if (window.JonasGlobe) startGlobe();
+    else if (document.readyState !== 'complete') addEventListener('load', startGlobe);
+    else setTimeout(globeWhenReady, 120); /* defer-skriptet är strax klart */
+  }
+  var globIO = new IntersectionObserver(function(entries){
+    if (entries[0].isIntersecting) { globIO.disconnect(); globeWhenReady(); }
+  }, { rootMargin: '600px' });
+  globIO.observe(globCanvas);
+  /* samma robusthetsnät som för reveal: utan interaktion (skärmdump etc.)
+     initieras globen ändå; första gesten avbryter och IO tar över */
+  var globNet = setTimeout(globeWhenReady, 900);
+  ['wheel','touchstart','keydown','pointerdown','scroll'].forEach(function(ev){
+    addEventListener(ev, function(){ clearTimeout(globNet); }, { once: true, passive: true });
+  });
+
+  /* ---------- π-TAPE (Pi-boken) ---------- */
+  var tape = document.getElementById('piTape');
+  if (tape && 'fetch' in window) {
+    var tapeIO = new IntersectionObserver(function(entries){
+      if (!entries[0].isIntersecting) return;
+      tapeIO.disconnect();
+      fetch('../assets/pi-100k.txt').then(function(r){ return r.text(); }).then(function(t){
+        var d = t.replace(/\s+/g,'');
+        var s = '3.' + d.slice(2, 262) + '…';
+        tape.innerHTML = '';
+        var b = document.createElement('b'); b.textContent = 'π = ';
+        tape.appendChild(b);
+        tape.appendChild(document.createTextNode(s + '   '));
+        var b2 = b.cloneNode(true);
+        tape.appendChild(b2);
+        tape.appendChild(document.createTextNode(s));
+      }).catch(function(){});
+    }, { rootMargin: '300px' });
+    tapeIO.observe(tape);
+  }
+
+  /* ---------- FORMULÄR (Formspree kopplas senare) ---------- */
+  var form = document.getElementById('contactForm');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    /* FORMSPREE: när ID:t finns – ersätt raderna nedan med riktig POST till https://formspree.io/f/DITT_FORMSPREE_ID */
+    form.classList.add('sent');
+  });
+})();
+</script>
+</body>
+</html>
