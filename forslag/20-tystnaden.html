@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jonas von Essen – Tvåfaldig världsmästare i minne</title>
+<meta name="description" content="Jonas von Essen – tvåfaldig världsmästare i minne, föreläsare och författare. 100 000 decimaler av pi, 197 länder, tre gratis läroappar och en onlinekurs i minnesteknik.">
+<meta property="og:title" content="Jonas von Essen – Tvåfaldig världsmästare i minne">
+<meta property="og:description" content="Jag minns 100 000 decimaler av pi. Jag vet. Det är mycket. Ditt namn klarar jag också.">
+<meta property="og:image" content="../assets/img/jonas_vm-md.webp">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230c0c0d'/%3E%3Ctext x='32' y='45' font-size='34' text-anchor='middle' fill='%23eae6dc' font-family='Georgia,serif'%3E%CF%80%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/fonts.css">
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --ink:#eae6dc;
+    --mist:#b7b1a4;   /* mono-metadata, AA ≈ 9:1 mot --bg */
+    --nav:#a9a396;
+    --hair:#3f3d37;   /* dekorativa linjer/understrykningar */
+    --sans:'Space Grotesk',system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;background:var(--bg)}
+  html.noscroll{overflow:hidden}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:var(--sans);font-weight:400;
+    line-height:1.5;-webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--ink);color:var(--bg)}
+  a{color:inherit}
+  :focus-visible{outline:2px solid var(--ink);outline-offset:5px;border-radius:2px}
+
+  /* ————— nav ————— */
+  .nav{
+    position:fixed;inset:0 0 auto 0;z-index:40;
+    display:flex;justify-content:space-between;align-items:baseline;gap:1rem;
+    padding:1.1rem clamp(1.1rem,4vw,2.6rem);
+    font-family:var(--mono);font-size:.62rem;letter-spacing:.24em;text-transform:uppercase;
+    background:linear-gradient(to bottom,rgba(12,12,13,.92),rgba(12,12,13,0));
+    pointer-events:none;
+  }
+  .nav a{pointer-events:auto;text-decoration:none;color:var(--nav);padding:.2rem 0}
+  .nav a:hover{color:var(--ink)}
+  .nav .brand{color:var(--ink);white-space:nowrap}
+  .nav ul{display:flex;gap:clamp(.9rem,2.6vw,1.9rem);list-style:none;flex-wrap:wrap;justify-content:flex-end}
+  .nav a.on{color:var(--ink);border-bottom:1px solid var(--ink);padding-bottom:.15rem}
+  @media (max-width:560px){ .nav{font-size:.55rem;letter-spacing:.18em} .nav .brand{display:none} .nav ul{width:100%;justify-content:center} }
+
+  /* ————— grundscener ————— */
+  main{display:block}
+  .wrap{max-width:52rem;margin-inline:auto;padding-inline:clamp(1.25rem,5vw,2.5rem)}
+  section{scroll-margin-top:3.5rem}
+  .scene{min-height:78vh;min-height:78svh;display:grid;align-content:center;justify-items:center;text-align:center}
+  .scene--hero{min-height:100vh;min-height:100svh;align-content:end;padding-bottom:16vh;padding-bottom:16svh}
+  .scene--low{min-height:64vh;min-height:64svh}
+
+  .big{
+    font-size:clamp(1.55rem,1rem + 2.7vw,2.85rem);
+    font-weight:400;line-height:1.38;letter-spacing:.015em;
+    max-width:24ch;text-wrap:balance;
+  }
+  h1{
+    font-size:clamp(2.5rem,1.4rem + 5.4vw,5rem);
+    font-weight:400;letter-spacing:.055em;line-height:1.1;text-wrap:balance;
+  }
+  .meta{
+    font-family:var(--mono);font-size:.66rem;font-weight:400;
+    letter-spacing:.3em;text-transform:uppercase;color:var(--mist);
+    margin-top:1.6rem;line-height:2.1;max-width:38rem;
+  }
+  .label{
+    font-family:var(--mono);font-size:.66rem;font-weight:400;
+    letter-spacing:.44em;text-transform:uppercase;color:var(--mist);
+    text-align:center;margin-bottom:clamp(5rem,14vh,9rem);
+  }
+
+  /* ————— teleprompter: JS sätter --tp per rad; utan JS/vid reduced motion är allt fullt läsbart ————— */
+  html.tp [data-line]{opacity:var(--tp,1);transition:opacity .25s linear;will-change:opacity}
+  html.tp [data-line]:focus-within{opacity:1}
+  html.tp .aft{opacity:0;transition:opacity .45s ease}
+  html.tp [data-scene].lit .aft{opacity:1;transition:opacity 2.3s ease 1.15s}
+
+  /* ————— hero ————— */
+  .tagline{margin-top:1.4rem}
+  .ctas{display:flex;gap:2.6rem;justify-content:center;flex-wrap:wrap;margin-top:3.2rem;
+        font-family:var(--mono);font-size:.68rem;letter-spacing:.22em;text-transform:uppercase}
+  .ctas a{text-decoration:none;color:var(--ink);border-bottom:1px solid var(--hair);padding-bottom:.45rem}
+  .ctas a:hover{border-color:var(--ink);text-shadow:0 0 26px rgba(234,230,220,.45)}
+  .cue{width:1px;height:52px;margin-top:6vh;background:linear-gradient(var(--ink),transparent);opacity:.5;animation:cue 3.2s ease-in-out infinite}
+  @keyframes cue{0%,100%{opacity:.15}50%{opacity:.6}}
+
+  /* ————— om / minnen ————— */
+  .strofer{display:grid;gap:clamp(6rem,17vh,11rem);justify-items:center;text-align:center}
+  .item .big{font-size:clamp(1.35rem,.95rem + 2vw,2.3rem)}
+  .fakta{letter-spacing:.26em}
+
+  figure.stillbild{display:grid;justify-items:center;gap:1.4rem}
+  figure.stillbild img{
+    width:min(52vw,230px);height:auto;display:block;
+    filter:grayscale(.55) contrast(1.04) brightness(.92);
+    -webkit-mask-image:radial-gradient(75% 75% at 50% 42%,#000 46%,transparent 78%);
+            mask-image:radial-gradient(75% 75% at 50% 42%,#000 46%,transparent 78%);
+  }
+
+  /* ————— projekt ————— */
+  .proj{display:grid;justify-items:center;text-align:center}
+  .proj + .proj{margin-top:clamp(6rem,17vh,11rem)}
+  .proj h3{font-size:clamp(1.6rem,1rem + 2.6vw,2.7rem);font-weight:400;letter-spacing:.02em;line-height:1.25}
+  .proj h3 a{text-decoration:none;border-bottom:1px solid transparent;padding-bottom:.3rem}
+  .proj h3 .pil{font-family:var(--mono);font-size:.55em;vertical-align:.45em;letter-spacing:0;color:var(--mist);margin-left:.45em}
+  .proj p.desc{margin-top:1.3rem;max-width:44ch;color:var(--ink);font-size:clamp(.95rem,.85rem + .5vw,1.1rem);line-height:1.75;font-weight:400}
+  html.tp .proj:is(:hover,:focus-within) [data-line]{opacity:1}
+  .proj:is(:hover,:focus-within) h3 a{border-color:var(--ink);text-shadow:0 0 34px rgba(234,230,220,.5)}
+  .proj:is(:hover,:focus-within) h3 .pil{color:var(--ink)}
+
+  .globscen{display:grid;justify-items:center;text-align:center}
+  .globwrap{width:min(56vw,270px)}
+  #glob{width:100%;aspect-ratio:1;display:block;cursor:grab}
+  #glob:active{cursor:grabbing}
+
+  /* ————— kurs ————— */
+  .kursknapp{
+    display:inline-block;margin-top:3rem;padding:1.05rem 3.2rem;
+    font-family:var(--mono);font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;
+    color:var(--ink);text-decoration:none;border:1px solid var(--hair);
+    transition:background .35s ease,color .35s ease,border-color .35s ease;
+  }
+  .kursknapp:hover{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+  /* ————— kontakt ————— */
+  form{width:min(100%,30rem);margin-top:3.5rem;text-align:left;display:grid;gap:2.4rem}
+  .falt label{display:block;font-family:var(--mono);font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--mist);margin-bottom:.55rem}
+  .falt input,.falt textarea{
+    width:100%;background:transparent;border:0;border-bottom:1px solid var(--hair);
+    color:var(--ink);font-family:var(--sans);font-size:1.05rem;padding:.45rem 0 .65rem;
+    border-radius:0;
+  }
+  .falt textarea{resize:vertical;min-height:5.5rem;line-height:1.6}
+  .falt input:focus-visible,.falt textarea:focus-visible{outline:none;border-bottom-color:var(--ink);box-shadow:0 1px 0 0 var(--ink)}
+  .skicka{
+    justify-self:start;background:none;border:0;border-bottom:1px solid var(--hair);cursor:pointer;
+    font-family:var(--mono);font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--ink);
+    padding:.2rem .1rem .55rem;
+  }
+  .skicka:hover{border-color:var(--ink);text-shadow:0 0 26px rgba(234,230,220,.45)}
+  .tack{display:none;margin-top:3.5rem;max-width:34ch}
+  .tack .meta{margin-top:1.2rem}
+  form.klar{display:none}
+  .klar + .tack{display:block}
+
+  .soc{display:flex;gap:2.4rem;justify-content:center;flex-wrap:wrap;margin-top:clamp(5rem,13vh,8rem)}
+  .soc a{display:inline-flex;align-items:center;gap:.6rem;text-decoration:none;
+         font-family:var(--mono);font-size:.62rem;letter-spacing:.26em;text-transform:uppercase;color:var(--mist)}
+  .soc a:hover{color:var(--ink)}
+  .soc svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+
+  /* ————— footer ————— */
+  footer{padding:clamp(5rem,14vh,9rem) 1.5rem 3rem;text-align:center;
+         font-family:var(--mono);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--mist);line-height:2.6}
+  footer a{color:var(--mist);text-decoration:none;border-bottom:1px solid var(--hair);padding-bottom:.1rem}
+  footer a:hover{color:var(--ink);border-color:var(--ink)}
+  footer .rad{display:flex;gap:1.4rem 2rem;justify-content:center;flex-wrap:wrap}
+
+  /* ————— mellanrum (mörkret mellan tankarna) ————— */
+  .paus{height:clamp(7rem,22vh,15rem)}
+  .paus--stor{height:clamp(9rem,30vh,20rem)}
+
+  /* ————— laddskärm ————— */
+  #loader{
+    position:fixed;inset:0;z-index:100;background:var(--bg);
+    display:grid;place-content:center;transition:opacity .55s ease;
+  }
+  #loader.borta{opacity:0;pointer-events:none}
+  #ltext{font-family:var(--mono);font-size:clamp(1rem,3vw,1.35rem);letter-spacing:.14em;color:var(--ink)}
+  #lcur{display:inline-block;width:.58em;height:1.15em;background:var(--ink);vertical-align:-.18em;margin-left:.12em;animation:blink .84s steps(1) infinite}
+  #lcur.fast{animation:none}
+  @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .cue{animation:none;opacity:.4}
+    #lcur{animation:none}
+    html.tp [data-line]{transition:none}
+  }
+  @media (max-width:560px){
+    .scene{min-height:66vh;min-height:66svh}
+    .scene--hero{min-height:100vh;min-height:100svh}
+    .scene--low{min-height:56vh;min-height:56svh}
+    .strofer{gap:clamp(4.5rem,11vh,7rem)}
+    .proj + .proj{margin-top:clamp(4.5rem,11vh,7rem)}
+    .paus{height:clamp(4.5rem,13vh,8rem)}
+    .paus--stor{height:clamp(6rem,17vh,11rem)}
+    .meta{letter-spacing:.22em;font-size:.6rem}
+  }
+</style>
+</head>
+<body>
+
+<!-- laddskärm: en ensam cursor blinkar, sedan skrivs "jag minns." -->
+<div id="loader" aria-hidden="true">
+  <p id="ltext"><span id="lord"></span><span id="lcur"></span></p>
+</div>
+
+<header class="nav">
+  <a class="brand" href="#topp">Jonas von Essen</a>
+  <nav aria-label="Sidnavigering">
+    <ul>
+      <li><a href="#om" data-nav="om">Om</a></li>
+      <li><a href="#minnen" data-nav="minnen">Minnen</a></li>
+      <li><a href="#projekt" data-nav="projekt">Projekt</a></li>
+      <li><a href="#kurs" data-nav="kurs">Kurs</a></li>
+      <li><a href="#kontakt" data-nav="kontakt">Kontakt</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="topp">
+
+  <!-- ———— HERO ———— -->
+  <section class="wrap scene scene--hero" data-scene aria-label="Introduktion">
+    <div data-line>
+      <h1>Jonas von Essen</h1>
+      <p class="big tagline" style="margin-inline:auto">Världsmästare i att komma ihåg saker.</p>
+    </div>
+    <p class="meta aft">Tvåfaldig världsmästare i minne &nbsp;·&nbsp; Föreläsare &nbsp;·&nbsp; Frågesportsnörd</p>
+    <div class="ctas aft">
+      <a href="#projekt">Se vad jag byggt</a>
+      <a href="#kontakt">Boka föreläsning</a>
+    </div>
+    <div class="cue" aria-hidden="true"></div>
+  </section>
+
+  <!-- ———— tre tankar ———— -->
+  <section class="wrap" aria-label="Tre saker att veta">
+    <div class="scene scene--low" data-scene>
+      <p class="big" data-line>Jag minns <span style="white-space:nowrap">100&#8202;000</span> decimaler av&nbsp;pi.</p>
+      <p class="meta aft">2020 · Först i världen att klara ett verifierat test på alla</p>
+    </div>
+    <div class="scene scene--low" data-scene>
+      <p class="big" data-line>Jag vet. Det är mycket.</p>
+      <p class="meta aft">Europarekord i uppläsning · <span style="white-space:nowrap">24&#8202;063</span> decimaler i rad</p>
+    </div>
+    <div class="scene scene--low" data-scene>
+      <p class="big" data-line>Ditt namn klarar jag också.</p>
+      <p class="meta aft">Talang 2018 · Hela publikens namn · Golden buzzer av David Batra · Finalist</p>
+    </div>
+  </section>
+
+  <div class="paus"></div>
+
+  <!-- ———— OM ———— -->
+  <section id="om" class="wrap" aria-labelledby="om-rubrik">
+    <h2 class="label" id="om-rubrik" data-line>Om mig</h2>
+    <div class="strofer">
+      <div class="item" data-scene>
+        <p class="big" data-line>2013 blev jag — som förste svensk någonsin — världsmästare i&nbsp;minne.</p>
+        <p class="meta aft">World Memory Championships · London</p>
+      </div>
+      <div class="item" data-scene>
+        <p class="big" data-line>2014 försvarade jag titeln.</p>
+        <p class="meta aft">Haikou, Kina · 2× VM-guld</p>
+      </div>
+      <figure class="stillbild" data-scene>
+        <img src="../assets/img/foto-fokus-md.webp" alt="Jonas i ett mörkt rum, fingrarna mot tinningarna i djup koncentration" width="533" height="800" loading="lazy" data-line>
+        <figcaption class="meta aft" style="margin-top:0">Ur Memory Games</figcaption>
+      </figure>
+      <div class="item" data-scene>
+        <p class="big" data-line>Sedan dess är det mitt jobb att visa att hjärnan klarar mer än man tror — i TV-studior, föreläsningssalar, böcker och&nbsp;appar.</p>
+      </div>
+      <div class="item" data-scene>
+        <p class="big" data-line>När jag inte tävlar i att minnas saker tävlar jag i att formulera&nbsp;dem.</p>
+        <p class="meta aft">Svensk mästare i poetry slam 2026 · Göteborgsmästare i ordvitsar 2026 · Klar för SM-final</p>
+      </div>
+      <p class="meta fakta" data-line style="margin-top:0">Göteborg · Föreläsare &amp; författare · 3 gratis läroappar · 2× VM-guld</p>
+    </div>
+  </section>
+
+  <div class="paus paus--stor"></div>
+
+  <!-- ———— MINNEN (meriter) ———— -->
+  <section id="minnen" class="wrap" aria-labelledby="minnen-rubrik">
+    <h2 class="label" id="minnen-rubrik" data-line>Minnen · ett urval</h2>
+    <div class="strofer">
+      <div class="item" data-scene>
+        <p class="big" data-line>Miljonfrågan? Rätt&nbsp;svar.</p>
+        <p class="meta aft">Postkodmiljonären 2023 · En av 13 genom tiderna</p>
+      </div>
+      <div class="item" data-scene>
+        <p class="big" data-line>Smartare än en femteklassare. Sedan 2020, officiellt.</p>
+        <p class="meta aft">TV4 · Vinst</p>
+      </div>
+      <div class="item" data-scene>
+        <p class="big" data-line>Muren föll.</p>
+        <p class="meta aft">SVT 2021 · Besegrade expertpanelen</p>
+      </div>
+      <div class="item" data-scene>
+        <p class="big" data-line>200 numrerade valnötter. Fråga&nbsp;inte.</p>
+        <p class="meta aft">The Brain, Kina · Vann sin utmaning</p>
+      </div>
+      <div class="item" data-scene>
+        <p class="big" data-line>Fem SM-guld i pubquiz.</p>
+        <p class="meta aft">Med laget Glenns över sjö och strand</p>
+      </div>
+      <div class="item" data-scene>
+        <p class="big" data-line>Högskoleprovet: 2.0. Tolv&nbsp;gånger.</p>
+        <p class="meta aft">160/160 år 2021 · Ende i landet</p>
+      </div>
+      <div class="item" data-scene>
+        <p class="big" data-line>En del av det här fick plats i tre&nbsp;böcker.</p>
+        <p class="meta aft">Så får du ett superminne (Semic, 2024) · Bli ett minnesgeni! (2019) · Pi-boken 2.0 (2020)</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="paus paus--stor"></div>
+
+  <!-- ———— PROJEKT ———— -->
+  <section id="projekt" class="wrap" aria-labelledby="projekt-rubrik">
+    <h2 class="label" id="projekt-rubrik" data-line>Projekt</h2>
+
+    <div class="scene scene--low" data-scene style="min-height:auto;margin-bottom:clamp(6rem,17vh,11rem)">
+      <p class="big" data-line>Tre appar. Noll kronor.</p>
+      <p class="meta aft">Jag bygger dem för att det är kul — och för att bra inlärning inte ska kosta</p>
+    </div>
+
+    <article class="proj" data-scene>
+      <div data-line>
+        <h3><a href="https://jonasgeografi.se" target="_blank" rel="noopener">jonasgeografi.se<span class="pil">↗</span></a></h3>
+        <p class="desc">Alla världens länder på en snurrbar jordglob där varje land är ett eget litet konstverk. Utforska, quizza och res jorden runt — med minnesknep för varje land.</p>
+      </div>
+      <p class="meta aft">Gratis · Minnesknep för varje land</p>
+    </article>
+
+    <article class="proj" data-scene>
+      <div data-line>
+        <h3><a href="https://hpakuten.se" target="_blank" rel="noopener">hpakuten.se<span class="pil">↗</span></a></h3>
+        <p class="desc">Gratis träning inför högskoleprovet: simulera gamla prov på tid, videogenomgångar och minnestekniker. Från Sveriges kanske mest rutinerade HP-skrivare.</p>
+      </div>
+      <p class="meta aft">Gratis · Gamla prov på tid</p>
+    </article>
+
+    <article class="proj" data-scene>
+      <div data-line>
+        <h3><a href="https://www.gångertabellen.se" target="_blank" rel="noopener">gångertabellen.se<span class="pil">↗</span></a></h3>
+        <p class="desc">Gångertabellen är lättare än den ser ut: med rätt knep är det bara sex tal kvar att memorera. Quiz, minnesbilder och smart repetition — utan inloggning.</p>
+      </div>
+      <p class="meta aft">Gratis · Utan inloggning</p>
+    </article>
+
+    <div class="paus"></div>
+
+    <!-- jorden, sedd från långt borta -->
+    <div class="globscen" data-scene>
+      <div class="globwrap" data-line data-min=".4">
+        <canvas id="glob" aria-label="Roterande jordglob med världens länder som ljusa punkter"></canvas>
+      </div>
+      <p class="big" data-line style="margin-top:2.2rem">197 länder. Jag kan&nbsp;alla.</p>
+      <p class="meta aft">57.71°&#8202;N · 11.97°&#8202;E — Göteborg. Där bor jag.</p>
+    </div>
+  </section>
+
+  <div class="paus paus--stor"></div>
+
+  <!-- ———— KURS ———— -->
+  <section id="kurs" class="wrap" aria-labelledby="kurs-rubrik">
+    <div class="scene scene--low" data-scene style="min-height:auto">
+      <h2 class="label" id="kurs-rubrik" data-line style="margin-bottom:clamp(3rem,8vh,5rem)">Kurs</h2>
+      <p class="big" data-line>Skaffa ett superminne.</p>
+      <p class="desc" data-line style="max-width:40ch;margin-top:1.6rem;line-height:1.75;font-size:clamp(.95rem,.85rem + .5vw,1.1rem)">
+        En onlinekurs i minnesteknik. Lär dig metoderna jag använder — i din egen takt, hur många gånger du vill.</p>
+      <div data-line data-min=".55"><a class="kursknapp" href="https://kurs.jonasvonessen.se" target="_blank" rel="noopener">Till kursen</a></div>
+      <p class="meta aft">kurs.jonasvonessen.se</p>
+    </div>
+  </section>
+
+  <div class="paus paus--stor"></div>
+
+  <!-- ———— KONTAKT ———— -->
+  <section id="kontakt" class="wrap" aria-labelledby="kontakt-rubrik">
+    <div class="scene" data-scene style="min-height:auto;justify-items:center;text-align:center">
+      <h2 class="label" id="kontakt-rubrik" data-line style="margin-bottom:clamp(3rem,8vh,5rem)">Kontakt</h2>
+      <p class="big" data-line>Säg något. Jag kommer ihåg&nbsp;det.</p>
+      <p class="desc" data-line style="max-width:38ch;margin-top:1.6rem;line-height:1.75;font-size:clamp(.95rem,.85rem + .5vw,1.1rem)">
+        Vill du boka en föreläsning för ett oförglömligt event? Skriv en rad.</p>
+
+      <!-- FORMSPREE: när formuläret ska kopplas, sätt action="https://formspree.io/f/DITT_FORMSPREE_ID" method="POST" och ta bort submit-hanteraren i JS. -->
+      <form id="kform" data-line data-min=".55">
+        <div class="falt">
+          <label for="f-namn">Namn</label>
+          <input id="f-namn" name="namn" type="text" autocomplete="name" required>
+        </div>
+        <div class="falt">
+          <label for="f-epost">E-post</label>
+          <input id="f-epost" name="epost" type="email" autocomplete="email" required>
+        </div>
+        <div class="falt">
+          <label for="f-medd">Meddelande</label>
+          <textarea id="f-medd" name="meddelande" rows="3" required></textarea>
+        </div>
+        <button class="skicka" type="submit">Skicka</button>
+      </form>
+      <div class="tack" role="status" aria-live="polite">
+        <p class="big" style="font-size:clamp(1.2rem,1rem + 1.2vw,1.6rem)">Tack. Det är sparat — på riktigt.</p>
+        <p class="meta">Formuläret kopplas snart — mejla mig så länge.</p>
+      </div>
+
+      <div class="soc" data-line data-min=".4">
+        <a href="https://www.instagram.com/jonasvonessen/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6" fill="currentColor" stroke="none"/></svg>
+          Instagram</a>
+        <a href="https://www.tiktok.com/@jonasvonessen" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 11.5a4.25 4.25 0 1 0 4.25 4.25V3.5c.6 2.6 2.6 4.6 5.25 5"/></svg>
+          TikTok</a>
+        <a href="https://www.youtube.com/@BlueberryClubSparven" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="3.5"/><path d="M10.2 9.3v5.4l4.8-2.7z" fill="currentColor" stroke="none"/></svg>
+          YouTube</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="rad" style="margin-bottom:1.2rem">
+    <a href="https://jonasgeografi.se" target="_blank" rel="noopener">jonasgeografi.se</a>
+    <a href="https://hpakuten.se" target="_blank" rel="noopener">hpakuten.se</a>
+    <a href="https://www.gångertabellen.se" target="_blank" rel="noopener">gångertabellen.se</a>
+    <a href="https://kurs.jonasvonessen.se" target="_blank" rel="noopener">kurs.jonasvonessen.se</a>
+  </div>
+  <p>© 2026 Jonas von Essen · Foto: Memory Games</p>
+</footer>
+
+<script src="../assets/globe.js"></script>
+<script>
+(function(){
+  'use strict';
+  var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var docEl = document.documentElement;
+
+  /* ————— laddskärm ————— */
+  var loader = document.getElementById('loader');
+  var lord = document.getElementById('lord');
+  var lcur = document.getElementById('lcur');
+  var timers = [];
+  function seen(){ try { return sessionStorage.getItem('jve-tyst'); } catch(e){ return false; } }
+  function markSeen(){ try { sessionStorage.setItem('jve-tyst','1'); } catch(e){} }
+  var skipLoader = reduced || seen() || /[?&]noloader/.test(location.search);
+
+  function endLoader(now){
+    timers.forEach(clearTimeout); timers = [];
+    docEl.classList.remove('noscroll');
+    if (!loader) return;
+    if (now) { loader.remove(); loader = null; }
+    else {
+      loader.classList.add('borta');
+      setTimeout(function(){ if (loader) { loader.remove(); loader = null; } }, 650);
+    }
+    window.removeEventListener('keydown', skipNow);
+    window.removeEventListener('pointerdown', skipNow);
+  }
+  function skipNow(){ endLoader(true); }
+
+  if (skipLoader) { endLoader(true); }
+  else {
+    markSeen();
+    docEl.classList.add('noscroll');
+    window.addEventListener('keydown', skipNow);
+    window.addEventListener('pointerdown', skipNow);
+    // cursorn blinkar tre gånger (0.84 s-period, redan igång via CSS) ...
+    timers.push(setTimeout(function(){
+      // ... sedan skrivs "jag minns."
+      lcur.classList.add('fast');
+      var text = 'jag minns.', i = 0;
+      var iv = setInterval(function(){
+        lord.textContent = text.slice(0, ++i);
+        if (i >= text.length) {
+          clearInterval(iv);
+          timers.push(setTimeout(function(){ endLoader(false); }, 420));
+        }
+      }, 48);
+      timers.push(iv);
+    }, 1300));
+  }
+
+  /* ————— teleprompter ————— */
+  var lines = [], scenes = [];
+  function collect(){
+    var els = document.querySelectorAll('[data-line]');
+    lines = [];
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i];
+      lines.push({ el: el, top: 0, h: 0,
+                   scene: el.closest('[data-scene]'),
+                   min: parseFloat(el.getAttribute('data-min') || '.14') });
+    }
+    var sc = document.querySelectorAll('[data-scene]');
+    scenes = [];
+    for (var j = 0; j < sc.length; j++) scenes.push({ el: sc[j], lit: false, max: 0 });
+    measure();
+  }
+  function measure(){
+    var sy = window.scrollY || window.pageYOffset;
+    for (var i = 0; i < lines.length; i++) {
+      var r = lines[i].el.getBoundingClientRect();
+      lines[i].top = r.top + sy;
+      lines[i].h = r.height;
+    }
+  }
+  function update(){
+    var vh = window.innerHeight;
+    var sy = window.scrollY || window.pageYOffset;
+    var maxScroll = Math.max(1, docEl.scrollHeight - vh);
+    var p = Math.min(1, Math.max(0, sy / maxScroll));
+    var focus = vh * (0.34 + 0.32 * p);   // ljuskäglan glider nedåt genom sidan
+    var band = vh * 0.15;                  // fullt tänd zon
+    var fall = vh * 0.50;                  // avstånd till mörker
+    var i, s;
+    for (i = 0; i < scenes.length; i++) scenes[i].max = 0;
+    for (i = 0; i < lines.length; i++) {
+      var L = lines[i];
+      var c = L.top + L.h / 2 - sy;
+      var d = Math.abs(c - focus);
+      var halfSelf = Math.min(L.h / 2, vh * 0.25); // höga block: räkna från närmsta kant
+      d = Math.max(0, d - halfSelf);
+      var o;
+      if (d <= band) o = 1;
+      else {
+        var x = Math.min(1, (d - band) / fall);
+        o = 1 - x * x * (3 - 2 * x);       // mjuk falloff
+      }
+      var v = L.min + (1 - L.min) * o;
+      L.el.style.setProperty('--tp', v.toFixed(3));
+      if (L.scene) {
+        for (s = 0; s < scenes.length; s++) {
+          if (scenes[s].el === L.scene && o > scenes[s].max) scenes[s].max = o;
+        }
+      }
+    }
+    for (s = 0; s < scenes.length; s++) {
+      var S = scenes[s];
+      if (!S.lit && S.max > 0.92) { S.lit = true; S.el.classList.add('lit'); }
+      else if (S.lit && S.max < 0.45) { S.lit = false; S.el.classList.remove('lit'); }
+    }
+  }
+  if (!reduced) {
+    docEl.classList.add('tp');
+    collect();
+    update();
+    var ticking = false;
+    window.addEventListener('scroll', function(){
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function(){ ticking = false; update(); });
+    }, { passive: true });
+    var rz;
+    window.addEventListener('resize', function(){
+      clearTimeout(rz);
+      rz = setTimeout(function(){ measure(); update(); }, 120);
+    });
+    window.addEventListener('load', function(){ measure(); update(); });
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function(){ measure(); update(); });
+    }
+  }
+
+  /* ————— globen: liten och ensam i mörkret ————— */
+  var glob = document.getElementById('glob');
+  var globStarted = false;
+  function startGlobe(){
+    if (globStarted || !window.JonasGlobe) return;
+    globStarted = true;
+    JonasGlobe.create(glob, '../assets/globe-data.json', {
+      mode: 'dots',
+      dotColor: '#e7e3d9',
+      dotSize: 1.35,
+      graticule: '',
+      rim: '',
+      sphereFill: '',
+      marker: null,
+      speed: 0.035
+    });
+  }
+  if (glob) {
+    if ('IntersectionObserver' in window) {
+      var gio = new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting) { startGlobe(); gio.disconnect(); }
+      }, { rootMargin: '500px' });
+      gio.observe(glob);
+    } else { startGlobe(); }
+  }
+
+  /* ————— aktiv sektion i nav ————— */
+  var navLinks = {};
+  var navEls = document.querySelectorAll('[data-nav]');
+  for (var n = 0; n < navEls.length; n++) navLinks[navEls[n].getAttribute('data-nav')] = navEls[n];
+  if ('IntersectionObserver' in window) {
+    var sio = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        var a = navLinks[e.target.id];
+        if (!a) return;
+        if (e.isIntersecting) {
+          for (var k in navLinks) navLinks[k].classList.remove('on');
+          a.classList.add('on');
+        }
+      });
+    }, { rootMargin: '-40% 0px -50% 0px' });
+    ['om','minnen','projekt','kurs','kontakt'].forEach(function(id){
+      var el = document.getElementById(id);
+      if (el) sio.observe(el);
+    });
+  }
+
+  /* ————— kontaktformulär (ingen backend ännu) ————— */
+  var form = document.getElementById('kform');
+  if (form) {
+    form.addEventListener('submit', function(ev){
+      ev.preventDefault();
+      form.classList.add('klar');
+    });
+  }
+})();
+</script>
+</body>
+</html>

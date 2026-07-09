@@ -1,0 +1,1352 @@
+<!doctype html>
+<html lang="sv" class="nojs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jonas von Essen – Tvåfaldig världsmästare i minne</title>
+<meta name="description" content="Välkommen till Minnesfabriken. Jonas von Essen – tvåfaldig världsmästare i minne, föreläsare, författare och byggare av gratis läroappar.">
+<meta property="og:title" content="Jonas von Essen – Tvåfaldig världsmästare i minne">
+<meta property="og:description" content="Välkommen till Minnesfabriken: minnesteknik, föreläsningar, gratis läroappar och den gyllene biljetten till ett superminne.">
+<meta property="og:image" content="../assets/img/jonas_vm-md.webp">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='12'%20fill='%23301b52'/%3E%3Crect%20x='7'%20y='20'%20width='50'%20height='24'%20rx='5'%20fill='%23f2c14e'/%3E%3Ccircle%20cx='7'%20cy='32'%20r='5'%20fill='%23301b52'/%3E%3Ccircle%20cx='57'%20cy='32'%20r='5'%20fill='%23301b52'/%3E%3Ctext%20x='32'%20y='40'%20font-size='19'%20font-family='Georgia,serif'%20font-weight='700'%20fill='%23301b52'%20text-anchor='middle'%3E%CF%80%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/fonts.css">
+<script>
+(function(){
+  var d = document.documentElement;
+  var noloader = /[?&]noloader/.test(location.search);
+  var rm = false, seen = false;
+  try { rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch(e){}
+  try { seen = sessionStorage.getItem('mf22') === '1'; } catch(e){}
+  d.classList.remove('nojs');
+  d.classList.add('js');
+  if (noloader || rm || seen) { d.classList.add('revealed'); }
+  else { d.classList.add('show-loader'); }
+})();
+</script>
+<style>
+/* ============ MINNESFABRIKEN — grund ============ */
+:root{
+  --lila-1:#301b52;      /* teaterlila */
+  --lila-2:#1f0f38;      /* djupaste sammet */
+  --lila-3:#3d2566;      /* upphöjd panel */
+  --guld:#f2c14e;        /* mässing/guld */
+  --guld-ljus:#f7d780;   /* AA-guld för text */
+  --guld-djup:#a8741e;
+  --guld-skimmer:#fff3c9;
+  --rosa:#ff7eb6;        /* karamell */
+  --gron:#7fe3b0;        /* pistage */
+  --vin-1:#66142c;       /* ridåsammet */
+  --vin-2:#3f0a1b;
+  --text:#efe6f7;
+  --text-dim:#cfc0e4;
+  --papper:#f6edda;
+  --papper-morg:#33234f;
+  --mono:'JetBrains Mono', ui-monospace, monospace;
+  --serif:'Fraunces', Georgia, serif;
+  --sans:'Space Grotesk', system-ui, sans-serif;
+  --skylt:'Rye', 'Fraunces', Georgia, serif;
+  --hand:'Caveat', 'Segoe Script', cursive;
+  --maxw:1180px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+body{
+  font-family:var(--sans);
+  color:var(--text);
+  background:
+    radial-gradient(1100px 600px at 85% -5%, rgba(255,126,182,.07), transparent 60%),
+    radial-gradient(900px 700px at -10% 30%, rgba(242,193,78,.06), transparent 55%),
+    linear-gradient(178deg, var(--lila-1) 0%, #27154a 38%, var(--lila-2) 100%);
+  background-attachment:fixed;
+  line-height:1.6;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+/* sammetstextur + diskreta karamellswirls */
+body::before{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    conic-gradient(from 40deg at 78% 18%, transparent 0 40%, rgba(255,126,182,.035) 47%, transparent 55%, rgba(242,193,78,.03) 66%, transparent 75%),
+    conic-gradient(from 220deg at 12% 78%, transparent 0 35%, rgba(127,227,176,.03) 45%, transparent 56%, rgba(242,193,78,.028) 68%, transparent 80%),
+    repeating-linear-gradient(115deg, rgba(255,255,255,.014) 0 2px, transparent 2px 7px);
+}
+::selection{background:var(--guld);color:#2a1608}
+img{max-width:100%;display:block}
+a{color:var(--guld-ljus)}
+a:hover{color:var(--guld-skimmer)}
+:focus-visible{outline:2px solid var(--guld-ljus);outline-offset:3px;border-radius:3px}
+.skip{position:absolute;left:-999px;top:8px;z-index:2000;background:var(--guld);color:#2a1608;padding:.6rem 1rem;border-radius:8px;font-weight:700;text-decoration:none}
+.skip:focus{left:8px}
+.inre{max-width:var(--maxw);margin-inline:auto;padding-inline:clamp(18px,5vw,56px)}
+
+h1,h2,h3{font-family:var(--serif);font-weight:600;line-height:1.12;letter-spacing:.01em}
+.mono{font-family:var(--mono)}
+
+/* ============ RIDÅN (loader) ============ */
+.rida{display:none}
+html.show-loader .rida{display:block;position:fixed;inset:0;z-index:1000;overflow:hidden;background:var(--lila-2)}
+html.show-loader.revealed body{overflow:auto}
+html.show-loader:not(.revealed) body{overflow:hidden}
+.rida .halva{
+  position:absolute;top:0;bottom:0;width:52%;
+  background:
+    repeating-linear-gradient(90deg,
+      rgba(0,0,0,.38) 0 14px, rgba(255,255,255,.075) 26px 34px,
+      rgba(0,0,0,.22) 48px 62px, rgba(255,255,255,.045) 74px 82px, rgba(0,0,0,.3) 96px 110px),
+    linear-gradient(180deg, #71182f 0%, var(--vin-1) 45%, #4c0e20 78%, var(--vin-2) 100%);
+  box-shadow:inset 0 -40px 60px rgba(0,0,0,.45);
+  transition:transform 1s cubic-bezier(.72,.02,.26,1);
+}
+.rida .halva::after{ /* guldfrans */
+  content:"";position:absolute;left:0;right:0;bottom:0;height:26px;
+  background:
+    repeating-linear-gradient(90deg, var(--guld) 0 3px, var(--guld-djup) 3px 5px, rgba(0,0,0,0) 5px 8px);
+  border-top:4px solid var(--guld);
+  filter:drop-shadow(0 3px 3px rgba(0,0,0,.5));
+}
+.rida .vanster{left:-1%}
+.rida .hoger{right:-1%}
+.rida.oppen .vanster{transform:translateX(-108%) scaleX(1.06)}
+.rida.oppen .hoger{transform:translateX(108%) scaleX(1.06)}
+.rida .kappa{ /* valanskappa upptill */
+  position:absolute;top:0;left:0;right:0;height:74px;z-index:3;
+  background:linear-gradient(180deg,#7c1b34, var(--vin-1) 70%, #55112 4);
+  background:linear-gradient(180deg,#7c1b34, var(--vin-1) 70%, #551124);
+  -webkit-mask:radial-gradient(28px 22px at 28px 100%, transparent 21px, #000 22px) repeat-x;
+  mask:radial-gradient(28px 22px at 28px 100%, transparent 21px, #000 22px) repeat-x;
+  -webkit-mask-size:56px 100%;mask-size:56px 100%;
+  transition:transform .7s ease .25s, opacity .7s ease .25s;
+}
+.rida.oppen .kappa{transform:translateY(-110%);opacity:0}
+.rida .sign{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:4;
+  width:min(560px, calc(100vw - 48px));
+  background:linear-gradient(180deg, rgba(20,8,38,.94), rgba(31,15,56,.94));
+  border:1px solid rgba(242,193,78,.65);border-radius:14px;
+  box-shadow:0 0 0 4px rgba(31,15,56,.9), 0 0 0 5px rgba(242,193,78,.35), 0 24px 60px rgba(0,0,0,.55);
+  padding:clamp(16px,4vw,28px) clamp(18px,4.5vw,32px);
+  transition:opacity .45s ease, transform .45s ease;
+}
+.rida.oppen .sign{opacity:0;transform:translate(-50%,-58%)}
+.rida .sign h2{font-family:var(--serif);color:var(--guld-ljus);font-size:1.05rem;letter-spacing:.28em;text-transform:uppercase;text-align:center;margin-bottom:.9rem;font-weight:600}
+.rida .sign pre{
+  font-family:var(--mono);font-size:clamp(.68rem, 2.6vw, .85rem);line-height:1.75;
+  color:var(--guld-ljus);white-space:pre-wrap;min-height:9.2em;
+}
+.rida .sign pre .ok{color:var(--gron)}
+.rida .sign .cursor{display:inline-block;width:.6em;height:1.1em;background:var(--guld);vertical-align:-0.18em;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.rida .hoppa{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:4;font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;color:var(--text-dim)}
+
+/* ============ TOPPNAV ============ */
+.topp{
+  position:sticky;top:0;z-index:500;
+  background:rgba(26,12,44,.93);
+  border-bottom:1px solid rgba(242,193,78,.4);
+  box-shadow:0 1px 0 rgba(242,193,78,.14), 0 10px 30px rgba(0,0,0,.35);
+}
+.topp .rad{display:flex;align-items:center;gap:1rem;max-width:var(--maxw);margin-inline:auto;padding:.65rem clamp(14px,4vw,40px)}
+.marke{display:flex;align-items:center;gap:.6rem;text-decoration:none;color:var(--text)}
+.marke .mm{
+  width:34px;height:34px;border-radius:50%;flex:none;
+  background:radial-gradient(circle at 32% 28%, var(--guld-skimmer), var(--guld) 45%, var(--guld-djup) 90%);
+  color:#2a1608;font-family:var(--serif);font-weight:600;font-size:1.15rem;
+  display:grid;place-items:center;box-shadow:0 0 0 2px rgba(242,193,78,.35), 0 4px 10px rgba(0,0,0,.4);
+}
+.marke b{font-family:var(--serif);font-weight:600;font-size:1rem;letter-spacing:.06em}
+.marke small{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.22em;color:var(--guld-ljus);text-transform:uppercase}
+.topp nav{margin-left:auto;display:flex;gap:.15rem;flex-wrap:wrap;justify-content:flex-end}
+.topp nav a{
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-dim);text-decoration:none;padding:.5rem .65rem;border-radius:7px;border:1px solid transparent;
+}
+.topp nav a:hover{color:var(--guld-skimmer)}
+.topp nav a.aktiv{color:var(--guld-ljus);border-color:rgba(242,193,78,.45);background:rgba(242,193,78,.08)}
+@media (max-width:760px){
+  .marke b span{display:none}
+  .topp nav a{padding:.45rem .45rem;font-size:.66rem}
+}
+
+/* ============ RÖRSYSTEMET ============ */
+.ror-ral{display:none}
+@media (min-width:1240px){
+  .ror-ral{display:block;position:absolute;left:30px;top:0;bottom:0;width:20px;z-index:1;pointer-events:none}
+  .ror-ral .tub{
+    position:absolute;inset:0;border-radius:10px;
+    background:linear-gradient(90deg,#5c4419,#c79a35 30%,var(--guld-skimmer) 48%,var(--guld) 62%,#7a5a1e);
+    box-shadow:0 0 18px rgba(242,193,78,.14), inset 0 0 4px rgba(0,0,0,.35);
+  }
+  .ror-ral .tub::after{ /* nitar */
+    content:"";position:absolute;left:50%;top:0;bottom:0;width:6px;transform:translateX(-50%);
+    background:repeating-linear-gradient(180deg, rgba(58,38,8,.55) 0 6px, transparent 6px 120px);
+    border-radius:3px;
+  }
+  .ror-ral .puls{
+    position:absolute;left:50%;top:-3%;width:12px;height:12px;border-radius:50%;transform:translateX(-50%);
+    background:radial-gradient(circle at 35% 35%, #ffd9ea, var(--rosa) 55%, rgba(255,126,182,0) 75%);
+    box-shadow:0 0 14px 5px rgba(255,126,182,.5);
+    animation:leverans 15s linear infinite;
+  }
+  @keyframes leverans{0%{top:-3%;opacity:0}5%{opacity:1}95%{opacity:1}100%{top:102%;opacity:0}}
+  .nod{position:absolute;left:6px;top:44px;z-index:2;pointer-events:none}
+}
+@media (max-width:1239.9px){ .nod{display:none} }
+.nod svg{display:block;overflow:visible}
+.nal{transform-box:fill-box;transform-origin:center;animation:matare 7s ease-in-out infinite alternate}
+@keyframes matare{from{transform:rotate(-38deg)}to{transform:rotate(42deg)}}
+.ratt{transform-box:fill-box;transform-origin:center;animation:vrid 26s linear infinite}
+@keyframes vrid{to{transform:rotate(360deg)}}
+
+/* ============ GEMENSAMT: sektioner ============ */
+main{position:relative;display:block}
+.dept{position:relative;padding:clamp(64px,9vw,120px) 0}
+.dept-huvud{margin-bottom:clamp(28px,4vw,52px)}
+.plakat{
+  display:inline-flex;align-items:center;gap:.55rem;
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;color:#2a1608;
+  background:linear-gradient(180deg,var(--guld-skimmer),var(--guld) 55%,#d9a83c);
+  border-radius:6px;padding:.42rem .8rem;
+  box-shadow:0 0 0 1px rgba(120,80,16,.7), 0 3px 8px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.55);
+}
+.plakat::before,.plakat::after{content:"";width:6px;height:6px;border-radius:50%;background:#7a5a1e;box-shadow:inset 0 1px 1px rgba(0,0,0,.5)}
+.dept-huvud h2{font-size:clamp(1.9rem,4.4vw,3.1rem);margin-top:.9rem;color:var(--text)}
+.dept-huvud h2 .guldig{color:var(--guld-ljus)}
+.dept-huvud .under{max-width:56ch;color:var(--text-dim);margin-top:.7rem;font-size:1.02rem}
+.delare{display:flex;align-items:center;gap:.7rem;margin-top:1.1rem;color:var(--guld)}
+.delare::before,.delare::after{content:"";height:1px;flex:0 0 74px;background:linear-gradient(90deg,transparent,var(--guld));opacity:.7}
+.delare::after{background:linear-gradient(90deg,var(--guld),transparent)}
+.delare svg{flex:none}
+
+/* reveal */
+html.js .reveal{opacity:0;transform:translateY(20px);transition:opacity .7s ease, transform .7s ease}
+html.js .reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion: reduce){
+  html.js .reveal{opacity:1;transform:none;transition:none}
+  .nal,.ratt,.puls{animation:none !important}
+}
+
+/* ============ HERO ============ */
+.hero{position:relative;padding:clamp(56px,7vw,96px) 0 clamp(70px,8vw,110px);min-height:calc(92vh - 60px);display:flex;align-items:center;overflow:hidden}
+.hero::before,.hero::after{ /* strålkastare */
+  content:"";position:absolute;top:-12%;width:46%;height:120%;pointer-events:none;
+  background:linear-gradient(195deg, rgba(247,215,128,.14), rgba(247,215,128,.03) 45%, transparent 70%);
+  clip-path:polygon(38% 0, 62% 0, 100% 100%, 0% 100%);
+}
+.hero::before{left:-6%;transform:rotate(9deg)}
+.hero::after{right:-6%;transform:rotate(-9deg) scaleX(-1);background:linear-gradient(195deg, rgba(255,126,182,.10), rgba(255,126,182,.02) 45%, transparent 70%)}
+.hero .inre{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(24px,5vw,64px);align-items:center;position:relative;z-index:2}
+.skylt-rye{
+  font-family:var(--skylt);font-weight:400;font-size:clamp(.8rem,2vw,1rem);letter-spacing:.3em;
+  color:var(--guld-ljus);text-transform:uppercase;display:inline-flex;align-items:center;gap:.8rem;
+}
+.skylt-rye::before,.skylt-rye::after{content:"✦";font-family:var(--sans);font-size:.8em;color:var(--rosa)}
+.hero h1{
+  font-size:clamp(2.05rem,5.4vw,4.15rem);
+  margin:1rem 0 1.1rem;text-transform:uppercase;letter-spacing:.015em;line-height:1.05;
+  background:linear-gradient(100deg, var(--guld) 0%, var(--guld-skimmer) 28%, var(--guld) 52%, #e2ae3c 74%, var(--guld-skimmer) 100%);
+  background-size:250% 100%;background-position:85% 0;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 3px 14px rgba(242,193,78,.22));
+}
+html.revealed .hero h1{animation:skimra 2s ease .35s 1 both}
+@keyframes skimra{0%{background-position:118% 0;opacity:0}25%{opacity:1}100%{background-position:0% 0;opacity:1}}
+.hero .roll{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(1.02rem,2.2vw,1.3rem);color:var(--rosa)}
+.hero .roll b{font-style:normal;font-weight:600;color:var(--text)}
+.hero .ingress{max-width:52ch;color:var(--text-dim);margin:1.1rem 0 1.7rem;font-size:1.05rem}
+.knappar{display:flex;gap:.9rem;flex-wrap:wrap}
+.knapp{
+  display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;border-radius:999px;
+  padding:.8rem 1.5rem;font-weight:700;font-size:.95rem;letter-spacing:.02em;
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+.knapp-guld{
+  background:linear-gradient(160deg,var(--guld-skimmer),var(--guld) 45%,#dda93a);
+  color:#2a1608;box-shadow:0 0 0 1px rgba(120,80,16,.6), 0 8px 22px rgba(242,193,78,.28), inset 0 1px 0 rgba(255,255,255,.6);
+}
+.knapp-guld:hover{transform:translateY(-2px);box-shadow:0 0 0 1px rgba(120,80,16,.6), 0 12px 28px rgba(242,193,78,.4);color:#2a1608}
+.knapp-kontur{border:1.5px solid rgba(255,126,182,.75);color:#ffd3e6}
+.knapp-kontur:hover{background:rgba(255,126,182,.12);transform:translateY(-2px);color:#ffe2ef}
+@media (prefers-reduced-motion: reduce){.knapp{transition:none}.knapp:hover{transform:none}}
+
+/* ovala guldramar med sammetspassepartout */
+.ram-oval{position:relative;display:block;margin-inline:auto}
+.ram-oval .pass{
+  border-radius:50%;padding:clamp(12px,1.6vw,20px);
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255,255,255,.06), transparent 40%),
+    linear-gradient(160deg,#472a78,var(--lila-1) 60%,#241040);
+  box-shadow:
+    0 0 0 3px var(--guld-djup),
+    0 0 0 7px var(--guld),
+    0 0 0 8px #8a5f18,
+    0 0 0 9px rgba(0,0,0,.35),
+    0 26px 60px rgba(0,0,0,.55),
+    0 0 42px rgba(242,193,78,.14);
+}
+.ram-oval img{border-radius:50%;width:100%;height:100%;object-fit:cover}
+.ram-oval .krona{position:absolute;top:-24px;left:50%;transform:translateX(-50%);color:var(--guld);filter:drop-shadow(0 3px 4px rgba(0,0,0,.5))}
+.ram-oval figcaption{
+  position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);white-space:nowrap;
+  font-family:var(--mono);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:#2a1608;
+  background:linear-gradient(180deg,var(--guld-skimmer),var(--guld) 60%,#d9a83c);
+  padding:.3rem .8rem;border-radius:5px;box-shadow:0 0 0 1px rgba(120,80,16,.7), 0 4px 10px rgba(0,0,0,.45);
+}
+.hero .ram-oval{width:min(360px,78vw);aspect-ratio:4/5}
+.hero .ram-oval .pass{width:100%;height:100%}
+html.revealed .hero .ram-oval{animation:entre 1s ease .5s both}
+html.revealed .hero .vanster-scen > *{animation:entre .8s ease both}
+html.revealed .hero .vanster-scen > *:nth-child(1){animation-delay:.25s}
+html.revealed .hero .vanster-scen > *:nth-child(2){animation-delay:.3s}
+html.revealed .hero .vanster-scen > *:nth-child(3){animation-delay:.55s}
+html.revealed .hero .vanster-scen > *:nth-child(4){animation-delay:.7s}
+html.revealed .hero .vanster-scen > *:nth-child(5){animation-delay:.85s}
+@keyframes entre{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){
+  html.revealed .hero h1, html.revealed .hero .ram-oval, html.revealed .hero .vanster-scen > *{animation:none}
+}
+@media (max-width:900px){
+  .hero .inre{grid-template-columns:1fr;text-align:center}
+  .hero .ingress{margin-inline:auto}
+  .knappar{justify-content:center}
+  .hero .ram-oval{order:-1;width:min(250px,64vw)}
+}
+
+/* ============ PROVSMAKNINGEN (om) ============ */
+.om-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(28px,5vw,72px);align-items:center}
+.om-grid .ram-oval{width:min(330px,80vw);aspect-ratio:3/4}
+.om-bio p{margin-bottom:1rem;color:var(--text)}
+.om-bio p + p{color:var(--text-dim)}
+.praliner{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.4rem;list-style:none}
+.praliner li{
+  font-weight:700;font-size:.86rem;padding:.55rem 1.1rem;border-radius:999px;color:#241040;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.5), inset 0 -3px 6px rgba(0,0,0,.22), 0 6px 14px rgba(0,0,0,.35);
+}
+.praliner li:nth-child(4n+1){background:linear-gradient(160deg,var(--guld-skimmer),var(--guld))}
+.praliner li:nth-child(4n+2){background:linear-gradient(160deg,#ffd3e6,var(--rosa))}
+.praliner li:nth-child(4n+3){background:linear-gradient(160deg,#c9f5df,var(--gron))}
+.praliner li:nth-child(4n+4){background:linear-gradient(160deg,#e6dcff,#bfa6ee)}
+@media (max-width:900px){.om-grid{grid-template-columns:1fr}.om-grid .ram-oval{width:min(260px,70vw)}}
+
+/* ============ UNDERVERKSHALLEN (meriter) ============ */
+.montrar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(18px,3vw,34px);margin-top:1rem}
+@media (max-width:980px){.montrar{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.montrar{grid-template-columns:1fr}}
+.monter{display:flex;flex-direction:column;align-items:center;text-align:center}
+.kupa{
+  position:relative;width:min(210px,72%);aspect-ratio:10/11;margin-bottom:-10px;z-index:2;
+  border-radius:50% 50% 14px 14px / 62% 62% 10px 10px;
+  background:linear-gradient(118deg, rgba(255,255,255,.16), rgba(255,255,255,.02) 38%, rgba(255,255,255,.01) 60%, rgba(255,255,255,.12));
+  border:1px solid rgba(255,255,255,.28);
+  box-shadow:inset 0 0 30px rgba(255,255,255,.05), 0 14px 30px rgba(0,0,0,.35);
+  display:grid;place-items:center;
+}
+.kupa::before{ /* glansreflex */
+  content:"";position:absolute;top:9%;left:16%;width:24%;height:34%;border-radius:50%;
+  background:radial-gradient(ellipse at center, rgba(255,255,255,.34), transparent 70%);
+  transform:rotate(-24deg);pointer-events:none;
+}
+.kupa::after{ /* knopp */
+  content:"";position:absolute;top:-9px;left:50%;transform:translateX(-50%);
+  width:14px;height:14px;border-radius:50%;
+  background:radial-gradient(circle at 34% 30%, var(--guld-skimmer), var(--guld) 55%, var(--guld-djup));
+  box-shadow:0 2px 5px rgba(0,0,0,.5);
+}
+.exponat{font-family:var(--serif);font-weight:600;color:var(--guld-ljus);font-size:clamp(2.2rem,4.5vw,3rem);line-height:1;padding-top:.4em;
+  text-shadow:0 0 26px rgba(242,193,78,.35)}
+.exponat small{display:block;font-family:var(--mono);font-weight:400;font-size:.58rem;letter-spacing:.26em;color:var(--rosa);margin-top:.75em;text-transform:uppercase;text-shadow:none}
+.gnista{position:absolute;color:var(--guld-skimmer);font-size:.72rem;animation:gnistra 3.2s ease-in-out infinite;pointer-events:none}
+.gnista.g2{animation-delay:1.1s;color:#ffd3e6}
+.gnista.g3{animation-delay:2.2s}
+@keyframes gnistra{0%,100%{opacity:0;transform:scale(.5)}45%{opacity:.95;transform:scale(1.1)}60%{opacity:.4}}
+@media (prefers-reduced-motion: reduce){.gnista{animation:none;opacity:.5}}
+.podium{
+  width:min(240px,86%);height:34px;z-index:1;
+  background:linear-gradient(180deg,#503073,var(--lila-1) 70%,#22103e);
+  clip-path:polygon(6% 0, 94% 0, 100% 100%, 0 100%);
+  border-top:3px solid var(--guld);
+  box-shadow:0 16px 28px rgba(0,0,0,.4);
+}
+.massing{
+  margin-top:14px;max-width:300px;
+  background:linear-gradient(180deg,var(--guld-skimmer),var(--guld) 52%,#d9a83c);
+  color:#2a1608;border-radius:7px;padding:.5rem .9rem .55rem;
+  box-shadow:0 0 0 1px rgba(120,80,16,.7), 0 5px 12px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.6);
+}
+.massing h3{font-size:.95rem;font-weight:600;letter-spacing:.02em}
+.massing .arta{font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:#5c3a06}
+.monter > p{margin-top:.7rem;font-size:.88rem;color:var(--text-dim);max-width:300px}
+
+.hall-foto{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(26px,4vw,56px);align-items:center;margin-top:clamp(44px,6vw,72px)}
+.hall-foto .ram-oval{width:min(280px,74vw);aspect-ratio:5/6}
+@media (max-width:900px){.hall-foto{grid-template-columns:1fr}.hall-foto .ram-oval{width:min(240px,68vw)}}
+.inventarie{
+  border:1px solid rgba(242,193,78,.32);border-radius:14px;
+  background:linear-gradient(160deg, rgba(61,37,102,.5), rgba(31,15,56,.6));
+  padding:clamp(18px,3vw,30px);
+}
+.inventarie h3{color:var(--guld-ljus);font-size:1.2rem;margin-bottom:.9rem;display:flex;align-items:center;gap:.6rem}
+.inventarie ul{list-style:none;font-size:.92rem}
+.inventarie li{
+  display:flex;gap:.8rem;padding:.6rem 0;color:var(--text-dim);
+  border-bottom:1px dashed rgba(242,193,78,.22);
+}
+.inventarie li:last-child{border-bottom:none}
+.inventarie li .nr{font-family:var(--mono);color:var(--gron);font-size:.72rem;flex:none;padding-top:.22em;letter-spacing:.08em}
+.inventarie li b{color:var(--text);font-weight:700}
+
+.arkiv{margin-top:clamp(40px,5vw,64px)}
+.arkiv h3{color:var(--text);font-size:1.25rem;display:flex;align-items:center;gap:.6rem}
+.arkiv h3 .mono-tag{font-family:var(--mono);font-size:.6rem;letter-spacing:.24em;color:var(--rosa);text-transform:uppercase}
+.arkiv-rad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin-top:1.1rem}
+@media (max-width:900px){.arkiv-rad{grid-template-columns:1fr}}
+.arkivkort{
+  display:block;text-decoration:none;border-radius:12px;padding:1rem 1.1rem;
+  border:1px solid rgba(242,193,78,.35);
+  background:linear-gradient(165deg, rgba(61,37,102,.55), rgba(31,15,56,.7));
+  transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.arkivkort:hover{transform:translateY(-3px);border-color:var(--guld);box-shadow:0 14px 30px rgba(0,0,0,.4)}
+@media (prefers-reduced-motion: reduce){.arkivkort{transition:none}.arkivkort:hover{transform:none}}
+.arkivkort .mono-tag{font-family:var(--mono);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gron)}
+.arkivkort b{display:block;color:var(--text);font-family:var(--serif);font-weight:600;font-size:1.02rem;margin:.35rem 0 .3rem;line-height:1.3}
+.arkivkort span{font-size:.8rem;color:var(--guld-ljus)}
+
+/* ============ MASKINHALLEN (projekt) ============ */
+.grenror{display:none}
+@media (min-width:961px){
+  .grenror{display:flex;height:44px;margin-bottom:-6px;position:relative}
+  .grenror::before{ /* horisontellt rör */
+    content:"";position:absolute;left:6%;right:6%;top:0;height:15px;border-radius:8px;
+    background:linear-gradient(180deg,#8a651f,var(--guld) 35%,var(--guld-skimmer) 50%,#c79a35 70%,#6d5321);
+    box-shadow:0 4px 10px rgba(0,0,0,.35);
+  }
+  .grenror .stam{position:absolute;top:9px;width:13px;height:35px;transform:translateX(-50%);
+    background:linear-gradient(90deg,#6d5321,var(--guld) 40%,var(--guld-skimmer) 52%,#a8741e);
+    border-radius:0 0 4px 4px;
+  }
+  .grenror .stam::after{content:"";position:absolute;left:-4px;right:-4px;bottom:0;height:6px;border-radius:3px;
+    background:linear-gradient(180deg,var(--guld),#8a5f18)}
+  .grenror .stam:nth-child(1){left:16.6%}
+  .grenror .stam:nth-child(2){left:50%}
+  .grenror .stam:nth-child(3){left:83.3%}
+}
+.maskiner{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(18px,2.6vw,30px)}
+@media (max-width:960px){.maskiner{grid-template-columns:1fr;max-width:520px;margin-inline:auto}}
+.maskin{
+  position:relative;border-radius:18px;display:flex;flex-direction:column;
+  border:1px solid rgba(242,193,78,.4);
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(242,193,78,.07), transparent 55%),
+    linear-gradient(175deg, rgba(61,37,102,.65), rgba(31,15,56,.85));
+  box-shadow:0 24px 50px rgba(0,0,0,.45);
+  padding:1.2rem 1.2rem 1.4rem;
+}
+.maskin .etikett{
+  align-self:center;margin-top:-2rem;margin-bottom:1.1rem;
+  font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:#2a1608;
+  background:linear-gradient(180deg,var(--guld-skimmer),var(--guld) 55%,#d9a83c);
+  padding:.4rem .8rem;border-radius:6px;white-space:nowrap;
+  box-shadow:0 0 0 1px rgba(120,80,16,.7), 0 4px 10px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.55);
+}
+.maskin-fonster{position:relative;border-radius:12px;overflow:hidden;margin-bottom:1.1rem;background:#180b2e}
+.maskin h3{font-size:1.3rem;color:var(--text)}
+.maskin h3 a{color:var(--text);text-decoration:none}
+.maskin h3 a:hover{color:var(--guld-skimmer)}
+.maskin p{font-size:.92rem;color:var(--text-dim);margin:.5rem 0 1.1rem;flex:1}
+.maskin .knapp{align-self:flex-start;padding:.6rem 1.15rem;font-size:.86rem}
+
+/* jordglobsmaskinen */
+.glob-scen{position:relative;aspect-ratio:1;display:grid;place-items:center;
+  background:radial-gradient(circle at 50% 42%, #2c1752 0%, #180b2e 70%)}
+.glob-kupa{position:relative;width:88%;aspect-ratio:1;border-radius:50%}
+.glob-kupa canvas{position:relative;z-index:1}
+.glob-kupa .glas{
+  position:absolute;inset:-4%;border-radius:50%;z-index:2;pointer-events:none;
+  background:radial-gradient(ellipse 34% 22% at 32% 20%, rgba(255,255,255,.30), transparent 75%),
+             radial-gradient(ellipse 20% 12% at 68% 78%, rgba(255,255,255,.09), transparent 75%);
+  border:1px solid rgba(255,255,255,.25);
+  box-shadow:inset 0 0 34px rgba(255,255,255,.06);
+}
+.glob-scen .sockel{position:absolute;bottom:2.5%;left:50%;transform:translateX(-50%);width:52%;height:11px;
+  background:linear-gradient(180deg,var(--guld),#8a5f18);border-radius:5px;box-shadow:0 6px 14px rgba(0,0,0,.5)}
+.mono-etikett{position:absolute;z-index:3;left:50%;bottom:9%;transform:translateX(-50%);
+  font-family:var(--mono);font-size:.56rem;letter-spacing:.22em;text-transform:uppercase;color:#2a1608;
+  background:var(--guld);padding:.18rem .55rem;border-radius:4px;white-space:nowrap;
+  box-shadow:0 0 0 1px rgba(120,80,16,.7)}
+
+/* hp-pressen */
+.press{position:relative;aspect-ratio:1;display:flex;flex-direction:column;background:#180b2e}
+.press .kolv{
+  height:34px;flex:none;position:relative;z-index:2;
+  background:linear-gradient(180deg,#8a651f,var(--guld) 40%,#c79a35 65%,#6d5321);
+  border-bottom:4px solid #40280a;
+  animation:pressa 3.4s ease-in-out infinite alternate;
+}
+.press .kolv::before,.press .kolv::after{content:"";position:absolute;top:100%;width:12px;height:16px;
+  background:linear-gradient(90deg,#6d5321,var(--guld) 45%,#8a651f)}
+.press .kolv::before{left:18%}
+.press .kolv::after{right:18%}
+@keyframes pressa{from{transform:translateY(0)}to{transform:translateY(9px)}}
+@media (prefers-reduced-motion: reduce){.press .kolv{animation:none}}
+.press img{flex:1;width:100%;height:100%;object-fit:cover;min-height:0}
+.press .sigill{
+  position:absolute;right:8%;bottom:8%;z-index:3;width:74px;height:74px;border-radius:50%;
+  background:radial-gradient(circle at 34% 28%, #ff9dc8, var(--rosa) 55%, #d14f89);
+  color:#3f0a1b;display:grid;place-items:center;text-align:center;
+  font-family:var(--mono);font-weight:700;font-size:.95rem;line-height:1.05;
+  transform:rotate(-10deg);
+  box-shadow:0 6px 14px rgba(0,0,0,.45), inset 0 0 0 3px rgba(63,10,27,.35), inset 0 0 0 6px rgba(255,255,255,.25);
+}
+.press .sigill small{display:block;font-size:.44rem;letter-spacing:.14em;font-weight:500}
+
+/* gångertabellsverket */
+.verk{aspect-ratio:1;display:grid;place-items:center;background:
+  radial-gradient(circle at 50% 45%, #2c1752 0%, #180b2e 72%)}
+.verk svg{width:92%;height:auto;display:block}
+.kugg{transform-box:fill-box;transform-origin:center}
+.kugg-a{animation:vrid 30s linear infinite}
+.kugg-b{animation:vrid 22s linear infinite reverse}
+.kugg-c{animation:vrid 26s linear infinite}
+@media (prefers-reduced-motion: reduce){.kugg-a,.kugg-b,.kugg-c{animation:none}}
+
+/* ============ DEN GYLLENE BILJETTEN ============ */
+.scen{position:relative;overflow:hidden;background:
+  radial-gradient(90% 70% at 50% 108%, rgba(242,193,78,.13), transparent 60%),
+  linear-gradient(180deg, transparent, rgba(16,6,32,.65) 30%, rgba(16,6,32,.85))}
+.scen::before,.scen::after{ /* sidoridåer */
+  content:"";position:absolute;top:0;bottom:0;width:clamp(30px,7vw,110px);z-index:1;pointer-events:none;
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,.4) 0 10px, rgba(255,255,255,.06) 18px 24px, rgba(0,0,0,.28) 34px 44px),
+    linear-gradient(180deg,#71182f, var(--vin-1) 55%, var(--vin-2));
+  box-shadow:0 0 34px rgba(0,0,0,.6);
+}
+.scen::before{left:0;border-right:3px solid var(--guld-djup)}
+.scen::after{right:0;border-left:3px solid var(--guld-djup)}
+.scen .inre{position:relative;z-index:2;text-align:center}
+.scen .spot{position:absolute;left:50%;top:-40px;transform:translateX(-50%);width:min(640px,86%);height:110%;
+  background:linear-gradient(180deg, rgba(247,215,128,.15), rgba(247,215,128,.02) 60%, transparent);
+  clip-path:polygon(42% 0, 58% 0, 100% 100%, 0 100%);pointer-events:none;z-index:0}
+.biljett-omrade{position:relative;margin-top:clamp(30px,4vw,50px)}
+.biljett-wrap{perspective:1400px;width:min(620px,100%);margin-inline:auto}
+html.js .biljett-wrap.flyter{animation:svavar 6s ease-in-out infinite alternate}
+@keyframes svavar{from{transform:translateY(-7px)}to{transform:translateY(9px)}}
+@media (prefers-reduced-motion: reduce){html.js .biljett-wrap.flyter{animation:none}}
+.biljett{
+  position:relative;width:100%;height:300px;
+  transform-style:preserve-3d;
+  transition:transform .9s cubic-bezier(.4,.1,.2,1);
+  filter:drop-shadow(0 30px 40px rgba(0,0,0,.55)) drop-shadow(0 0 34px rgba(242,193,78,.22));
+}
+.biljett.flipped{}
+@media (prefers-reduced-motion: reduce){.biljett{transition:none}}
+.sida{
+  position:absolute;inset:0;border-radius:16px;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;
+  padding:1.4rem 2rem;
+}
+.sida.fram{
+  cursor:pointer;border:none;width:100%;font:inherit;text-align:center;
+  background:
+    repeating-linear-gradient(135deg, rgba(122,76,14,.09) 0 2px, transparent 2px 9px),
+    linear-gradient(115deg,#8a5a12 0%, var(--guld) 22%, var(--guld-skimmer) 43%, var(--guld) 58%, #b5822a 82%, var(--guld) 100%);
+  box-shadow:inset 0 0 0 3px rgba(90,58,10,.5), inset 0 0 0 6px rgba(255,243,201,.5), inset 0 0 60px rgba(122,76,14,.25);
+  overflow:hidden;
+}
+.sida.fram::before{ /* perforerad stubb */
+  content:"";position:absolute;top:12px;bottom:12px;right:74px;
+  border-right:2px dashed rgba(90,58,10,.55);
+}
+.sida.fram .stubb{
+  position:absolute;top:0;bottom:0;right:0;width:74px;display:grid;place-items:center;
+  font-family:var(--mono);font-size:.58rem;letter-spacing:.3em;color:#5c3a06;
+  writing-mode:vertical-rl;text-transform:uppercase;
+}
+.sida.fram::after{ /* skimmer-sweep */
+  content:"";position:absolute;top:-20%;bottom:-20%;left:-30%;width:26%;
+  background:linear-gradient(105deg, transparent, rgba(255,255,255,.55) 50%, transparent);
+  transform:skewX(-14deg) translateX(0);
+  animation:skimmer 4.6s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes skimmer{0%,55%{transform:skewX(-14deg) translateX(-120%)}85%,100%{transform:skewX(-14deg) translateX(560%)}}
+@media (prefers-reduced-motion: reduce){.sida.fram::after{display:none}}
+.biljett-titel{
+  font-family:var(--skylt);font-weight:400;font-size:clamp(1.5rem,4.6vw,2.6rem);letter-spacing:.08em;
+  color:#7a4c0e;text-transform:uppercase;line-height:1.05;
+  text-shadow:0 1px 0 rgba(255,255,255,.55), 0 -1px 0 rgba(70,44,6,.45);
+}
+.biljett-rad{
+  font-family:var(--mono);font-size:clamp(.6rem,1.8vw,.78rem);letter-spacing:.22em;text-transform:uppercase;
+  color:#5c3a06;text-shadow:0 1px 0 rgba(255,255,255,.45);
+}
+.biljett-orn{display:flex;align-items:center;gap:.7rem;color:#7a4c0e;font-size:.8rem}
+.biljett-orn::before,.biljett-orn::after{content:"";height:2px;width:64px;background:linear-gradient(90deg,transparent,#7a4c0e)}
+.biljett-orn::after{background:linear-gradient(90deg,#7a4c0e,transparent)}
+.biljett-hint{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;color:#6b420c;margin-top:.5rem;text-transform:uppercase}
+.sida.bak{
+  transform:rotateY(180deg);
+  background:
+    repeating-linear-gradient(0deg, rgba(122,76,14,.05) 0 1px, transparent 1px 26px),
+    linear-gradient(160deg,#fbf3de,var(--papper) 55%,#eaddbe);
+  box-shadow:inset 0 0 0 3px rgba(90,58,10,.4), inset 0 0 0 6px rgba(242,193,78,.55), inset 0 0 50px rgba(122,76,14,.14);
+  color:var(--papper-morg);
+  visibility:hidden;transition:visibility 0s .4s;
+}
+.biljett.flipped .sida.bak{visibility:visible}
+.biljett.flipped .sida.fram{visibility:hidden;transition:visibility 0s .4s}
+.sida.fram{transition:visibility 0s .4s}
+@media (prefers-reduced-motion: reduce){.sida.fram,.sida.bak{transition:none}}
+.sida.bak .tillhor{font-family:var(--serif);font-style:italic;font-size:1.06rem;color:#4a3568}
+.namnrad{display:flex;align-items:baseline;gap:.6rem;width:min(380px,100%);margin:.4rem 0 .8rem}
+.namnrad input{
+  flex:1;min-width:0;border:none;border-bottom:2px solid #8a5f18;background:transparent;
+  font-family:var(--hand);font-size:1.5rem;color:#33234f;padding:.1rem .3rem;border-radius:0;
+}
+.namnrad input::placeholder{color:#a08f6e;font-size:1.2rem}
+.namnrad input:focus-visible{outline:2px solid #8a5f18;outline-offset:2px;border-radius:4px}
+.sida.bak .liten{font-size:.74rem;color:#6d5a8e;font-family:var(--mono);letter-spacing:.06em}
+.sida.bak .knapp-guld{margin-top:.4rem}
+.vand-tillbaka{
+  position:absolute;top:10px;right:12px;border:none;background:transparent;cursor:pointer;
+  font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;color:#6d5a8e;text-transform:uppercase;padding:.3rem .4rem;
+}
+.vand-tillbaka:hover{color:#33234f}
+.direktlank{margin-top:1.4rem;font-size:.88rem}
+.direktlank a{color:var(--guld-ljus)}
+.pekar-figur{position:absolute;right:clamp(4px,6vw,90px);bottom:-24px;width:clamp(90px,11vw,150px);z-index:3;pointer-events:none;
+  filter:drop-shadow(0 12px 22px rgba(0,0,0,.5))}
+@media (max-width:760px){.pekar-figur{display:none}}
+@media (max-width:640px){
+  .biljett{height:340px}
+  .sida{padding:1.1rem 1rem}
+  .sida.fram::before{right:52px}
+  .sida.fram .stubb{width:52px}
+}
+@media (max-width:400px){.biljett{height:360px}}
+
+/* ============ KONTORET (kontakt) ============ */
+.kontor-grid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(28px,5vw,64px);align-items:start}
+@media (max-width:900px){.kontor-grid{grid-template-columns:1fr}}
+.kontor-vanster h3{font-size:1.35rem;color:var(--text);margin-bottom:.7rem}
+.kontor-vanster p{color:var(--text-dim);max-width:44ch}
+.some{display:flex;gap:.8rem;margin:1.3rem 0 1.8rem;list-style:none}
+.some a{
+  width:48px;height:48px;border-radius:50%;display:grid;place-items:center;color:var(--guld-ljus);
+  border:1.5px solid rgba(242,193,78,.5);transition:transform .2s ease, background .2s ease, color .2s ease;
+}
+.some a:hover{background:var(--guld);color:#2a1608;transform:translateY(-3px)}
+@media (prefers-reduced-motion: reduce){.some a{transition:none}.some a:hover{transform:none}}
+.some a svg{width:20px;height:20px}
+.some-namn{font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;color:var(--text-dim);text-transform:uppercase}
+.brev{
+  position:relative;background:linear-gradient(168deg,#fbf3de,var(--papper) 60%,#efe2c4);
+  color:var(--papper-morg);border-radius:6px 18px 6px 18px;
+  padding:clamp(22px,3.6vw,40px);
+  box-shadow:0 3px 0 #d8c9a4, 0 26px 50px rgba(0,0,0,.5);
+}
+.brev::before{ /* brevpapperslinjer i huvudet */
+  content:"";position:absolute;inset:0;border:1px solid rgba(138,95,24,.35);border-radius:inherit;pointer-events:none;margin:9px;
+}
+.brevhuvud{text-align:center;border-bottom:2px solid rgba(138,95,24,.5);padding-bottom:1rem;margin-bottom:1.4rem}
+.brevhuvud .mm2{
+  width:44px;height:44px;margin:0 auto .5rem;border-radius:50%;
+  background:radial-gradient(circle at 32% 28%, var(--guld-skimmer), var(--guld) 45%, var(--guld-djup) 90%);
+  color:#2a1608;font-family:var(--serif);font-weight:600;font-size:1.4rem;display:grid;place-items:center;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.6), 0 3px 8px rgba(0,0,0,.25);
+}
+.brevhuvud b{font-family:var(--serif);font-weight:600;letter-spacing:.14em;font-size:1.05rem;text-transform:uppercase;color:#33234f}
+.brevhuvud small{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.26em;text-transform:uppercase;color:#8a5f18;margin-top:.3rem}
+.stampel{
+  position:absolute;top:clamp(14px,3vw,26px);right:clamp(14px,3vw,26px);width:86px;height:86px;border-radius:50%;
+  border:2.5px solid rgba(209,79,137,.75);color:#b03a72;display:grid;place-items:center;text-align:center;
+  font-family:var(--mono);font-size:.5rem;letter-spacing:.12em;line-height:1.4;text-transform:uppercase;
+  transform:rotate(9deg);opacity:.85;pointer-events:none;
+}
+.stampel span{display:block;padding:.4em}
+@media (max-width:520px){.stampel{display:none}}
+.falt{margin-bottom:1rem}
+.falt label{display:block;font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:#5c4419;margin-bottom:.35rem}
+.falt input,.falt textarea{
+  width:100%;border:1px solid rgba(138,95,24,.55);border-radius:8px;background:rgba(255,255,255,.6);
+  font-family:var(--sans);font-size:1rem;color:#241735;padding:.7rem .85rem;
+}
+.falt input:focus-visible,.falt textarea:focus-visible{outline:2px solid #8a5f18;outline-offset:1px}
+.falt textarea{min-height:130px;resize:vertical}
+.brev .knapp-guld{border:none;cursor:pointer;font-family:var(--sans)}
+.brev .ps{font-family:var(--hand);font-size:1.25rem;color:#5c4419;margin-top:1.1rem;transform:rotate(-1deg)}
+.tack{
+  display:none;text-align:center;padding:2.2rem 0 1.4rem;
+}
+.brev.skickat form{display:none}
+.brev.skickat .tack{display:block}
+.tack .stort{font-family:var(--serif);font-size:1.6rem;color:#33234f;margin-bottom:.5rem}
+.tack p{color:#5c4419}
+.tack a{color:#8a4310}
+
+/* ============ FOOTER ============ */
+footer{
+  border-top:1px solid rgba(242,193,78,.35);
+  background:linear-gradient(180deg, rgba(16,6,32,.4), rgba(12,4,26,.92));
+  padding:clamp(40px,6vw,64px) 0 2.2rem;text-align:center;
+}
+.farval{font-family:var(--serif);font-style:italic;font-size:clamp(1.1rem,2.4vw,1.45rem);color:var(--guld-ljus);margin-bottom:1.6rem}
+.fot-lankar{display:flex;flex-wrap:wrap;gap:.4rem 1.6rem;justify-content:center;margin-bottom:1.4rem;font-size:.9rem}
+.fot-lankar a{color:var(--text-dim);text-decoration:none}
+.fot-lankar a:hover{color:var(--guld-skimmer);text-decoration:underline}
+.fot-meta{font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;color:#9d8bbd;line-height:2}
+.fot-meta .guld{color:var(--guld-ljus)}
+</style>
+</head>
+<body>
+<a class="skip" href="#hem">Hoppa till innehållet</a>
+
+<!-- ==================== RIDÅN (laddskärm) ==================== -->
+<div class="rida" id="rida" aria-hidden="true">
+  <div class="halva vanster"></div>
+  <div class="halva hoger"></div>
+  <div class="kappa"></div>
+  <div class="sign">
+    <h2>Minnesfabriken</h2>
+    <pre id="bootrad"><span class="cursor"></span></pre>
+  </div>
+  <p class="hoppa">tryck var som helst för insläpp direkt</p>
+</div>
+
+<!-- ==================== TOPPNAV ==================== -->
+<header class="topp">
+  <div class="rad">
+    <a class="marke" href="#hem" aria-label="Minnesfabriken – till toppen">
+      <span class="mm" aria-hidden="true">M</span>
+      <b>Minnesfabriken<span> v. Essen</span><small>Jonas von Essen</small></b>
+    </a>
+    <nav aria-label="Huvudnavigation">
+      <a href="#om" data-mal="om">Provsmakningen</a>
+      <a href="#meriter" data-mal="meriter">Underverkshallen</a>
+      <a href="#projekt" data-mal="projekt">Maskinhallen</a>
+      <a href="#kurs" data-mal="kurs">Gyllene biljetten</a>
+      <a href="#kontakt" data-mal="kontakt">Kontoret</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- rörsystemet längs kanten -->
+  <div class="ror-ral" aria-hidden="true">
+    <div class="tub"></div>
+    <div class="puls"></div>
+  </div>
+
+  <!-- ==================== HERO ==================== -->
+  <section class="hero" id="hem" aria-label="Introduktion">
+    <div class="inre">
+      <div class="vanster-scen">
+        <p class="skylt-rye">Fabriken är öppen</p>
+        <h1>Välkommen till Minnes&shy;fabriken</h1>
+        <p class="roll"><b>Jonas von Essen</b> — tvåfaldig världsmästare i minne · föreläsare · frågesportsnörd</p>
+        <p class="ingress">Jag tävlar i att minnas saker – och i att säga dem snyggt. Däremellan bygger jag gratis appar som gör det lättare att lära sig. Kliv in: rören är polerade och alla minnen är färska.</p>
+        <div class="knappar">
+          <a class="knapp knapp-guld" href="#projekt">Se vad jag byggt <span aria-hidden="true">→</span></a>
+          <a class="knapp knapp-kontur" href="#kontakt">Boka föreläsning</a>
+        </div>
+      </div>
+      <figure class="ram-oval">
+        <svg class="krona" width="46" height="26" viewBox="0 0 46 26" aria-hidden="true"><path d="M3 23 L8 8 L16 16 L23 3 L30 16 L38 8 L43 23 Z" fill="currentColor"/></svg>
+        <span class="pass"><img src="../assets/img/foto-galen-forskare-md.webp" alt="Jonas von Essen gör en galen uppfinnarmin med händerna som klor" fetchpriority="high"></span>
+        <figcaption>Fabrikören · Foto: Stefan Edetoft</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ==================== PROVSMAKNINGEN (OM) ==================== -->
+  <section class="dept" id="om" aria-labelledby="om-rubrik">
+    <div class="nod">
+      <svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true">
+        <rect x="10" y="26" width="34" height="12" rx="6" fill="#c79a35"/>
+        <circle cx="42" cy="32" r="15" fill="#1f0f38" stroke="#f2c14e" stroke-width="3"/>
+        <circle cx="42" cy="32" r="11" fill="#f6edda"/>
+        <g stroke="#8a5f18" stroke-width="1"><path d="M42 23v3M51 32h-3M42 41v-3M33 32h3"/></g>
+        <line class="nal" x1="42" y1="32" x2="42" y2="24.5" stroke="#b03a72" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="42" cy="32" r="1.8" fill="#301b52"/>
+      </svg>
+    </div>
+    <div class="inre">
+      <header class="dept-huvud reveal">
+        <span class="plakat">Avdelning 01 · Provsmakningen</span>
+        <h2>Smaka på <span class="guldig">fabrikören</span> själv</h2>
+        <div class="delare"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 0l1.8 5.2L14 7l-5.2 1.8L7 14 5.2 8.8 0 7l5.2-1.8Z" fill="currentColor"/></svg></div>
+      </header>
+      <div class="om-grid">
+        <figure class="ram-oval reveal">
+          <span class="pass"><img src="../assets/img/foto-siffervagg-md.webp" alt="Jonas ler framför en vägg täckt av handskrivna pi-decimaler" loading="lazy"></span>
+          <figcaption>Foto: Jessica Ahrling</figcaption>
+        </figure>
+        <div class="om-bio reveal">
+          <p>Jag heter Jonas von Essen och 2013 blev jag – som förste svensk någonsin – världsmästare i minne. 2014 försvarade jag titeln. Sedan dess har jag gjort det till mitt jobb att visa att hjärnan klarar mer än man tror: i TV-studior, föreläsningssalar, böcker och appar.</p>
+          <p>Jag har memorerat 100&nbsp;000 decimaler av pi, lärt mig hela Talang-publikens namn och vunnit en miljon på Postkodmiljonären. När jag inte tävlar i att minnas saker tävlar jag i att formulera dem – som färsk svensk mästare i poetry slam och Göteborgsmästare i ordvitsar.</p>
+          <ul class="praliner" aria-label="Snabbfakta">
+            <li>2× VM-guld</li>
+            <li>Göteborg</li>
+            <li>3 gratis läroappar</li>
+            <li>Föreläsare &amp; författare</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== UNDERVERKSHALLEN (MERITER) ==================== -->
+  <section class="dept" id="meriter" aria-labelledby="meriter-rubrik">
+    <div class="nod">
+      <svg width="60" height="60" viewBox="0 0 60 60" aria-hidden="true">
+        <rect x="8" y="24" width="30" height="12" rx="6" fill="#c79a35"/>
+        <g class="ratt">
+          <circle cx="38" cy="30" r="13" fill="none" stroke="#f2c14e" stroke-width="4"/>
+          <path d="M38 17v26M25 30h26M29 21l18 18M47 21L29 39" stroke="#f2c14e" stroke-width="3"/>
+        </g>
+        <circle cx="38" cy="30" r="4" fill="#f7d780" stroke="#8a5f18"/>
+      </svg>
+    </div>
+    <div class="inre">
+      <header class="dept-huvud reveal">
+        <span class="plakat">Avdelning 02 · Underverkshallen</span>
+        <h2>Montrar med <span class="guldig">äkta underverk</span></h2>
+        <p class="under">Allt i hallen är riktigt, polerat och putsat för hand. Rör gärna vid glaskuporna – de kommer ihåg dina fingeravtryck.</p>
+        <div class="delare"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 0l1.8 5.2L14 7l-5.2 1.8L7 14 5.2 8.8 0 7l5.2-1.8Z" fill="currentColor"/></svg></div>
+      </header>
+
+      <div class="montrar">
+        <article class="monter reveal">
+          <div class="kupa"><span class="gnista" style="top:18%;right:20%">✦</span><span class="gnista g2" style="bottom:30%;left:16%">✦</span>
+            <div class="exponat">2×<small>VM-guld i minne</small></div></div>
+          <div class="podium"></div>
+          <div class="massing"><span class="arta">London 2013 · Haikou 2014</span><h3>Världsmästare i minne</h3></div>
+          <p>Sveriges förste världsmästare i minne – och sedan en gång till, för säkerhets skull.</p>
+        </article>
+        <article class="monter reveal">
+          <div class="kupa"><span class="gnista" style="top:22%;left:18%">✦</span><span class="gnista g3" style="bottom:26%;right:18%">✦</span>
+            <div class="exponat">π<small>100 000 decimaler</small></div></div>
+          <div class="podium"></div>
+          <div class="massing"><span class="arta">Först i världen · 2020</span><h3>100&nbsp;000 π-decimaler</h3></div>
+          <p>Först i världen att klara ett verifierat test på alla 100&nbsp;000. Europarekord i uppläsning: 24&nbsp;063 i rad.</p>
+        </article>
+        <article class="monter reveal">
+          <div class="kupa"><span class="gnista" style="top:16%;right:24%">✦</span><span class="gnista g2" style="bottom:32%;left:20%">✦</span>
+            <div class="exponat">★<small>Golden buzzer</small></div></div>
+          <div class="podium"></div>
+          <div class="massing"><span class="arta">Talang, TV4 · 2018</span><h3>Golden buzzer &amp; final</h3></div>
+          <p>Lärde mig hela publikens namn – David Batra tryckte på guldknappen. Finalist.</p>
+        </article>
+        <article class="monter reveal">
+          <div class="kupa"><span class="gnista" style="top:20%;left:22%">✦</span><span class="gnista g3" style="bottom:24%;right:22%">✦</span>
+            <div class="exponat">1 mkr<small>Miljonfrågan</small></div></div>
+          <div class="podium"></div>
+          <div class="massing"><span class="arta">Postkodmiljonären · 2023</span><h3>Rätt på miljonfrågan</h3></div>
+          <p>En av endast 13 genom tiderna i Sverige som svarat rätt hela vägen.</p>
+        </article>
+        <article class="monter reveal">
+          <div class="kupa"><span class="gnista" style="top:24%;right:18%">✦</span><span class="gnista g2" style="bottom:28%;left:24%">✦</span>
+            <div class="exponat">SM<small>Poetry slam</small></div></div>
+          <div class="podium"></div>
+          <div class="massing"><span class="arta">Sverige · 2026</span><h3>Svensk mästare i poetry slam</h3></div>
+          <p>För jag tävlar också i att säga saker snyggt. Rim och reson, bokstavligen.</p>
+        </article>
+        <article class="monter reveal">
+          <div class="kupa"><span class="gnista" style="top:18%;left:20%">✦</span><span class="gnista g3" style="bottom:30%;right:20%">✦</span>
+            <div class="exponat">160<small>av 160 · HP 2021</small></div></div>
+          <div class="podium"></div>
+          <div class="massing"><span class="arta">Högskoleprovet</span><h3>2.0 – tolv gånger</h3></div>
+          <p>160 rätt av 160 år 2021 – som ende i landet. Tolv maxade prov och räknar fortfarande.</p>
+        </article>
+      </div>
+
+      <div class="hall-foto">
+        <figure class="ram-oval reveal">
+          <span class="pass"><img src="../assets/img/jonas_vm-md.webp" alt="Jonas med VM-pokalen och svenska flaggan över axlarna" loading="lazy"></span>
+          <figcaption>VM-pokalen · London 2013</figcaption>
+        </figure>
+        <div class="inventarie reveal">
+          <h3><svg width="16" height="16" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 0l1.8 5.2L14 7l-5.2 1.8L7 14 5.2 8.8 0 7l5.2-1.8Z" fill="currentColor"/></svg> Inventarielista, övriga underverk</h3>
+          <ul>
+            <li><span class="nr">INV-07</span><span><b>5× svensk mästare i pubquiz</b> — med laget ”Glenns över sjö och strand”.</span></li>
+            <li><span class="nr">INV-08</span><span><b>Göteborgsmästare i ordvitsar 2026</b> — och klar för SM-final. Ordvitsventilen står på farligt öppen.</span></li>
+            <li><span class="nr">INV-09</span><span><b>Fler TV-segrar</b> — vann Smartare än en femteklassare (2020), besegrade expertpanelen i Muren (SVT, 2021) och klarade utmaningen i kinesiska The Brain – bland annat 200 numrerade valnötter.</span></li>
+            <li><span class="nr">INV-10</span><span><b>Författare</b> — ”Så får du ett superminne” (Semic), ”Bli ett minnesgeni!” och ”Pi-boken 2.0”.</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="arkiv reveal">
+        <h3>Ur arkivet <span class="mono-tag">· rullande bilder</span></h3>
+        <div class="arkiv-rad">
+          <a class="arkivkort" href="https://www.youtube.com/watch?v=PtqSFf3cO04" target="_blank" rel="noopener">
+            <span class="mono-tag">Talang</span>
+            <b>Jonas memorerar 500 namn på två timmar</b>
+            <span>Se klippet på YouTube →</span>
+          </a>
+          <a class="arkivkort" href="https://www.youtube.com/results?search_query=jonas+von+essen+postkodmiljon%C3%A4ren" target="_blank" rel="noopener">
+            <span class="mono-tag">Postkodmiljonären</span>
+            <b>Miljonfrågan – hela nervkittlaren</b>
+            <span>Se klippet på YouTube →</span>
+          </a>
+          <a class="arkivkort" href="https://www.youtube.com/@BlueberryClubSparven" target="_blank" rel="noopener">
+            <span class="mono-tag">Gratis lektion</span>
+            <b>Lär dig världens 10 största länder på 5 minuter</b>
+            <span>Se klippet på YouTube →</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== MASKINHALLEN (PROJEKT) ==================== -->
+  <section class="dept" id="projekt" aria-labelledby="projekt-rubrik">
+    <div class="nod">
+      <svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true">
+        <rect x="10" y="26" width="34" height="12" rx="6" fill="#c79a35"/>
+        <circle cx="42" cy="32" r="15" fill="#1f0f38" stroke="#f2c14e" stroke-width="3"/>
+        <circle cx="42" cy="32" r="11" fill="#f6edda"/>
+        <g stroke="#8a5f18" stroke-width="1"><path d="M42 23v3M51 32h-3M42 41v-3M33 32h3"/></g>
+        <line class="nal" x1="42" y1="32" x2="42" y2="24.5" stroke="#2a9d6f" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="42" cy="32" r="1.8" fill="#301b52"/>
+      </svg>
+    </div>
+    <div class="inre">
+      <header class="dept-huvud reveal">
+        <span class="plakat">Avdelning 03 · Maskinhallen</span>
+        <h2>Tre maskiner, <span class="guldig">noll kronor</span></h2>
+        <p class="under">Jag bygger dem för att det är kul – och för att bra inlärning inte ska kosta. Maskinerna går dygnet runt och behöver aldrig smörjas.</p>
+        <div class="delare"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 0l1.8 5.2L14 7l-5.2 1.8L7 14 5.2 8.8 0 7l5.2-1.8Z" fill="currentColor"/></svg></div>
+      </header>
+
+      <div class="grenror" aria-hidden="true"><span class="stam"></span><span class="stam"></span><span class="stam"></span></div>
+
+      <div class="maskiner">
+        <article class="maskin reveal">
+          <span class="etikett">Maskin nr 001 · Jordglobsmaskinen</span>
+          <div class="maskin-fonster glob-scen">
+            <div class="glob-kupa">
+              <canvas id="glob" style="width:100%;aspect-ratio:1;display:block" aria-label="Interaktiv jordglob – dra för att snurra"></canvas>
+              <div class="glas" aria-hidden="true"></div>
+            </div>
+            <div class="sockel" aria-hidden="true"></div>
+            <span class="mono-etikett" aria-hidden="true">197/197 länder</span>
+          </div>
+          <h3><a href="https://jonasgeografi.se" target="_blank" rel="noopener">jonasgeografi.se</a></h3>
+          <p>Lär dig alla världens länder på en snurrbar jordglob där varje land är ett eget litet konstverk. Utforska, quizza och res jorden runt – med minnesknep för varje land.</p>
+          <a class="knapp knapp-guld" href="https://jonasgeografi.se" target="_blank" rel="noopener">Snurra själv <span aria-hidden="true">→</span></a>
+        </article>
+
+        <article class="maskin reveal">
+          <span class="etikett">Maskin nr 002 · HP-pressen</span>
+          <div class="maskin-fonster press">
+            <div class="kolv" aria-hidden="true"></div>
+            <img src="../assets/img/bild_hp-md.webp" alt="Högskoleprovets provhäfte och svarshäfte med penna" loading="lazy">
+            <span class="sigill" aria-hidden="true">2.0<small>×12 GGR</small></span>
+          </div>
+          <h3><a href="https://hpakuten.se" target="_blank" rel="noopener">hpakuten.se</a></h3>
+          <p>Gratis träning inför högskoleprovet: simulera gamla prov på tid, videogenomgångar och minnestekniker. Från Sveriges kanske mest rutinerade HP-skrivare.</p>
+          <a class="knapp knapp-guld" href="https://hpakuten.se" target="_blank" rel="noopener">In i pressen <span aria-hidden="true">→</span></a>
+        </article>
+
+        <article class="maskin reveal">
+          <span class="etikett">Maskin nr 003 · Gångertabellsverket</span>
+          <div class="maskin-fonster verk">
+            <svg viewBox="0 0 300 300" role="img" aria-label="Kugghjul som räknar ut sju gånger åtta är femtiosex">
+              <defs>
+                <radialGradient id="mtl" cx="35%" cy="30%" r="80%">
+                  <stop offset="0" stop-color="#fff3c9"/><stop offset=".45" stop-color="#f2c14e"/><stop offset="1" stop-color="#8a5f18"/>
+                </radialGradient>
+              </defs>
+              <g class="kugg kugg-a">
+                <g fill="url(#mtl)">
+                  <circle cx="105" cy="150" r="62"/>
+                  <g>
+                    <rect x="97" y="74" width="16" height="18" rx="3" fill="url(#mtl)"/>
+                    <rect x="97" y="74" width="16" height="18" rx="3" fill="url(#mtl)" transform="rotate(30 105 150)"/>
+                    <rect x="97" y="74" width="16" height="18" rx="3" fill="url(#mtl)" transform="rotate(60 105 150)"/>
+                    <rect x="97" y="74" width="16" height="18" rx="3" fill="url(#mtl)" transform="rotate(90 105 150)"/>
+                    <rect x="97" y="74" width="16" height="18" rx="3" fill="url(#mtl)" transform="rotate(120 105 150)"/>
+                    <rect x="97" y="74" width="16" height="18" rx="3" fill="url(#mtl)" transform="rotate(150 105 150)"/>
+                    <rect x="97" y="74" width="16" height="18" rx="3" fill="url(#mtl)" transform="rotate(180 105 150)"/>
+                    <rect x="97" y="74" width="16" height="18" rx="3" fill="url(#mtl)" transform="rotate(210 105 150)"/>
+                    <rect x="97" y="74" width="16" height="18" rx="3" fill="url(#mtl)" transform="rotate(240 105 150)"/>
+                    <rect x="97" y="74" width="16" height="18" rx="3" fill="url(#mtl)" transform="rotate(270 105 150)"/>
+                    <rect x="97" y="74" width="16" height="18" rx="3" fill="url(#mtl)" transform="rotate(300 105 150)"/>
+                    <rect x="97" y="74" width="16" height="18" rx="3" fill="url(#mtl)" transform="rotate(330 105 150)"/>
+                  </g>
+                </g>
+                <circle cx="105" cy="150" r="46" fill="#301b52" stroke="#8a5f18" stroke-width="2"/>
+                <text x="105" y="160" text-anchor="middle" font-family="'Fraunces',Georgia,serif" font-size="30" fill="#f7d780">7×8</text>
+              </g>
+              <g class="kugg kugg-b">
+                <g fill="url(#mtl)">
+                  <circle cx="216" cy="112" r="44"/>
+                  <g>
+                    <rect x="209" y="56" width="14" height="16" rx="3" fill="url(#mtl)"/>
+                    <rect x="209" y="56" width="14" height="16" rx="3" fill="url(#mtl)" transform="rotate(40 216 112)"/>
+                    <rect x="209" y="56" width="14" height="16" rx="3" fill="url(#mtl)" transform="rotate(80 216 112)"/>
+                    <rect x="209" y="56" width="14" height="16" rx="3" fill="url(#mtl)" transform="rotate(120 216 112)"/>
+                    <rect x="209" y="56" width="14" height="16" rx="3" fill="url(#mtl)" transform="rotate(160 216 112)"/>
+                    <rect x="209" y="56" width="14" height="16" rx="3" fill="url(#mtl)" transform="rotate(200 216 112)"/>
+                    <rect x="209" y="56" width="14" height="16" rx="3" fill="url(#mtl)" transform="rotate(240 216 112)"/>
+                    <rect x="209" y="56" width="14" height="16" rx="3" fill="url(#mtl)" transform="rotate(280 216 112)"/>
+                    <rect x="209" y="56" width="14" height="16" rx="3" fill="url(#mtl)" transform="rotate(320 216 112)"/>
+                  </g>
+                </g>
+                <circle cx="216" cy="112" r="30" fill="#301b52" stroke="#8a5f18" stroke-width="2"/>
+                <text x="216" y="121" text-anchor="middle" font-family="'Fraunces',Georgia,serif" font-size="24" fill="#ff7eb6">=56</text>
+              </g>
+              <g class="kugg kugg-c">
+                <g fill="url(#mtl)">
+                  <circle cx="212" cy="222" r="34"/>
+                  <g>
+                    <rect x="206" y="180" width="12" height="14" rx="3" fill="url(#mtl)"/>
+                    <rect x="206" y="180" width="12" height="14" rx="3" fill="url(#mtl)" transform="rotate(45 212 222)"/>
+                    <rect x="206" y="180" width="12" height="14" rx="3" fill="url(#mtl)" transform="rotate(90 212 222)"/>
+                    <rect x="206" y="180" width="12" height="14" rx="3" fill="url(#mtl)" transform="rotate(135 212 222)"/>
+                    <rect x="206" y="180" width="12" height="14" rx="3" fill="url(#mtl)" transform="rotate(180 212 222)"/>
+                    <rect x="206" y="180" width="12" height="14" rx="3" fill="url(#mtl)" transform="rotate(225 212 222)"/>
+                    <rect x="206" y="180" width="12" height="14" rx="3" fill="url(#mtl)" transform="rotate(270 212 222)"/>
+                    <rect x="206" y="180" width="12" height="14" rx="3" fill="url(#mtl)" transform="rotate(315 212 222)"/>
+                  </g>
+                </g>
+                <circle cx="212" cy="222" r="22" fill="#301b52" stroke="#8a5f18" stroke-width="2"/>
+                <text x="212" y="230" text-anchor="middle" font-family="'Fraunces',Georgia,serif" font-size="17" fill="#7fe3b0">6 kvar</text>
+              </g>
+            </svg>
+          </div>
+          <h3><a href="https://www.gångertabellen.se" target="_blank" rel="noopener">gångertabellen.se</a></h3>
+          <p>Gångertabellen är lättare än den ser ut: med rätt knep är det bara sex tal kvar att memorera. Quiz, minnesbilder och smart repetition – utan inloggning.</p>
+          <a class="knapp knapp-guld" href="https://www.gångertabellen.se" target="_blank" rel="noopener">Dra igång verket <span aria-hidden="true">→</span></a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== DEN GYLLENE BILJETTEN (KURS) ==================== -->
+  <section class="dept scen" id="kurs" aria-labelledby="kurs-rubrik">
+    <div class="spot" aria-hidden="true"></div>
+    <div class="inre">
+      <header class="dept-huvud reveal" style="margin-bottom:0">
+        <span class="plakat">Avdelning 04 · Stora scenen</span>
+        <h2 id="kurs-rubrik">Den <span class="guldig">gyllene biljetten</span></h2>
+        <p class="under" style="margin-inline:auto">Onlinekursen <strong style="color:var(--text)">Skaffa ett superminne!</strong> – lär dig metoderna jag använder, i din egen takt, hur många gånger du vill. En biljett per hjärna räcker: den gäller livet ut.</p>
+      </header>
+
+      <div class="biljett-omrade reveal">
+        <div class="biljett-wrap flyter" id="biljettWrap">
+          <div class="biljett" id="biljett">
+            <button class="sida fram" id="biljettFram" type="button" aria-expanded="false" aria-controls="biljettBak">
+              <span class="biljett-orn" aria-hidden="true">✦ ✦ ✦</span>
+              <span class="biljett-titel">Gyllene biljett</span>
+              <span class="biljett-rad">Skaffa ett superminne · Insläpp: livet ut</span>
+              <span class="biljett-hint">Klicka för att vända på biljetten</span>
+              <span class="stubb" aria-hidden="true">π · 3,14159</span>
+            </button>
+            <div class="sida bak" id="biljettBak">
+              <button class="vand-tillbaka" id="vandTillbaka" type="button">← vänd</button>
+              <p class="tillhor">Denna biljett tillhör:</p>
+              <div class="namnrad">
+                <label class="liten" for="biljettNamn" style="position:absolute;left:-9999px">Skriv ditt namn</label>
+                <input id="biljettNamn" type="text" maxlength="40" autocomplete="off" placeholder="skriv ditt namn här" spellcheck="false">
+              </div>
+              <p class="liten">…skriv ditt namn, jag kommer ihåg det.</p>
+              <a class="knapp knapp-guld" id="kursKnapp" href="https://kurs.jonasvonessen.se" target="_blank" rel="noopener">Till kursen <span aria-hidden="true">→</span></a>
+            </div>
+          </div>
+        </div>
+        <img class="pekar-figur" src="../assets/img/pekar.webp" alt="" loading="lazy" aria-hidden="true">
+      </div>
+      <p class="direktlank">Ingen tid för biljettlekar? <a href="https://kurs.jonasvonessen.se" target="_blank" rel="noopener">Gå direkt till kursen →</a></p>
+    </div>
+  </section>
+
+  <!-- ==================== KONTORET (KONTAKT) ==================== -->
+  <section class="dept" id="kontakt" aria-labelledby="kontakt-rubrik">
+    <div class="nod">
+      <svg width="60" height="60" viewBox="0 0 60 60" aria-hidden="true">
+        <rect x="8" y="24" width="30" height="12" rx="6" fill="#c79a35"/>
+        <g class="ratt">
+          <circle cx="38" cy="30" r="13" fill="none" stroke="#f2c14e" stroke-width="4"/>
+          <path d="M38 17v26M25 30h26M29 21l18 18M47 21L29 39" stroke="#f2c14e" stroke-width="3"/>
+        </g>
+        <circle cx="38" cy="30" r="4" fill="#f7d780" stroke="#8a5f18"/>
+      </svg>
+    </div>
+    <div class="inre">
+      <header class="dept-huvud reveal">
+        <span class="plakat">Avdelning 05 · Kontoret</span>
+        <h2 id="kontakt-rubrik">Skriv en rad till <span class="guldig">fabrikören</span></h2>
+        <div class="delare"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 0l1.8 5.2L14 7l-5.2 1.8L7 14 5.2 8.8 0 7l5.2-1.8Z" fill="currentColor"/></svg></div>
+      </header>
+      <div class="kontor-grid">
+        <div class="kontor-vanster reveal">
+          <h3>Boka ett oförglömligt event</h3>
+          <p>Vill du boka en föreläsning? Skriv en rad! Fabriken svarar snabbare än du hinner glömma vad du frågade om. Föreläsningar, workshops, TV och annat minnesvärt – allt går genom kontoret.</p>
+          <ul class="some" aria-label="Sociala medier">
+            <li><a href="https://www.instagram.com/jonasvonessen/" target="_blank" rel="noopener" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.2" fill="currentColor" stroke="none"/></svg>
+            </a></li>
+            <li><a href="https://www.tiktok.com/@jonasvonessen" target="_blank" rel="noopener" aria-label="TikTok">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.6 3c.4 2.1 1.8 3.6 3.9 3.9v3c-1.5 0-2.8-.5-3.9-1.3v6.4c0 3.4-2.5 6-5.8 6-3.2 0-5.8-2.6-5.8-5.9 0-3.2 2.5-5.9 5.7-5.9.3 0 .7 0 1 .1v3.1c-.3-.1-.7-.2-1-.2-1.5 0-2.7 1.3-2.7 2.9s1.2 2.9 2.8 2.9c1.6 0 2.8-1.3 2.8-2.9V3h3Z"/></svg>
+            </a></li>
+            <li><a href="https://www.youtube.com/@BlueberryClubSparven" target="_blank" rel="noopener" aria-label="YouTube">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.6 7.2a2.6 2.6 0 0 0-1.8-1.9C18.2 5 12 5 12 5s-6.2 0-7.8.3A2.6 2.6 0 0 0 2.4 7.2 27 27 0 0 0 2 12c0 1.6.1 3.2.4 4.8a2.6 2.6 0 0 0 1.8 1.9c1.6.3 7.8.3 7.8.3s6.2 0 7.8-.3a2.6 2.6 0 0 0 1.8-1.9c.3-1.6.4-3.2.4-4.8s-.1-3.2-.4-4.8ZM10 15.2V8.8L15.5 12 10 15.2Z"/></svg>
+            </a></li>
+          </ul>
+          <p class="some-namn">@jonasvonessen · YouTube</p>
+        </div>
+
+        <div class="brev reveal" id="brev">
+          <div class="stampel" aria-hidden="true"><span>Porto<br>betalt av<br>hjärnan</span></div>
+          <div class="brevhuvud">
+            <div class="mm2" aria-hidden="true">M</div>
+            <b>Minnesfabriken v. Essen</b>
+            <small>Grundad 2013 · Göteborg · Alla brev besvaras &amp; memoreras</small>
+          </div>
+          <!-- FORMSPREE: byt action till https://formspree.io/f/DITT_FORMSPREE_ID och ta bort JS-fejken nedan -->
+          <form id="kontaktForm" novalidate>
+            <div class="falt">
+              <label for="f-namn">Namn</label>
+              <input id="f-namn" name="namn" type="text" autocomplete="name" required>
+            </div>
+            <div class="falt">
+              <label for="f-epost">E-post</label>
+              <input id="f-epost" name="epost" type="email" autocomplete="email" required>
+            </div>
+            <div class="falt">
+              <label for="f-medd">Meddelande</label>
+              <textarea id="f-medd" name="meddelande" required></textarea>
+            </div>
+            <button class="knapp knapp-guld" type="submit">Skicka <span aria-hidden="true">✉</span></button>
+            <p class="ps">P.S. Jag kommer ihåg alla som hör av sig. Bokstavligen.</p>
+          </form>
+          <div class="tack" role="status">
+            <p class="stort">Tack! Brevet är mottaget i andanom.</p>
+            <p>Formuläret kopplas snart – mejla mig så länge, så svarar jag med hela ditt namn rätt stavat.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ==================== FOOTER ==================== -->
+<footer>
+  <div class="inre">
+    <p class="farval" id="farval">Fabriken glömmer aldrig ett besök.</p>
+    <nav class="fot-lankar" aria-label="Länkar">
+      <a href="https://jonasgeografi.se" target="_blank" rel="noopener">jonasgeografi.se</a>
+      <a href="https://hpakuten.se" target="_blank" rel="noopener">hpakuten.se</a>
+      <a href="https://www.gångertabellen.se" target="_blank" rel="noopener">gångertabellen.se</a>
+      <a href="https://kurs.jonasvonessen.se" target="_blank" rel="noopener">Skaffa ett superminne (kurs)</a>
+    </nav>
+    <p class="fot-meta">© 2026 Jonas von Essen · <span class="guld">Minnesfabriken</span> — inga minnen gick förlorade när denna sida byggdes<br>
+    Foto: Stefan Edetoft (fabrikören) · Jessica Ahrling (sifferväggen)</p>
+  </div>
+</footer>
+
+<script src="../assets/globe.js"></script>
+<script>
+(function(){
+  'use strict';
+  var d = document.documentElement;
+  var RM = false;
+  try { RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch(e){}
+
+  /* ---------- RIDÅN ---------- */
+  var rida = document.getElementById('rida');
+  var showLoader = d.classList.contains('show-loader') && !d.classList.contains('revealed');
+  try { sessionStorage.setItem('mf22','1'); } catch(e){}
+
+  function oppnaRidan(){
+    if (d.classList.contains('revealed')) return;
+    d.classList.add('revealed');
+    rida.classList.add('oppen');
+    window.setTimeout(function(){
+      rida.style.display = 'none';
+    }, 1100);
+    document.removeEventListener('keydown', hoppaOver);
+    rida.removeEventListener('click', hoppaOver);
+  }
+  function hoppaOver(){ oppnaRidan(); }
+
+  if (showLoader && rida) {
+    var rader = [
+      '> smörjer minnesmaskineriet ...... OK',
+      '> polerar mässingsrören .......... blänker',
+      '> π-karameller på lager .......... 100 000 st',
+      '> kalibrerar ordvitsventilen ..... farligt öppen',
+      '> insläpp: nu'
+    ];
+    var ut = document.getElementById('bootrad');
+    var buf = '';
+    var ri = 0, ci = 0;
+    function typa(){
+      if (d.classList.contains('revealed')) return;
+      if (ri >= rader.length) { window.setTimeout(oppnaRidan, 320); return; }
+      var rad = rader[ri];
+      ci++;
+      if (ci >= rad.length) {
+        buf += rad + '\n';
+        ri++; ci = 0;
+        rendera();
+        window.setTimeout(typa, 90);
+      } else {
+        rendera(rad.slice(0, ci));
+        window.setTimeout(typa, 9);
+      }
+    }
+    function rendera(partiell){
+      ut.textContent = buf + (partiell || '');
+      var c = document.createElement('span');
+      c.className = 'cursor';
+      ut.appendChild(c);
+    }
+    rida.addEventListener('click', hoppaOver);
+    document.addEventListener('keydown', hoppaOver);
+    window.setTimeout(typa, 260);
+    window.setTimeout(oppnaRidan, 3400); // säkerhetsnät
+  } else if (rida) {
+    rida.style.display = 'none';
+  }
+
+  /* ---------- Reveal on scroll ---------- */
+  var revealer = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window && !RM) {
+    var io = new IntersectionObserver(function(poster){
+      poster.forEach(function(p){
+        if (p.isIntersecting) { p.target.classList.add('in'); io.unobserve(p.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    revealer.forEach(function(el){ io.observe(el); });
+  } else {
+    revealer.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  /* ---------- Aktiv sektion i nav ---------- */
+  var navLankar = document.querySelectorAll('.topp nav a[data-mal]');
+  var sektioner = [];
+  navLankar.forEach(function(a){
+    var s = document.getElementById(a.getAttribute('data-mal'));
+    if (s) sektioner.push({ el: s, lank: a });
+  });
+  if ('IntersectionObserver' in window) {
+    var navIo = new IntersectionObserver(function(poster){
+      poster.forEach(function(p){
+        var traff = sektioner.find(function(s){ return s.el === p.target; });
+        if (!traff) return;
+        if (p.isIntersecting) {
+          navLankar.forEach(function(a){ a.classList.remove('aktiv'); });
+          traff.lank.classList.add('aktiv');
+        }
+      });
+    }, { rootMargin: '-38% 0px -52% 0px' });
+    sektioner.forEach(function(s){ navIo.observe(s.el); });
+  }
+
+  /* ---------- Jordglobsmaskinen (lazy) ---------- */
+  var globCanvas = document.getElementById('glob');
+  var globStartad = false;
+  function startaGlob(){
+    if (globStartad || !globCanvas || typeof JonasGlobe === 'undefined') return;
+    globStartad = true;
+    JonasGlobe.create(globCanvas, '../assets/globe-data.json', {
+      mode: 'both',
+      dotColor: '#7fe3b0',
+      lineColor: 'rgba(127,227,176,.5)',
+      graticule: 'rgba(242,193,78,.10)',
+      rim: 'rgba(242,193,78,.30)',
+      sphereFill: 'rgba(24,11,46,.9)',
+      markerColor: '#f2c14e'
+    });
+  }
+  if ('IntersectionObserver' in window && globCanvas) {
+    var gIo = new IntersectionObserver(function(poster){
+      poster.forEach(function(p){
+        if (p.isIntersecting) { startaGlob(); gIo.disconnect(); }
+      });
+    }, { rootMargin: '300px' });
+    gIo.observe(globCanvas);
+  } else {
+    startaGlob();
+  }
+
+  /* ---------- DEN GYLLENE BILJETTEN ---------- */
+  var wrap = document.getElementById('biljettWrap');
+  var biljett = document.getElementById('biljett');
+  var fram = document.getElementById('biljettFram');
+  var tillbaka = document.getElementById('vandTillbaka');
+  var namnFalt = document.getElementById('biljettNamn');
+  var kursKnapp = document.getElementById('kursKnapp');
+  var farval = document.getElementById('farval');
+  var flippad = false;
+  var tiltX = 0, tiltY = 0, rafId = 0;
+
+  function ritaBiljett(){
+    rafId = 0;
+    var flip = flippad ? 180 : 0;
+    biljett.style.transform = 'rotateX(' + tiltX.toFixed(2) + 'deg) rotateY(' + (flip + tiltY).toFixed(2) + 'deg)';
+  }
+  function beGomRita(){ if (!rafId) rafId = window.requestAnimationFrame(ritaBiljett); }
+
+  if (biljett && fram) {
+    if (!RM) {
+      wrap.addEventListener('pointermove', function(e){
+        if (e.pointerType && e.pointerType !== 'mouse') return;
+        var r = wrap.getBoundingClientRect();
+        var nx = (e.clientX - r.left) / r.width - 0.5;
+        var ny = (e.clientY - r.top) / r.height - 0.5;
+        tiltY = nx * 14;
+        tiltX = -ny * 10;
+        beGomRita();
+      });
+      wrap.addEventListener('pointerleave', function(){
+        tiltX = 0; tiltY = 0; beGomRita();
+      });
+    }
+    function vand(till){
+      flippad = till;
+      fram.setAttribute('aria-expanded', String(flippad));
+      biljett.classList.toggle('flipped', flippad);
+      tiltX = 0; tiltY = 0;
+      ritaBiljett();
+      window.setTimeout(function(){
+        if (flippad && namnFalt) namnFalt.focus({ preventScroll: true });
+        if (!flippad) fram.focus({ preventScroll: true });
+      }, RM ? 30 : 520);
+    }
+    fram.addEventListener('click', function(){ vand(true); });
+    tillbaka.addEventListener('click', function(){ vand(false); });
+  }
+
+  if (namnFalt) {
+    namnFalt.addEventListener('input', function(){
+      var namn = namnFalt.value.trim();
+      var knappText = namn ? ('Till kursen, ' + namn + ' ') : 'Till kursen ';
+      kursKnapp.textContent = knappText;
+      var pil = document.createElement('span');
+      pil.setAttribute('aria-hidden','true');
+      pil.textContent = '→';
+      kursKnapp.appendChild(pil);
+      farval.textContent = namn
+        ? ('Hej då, ' + namn + '. Jag glömmer dig inte.')
+        : 'Fabriken glömmer aldrig ett besök.';
+    });
+  }
+
+  /* ---------- Kontaktformuläret ---------- */
+  var form = document.getElementById('kontaktForm');
+  var brev = document.getElementById('brev');
+  if (form) {
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      brev.classList.add('skickat');
+    });
+  }
+})();
+</script>
+</body>
+</html>
