@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>jonasvonessen.se — designförslag</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="assets/fonts.css">
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    min-height: 100vh; display: grid; place-items: center;
+    background: linear-gradient(180deg, #05080f, #0b1026);
+    color: #e8ecf4; font-family: 'Space Grotesk', system-ui, sans-serif;
+    padding: 40px 20px;
+  }
+  main { max-width: 720px; width: 100%; }
+  .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+  .prompt { color: #39d98a; font-size: .95rem; margin-bottom: 14px; }
+  h1 { font-size: clamp(1.8rem, 5vw, 2.6rem); margin-bottom: 8px; }
+  p.lead { color: #9aa7bd; margin-bottom: 36px; }
+  a.card {
+    display: block; text-decoration: none; color: inherit;
+    border: 1px solid rgba(120,160,255,.18); border-radius: 14px;
+    padding: 22px 24px; margin-bottom: 16px;
+    background: rgba(255,255,255,.02);
+    transition: border-color .2s, transform .2s, background .2s;
+  }
+  a.card:hover, a.card:focus-visible { border-color: #39d98a; transform: translateY(-2px); background: rgba(57,217,138,.05); }
+  a.card:focus-visible { outline: 2px solid #39d98a; outline-offset: 2px; }
+  .card .nr { color: #ffd166; font-size: .8rem; letter-spacing: .12em; }
+  .card h2 { font-size: 1.25rem; margin: 6px 0 4px; }
+  .card p { color: #9aa7bd; font-size: .95rem; }
+  footer { margin-top: 32px; color: #5a6678; font-size: .85rem; }
+</style>
+</head>
+<body>
+<main>
+  <div class="mono prompt">jonas@hemsida:~$ visa designförslag --alla</div>
+  <h1>Ny hemsida — tre designförslag</h1>
+  <p class="lead">Samma innehåll, tre olika karaktärer. Klicka och jämför!</p>
+
+  <a class="card" href="forslag/1-terminal.html">
+    <div class="mono nr">FÖRSLAG 01</div>
+    <h2>Superminne OS</h2>
+    <p>Mörk terminal — fosforgrönt, amber och boot-sekvens. Högteknologiskt och exklusivt.</p>
+  </a>
+  <a class="card" href="forslag/2-observatoriet.html">
+    <div class="mono nr">FÖRSLAG 02</div>
+    <h2>Observatoriet</h2>
+    <p>Elegant natt — midnattsindigo, stjärnfält, guld och serif. Intelligent och tidlöst.</p>
+  </a>
+  <a class="card" href="forslag/3-lekfull.html">
+    <div class="mono nr">FÖRSLAG 03</div>
+    <h2>Snille &amp; sprall</h2>
+    <p>Ljust och färgstarkt — candy-färger, sticker-meriter och poserna i huvudrollen.</p>
+  </a>
+
+  <footer class="mono">© 2026 Jonas von Essen · arbetsmaterial</footer>
+</main>
+</body>
+</html>
