@@ -537,7 +537,6 @@ html.js .biljett-wrap.flyter{animation:svavar 6s ease-in-out infinite alternate}
   position:relative;width:100%;height:300px;
   transform-style:preserve-3d;
   transition:transform .9s cubic-bezier(.4,.1,.2,1);
-  filter:drop-shadow(0 30px 40px rgba(0,0,0,.55)) drop-shadow(0 0 34px rgba(242,193,78,.22));
 }
 @media (prefers-reduced-motion: reduce){.biljett{transition:none}}
 .sida{
@@ -550,7 +549,8 @@ html.js .biljett-wrap.flyter{animation:svavar 6s ease-in-out infinite alternate}
   background:
     repeating-linear-gradient(135deg, rgba(122,76,14,.09) 0 2px, transparent 2px 9px),
     linear-gradient(115deg,#8a5a12 0%, var(--guld) 22%, var(--guld-skimmer) 43%, var(--guld) 58%, #b5822a 82%, var(--guld) 100%);
-  box-shadow:inset 0 0 0 3px rgba(90,58,10,.5), inset 0 0 0 6px rgba(255,243,201,.5), inset 0 0 60px rgba(122,76,14,.25);
+  box-shadow:inset 0 0 0 3px rgba(90,58,10,.5), inset 0 0 0 6px rgba(255,243,201,.5), inset 0 0 60px rgba(122,76,14,.25),
+    0 30px 50px rgba(0,0,0,.5), 0 0 42px rgba(242,193,78,.25);
   overflow:hidden;
 }
 .sida.fram::before{ /* perforerad stubb */
@@ -589,7 +589,8 @@ html.js .biljett-wrap.flyter{animation:svavar 6s ease-in-out infinite alternate}
   background:
     repeating-linear-gradient(0deg, rgba(122,76,14,.05) 0 1px, transparent 1px 26px),
     linear-gradient(160deg,#fbf3de,var(--papper) 55%,#eaddbe);
-  box-shadow:inset 0 0 0 3px rgba(90,58,10,.4), inset 0 0 0 6px rgba(242,193,78,.55), inset 0 0 50px rgba(122,76,14,.14);
+  box-shadow:inset 0 0 0 3px rgba(90,58,10,.4), inset 0 0 0 6px rgba(242,193,78,.55), inset 0 0 50px rgba(122,76,14,.14),
+    0 30px 50px rgba(0,0,0,.5), 0 0 42px rgba(242,193,78,.22);
   color:var(--papper-morg);
   visibility:hidden;transition:visibility 0s .4s;
 }
@@ -641,6 +642,10 @@ html.js .biljett-wrap.flyter{animation:svavar 6s ease-in-out infinite alternate}
 @media (prefers-reduced-motion: reduce){.some a{transition:none}.some a:hover{transform:none}}
 .some a svg{width:20px;height:20px}
 .some-namn{font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;color:var(--text-dim);text-transform:uppercase}
+.kontor-foto{width:min(270px,66vw);aspect-ratio:3/4;margin:2.6rem 0 1rem}
+.kontor-foto .pass{height:100%}
+.kontor-foto img{object-position:50% 30%}
+@media (max-width:900px){.kontor-foto{display:none}}
 .brev{
   position:relative;background:linear-gradient(168deg,#fbf3de,var(--papper) 60%,#efe2c4);
   color:var(--papper-morg);border-radius:6px 18px 6px 18px;
@@ -1098,6 +1103,10 @@ footer{
             </a></li>
           </ul>
           <p class="some-namn">@jonasvonessen · YouTube</p>
+          <figure class="ram-oval kontor-foto">
+            <span class="pass"><img src="../assets/img/foto-knut-rod-md.webp" alt="Jonas tittar storögt på ett snöre knutet i rosett runt sitt pekfinger" loading="lazy"></span>
+            <figcaption>Kom-ihåg-avdelningen · Foto: Stefan Edetoft</figcaption>
+          </figure>
         </div>
 
         <div class="brev reveal" id="brev">

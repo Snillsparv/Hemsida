@@ -52,7 +52,7 @@ a{color:inherit}
 .hoppa:focus{top:12px}
 
 /* ---------- toppnav (på träbordet, ovanför brevet) ---------- */
-.topp{position:sticky;top:0;z-index:60;background:rgba(26,16,9,.93);border-bottom:1px solid rgba(240,230,210,.14)}
+.topp{position:sticky;top:0;z-index:60;background:#1c110a;border-bottom:1px solid rgba(240,230,210,.14)}
 .topp nav{max-width:980px;margin:0 auto;display:flex;align-items:center;gap:1rem;padding:.45rem 1rem}
 .brand{font-size:1.4rem;font-weight:700;color:var(--gradde);text-decoration:none;letter-spacing:.01em;flex:1;white-space:nowrap}
 .lankar{display:flex;gap:clamp(.7rem,2.5vw,1.6rem);flex-wrap:wrap;justify-content:flex-end}
@@ -290,7 +290,7 @@ form{margin-top:1.2em}
 .kuvert{position:relative;width:min(340px,78vw);aspect-ratio:340/224;perspective:800px;
   filter:drop-shadow(0 22px 34px rgba(0,0,0,.55))}
 .k-bak{position:absolute;inset:0;background:linear-gradient(180deg,#f3ecda,#eadfc4);border-radius:5px;z-index:1}
-.k-brev{position:absolute;left:50%;top:7%;width:88%;height:86%;z-index:2;transform:translateX(-50%);
+.k-brev{position:absolute;left:50%;top:13%;width:84%;height:81%;z-index:2;transform:translateX(-50%);
   background:
     linear-gradient(180deg, transparent 26%, rgba(35,42,77,0) 26%),
     repeating-linear-gradient(to bottom, transparent 0 22px, rgba(35,42,77,.32) 22px 24px, transparent 24px 30px),
@@ -299,7 +299,7 @@ form{margin-top:1.2em}
   animation:brevupp .85s 1.4s cubic-bezier(.22,.75,.25,1) both}
 .k-brev::before{content:"Hej!";position:absolute;left:10%;top:2%;
   font-family:'Caveat',cursive;font-weight:700;font-size:1.5rem;color:var(--black)}
-@keyframes brevupp{from{transform:translateX(-50%) translateY(0)}to{transform:translateX(-50%) translateY(-46%)}}
+@keyframes brevupp{from{transform:translateX(-50%) translateY(0)}to{transform:translateX(-50%) translateY(-54%)}}
 .k-ficka{position:absolute;inset:0;z-index:3;border-radius:5px;
   background:linear-gradient(180deg,#f0e7d0,#e6d9ba);
   clip-path:polygon(0 12%, 50% 56%, 100% 12%, 100% 100%, 0 100%)}
