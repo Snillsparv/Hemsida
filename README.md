@@ -13,6 +13,16 @@ men helt olika karaktär:
 | `forslag/1-terminal.html` | **Superminne OS** | Mörk terminal/utvecklarverktyg — fosforgrönt, amber, boot-sekvens |
 | `forslag/2-observatoriet.html` | **Observatoriet** | Elegant natt — midnattsindigo, stjärnfält, guld, serif |
 | `forslag/3-lekfull.html` | **Snille & sprall** | Ljus och färgstark — candy-färger, sticker-meriter, poserna i huvudrollen |
+| `forslag/4-minnespalatset.html` | **Minnespalatset** | Cyanotypi-arkitektritning — klickbar planritning, måttsatta meriter |
+| `forslag/5-pi.html` | **π-katedralen** | Cinematiskt sifferregn — sök ditt födelsedatum i 100 000 decimaler |
+| `forslag/6-forstasidan.html` | **Förstasidan** | Tidningen "von Essens Allehanda" — notiser, annonser, korsord |
+| `forslag/7-crt.html` | **CRT-arkivet** | Amber-terminal — ASCII-porträtt i realtid, skrivbar kommandorad |
+| `forslag/8-varieteaffischen.html` | **Varietéaffischen** | Vintage cirkusposter — marquee-lampor, riv-en-biljett |
+| `forslag/9-synapsen.html` | **Synapsen** | Elektrisk hjärna — interaktivt neuronnät med meritnoder |
+| `forslag/10-bento.html` | **Bento-studion** | Premium bento-grid — 3D-tilt, levande π-bricka |
+| `forslag/11-gameshow.html` | **Gameshow** | TV-studio — jackpot-odometer, A/B/C/D-fråga med konfetti |
+| `forslag/12-skissboken.html` | **Skissboken** | Anteckningsbok — handskrivna marginalkommentarer, tejpade foton |
+| `forslag/13-monoliten.html` | **Monoliten** | Brutalist Swiss — gigantisk typografi, IKB-blå accent |
 
 Alla tre öppnas med en terminal-laddskärm (klickbar för att hoppa över, visas en gång
 per session, respekterar `prefers-reduced-motion`).
