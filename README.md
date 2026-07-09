@@ -23,6 +23,11 @@ men helt olika karaktär:
 | `forslag/11-gameshow.html` | **Gameshow** | TV-studio — jackpot-odometer, A/B/C/D-fråga med konfetti |
 | `forslag/12-skissboken.html` | **Skissboken** | Anteckningsbok — handskrivna marginalkommentarer, tejpade foton |
 | `forslag/13-monoliten.html` | **Monoliten** | Brutalist Swiss — gigantisk typografi, IKB-blå accent |
+| `forslag/14-aurora.html` | **Aurora** | Mörk glassmorphism — mesh-gradienter, glaskort med ljusreflex |
+| `forslag/15-resan.html` | **Resan** | Scrollytelling — karriären som filmkapitel med pinnad VM-scen |
+| `forslag/16-stralkastaren.html` | **Strålkastaren** | Mörk Awwwards-lyx — ljuskägla avslöjar gömda π-decimaler |
+| `forslag/17-mjukstudion.html` | **Mjukstudion** | Soft 3D/clay — squishande kuddar, spring-animationer |
+| `forslag/18-limelight.html` | **Limelight** | Off-svart + lime — sticky-stackad meritkortlek |
 
 Alla tre öppnas med en terminal-laddskärm (klickbar för att hoppa över, visas en gång
 per session, respekterar `prefers-reduced-motion`).
