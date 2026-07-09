@@ -670,18 +670,26 @@ form{margin-top:1.2em}
     if(!pennRaf)pennRaf=requestAnimationFrame(pennTick);
   }
 
-  /* ---------- avslöja ett stycke ---------- */
+  /* ---------- avslöja ett stycke (kö: styckena skrivs i tur och ordning) ---------- */
+  var koT=0;
   function skrivEl(el){
     var ws=el.__ord||[];
     var steg=Math.max(9,Math.min(26,520/(ws.length||1)));
-    ws.forEach(function(w,i){w.style.transitionDelay=Math.round(i*steg)+'ms';});
-    el.classList.add('skriven');
-    pennaFolj(ws,steg);
-    var cirklar=$$('.inringad',el);
-    if(cirklar.length){
-      setTimeout(function(){cirklar.forEach(function(c){c.classList.add('rita');});},
-        Math.round(ws.length*steg)+120);
+    var dur=ws.length*steg;
+    var now=performance.now();
+    var vanta=Math.max(0,Math.min(koT-now,900));
+    koT=Math.max(now,koT)+Math.min(dur*.55,420);
+    function kor(){
+      ws.forEach(function(w,i){w.style.transitionDelay=Math.round(i*steg)+'ms';});
+      el.classList.add('skriven');
+      pennaFolj(ws,steg);
+      var cirklar=$$('.inringad',el);
+      if(cirklar.length){
+        setTimeout(function(){cirklar.forEach(function(c){c.classList.add('rita');});},
+          Math.round(dur)+120);
+      }
     }
+    if(vanta<20)kor();else setTimeout(kor,vanta);
   }
   function visaAllt(){
     skrivEls.forEach(function(el){

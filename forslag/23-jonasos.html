@@ -345,7 +345,7 @@ html:not(.js) #os{display:none}
 
 /* projekt */
 .folder-icons{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 10px}
-.folder-icons .icon{width:104px}
+.folder-icons .icon{width:114px}
 .folder-hint{font-size:.64rem;color:var(--ink-soft);letter-spacing:.03em;border-top:1px dashed rgba(43,33,80,.2);padding-top:10px;margin-top:8px}
 .globe-card{
   border-radius:16px;padding:14px;margin-bottom:14px;
@@ -436,7 +436,7 @@ html:not(.js) .app-sec{
 html:not(.js) .folder-icons{display:none}
 html:not(.js) #glob{display:none}
 html.js .globe-fallback{display:none}
-.globe-fallback{border-radius:12px;display:block;margin:0 auto}
+.globe-fallback{border-radius:12px;display:block;margin:0 auto;width:100%}
 #site-footer{
   max-width:800px;margin:0 auto;padding:0 20px 50px;
   font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--ink-soft);line-height:1.9;
@@ -447,21 +447,23 @@ html.js .globe-fallback{display:none}
   #menubar{height:40px;flex-basis:40px;gap:8px}
   .mb-title{display:none}
   #icons{
-    inset:12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(86px,1fr));
-    gap:4px 2px;align-content:start;
+    inset:12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(106px,1fr));
+    gap:6px 2px;align-content:start;
   }
   .icon{width:auto}
+  .desk-pi{display:none}
   .window:not(.dlg){
-    position:fixed !important;left:0 !important;top:40px !important;right:0;bottom:0;
+    position:fixed !important;left:0 !important;top:40px !important;right:0;bottom:48px;
     width:auto !important;max-width:none;max-height:none;border-radius:0;border:0;
-    transform:none !important;z-index:1600 !important;
+    transform:none !important;
   }
   .window:not(.dlg) .titlebar{cursor:default;border-radius:0}
   .tb-back{display:grid}
+  .window.dlg .tb-back{display:none}
   .tb-min{display:none}
   .window.dlg{
     position:fixed !important;left:4vw !important;right:4vw;top:22vh !important;
-    width:auto !important;min-width:0;z-index:2500 !important;
+    width:auto !important;min-width:0;z-index:2500 !important;max-height:70vh;
   }
   .hero{grid-template-columns:1fr;gap:8px}
   .hero-img{width:130px;justify-self:end;margin-top:-8px}
@@ -470,7 +472,7 @@ html.js .globe-fallback{display:none}
   .merit-figs{grid-template-columns:1fr}
   .kontakt-top{grid-template-columns:1fr 78px}
   .kontakt-top img{width:78px}
-  #assistant{bottom:14px;right:10px}
+  #assistant{bottom:58px;right:10px}
   .as-jonas{width:70px}
   .as-bubble{font-size:1.2rem;max-width:200px;margin-bottom:34px}
   .tb-copy{display:none}
@@ -930,6 +932,7 @@ html.js .globe-fallback{display:none}
     }else{
       win.hidden=false;
       win.classList.remove('closing');
+      if(!reg.dialog) addTask(id);
       var task=$('task-'+id); if(task) task.classList.remove('min');
     }
     win._opener=opener||null;

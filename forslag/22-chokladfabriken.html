@@ -127,7 +127,7 @@ html.show-loader:not(.revealed) body{overflow:hidden}
   transition:opacity .45s ease, transform .45s ease;
 }
 .rida.oppen .sign{opacity:0;transform:translate(-50%,-58%)}
-.rida .sign h2{font-family:var(--serif);color:var(--guld-ljus);font-size:1.05rem;letter-spacing:.28em;text-transform:uppercase;text-align:center;margin-bottom:.9rem;font-weight:600}
+.rida .sign .signtitel{font-family:var(--serif);color:var(--guld-ljus);font-size:1.05rem;letter-spacing:.28em;text-transform:uppercase;text-align:center;margin-bottom:.9rem;font-weight:600}
 .rida .sign pre{
   font-family:var(--mono);font-size:clamp(.68rem, 2.6vw, .85rem);line-height:1.75;
   color:var(--guld-ljus);white-space:pre-wrap;min-height:9.2em;
@@ -162,8 +162,12 @@ html.show-loader:not(.revealed) body{overflow:hidden}
 .topp nav a:hover{color:var(--guld-skimmer)}
 .topp nav a.aktiv{color:var(--guld-ljus);border-color:rgba(242,193,78,.45);background:rgba(242,193,78,.08)}
 @media (max-width:760px){
+  .topp{position:static}
+  .topp .rad{flex-wrap:wrap;justify-content:center;padding-bottom:.55rem}
   .marke b span{display:none}
-  .topp nav a{padding:.45rem .45rem;font-size:.66rem}
+  .topp nav{margin-left:0;width:100%;justify-content:center;gap:.1rem .2rem}
+  .topp nav a{padding:.38rem .5rem;font-size:.62rem;letter-spacing:.08em}
+  html{scroll-padding-top:12px}
 }
 
 /* ============ RÖRSYSTEMET ============ */
@@ -546,6 +550,7 @@ html.js .biljett-wrap.flyter{animation:svavar 6s ease-in-out infinite alternate}
 }
 .sida.fram{
   cursor:pointer;border:none;width:100%;font:inherit;text-align:center;
+  padding-right:104px;
   background:
     repeating-linear-gradient(135deg, rgba(122,76,14,.09) 0 2px, transparent 2px 9px),
     linear-gradient(115deg,#8a5a12 0%, var(--guld) 22%, var(--guld-skimmer) 43%, var(--guld) 58%, #b5822a 82%, var(--guld) 100%);
@@ -623,6 +628,7 @@ html.js .biljett-wrap.flyter{animation:svavar 6s ease-in-out infinite alternate}
 @media (max-width:640px){
   .biljett{height:340px}
   .sida{padding:1.1rem 1rem}
+  .sida.fram{padding-right:66px;padding-left:14px}
   .sida.fram::before{right:52px}
   .sida.fram .stubb{width:52px}
 }
@@ -714,7 +720,7 @@ footer{
   <div class="halva hoger"></div>
   <div class="kappa"></div>
   <div class="sign">
-    <h2>Minnesfabriken</h2>
+    <div class="signtitel">Minnesfabriken</div>
     <pre id="bootrad"><span class="cursor"></span></pre>
   </div>
   <p class="hoppa">tryck var som helst för insläpp direkt</p>
@@ -780,7 +786,7 @@ footer{
     <div class="inre">
       <header class="dept-huvud reveal">
         <span class="plakat">Avdelning 01 · Provsmakningen</span>
-        <h2>Smaka på <span class="guldig">fabrikören</span> själv</h2>
+        <h2 id="om-rubrik">Smaka på <span class="guldig">fabrikören</span> själv</h2>
         <div class="delare"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 0l1.8 5.2L14 7l-5.2 1.8L7 14 5.2 8.8 0 7l5.2-1.8Z" fill="currentColor"/></svg></div>
       </header>
       <div class="om-grid">
@@ -817,7 +823,7 @@ footer{
     <div class="inre">
       <header class="dept-huvud reveal">
         <span class="plakat">Avdelning 02 · Underverkshallen</span>
-        <h2>Montrar med <span class="guldig">äkta underverk</span></h2>
+        <h2 id="meriter-rubrik">Montrar med <span class="guldig">äkta underverk</span></h2>
         <p class="under">Allt i hallen är riktigt, polerat och putsat för hand. Rör gärna vid glaskuporna – de kommer ihåg dina fingeravtryck.</p>
         <div class="delare"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 0l1.8 5.2L14 7l-5.2 1.8L7 14 5.2 8.8 0 7l5.2-1.8Z" fill="currentColor"/></svg></div>
       </header>
@@ -921,7 +927,7 @@ footer{
     <div class="inre">
       <header class="dept-huvud reveal">
         <span class="plakat">Avdelning 03 · Maskinhallen</span>
-        <h2>Tre maskiner, <span class="guldig">noll kronor</span></h2>
+        <h2 id="projekt-rubrik">Tre maskiner, <span class="guldig">noll kronor</span></h2>
         <p class="under">Jag bygger dem för att det är kul – och för att bra inlärning inte ska kosta. Maskinerna går dygnet runt och behöver aldrig smörjas.</p>
         <div class="delare"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 0l1.8 5.2L14 7l-5.2 1.8L7 14 5.2 8.8 0 7l5.2-1.8Z" fill="currentColor"/></svg></div>
       </header>
@@ -1063,7 +1069,7 @@ footer{
             </div>
           </div>
         </div>
-        <img class="pekar-figur" src="../assets/img/pekar.webp" alt="" loading="lazy" aria-hidden="true">
+        <img class="pekar-figur" src="../assets/img/pekar.webp" alt="" aria-hidden="true">
       </div>
       <p class="direktlank">Ingen tid för biljettlekar? <a href="https://kurs.jonasvonessen.se" target="_blank" rel="noopener">Gå direkt till kursen →</a></p>
     </div>
@@ -1104,7 +1110,7 @@ footer{
           </ul>
           <p class="some-namn">@jonasvonessen · YouTube</p>
           <figure class="ram-oval kontor-foto">
-            <span class="pass"><img src="../assets/img/foto-knut-rod-md.webp" alt="Jonas tittar storögt på ett snöre knutet i rosett runt sitt pekfinger" loading="lazy"></span>
+            <span class="pass"><img src="../assets/img/foto-knut-rod-md.webp" alt="Jonas tittar storögt på ett snöre knutet i rosett runt sitt pekfinger"></span>
             <figcaption>Kom-ihåg-avdelningen · Foto: Stefan Edetoft</figcaption>
           </figure>
         </div>
