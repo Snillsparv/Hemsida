@@ -28,6 +28,11 @@ men helt olika karaktär:
 | `forslag/16-stralkastaren.html` | **Strålkastaren** | Mörk Awwwards-lyx — ljuskägla avslöjar gömda π-decimaler |
 | `forslag/17-mjukstudion.html` | **Mjukstudion** | Soft 3D/clay — squishande kuddar, spring-animationer |
 | `forslag/18-limelight.html` | **Limelight** | Off-svart + lime — sticky-stackad meritkortlek |
+| `forslag/19-diktsamlingen.html` | **Diktsamlingen** | Poetisk minimalism — sidan är en dikt med marginalfotnoter |
+| `forslag/20-tystnaden.html` | **Tystnaden** | Mörk meditation — teleprompter-ljus, en tanke i taget |
+| `forslag/21-brevet.html` | **Brevet** | Handskrivet brev som skriver sig självt, kuvert + sigill |
+| `forslag/22-chokladfabriken.html` | **Minnesfabriken** | Willy Wonka — sammetsridå, glaskupor, gyllene biljett |
+| `forslag/23-jonasos.html` | **JonasOS 26.0** | Hemsidan som operativsystem — ikoner, dragbara fönster |
 
 Alla tre öppnas med en terminal-laddskärm (klickbar för att hoppa över, visas en gång
 per session, respekterar `prefers-reduced-motion`).
