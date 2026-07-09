@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#0b1026">
 <meta property="og:title" content="Jonas von Essen – Tvåfaldig världsmästare i minne">
 <meta property="og:description" content="100 000 decimaler av π. Alla världens länder. Och ditt namn, om vi har setts. Föreläsningar, minneskurs och tre gratis läroappar.">
-<meta property="og:image" content="../assets/img/jonas_vm-md.webp">
+<meta property="og:image" content="https://www.jonasvonessen.se/assets/img/jonas_vm-md.webp">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b1026'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-size='38' fill='%23d4af6a' text-anchor='middle'%3E%CF%80%3C/text%3E%3Ccircle cx='50' cy='15' r='2' fill='%23ffd166'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="../assets/fonts.css">
@@ -123,7 +123,7 @@ html.booting #boot.done{opacity:0; visibility:hidden}
 .b-final.on{opacity:1; transform:none}
 .b-skip{
   position:absolute; bottom:22px; left:0; right:0; text-align:center;
-  font-family:var(--mono); font-size:10px; letter-spacing:.25em; color:rgba(242,237,226,.34);
+  font-family:var(--mono); font-size:10px; letter-spacing:.25em; color:rgba(242,237,226,.6);
 }
 
 /* ============ toppnav ============ */
@@ -141,8 +141,8 @@ html.booting #boot.done{opacity:0; visibility:hidden}
 .brand small{font-family:var(--mono); font-size:9px; letter-spacing:.3em; color:var(--brass); display:block; margin-top:-3px}
 .nav-links{display:flex; gap:clamp(10px,2.4vw,30px); list-style:none}
 .nav-links a{
-  text-decoration:none; color:var(--muted); font-size:13.5px; font-weight:500; letter-spacing:.04em;
-  padding:6px 2px; position:relative; transition:color .25s;
+  display:inline-block; text-decoration:none; color:var(--muted); font-size:13.5px; font-weight:500; letter-spacing:.04em;
+  padding:6px 2px; position:relative; transition:color .25s; white-space:nowrap;
 }
 .nav-links a::after{
   content:""; position:absolute; left:0; right:100%; bottom:0; height:1.5px;
@@ -215,8 +215,6 @@ html.js .rv.in{opacity:1; transform:none}
 
 .hero-fig{
   position:relative; display:flex; justify-content:center; align-items:flex-end; min-height:420px;
-  -webkit-mask-image:linear-gradient(to bottom, #000 calc(100% - 52px), transparent 100%);
-  mask-image:linear-gradient(to bottom, #000 calc(100% - 52px), transparent 100%);
 }
 .dial{position:absolute; inset:auto; width:min(620px,100%); aspect-ratio:1; z-index:0; color:var(--brass);
   left:50%; top:50%; transform:translate(-50%,-52%)}
@@ -231,9 +229,11 @@ html.js .rv.in{opacity:1; transform:none}
 .hero-fig img{
   position:relative; z-index:1; height:clamp(400px,58vh,620px); width:auto;
   filter:drop-shadow(-14px 6px 26px rgba(212,175,106,.30)) drop-shadow(16px -8px 34px rgba(84,110,240,.22)) drop-shadow(0 26px 40px rgba(0,0,0,.5));
+  -webkit-mask-image:linear-gradient(to bottom, #000 calc(100% - 52px), transparent 100%);
+  mask-image:linear-gradient(to bottom, #000 calc(100% - 52px), transparent 100%);
 }
 .fig-tag{
-  position:absolute; z-index:2; right:4%; bottom:9%;
+  position:absolute; z-index:2; right:3%; bottom:1.5%;
   font-family:var(--mono); font-size:10px; letter-spacing:.2em; color:var(--brass);
   border:1px solid var(--hair); border-radius:999px; padding:7px 14px;
   background:rgba(10,15,35,.7); backdrop-filter:blur(4px);
@@ -308,7 +308,7 @@ html.js .rv.in{opacity:1; transform:none}
 }
 .globe-wrap canvas{width:100%; aspect-ratio:1; display:block}
 .g-note{
-  position:absolute; font-family:var(--mono); font-size:9.5px; letter-spacing:.22em; color:rgba(212,175,106,.62);
+  position:absolute; font-family:var(--mono); font-size:9.5px; letter-spacing:.22em; color:rgba(212,175,106,.8);
   text-transform:uppercase; pointer-events:none;
 }
 .g-note.tl-pos{top:13px; left:15px}
@@ -380,6 +380,7 @@ html.js .rv.in{opacity:1; transform:none}
 .k-note strong{color:var(--ink); font-weight:500}
 
 form.kform{display:flex; flex-direction:column; gap:18px}
+form.kform[hidden]{display:none}
 .f-field{display:flex; flex-direction:column; gap:7px}
 .f-field label{font-family:var(--mono); font-size:10.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--brass)}
 .f-field input,.f-field textarea{
@@ -397,7 +398,9 @@ form.kform{display:flex; flex-direction:column; gap:18px}
   border:1px solid var(--hair2); border-radius:16px; background:var(--card);
   padding:34px 32px; text-align:center;
 }
-.k-done .dstar{width:26px; height:26px; margin:0 auto 14px; color:var(--gold)}
+.k-done .dstar{display:block; width:26px; height:26px; margin:0 auto 14px; color:var(--gold)}
+.k-done:focus{outline:none}
+.k-done:focus-visible{outline:2px solid var(--gold); outline-offset:3px}
 .k-done .dstar svg{display:block;width:100%;height:100%;fill:currentColor}
 .k-done h3{font-size:22px; margin-bottom:8px}
 .k-done p{color:var(--muted); font-size:15px}
@@ -459,6 +462,14 @@ footer{border-top:1px solid rgba(212,175,106,.22)}
   .brand b{font-size:15px}
   .nav-links{gap:9px}
   .nav-links a{font-size:11px}
+  .g-note .g-ins{display:none}
+  .g-note.br-pos{display:none}
+}
+@media (max-width:380px){
+  .topnav .wrap{gap:10px; padding:0 12px}
+  .brand b{font-size:14px}
+  .nav-links{gap:7px}
+  .nav-links a{font-size:10.5px; letter-spacing:0; padding:6px 1px}
 }
 
 /* ============ reduced motion ============ */
@@ -492,7 +503,7 @@ footer{border-top:1px solid rgba(212,175,106,.22)}
   <div class="b-skip">TRYCK VAR SOM HELST FÖR ATT HOPPA ÖVER</div>
 </div>
 
-<a class="skip" href="#om">Hoppa till innehållet</a>
+<a class="skip" href="#hem">Hoppa till innehållet</a>
 
 <!-- ==================== toppnav ==================== -->
 <header class="topnav">
@@ -704,7 +715,7 @@ footer{border-top:1px solid rgba(212,175,106,.22)}
       <article class="pcard globe-card rv">
         <div class="globe-wrap">
           <canvas id="glob" aria-label="Interaktiv jordglob – dra för att snurra"></canvas>
-          <span class="g-note tl-pos">Instrument 01 · dra för att snurra</span>
+          <span class="g-note tl-pos"><span class="g-ins">Instrument 01 · </span>dra för att snurra</span>
           <span class="g-note br-pos">GBG · 57.71°N 11.97°E</span>
         </div>
         <div class="p-body">
@@ -803,7 +814,7 @@ footer{border-top:1px solid rgba(212,175,106,.22)}
           2) byt <form>-taggen till: <form class="kform" action="https://formspree.io/f/DITT_FORMSPREE_ID" method="POST">
           3) ta bort JS-hanteraren "demoForm" längst ned i filen.
         -->
-        <form class="kform" id="kform" novalidate="">
+        <form class="kform" id="kform">
           <div class="f-field">
             <label for="f-namn">Namn</label>
             <input id="f-namn" name="namn" type="text" autocomplete="name" required>
@@ -1046,14 +1057,6 @@ footer{border-top:1px solid rgba(212,175,106,.22)}
   }
   window.addEventListener('load', function(){ setTimeout(startGlobe, 900); });
 
-  /* när sidan är klar och nätet vilar: värm upp resterande lazy-bilder */
-  window.addEventListener('load', function(){
-    setTimeout(function(){
-      [].slice.call(document.querySelectorAll('img[loading="lazy"]')).forEach(function(im){
-        im.loading = 'eager';
-      });
-    }, 600);
-  });
 
   /* ---------- despill: dämpa grönt kantljus i frilagda poser ---------- */
   function despill(img){
@@ -1071,7 +1074,7 @@ footer{border-top:1px solid rgba(212,175,106,.22)}
         var ex = p[i + 1] - m;
         if (ex > 0){
           p[i + 1] = m;                       /* klipp bort gröna överskottet */
-          if (ex > 12){                       /* tydligt spill: mörka ner en aning */
+          if (ex > 8){                        /* tydligt spill: mörka ner en aning */
             p[i] = (p[i] * 0.82) | 0;
             p[i + 1] = (p[i + 1] * 0.82) | 0;
             p[i + 2] = (p[i + 2] * 0.82) | 0;
@@ -1092,9 +1095,11 @@ footer{border-top:1px solid rgba(212,175,106,.22)}
   var form = document.getElementById('kform'), done = document.getElementById('kdone');
   if (form) form.addEventListener('submit', function(e){ /* demoForm */
     e.preventDefault();
+    if (!form.reportValidity()) return;
     form.hidden = true;
     done.hidden = false;
-    done.focus && done.setAttribute('tabindex', '-1');
+    done.setAttribute('tabindex', '-1');
+    done.focus();
   });
 })();
 </script>

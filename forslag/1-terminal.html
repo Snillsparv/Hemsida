@@ -7,7 +7,7 @@
 <meta name="description" content="Jonas von Essen – tvåfaldig världsmästare i minne, föreläsare och författare från Göteborg. Boka en föreläsning, testa tre gratis läroappar och lär dig minnesteknik.">
 <meta property="og:title" content="Jonas von Essen – Tvåfaldig världsmästare i minne">
 <meta property="og:description" content="Föreläsare, författare och byggare av gratis läroappar. 100 000 π-decimaler, 197 länder och en miljon på Postkodmiljonären.">
-<meta property="og:image" content="../assets/img/jonas_vm-md.webp">
+<meta property="og:image" content="https://www.jonasvonessen.se/assets/img/jonas_vm-md.webp">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23070d18'/%3E%3Crect width='62' height='62' x='1' y='1' rx='13' fill='none' stroke='%2339d98a' stroke-opacity='.55' stroke-width='2'/%3E%3Ctext x='32' y='46' font-size='38' text-anchor='middle' fill='%2339d98a' font-family='monospace'%3E%CF%80%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="../assets/fonts.css">
@@ -146,8 +146,13 @@ a:hover { color: #6ae8a9; }
   transition: color .15s, background .15s;
 }
 .statusnav a:hover { color: var(--green); background: rgba(57, 217, 138, .07); }
-.statusnav a.active { color: var(--green); }
-.statusnav a.active::before { content: '~/'; color: var(--dim); }
+.statusnav a.active {
+  color: var(--green);
+  text-decoration: underline;
+  text-decoration-color: rgba(57, 217, 138, .65);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 5px;
+}
 .clock { color: var(--dim); white-space: nowrap; }
 .clock b { color: var(--muted); font-weight: 500; }
 @media (max-width: 860px) { .clock { display: none; } .brand .path { display: none; } }
@@ -161,7 +166,7 @@ a:hover { color: #6ae8a9; }
 /* ---------- gemensamma sektionsdelar ---------- */
 section { padding-block: clamp(4.5rem, 9vw, 7.5rem); }
 .sec-head { margin-bottom: clamp(2.2rem, 5vw, 3.5rem); }
-.sec-head .idx { float: right; font-family: var(--mono); font-size: .78rem; color: var(--dim); padding-top: .35rem; }
+.sec-head .idx, .course-body .idx { float: right; font-family: var(--mono); font-size: .78rem; color: var(--dim); padding-top: .35rem; }
 .prompt {
   font-family: var(--mono); font-size: .85rem; color: var(--muted);
   margin-bottom: .9rem; letter-spacing: .01em; overflow-wrap: anywhere;
@@ -354,7 +359,8 @@ section { padding-block: clamp(4.5rem, 9vw, 7.5rem); }
 .merit-photos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.3rem; margin-bottom: clamp(2.5rem, 5vw, 3.6rem); padding: 0; }
 .merit-photos li { list-style: none; min-width: 0; }
 .merit-photos .win img { aspect-ratio: 5 / 4; object-fit: cover; }
-.merit-photos .win:hover img { }
+/* jämn korthöjd även när bildtexten radbryts (2 rader + padding + kantlinje) */
+.merit-photos .win-caption { min-height: calc(3.3em + 1.4rem + 1px); }
 @media (max-width: 760px) {
   .merit-photos {
     display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
@@ -450,7 +456,7 @@ section { padding-block: clamp(4.5rem, 9vw, 7.5rem); }
 .globe-pad { position: absolute; inset: 4.5%; }
 .globe-hint {
   position: absolute; left: 50%; bottom: 4%; transform: translateX(-50%);
-  font-family: var(--mono); font-size: .66rem; color: var(--dim);
+  font-family: var(--mono); font-size: .72rem; color: var(--dim);
   background: rgba(7, 12, 22, .75); border: 1px solid rgba(91, 191, 255, .16);
   padding: .28rem .6rem; border-radius: 999px; white-space: nowrap; pointer-events: none;
 }
@@ -640,7 +646,7 @@ html.booting { overflow: hidden; }
       </div>
       <div class="boot-body" id="bootBody"></div>
     </div>
-    <p class="boot-skip">[ tryck valfri tangent för att hoppa över ]</p>
+    <p class="boot-skip">[ tryck var som helst för att hoppa över ]</p>
   </div>
 </div>
 
@@ -747,7 +753,7 @@ html.booting { overflow: hidden; }
     <div class="wrap">
       <div class="sec-head reveal">
         <span class="idx" aria-hidden="true">[02/05]</span>
-        <p class="prompt"><span class="u">jonas@goteborg</span>:<span class="p">~</span><span class="d">$</span><span class="c">git log --meriter</span></p>
+        <p class="prompt"><span class="u">jonas@goteborg</span>:<span class="p">~</span><span class="d">$</span><span class="c">git log <span style="white-space:nowrap">--meriter</span></span></p>
         <h2>Meriter</h2>
         <p class="sec-lead">Ett urval ur loggen – från VM-guld i London till Göteborgsmästerskapen i ordvitsar. Allt är på riktigt, hur osannolikt det än låter.</p>
       </div>
@@ -776,14 +782,14 @@ html.booting { overflow: hidden; }
         </li>
       </ul>
 
-      <p class="log-title reveal" aria-hidden="true">jonas@goteborg:~$ git log --oneline --reverse</p>
+      <p class="log-title reveal" aria-hidden="true">jonas@goteborg:~$ git log <span style="white-space:nowrap">--oneline</span> <span style="white-space:nowrap">--reverse</span></p>
       <ol class="log">
         <li class="star reveal">
           <span class="log-meta"><span class="log-hash">c0ffee1</span><span class="log-year">2013–14</span></span>
           <span class="log-node" aria-hidden="true"></span>
           <div class="log-body">
             <h3>2× Världsmästare i minne<span class="star-mark" aria-hidden="true">★</span></h3>
-            <p>London 2013 och Haikou, Kina 2014. Sveriges förste världsmästare i minne – och hittills den ende som försvarat titeln.</p>
+            <p>London 2013 och Haikou, Kina 2014. Sveriges förste världsmästare i minne.</p>
           </div>
         </li>
         <li class="star reveal">
@@ -867,7 +873,7 @@ html.booting { overflow: hidden; }
     <div class="wrap">
       <div class="sec-head reveal">
         <span class="idx" aria-hidden="true">[03/05]</span>
-        <p class="prompt"><span class="u">jonas@goteborg</span>:<span class="p">~</span><span class="d">$</span><span class="c">ls ~/projekt --gratis</span></p>
+        <p class="prompt"><span class="u">jonas@goteborg</span>:<span class="p">~</span><span class="d">$</span><span class="c">ls ~/projekt <span style="white-space:nowrap">--gratis</span></span></p>
         <h2>Jag bygger också saker</h2>
         <p class="sec-lead">Tre appar, noll kronor. Jag bygger dem för att det är kul – och för att bra inlärning inte ska kosta.</p>
       </div>
@@ -919,7 +925,8 @@ html.booting { overflow: hidden; }
           <img src="../assets/img/kul.webp" alt="" width="512" height="720" loading="lazy">
         </div>
         <div class="course-body">
-          <p class="course-label"><span class="d">$</span> sudo ./skaffa-superminne <span class="d">--nu</span></p>
+          <span class="idx" aria-hidden="true">[04/05]</span>
+          <p class="course-label"><span class="d">$</span> sudo <span style="white-space:nowrap">./skaffa-superminne</span> <span class="d" style="white-space:nowrap">--nu</span></p>
           <h2>Skaffa ett superminne!</h2>
           <p>Onlinekurs i minnesteknik: lär dig metoderna jag använder – i din egen takt, hur många gånger du vill. Samma teknik som tog mig till två VM-guld, fast utan att du behöver memorera valnötter.</p>
           <div class="course-cta">
@@ -936,7 +943,7 @@ html.booting { overflow: hidden; }
     <div class="wrap">
       <div class="sec-head reveal">
         <span class="idx" aria-hidden="true">[05/05]</span>
-        <p class="prompt"><span class="u">jonas@goteborg</span>:<span class="p">~</span><span class="d">$</span><span class="c">./kontakt --boka</span></p>
+        <p class="prompt"><span class="u">jonas@goteborg</span>:<span class="p">~</span><span class="d">$</span><span class="c"><span style="white-space:nowrap">./kontakt</span> <span style="white-space:nowrap">--boka</span></span></p>
         <h2>Följ mig &amp; hör av dig</h2>
       </div>
       <div class="contact-grid">
@@ -975,7 +982,7 @@ html.booting { overflow: hidden; }
             1) Byt <form>-taggen till: <form action="https://formspree.io/f/DITT_FORMSPREE_ID" method="POST">
             2) Ta bort preventDefault-hanteraren i skriptet längst ner (sök på "kontaktform").
           -->
-          <form novalidate>
+          <form>
             <div class="form-inner">
               <div class="field">
                 <label for="f-namn">namn</label>
@@ -997,7 +1004,7 @@ html.booting { overflow: hidden; }
           </form>
           <div class="form-ok" role="status" aria-live="polite">
             <p class="okline">&gt; meddelande köat .......... OK</p>
-            <p>Tack! Formuläret kopplas snart – mejla mig så länge, så hörs vi.</p>
+            <p>Tack! Formuläret kopplas snart – hör av dig via <a href="https://www.instagram.com/jonasvonessen/" target="_blank" rel="noopener">Instagram</a> så länge, så hörs vi.</p>
           </div>
         </div>
       </div>
@@ -1254,6 +1261,7 @@ html.booting { overflow: hidden; }
     if (!form) return;
     form.addEventListener('submit', function (e) {
       e.preventDefault(); /* TODO: ta bort när Formspree-ID är på plats */
+      if (typeof form.reportValidity === 'function' && !form.reportValidity()) return;
       card.classList.add('sent');
     });
   })();

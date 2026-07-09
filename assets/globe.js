@@ -40,6 +40,11 @@
       this._raf = 0;
       this._destroyed = false;
 
+      // prefers-reduced-motion: ingen autorotation, ingen pulserande markör
+      this._reduced = typeof matchMedia === 'function'
+        && matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (this._reduced) this.o.speed = 0;
+
       this._resize = this._resize.bind(this);
       this._frame = this._frame.bind(this);
       window.addEventListener('resize', this._resize);
@@ -200,7 +205,7 @@
       if (this.o.marker) {
         const m = this._proj(this.o.marker.lng, this.o.marker.lat, sinP, cosP, l0);
         if (m.v) {
-          const pulse = (performance.now() % 1600) / 1600;
+          const pulse = this._reduced ? 0.45 : (performance.now() % 1600) / 1600;
           ctx.strokeStyle = this.o.markerColor;
           ctx.globalAlpha = 1 - pulse;
           ctx.lineWidth = 1.5 * this.dpr;
