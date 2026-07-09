@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jonas von Essen – Tvåfaldig världsmästare i minne</title>
+<meta name="description" content="Ett handskrivet brev från Jonas von Essen – tvåfaldig världsmästare i minne, föreläsare och författare från Göteborg. Om pi, gratis läroappar och konsten att komma ihåg allt.">
+<meta property="og:title" content="Jonas von Essen – Tvåfaldig världsmästare i minne">
+<meta property="og:description" content="Ett handskrivet brev om minne, pi, gratis läroappar och ett och annat VM-guld. Läs det – jag lovar att du kommer ihåg det.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="../assets/img/jonas_vm-md.webp">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='3' y='12' width='58' height='40' rx='7' fill='%23f7f1e3'/%3E%3Cpath d='M8 18 32 38 56 18' fill='none' stroke='%23232a4d' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='32' cy='41' r='8' fill='%238a2f1e'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/fonts.css">
+<style>
+/* ==============================================================
+   FÖRSLAG 21 — "BREVET": hela sidan är ett handskrivet brev.
+   Papper #f7f1e3, bläck #232a4d (kontrast ≈ 12.4:1).
+   ============================================================== */
+:root{
+  --papper:#f7f1e3;
+  --papper-ljus:#fbf6ea;
+  --black:#232a4d;
+  --black-mjuk:rgba(35,42,77,.78);
+  --black-svag:rgba(35,42,77,.45);
+  --vax:#8a2f1e;
+  --bord:#241812;
+  --gradde:#f0e6d2;
+  --vag:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='7' viewBox='0 0 24 7'><path d='M1 4.5 C4 1.5 8 1.5 12 4 C16 6.5 20 6 23 3.5' fill='none' stroke='%23232a4d' stroke-width='1.5' stroke-linecap='round' opacity='.7'/></svg>");
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-padding-top:84px}
+@media (prefers-reduced-motion: no-preference){ html{scroll-behavior:smooth} }
+html.laser{overflow:hidden}
+body{
+  background-color:var(--bord);
+  background-image:
+    radial-gradient(130% 60% at 50% -8%, rgba(255,205,140,.10), transparent 62%),
+    repeating-linear-gradient(91deg, rgba(0,0,0,.17) 0 2px, transparent 2px 7px, rgba(255,236,200,.022) 7px 9px, transparent 9px 23px),
+    repeating-linear-gradient(89deg, rgba(84,50,24,.26) 0 130px, rgba(30,17,9,.3) 130px 270px),
+    linear-gradient(180deg, #2c1c10, #1c1108);
+  color:var(--black);
+  font-family:'Caveat','Segoe Script','Bradley Hand',cursive;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:rgba(138,47,30,.28)}
+a{color:inherit}
+:focus-visible{outline:3px solid #c05a3c;outline-offset:3px;border-radius:3px}
+
+/* ---------- hoppa-länk ---------- */
+.hoppa{position:fixed;left:12px;top:-70px;z-index:200;background:var(--papper);color:var(--black);
+  font-size:1.25rem;padding:.4rem 1rem;border-radius:4px;transition:top .2s;text-decoration:none;box-shadow:0 6px 18px rgba(0,0,0,.5)}
+.hoppa:focus{top:12px}
+
+/* ---------- toppnav (på träbordet, ovanför brevet) ---------- */
+.topp{position:sticky;top:0;z-index:60;background:rgba(26,16,9,.93);border-bottom:1px solid rgba(240,230,210,.14)}
+.topp nav{max-width:980px;margin:0 auto;display:flex;align-items:center;gap:1rem;padding:.45rem 1rem}
+.brand{font-size:1.4rem;font-weight:700;color:var(--gradde);text-decoration:none;letter-spacing:.01em;flex:1;white-space:nowrap}
+.lankar{display:flex;gap:clamp(.7rem,2.5vw,1.6rem);flex-wrap:wrap;justify-content:flex-end}
+.lankar a{font-size:1.3rem;color:var(--gradde);text-decoration:none;padding:.1rem .15rem;position:relative}
+.lankar a:hover{color:#fff}
+.lankar a.aktiv{background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='7' viewBox='0 0 24 7'><path d='M1 4.5 C4 1.5 8 1.5 12 4 C16 6.5 20 6 23 3.5' fill='none' stroke='%23f0e6d2' stroke-width='1.6' stroke-linecap='round' opacity='.9'/></svg>") repeat-x left bottom/24px 7px;padding-bottom:.28rem}
+@media(max-width:620px){
+  .brand{display:none}
+  .topp nav{justify-content:center}
+  .lankar{justify-content:center}
+  .lankar a{font-size:1.2rem}
+}
+
+/* ---------- skrivbordet + pappret ---------- */
+.skrivbord{padding:clamp(1rem,4vw,3.5rem) clamp(.4rem,3vw,2rem) 1.5rem}
+.papper{
+  position:relative;
+  max-width:780px;margin:0 auto;
+  padding:clamp(1.8rem,6vw,4.6rem) clamp(1.3rem,5.5vw,4.4rem) clamp(2.6rem,6vw,4.2rem);
+  background-color:var(--papper);
+  background-image:
+    radial-gradient(120px 120px at 84% 3.2%, transparent 54px, rgba(150,105,40,.075) 56px, rgba(150,105,40,.075) 60px, transparent 62px),
+    radial-gradient(at 20% 12%, rgba(178,146,88,.05), transparent 55%),
+    radial-gradient(at 85% 58%, rgba(160,130,80,.05), transparent 50%),
+    radial-gradient(at 45% 95%, rgba(160,130,80,.045), transparent 55%),
+    repeating-linear-gradient(0deg, rgba(120,90,40,.017) 0 2px, transparent 2px 5px),
+    repeating-linear-gradient(90deg, rgba(120,90,40,.013) 0 3px, transparent 3px 7px);
+  border-radius:3px;
+  box-shadow:
+    0 2px 4px rgba(25,15,6,.4),
+    11px 15px 0 -5px #e9ddc0,
+    11px 17px 26px rgba(25,15,6,.38),
+    0 42px 90px rgba(16,9,4,.55);
+  font-size:clamp(1.42rem,1.3rem + .5vw,1.6rem);
+  line-height:1.52;
+  letter-spacing:.005em;
+}
+.papper p{margin:0 0 1.05em}
+.datum{text-align:right;font-size:1.35rem;color:var(--black-mjuk);margin-bottom:1.6em}
+
+h1{font-weight:700;line-height:1.05;margin:0 0 .55em}
+.hej{display:block;font-size:clamp(3.6rem,2.2rem + 7vw,6.2rem);transform:rotate(-1.2deg);margin-bottom:.12em}
+.h1-rest{display:block;font-size:clamp(1.9rem,1.5rem + 1.6vw,2.6rem);line-height:1.25;font-weight:700}
+.tagline{font-size:1.45rem;color:var(--black-mjuk);margin-bottom:1.4em}
+
+h2{font-size:clamp(2.05rem,1.7rem + 1.6vw,2.75rem);font-weight:700;line-height:1.12;
+   margin:0 0 .55em;transform:rotate(-.45deg)}
+h3{font-size:clamp(1.7rem,1.5rem + .9vw,2.05rem);font-weight:700;margin:1.1em 0 .3em;transform:rotate(-.3deg)}
+section{scroll-margin-top:84px}
+
+b,strong{font-weight:700}
+
+/* länkar i brevet */
+.papper a{text-decoration-thickness:1.5px;text-underline-offset:5px;text-decoration-color:rgba(35,42,77,.55)}
+.papper a:hover{text-decoration-style:wavy;text-decoration-color:var(--vax)}
+
+/* pil-länkar */
+.pil-lank{display:inline-block;font-weight:700;margin:.06em 0}
+.pil{display:inline-block;vertical-align:-.22em;margin-right:.35rem}
+.pil path{stroke:var(--black);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.cta-rader{margin-top:1.2em}
+
+/* understrykningar (vågiga) */
+.understruken{background:var(--vag) repeat-x left 100%/22px 7px;padding-bottom:.16em}
+.skriv .understruken{background:none}
+.skriv .understruken .w{background:var(--vag) repeat-x left 100%/22px 7px;padding-bottom:.16em}
+
+/* inringade ord */
+.inringad{position:relative;display:inline-block;padding:0 .14em}
+.inringad svg{position:absolute;left:-8%;top:-20%;width:116%;height:146%;overflow:visible;pointer-events:none}
+.inringad path{fill:none;stroke:rgba(35,42,77,.85);stroke-width:2.1px;stroke-linecap:round;
+  vector-effect:non-scaling-stroke;stroke-dasharray:101;stroke-dashoffset:101}
+.inringad.rita path{transition:stroke-dashoffset .8s ease-in-out .12s;stroke-dashoffset:0}
+
+/* handritad vågig avdelare */
+.delare{display:flex;justify-content:center;margin:2.6rem 0 2.4rem;opacity:.6}
+.delare svg{width:min(220px,55%);height:16px}
+.delare path{fill:none;stroke:var(--black);stroke-width:2;stroke-linecap:round}
+
+/* ---------- meritlistan ---------- */
+.meriter{list-style:none;margin:0 0 1.1em}
+.meriter li{padding-left:1.45em;text-indent:-1.45em;margin-bottom:.55em}
+
+/* ---------- foton med fotohörn ---------- */
+.foto{width:min(430px,82%);margin:2.4rem auto 2.2rem;transform:rotate(-1.7deg)}
+.foto.hoger{transform:rotate(1.4deg)}
+.fotoram{position:relative;background:#fffdf6;padding:10px 10px 12px;
+  box-shadow:0 3px 8px rgba(60,38,10,.18),0 14px 30px rgba(60,38,10,.22)}
+.fotoram img{display:block;width:100%;height:auto}
+.horn{position:absolute;width:36px;height:36px;background:linear-gradient(135deg,#ecdcb4,#dfcda2);
+  clip-path:polygon(0 0,100% 0,0 100%);filter:drop-shadow(1px 2px 2px rgba(60,38,10,.25))}
+.horn.h1x{left:-7px;top:-7px}
+.horn.h2x{right:-7px;top:-7px;transform:rotate(90deg)}
+.horn.h3x{right:-7px;bottom:-7px;transform:rotate(180deg)}
+.horn.h4x{left:-7px;bottom:-7px;transform:rotate(270deg)}
+figcaption{text-align:center;font-size:1.32rem;line-height:1.35;margin-top:.75rem;color:var(--black-mjuk)}
+.kredit{display:block;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.62rem;font-weight:500;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--black-mjuk);margin-top:.4rem}
+
+/* ---------- vykortet med globen ---------- */
+.vykort{width:min(400px,92%);margin:2.5rem auto 2.3rem;transform:rotate(1.1deg)}
+.vykortram{position:relative;background:var(--papper-ljus);border:1px solid rgba(35,42,77,.4);
+  padding:13px;box-shadow:0 3px 8px rgba(60,38,10,.16),0 16px 34px rgba(60,38,10,.22)}
+.vykortram::before{content:"";position:absolute;inset:6px;border:1px solid rgba(35,42,77,.22);pointer-events:none}
+.vykortram canvas{cursor:grab;touch-action:pan-y}
+.frimarke{position:absolute;top:11px;right:11px;width:46px;height:56px;z-index:2;
+  border:2px dashed rgba(35,42,77,.5);background:rgba(138,47,30,.07);
+  display:grid;place-items:center;font-weight:700;font-size:1.15rem;color:var(--black-mjuk);
+  transform:rotate(3deg)}
+.stampel{position:absolute;top:14px;right:52px;width:64px;height:52px;z-index:2;opacity:.4;pointer-events:none}
+.stampel circle,.stampel path{fill:none;stroke:var(--black);stroke-width:1.6;stroke-linecap:round}
+
+/* ---------- kursboxen (handritad ram) ---------- */
+.kursbox{position:relative;margin:2.4rem 0 1.4rem;padding:clamp(1.4rem,4vw,2.2rem) clamp(1.2rem,4vw,2.4rem)}
+.kursbox > .ram{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.kursbox > .ram path{fill:rgba(138,47,30,.035);stroke:var(--black);stroke-width:2.4px;stroke-linecap:round;
+  vector-effect:non-scaling-stroke}
+.kurs-cta{display:inline-block;position:relative;font-size:clamp(1.7rem,1.4rem+1.4vw,2.15rem);font-weight:700;
+  padding:.42em 1.1em;margin:.35em 0 .15em;text-decoration:none !important;transform:rotate(-.6deg)}
+.kurs-cta svg{position:absolute;inset:-4% -3%;width:106%;height:108%;overflow:visible;pointer-events:none}
+.kurs-cta svg path{fill:none;stroke:var(--vax);stroke-width:2.6px;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.kurs-cta:hover{transform:rotate(.4deg) scale(1.02)}
+.kurs-cta:hover svg path{stroke-width:3.4px}
+.kurs-liten{font-size:1.3rem;color:var(--black-mjuk)}
+
+/* ---------- sociala länkar ---------- */
+.soc{list-style:none;margin:.2em 0 1.2em}
+.soc li{margin-bottom:.35em}
+.soc svg{display:inline-block;vertical-align:-.28em;margin-right:.5rem;width:26px;height:26px}
+.soc svg *{fill:none;stroke:var(--black);stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.soc .yt-tri{fill:var(--black);stroke:none}
+
+/* ---------- formuläret: linjerade rader ---------- */
+form{margin-top:1.2em}
+.falt{margin-bottom:1.25em}
+.falt label{display:block;font-size:1.3rem;color:var(--black-mjuk);margin-bottom:.05em}
+.falt input,.falt textarea{
+  display:block;width:100%;border:0;border-bottom:2px solid rgba(35,42,77,.5);
+  background:transparent;color:var(--black);caret-color:var(--vax);
+  font-family:'Caveat','Segoe Script',cursive;font-size:1.5rem;line-height:2.3rem;padding:.1rem .2rem 0;
+  border-radius:0;
+}
+.falt textarea{
+  min-height:9.2rem;resize:vertical;border-bottom:0;
+  background-image:repeating-linear-gradient(to bottom, transparent 0 calc(2.3rem - 2px), rgba(35,42,77,.42) calc(2.3rem - 2px) 2.3rem);
+  background-attachment:local;
+}
+.falt input:focus,.falt textarea:focus{outline:none;border-color:var(--black)}
+.falt input:focus-visible,.falt textarea:focus-visible{outline:3px solid #c05a3c;outline-offset:3px}
+.falt ::placeholder{color:rgba(35,42,77,.48);opacity:1}
+.skicka{position:relative;display:inline-block;background:none;border:0;cursor:pointer;
+  font-family:'Caveat',cursive;font-weight:700;font-size:1.75rem;color:var(--black);
+  padding:.35em 1.2em;transform:rotate(-.8deg)}
+.skicka svg{position:absolute;inset:-6% -4%;width:108%;height:112%;overflow:visible;pointer-events:none}
+.skicka svg path{fill:none;stroke:var(--black);stroke-width:2.4px;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.skicka:hover{transform:rotate(.5deg) scale(1.03)}
+.skicka .pil path{stroke-width:2}
+#tack{font-size:1.5rem;font-weight:700;padding:.6em 0}
+#tack span{display:block;font-weight:400;font-size:1.35rem;color:var(--black-mjuk)}
+
+/* ---------- signaturen ---------- */
+.avslut{margin-top:1.6em}
+.signatur{margin:.4rem 0 .6rem}
+.signatur svg{width:min(300px,64%);height:auto;overflow:visible}
+.signatur path{fill:none;stroke:var(--black);stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:101;stroke-dashoffset:101}
+.signatur.rita path{animation:rita .6s ease-in-out forwards}
+.signatur.rita path:nth-child(1){animation-duration:.52s;animation-delay:.05s}
+.signatur.rita path:nth-child(2){animation-duration:.3s;animation-delay:.57s}
+.signatur.rita path:nth-child(3){animation-duration:.28s;animation-delay:.87s}
+.signatur.rita path:nth-child(4){animation-duration:.34s;animation-delay:1.15s}
+.signatur.rita path:nth-child(5){animation-duration:.34s;animation-delay:1.49s}
+.signatur.rita path:nth-child(6){animation-duration:.4s;animation-delay:1.9s;animation-timing-function:ease-out}
+@keyframes rita{to{stroke-dashoffset:0}}
+.ps{margin-top:1.4em}
+.ps p{margin-bottom:.25em}
+
+/* ---------- BREVET SKRIVER SIG SJÄLVT (wow-detaljen) ---------- */
+.skriv .w{clip-path:inset(-45% 103% -45% -3%);opacity:0;
+  transition:clip-path .16s ease-out,opacity .06s linear}
+.skriv.skriven .w{clip-path:inset(-45% -3% -45% -3%);opacity:1}
+.skriv .pil,.skriv .soc svg{opacity:0;transition:opacity .45s ease .25s}
+.skriv.skriven .pil,.skriv.skriven .soc svg{opacity:1}
+.dyk{opacity:0;transform:translateY(14px) rotate(-2.6deg);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.3,1)}
+.dyk.hoger{transform:translateY(14px) rotate(2.3deg)}
+.dyk.framme{opacity:1}
+.foto.dyk.framme{transform:translateY(0) rotate(-1.7deg)}
+.foto.hoger.dyk.framme{transform:translateY(0) rotate(1.4deg)}
+.vykort.dyk.framme{transform:translateY(0) rotate(1.1deg)}
+
+/* pennspetsen som glider (endast desktop, sätts via JS) */
+#penna{position:absolute;left:0;top:0;width:38px;height:38px;pointer-events:none;z-index:8;
+  opacity:0;transition:opacity .35s ease;will-change:transform}
+
+/* stillbildsläge: reduced motion eller ?noloader — allt synligt direkt */
+.stilla .skriv .w{clip-path:none !important;opacity:1 !important;transition:none !important}
+.stilla .skriv .pil,.stilla .skriv .soc svg{opacity:1 !important;transition:none !important}
+.stilla .dyk{opacity:1 !important;transition:none !important}
+.stilla .foto.dyk{transform:rotate(-1.7deg) !important}
+.stilla .foto.hoger.dyk{transform:rotate(1.4deg) !important}
+.stilla .vykort.dyk{transform:rotate(1.1deg) !important}
+.stilla .signatur path{stroke-dashoffset:0 !important;animation:none !important}
+.stilla .inringad path{stroke-dashoffset:0 !important;transition:none !important}
+.stilla #penna{display:none}
+@media (prefers-reduced-motion: reduce){
+  .skriv .w{clip-path:none !important;opacity:1 !important;transition:none !important}
+  .dyk{opacity:1 !important;transform:none;transition:none !important}
+  .signatur path{stroke-dashoffset:0 !important;animation:none !important}
+  .inringad path{stroke-dashoffset:0 !important;transition:none !important}
+  #penna{display:none}
+}
+
+/* ---------- fot (på bordet, under pappret) ---------- */
+.fot{text-align:center;color:rgba(240,230,210,.82);padding:1.6rem 1rem 3.2rem;font-size:1.3rem}
+.fot a{color:rgba(240,230,210,.92);text-decoration-color:rgba(240,230,210,.45);text-underline-offset:4px}
+.fot a:hover{color:#fff}
+.fot .kredit{color:rgba(240,230,210,.55);margin-top:.8rem}
+
+/* ==============================================================
+   LADDSKÄRM: kuvert med sigill på träbordet
+   ============================================================== */
+#loader{display:none;position:fixed;inset:0;z-index:100;
+  align-items:center;justify-content:center;flex-direction:column;gap:2.4rem;
+  background-color:var(--bord);
+  background-image:
+    radial-gradient(90% 70% at 50% 42%, rgba(255,205,140,.13), transparent 62%),
+    repeating-linear-gradient(91deg, rgba(0,0,0,.17) 0 2px, transparent 2px 7px, rgba(255,236,200,.022) 7px 9px, transparent 9px 23px),
+    repeating-linear-gradient(89deg, rgba(84,50,24,.26) 0 130px, rgba(30,17,9,.3) 130px 270px),
+    linear-gradient(180deg, #2c1c10, #1c1108);
+  opacity:1;transition:opacity .5s ease}
+.med-loader #loader{display:flex}
+#loader.borta{opacity:0;pointer-events:none}
+.kuvert-scen{position:relative;animation:scenin .55s ease-out both}
+@keyframes scenin{from{opacity:0;transform:translateY(16px) scale(.94)}to{opacity:1;transform:none}}
+.kuvert{position:relative;width:min(340px,78vw);aspect-ratio:340/224;perspective:800px;
+  filter:drop-shadow(0 22px 34px rgba(0,0,0,.55))}
+.k-bak{position:absolute;inset:0;background:linear-gradient(180deg,#f3ecda,#eadfc4);border-radius:5px;z-index:1}
+.k-brev{position:absolute;left:50%;top:7%;width:88%;height:86%;z-index:2;transform:translateX(-50%);
+  background:
+    linear-gradient(180deg, transparent 26%, rgba(35,42,77,0) 26%),
+    repeating-linear-gradient(to bottom, transparent 0 22px, rgba(35,42,77,.32) 22px 24px, transparent 24px 30px),
+    #f9f3e4;
+  background-position:0 34%;border-radius:2px;box-shadow:0 2px 10px rgba(40,25,8,.25);
+  animation:brevupp .85s 1.4s cubic-bezier(.22,.75,.25,1) both}
+.k-brev::before{content:"Hej!";position:absolute;left:10%;top:2%;
+  font-family:'Caveat',cursive;font-weight:700;font-size:1.5rem;color:var(--black)}
+@keyframes brevupp{from{transform:translateX(-50%) translateY(0)}to{transform:translateX(-50%) translateY(-46%)}}
+.k-ficka{position:absolute;inset:0;z-index:3;border-radius:5px;
+  background:linear-gradient(180deg,#f0e7d0,#e6d9ba);
+  clip-path:polygon(0 12%, 50% 56%, 100% 12%, 100% 100%, 0 100%)}
+.k-ficka::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(115deg, transparent 49.6%, rgba(120,90,40,.14) 50%, transparent 50.6%),
+             linear-gradient(-115deg, transparent 49.6%, rgba(120,90,40,.14) 50%, transparent 50.6%)}
+.k-flarp{position:absolute;left:0;top:0;width:100%;height:57%;z-index:6;
+  transform-origin:50% 0;transform:rotateX(0);
+  background:linear-gradient(180deg,#f2ead6,#e9decb);
+  clip-path:polygon(0 0, 100% 0, 50% 100%);
+  animation:flarpen .75s .65s ease-in-out both}
+@keyframes flarpen{
+  0%{transform:rotateX(0);z-index:6}
+  60%{z-index:6}
+  61%{z-index:1}
+  100%{transform:rotateX(-179deg);z-index:1}}
+.k-sigill{position:absolute;left:50%;bottom:-21px;transform:translateX(-50%);
+  width:52px;height:52px;border-radius:50%;backface-visibility:hidden;
+  background:radial-gradient(circle at 36% 32%, #a5402a, #7c2317 58%, #5e150c);
+  box-shadow:0 3px 8px rgba(0,0,0,.4), inset 0 0 0 4px rgba(255,255,255,.07), inset 0 0 14px rgba(0,0,0,.35);
+  display:grid;place-items:center;
+  font-family:'Caveat',cursive;font-weight:700;font-size:1.7rem;color:#f2d9c4;text-shadow:0 1px 2px rgba(0,0,0,.5)}
+.k-rad{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.72rem;letter-spacing:.18em;
+  color:rgba(240,230,210,.6);text-transform:lowercase}
+.k-rad::after{content:"";animation:prickar 1.15s steps(1,end) infinite}
+@keyframes prickar{0%{content:""}25%{content:"."}50%{content:".."}75%{content:"..."}}
+@media (prefers-reduced-motion: reduce){
+  .kuvert-scen,.k-brev,.k-flarp{animation:none}
+}
+</style>
+</head>
+<body>
+<script>
+(function(){
+  var d=document.documentElement,s=false,l=false;
+  try{
+    var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var no=/[?&]noloader/.test(location.search);
+    if(rm||no)s=true;
+    if(!rm&&!no&&!sessionStorage.getItem('brev-sett'))l=true;
+  }catch(e){}
+  if(s)d.className+=' stilla';
+  if(l)d.className+=' med-loader laser';
+})();
+</script>
+
+<!-- ==================== LADDSKÄRM ==================== -->
+<div id="loader" aria-hidden="true">
+  <div class="kuvert-scen">
+    <div class="kuvert">
+      <div class="k-bak"></div>
+      <div class="k-brev"></div>
+      <div class="k-ficka"></div>
+      <div class="k-flarp"><div class="k-sigill">J</div></div>
+    </div>
+  </div>
+  <p class="k-rad">öppnar brevet</p>
+</div>
+
+<a class="hoppa" href="#innehall">Hoppa till innehållet</a>
+
+<header class="topp">
+  <nav aria-label="Sidnavigation">
+    <a class="brand" href="#innehall">Ett brev från Jonas</a>
+    <div class="lankar">
+      <a href="#om" data-nav="om">Om mig</a>
+      <a href="#meriter" data-nav="meriter">Meriter</a>
+      <a href="#projekt" data-nav="projekt">Appar</a>
+      <a href="#kurs" data-nav="kurs">Kurs</a>
+      <a href="#kontakt" data-nav="kontakt">Kontakt</a>
+    </div>
+  </nav>
+</header>
+
+<main id="innehall">
+<div class="skrivbord">
+<article class="papper">
+  <div id="penna" aria-hidden="true">
+    <svg viewBox="0 0 38 38" width="38" height="38">
+      <path d="M3 35 C7 25 13 15 24 7 C29 3.5 34 3 34 3 C34 3 33 9 28 15 C20 24 12 30 6 32 Z" fill="rgba(35,42,77,.88)"/>
+      <path d="M3 35 L15 21" stroke="#f7f1e3" stroke-width="1.3" fill="none"/>
+    </svg>
+  </div>
+
+  <p class="datum" data-skriv>Göteborg, den 9 juli 2026</p>
+
+  <h1 data-skriv>
+    <span class="hej">Hej!</span>
+    <span class="h1-rest">Jag heter Jonas von Essen, och jag har ett lite konstigt jobb: jag kommer ihåg saker.</span>
+  </h1>
+  <p class="tagline" data-skriv>Tvåfaldig världsmästare i minne. Föreläsare. Frågesportsnörd. (Allt kommer att förklaras.)</p>
+
+  <p data-skriv>Vad kul att du hittade hit! Jag tävlar i att minnas saker – och i att säga dem
+  snyggt. Däremellan bygger jag gratis appar som gör det lättare att lära sig. Precis det tänkte
+  jag berätta om i det här brevet. Slå dig ner en stund – jag lovar att du kommer att minnas
+  mer av det här brevet än av de flesta hemsidor.</p>
+
+  <p class="cta-rader" data-skriv>
+    <a class="pil-lank" href="#projekt"><svg class="pil" width="32" height="15" viewBox="0 0 32 15"><path d="M2 9 C10 5.5 18 5.5 27 7.5 M21 3 L28 7.7 L20 11.5"/></svg>Otålig? Hoppa direkt till apparna jag byggt.</a><br>
+    <a class="pil-lank" href="#kontakt"><svg class="pil" width="32" height="15" viewBox="0 0 32 15"><path d="M2 9 C10 5.5 18 5.5 27 7.5 M21 3 L28 7.7 L20 11.5"/></svg>Eller boka en föreläsning på en gång.</a>
+  </p>
+
+  <div class="delare" aria-hidden="true"><svg viewBox="0 0 200 16" preserveAspectRatio="none"><path d="M4 9 C20 1 36 17 52 9 C68 1 84 17 100 9 C116 1 132 17 148 9 C164 1 180 17 196 9"/></svg></div>
+
+  <!-- ==================== OM MIG ==================== -->
+  <section id="om" aria-label="Om mig">
+    <h2 data-skriv>Först: vem är jag egentligen?</h2>
+    <p data-skriv>Det började 2013. Då blev jag – som förste svensk någonsin –
+    <span class="inringad">världsmästare<svg viewBox="0 0 200 74" preserveAspectRatio="none" aria-hidden="true"><path pathLength="100" d="M14 37 C10 16 60 5 104 7 C158 9 192 20 188 40 C184 60 128 70 74 66 C30 63 10 52 16 30"/></svg></span>
+    i minne. Året därpå åkte jag till Haikou i Kina och försvarade titeln. Sedan dess har jag
+    gjort det till mitt jobb att visa att hjärnan klarar mer än man tror: i TV-studior,
+    föreläsningssalar, böcker och appar.</p>
+    <p data-skriv>Jag har memorerat <span class="understruken">100 000 decimaler av pi</span>,
+    lärt mig hela Talang-publikens namn och vunnit en miljon på Postkodmiljonären. När jag inte
+    tävlar i att minnas saker tävlar jag i att formulera dem – som färsk svensk mästare i poetry
+    slam och Göteborgsmästare i ordvitsar.</p>
+    <p data-skriv>Kortversionen, om du har bråttom: Göteborg – föreläsare och författare –
+    tre gratis läroappar – två VM-guld.</p>
+
+    <figure class="foto dyk">
+      <div class="fotoram">
+        <span class="horn h1x" aria-hidden="true"></span><span class="horn h2x" aria-hidden="true"></span>
+        <span class="horn h3x" aria-hidden="true"></span><span class="horn h4x" aria-hidden="true"></span>
+        <img src="../assets/img/foto-siffervagg-md.webp" alt="Jonas ler framför en vägg täckt av handskrivna pi-decimaler" width="580" height="800" loading="lazy" decoding="async">
+      </div>
+      <figcaption>Jag framför en vägg med pi-decimaler. Jag hade gärna sagt att det är en tapet
+      man kan köpa, men nej – vi skrev dit dem.
+      <span class="kredit">Foto: Jessica Ahrling</span></figcaption>
+    </figure>
+  </section>
+
+  <div class="delare" aria-hidden="true"><svg viewBox="0 0 200 16" preserveAspectRatio="none"><path d="M4 9 C20 1 36 17 52 9 C68 1 84 17 100 9 C116 1 132 17 148 9 C164 1 180 17 196 9"/></svg></div>
+
+  <!-- ==================== MERITER ==================== -->
+  <section id="meriter" aria-label="Meriter">
+    <h2 data-skriv>Saker jag av någon anledning har vunnit</h2>
+    <p data-skriv>Du undrar kanske vad ”världsmästare i minne” betyder i praktiken. Rimlig
+    fråga. Här är listan jag brukar peka på när någon höjer ett ögonbryn:</p>
+    <ul class="meriter">
+      <li data-skriv>– Två VM-guld i minne – London <b>2013</b> och Haikou, Kina <b>2014</b>.
+        Sveriges förste världsmästare i minne.</li>
+      <li data-skriv>– <span class="understruken">100 000 decimaler av pi</span> – först i
+        världen att klara ett verifierat test på alla (<b>2020</b>). Europarekordet i uppläsning
+        har jag också: 24 063 decimaler i rad.</li>
+      <li data-skriv>– <span class="understruken">Golden buzzer</span> i Talang <b>2018</b> (TV4)
+        – David Batra tryckte efter att jag lärt mig hela publikens namn. Tog mig till final.</li>
+      <li data-skriv>– Miljonfrågan i Postkodmiljonären <b>2023</b> – rätt svar, en miljon.
+        En av bara 13 genom tiderna i Sverige.</li>
+      <li data-skriv>– Svensk mästare i poetry slam <b>2026</b>.</li>
+      <li data-skriv>– Göteborgsmästare i ordvitsar <b>2026</b> – och klar för SM-final.
+        (Be mig inte bevisa det. Det slutar aldrig.)</li>
+      <li data-skriv>– Fem SM-guld i pubquiz – med laget ”Glenns över sjö och strand”.</li>
+      <li data-skriv>– Diverse TV-segrar – vann Smartare än en femteklassare (<b>2020</b>),
+        besegrade expertpanelen i Muren (SVT, <b>2021</b>) och vann min utmaning i kinesiska
+        The Brain. Den handlade om 200 numrerade valnötter. Fråga inte.</li>
+      <li data-skriv>– Tre böcker – ”Så får du ett superminne” (Semic, ny utgåva 2024),
+        ”Bli ett minnesgeni!” (2019) och ”Pi-boken 2.0” (2020, med alla 100 000 decimaler).</li>
+      <li data-skriv>– Högskoleprovet – 2.0 tolv gånger. Och 2021 fick jag
+        <span class="understruken">160 av 160 rätt</span>, som ende i landet.</li>
+    </ul>
+
+    <figure class="foto hoger dyk">
+      <div class="fotoram">
+        <span class="horn h1x" aria-hidden="true"></span><span class="horn h2x" aria-hidden="true"></span>
+        <span class="horn h3x" aria-hidden="true"></span><span class="horn h4x" aria-hidden="true"></span>
+        <img src="../assets/img/foto-knut-rod-md.webp" alt="Jonas tittar storögt på ett snöre knutet i rosett runt sitt pekfinger" width="611" height="800" loading="lazy" decoding="async">
+      </div>
+      <figcaption>Omslagsfotot till boken. Snöre runt fingret är förresten en riktigt dålig
+      minnesteknik – jag lär dig gärna bättre.
+      <span class="kredit">Foto: Stefan Edetoft</span></figcaption>
+    </figure>
+  </section>
+
+  <div class="delare" aria-hidden="true"><svg viewBox="0 0 200 16" preserveAspectRatio="none"><path d="M4 9 C20 1 36 17 52 9 C68 1 84 17 100 9 C116 1 132 17 148 9 C164 1 180 17 196 9"/></svg></div>
+
+  <!-- ==================== PROJEKT ==================== -->
+  <section id="projekt" aria-label="Appar jag byggt">
+    <h2 data-skriv>Jag bygger också saker</h2>
+    <p data-skriv>Nog om troféer. Det här är jag nästan mest stolt över: tre appar,
+    <span class="inringad">noll kronor<svg viewBox="0 0 200 74" preserveAspectRatio="none" aria-hidden="true"><path pathLength="100" d="M14 37 C10 16 60 5 104 7 C158 9 192 20 188 40 C184 60 128 70 74 66 C30 63 10 52 16 30"/></svg></span>.
+    Jag bygger dem för att det är kul – och för att bra inlärning inte ska kosta.</p>
+
+    <h3 data-skriv>1. jonasgeografi.se</h3>
+    <p data-skriv>Lär dig alla världens länder på en snurrbar jordglob där varje land är ett
+    eget litet konstverk. Utforska, quizza och res jorden runt – med minnesknep för varje land.</p>
+
+    <figure class="vykort dyk">
+      <div class="vykortram">
+        <canvas id="glob" style="width:100%;aspect-ratio:1;display:block" role="img" aria-label="Interaktiv jordglob i bläck – dra för att snurra"></canvas>
+        <span class="frimarke" aria-hidden="true">3,14</span>
+        <svg class="stampel" viewBox="0 0 64 52" aria-hidden="true"><circle cx="22" cy="26" r="17"/><path d="M44 16 C50 14 56 14 61 16 M44 24 C50 22 56 22 61 24 M44 32 C50 30 56 30 61 32"/></svg>
+      </div>
+      <figcaption>Ett vykort från appen – fast globen här är på riktigt. Ta tag och snurra!</figcaption>
+    </figure>
+    <p data-skriv><a class="pil-lank" href="https://jonasgeografi.se" target="_blank" rel="noopener"><svg class="pil" width="32" height="15" viewBox="0 0 32 15"><path d="M2 9 C10 5.5 18 5.5 27 7.5 M21 3 L28 7.7 L20 11.5"/></svg>Öppna jonasgeografi.se</a></p>
+
+    <h3 data-skriv>2. hpakuten.se</h3>
+    <p data-skriv>Gratis träning inför högskoleprovet: simulera gamla prov på tid,
+    videogenomgångar och minnestekniker. Från Sveriges kanske mest rutinerade HP-skrivare
+    (se listan ovan).</p>
+    <p data-skriv><a class="pil-lank" href="https://hpakuten.se" target="_blank" rel="noopener"><svg class="pil" width="32" height="15" viewBox="0 0 32 15"><path d="M2 9 C10 5.5 18 5.5 27 7.5 M21 3 L28 7.7 L20 11.5"/></svg>Öppna hpakuten.se</a></p>
+
+    <h3 data-skriv>3. gångertabellen.se</h3>
+    <p data-skriv>Gångertabellen är lättare än den ser ut: med rätt knep är det bara sex tal
+    kvar att memorera. Quiz, minnesbilder och smart repetition – utan inloggning.</p>
+    <p data-skriv><a class="pil-lank" href="https://www.gångertabellen.se" target="_blank" rel="noopener"><svg class="pil" width="32" height="15" viewBox="0 0 32 15"><path d="M2 9 C10 5.5 18 5.5 27 7.5 M21 3 L28 7.7 L20 11.5"/></svg>Öppna gångertabellen.se</a></p>
+
+    <h3 data-skriv>Om du hellre tittar än läser</h3>
+    <p data-skriv>Det förstår jag precis. Tre klipp jag gärna skickar med:</p>
+    <p data-skriv>
+      <a class="pil-lank" href="https://www.youtube.com/watch?v=PtqSFf3cO04" target="_blank" rel="noopener"><svg class="pil" width="32" height="15" viewBox="0 0 32 15"><path d="M2 9 C10 5.5 18 5.5 27 7.5 M21 3 L28 7.7 L20 11.5"/></svg>Talang: jag memorerar 500 namn på två timmar</a><br>
+      <a class="pil-lank" href="https://www.youtube.com/results?search_query=jonas+von+essen+postkodmiljon%C3%A4ren" target="_blank" rel="noopener"><svg class="pil" width="32" height="15" viewBox="0 0 32 15"><path d="M2 9 C10 5.5 18 5.5 27 7.5 M21 3 L28 7.7 L20 11.5"/></svg>Postkodmiljonären: miljonfrågan – se klippet på YouTube</a><br>
+      <a class="pil-lank" href="https://www.youtube.com/@BlueberryClubSparven" target="_blank" rel="noopener"><svg class="pil" width="32" height="15" viewBox="0 0 32 15"><path d="M2 9 C10 5.5 18 5.5 27 7.5 M21 3 L28 7.7 L20 11.5"/></svg>Gratis lektion: världens 10 största länder på 5 minuter</a>
+    </p>
+  </section>
+
+  <div class="delare" aria-hidden="true"><svg viewBox="0 0 200 16" preserveAspectRatio="none"><path d="M4 9 C20 1 36 17 52 9 C68 1 84 17 100 9 C116 1 132 17 148 9 C164 1 180 17 196 9"/></svg></div>
+
+  <!-- ==================== KURS ==================== -->
+  <section id="kurs" aria-label="Onlinekursen Skaffa ett superminne">
+    <div class="kursbox">
+      <svg class="ram" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M2.5 7 C25 4.5 55 5.5 97 4.5 C98 30 97.5 65 96.5 95 C65 96.5 30 96 3.5 94.5 C2.5 65 2 35 2.5 7 Z"/>
+      </svg>
+      <h2 data-skriv>Skaffa ett superminne!</h2>
+      <p data-skriv>Det viktigaste jag lärt mig på tolv år som minnesmästare: ett bra minne är
+      inte en talang – det är en teknik. I min onlinekurs lär du dig metoderna jag själv
+      använder. I din egen takt, hur många gånger du vill.</p>
+      <p data-skriv style="margin-bottom:.2em"><a class="kurs-cta" href="https://kurs.jonasvonessen.se" target="_blank" rel="noopener">Till kursen<svg viewBox="0 0 200 74" preserveAspectRatio="none" aria-hidden="true"><path d="M14 37 C10 14 60 4 104 6 C158 8 192 19 188 40 C184 61 128 71 74 67 C30 64 9 53 15 29"/></svg></a></p>
+      <p class="kurs-liten" data-skriv>kurs.jonasvonessen.se – rekommenderas varmt av mig, som är helt opartisk.</p>
+    </div>
+  </section>
+
+  <div class="delare" aria-hidden="true"><svg viewBox="0 0 200 16" preserveAspectRatio="none"><path d="M4 9 C20 1 36 17 52 9 C68 1 84 17 100 9 C116 1 132 17 148 9 C164 1 180 17 196 9"/></svg></div>
+
+  <!-- ==================== KONTAKT ==================== -->
+  <section id="kontakt" aria-label="Följ mig och kontakt">
+    <h2 data-skriv>Skriv tillbaka?</h2>
+    <p data-skriv>Jag finns förstås även där breven är kortare:</p>
+    <ul class="soc">
+      <li data-skriv><svg viewBox="0 0 26 26" aria-hidden="true"><rect x="3" y="3" width="20" height="20" rx="6"/><circle cx="13" cy="13" r="4.6"/><circle cx="18.6" cy="7.4" r=".9"/></svg><a href="https://www.instagram.com/jonasvonessen/" target="_blank" rel="noopener">Instagram – @jonasvonessen</a></li>
+      <li data-skriv><svg viewBox="0 0 26 26" aria-hidden="true"><path d="M13.5 4 L13.5 16.5 A4.4 4.4 0 1 1 9 12.2 M13.5 5 C14.5 8 17.5 10 20.5 10"/></svg><a href="https://www.tiktok.com/@jonasvonessen" target="_blank" rel="noopener">TikTok – @jonasvonessen</a></li>
+      <li data-skriv><svg viewBox="0 0 26 26" aria-hidden="true"><rect x="2.5" y="6" width="21" height="14.5" rx="4"/><path class="yt-tri" d="M11 10.2 L16.4 13.2 L11 16.2 Z"/></svg><a href="https://www.youtube.com/@BlueberryClubSparven" target="_blank" rel="noopener">YouTube</a></li>
+    </ul>
+    <p data-skriv>Och vill du boka en föreläsning – till jobbet, skolan eller scenen – så
+    lovade min gamla hemsida ”ett <span class="inringad">oförglömligt<svg viewBox="0 0 200 74" preserveAspectRatio="none" aria-hidden="true"><path pathLength="100" d="M14 37 C10 16 60 5 104 7 C158 9 192 20 188 40 C184 60 128 70 74 66 C30 63 10 52 16 30"/></svg></span> event”.
+    Det står jag för än i dag. Skriv en rad här under, så hör jag av mig:</p>
+
+    <!-- FORMSPREE: när formuläret ska kopplas, lägg till
+         action="https://formspree.io/f/DITT-FORMSPREE-ID" method="POST"
+         och ta bort JS-hanteraren nedan. -->
+    <form id="kontaktform" novalidate>
+      <div class="falt">
+        <label for="f-namn">Namn</label>
+        <input id="f-namn" name="namn" type="text" autocomplete="name" placeholder="Vad heter du? Jag glömmer det inte." required>
+      </div>
+      <div class="falt">
+        <label for="f-epost">E-post</label>
+        <input id="f-epost" name="epost" type="email" autocomplete="email" placeholder="din@adress.se" required>
+      </div>
+      <div class="falt">
+        <label for="f-medd">Meddelande</label>
+        <textarea id="f-medd" name="meddelande" placeholder="Berätta om ditt event – eller utmana mig i frågesport." required></textarea>
+      </div>
+      <button class="skicka" type="submit">Skicka
+        <svg viewBox="0 0 200 74" preserveAspectRatio="none" aria-hidden="true"><path d="M14 37 C10 14 60 4 104 6 C158 8 192 19 188 40 C184 61 128 71 74 67 C30 64 9 53 15 29"/></svg>
+      </button>
+    </form>
+    <p id="tack" hidden tabindex="-1">Tack! Ditt meddelande är antecknat.
+      <span>Formuläret kopplas snart – mejla mig så länge, eller hugg tag i mig på Instagram.</span>
+    </p>
+
+    <div class="avslut">
+      <p data-skriv>Tack för att du läste ända hit. De flesta skummar. Jag kommer ihåg
+      sådant här – i ordets alla bemärkelser.</p>
+      <p data-skriv style="margin-bottom:.2em">Varma hälsningar från Göteborg,</p>
+      <div class="signatur" role="img" aria-label="Jonas – handskriven signatur">
+        <svg viewBox="0 20 340 120">
+          <path pathLength="100" d="M64 20 C74 9 93 12 95 26 C97 48 90 72 80 97 C73 114 50 119 44 106 C39 94 56 86 72 84 C79 84 85 85 90 86"/>
+          <path pathLength="100" d="M90 86 C93 74 98 62 108 60 C119 58 125 70 118 80 C112 88 99 88 99 78 C99 70 104 64 111 63 C116 63 121 65 126 70"/>
+          <path pathLength="100" d="M126 70 C128 66 131 62 133 64 C135 66 133 76 132 86 C135 72 141 62 147 64 C152 66 151 74 149 86 C149 87 151 87 153 85"/>
+          <path pathLength="100" d="M153 85 C158 76 164 64 170 62 C162 58 152 64 153 74 C154 84 166 88 170 80 C172 76 172 68 173 62 C173 72 173 82 177 87 C180 89 184 86 186 82"/>
+          <path pathLength="100" d="M186 82 C191 74 199 65 207 61 C201 57 192 60 194 66 C196 72 205 73 207 80 C209 88 198 91 191 86 C196 92 208 92 220 88 C230 84 237 84 242 82"/>
+          <path pathLength="100" d="M42 122 C100 110 210 108 296 116"/>
+        </svg>
+      </div>
+      <div class="ps">
+        <p data-skriv>P.S. Boka en föreläsning så lovar jag att kunna allas namn.</p>
+        <p data-skriv>P.P.S. Även ditt.</p>
+      </div>
+    </div>
+  </section>
+</article>
+</div>
+</main>
+
+<footer class="fot">
+  <p>© 2026 Jonas von Essen ·
+    <a href="https://jonasgeografi.se" target="_blank" rel="noopener">jonasgeografi.se</a> ·
+    <a href="https://hpakuten.se" target="_blank" rel="noopener">hpakuten.se</a> ·
+    <a href="https://www.gångertabellen.se" target="_blank" rel="noopener">gångertabellen.se</a> ·
+    <a href="https://kurs.jonasvonessen.se" target="_blank" rel="noopener">Skaffa ett superminne</a></p>
+  <p class="kredit">Foto: Jessica Ahrling · Stefan Edetoft</p>
+</footer>
+
+<script src="../assets/globe.js"></script>
+<script>
+(function(){
+  'use strict';
+  var docEl=document.documentElement;
+  var stilla=docEl.classList.contains('stilla');
+  var reduced=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var papper=document.querySelector('.papper');
+  var $$=function(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s));};
+
+  /* ---------- dela upp texten i ord (för skriv-effekten) ---------- */
+  function splitOrd(el){
+    var walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,null);
+    var noder=[],n;
+    while((n=walker.nextNode())){
+      if(!n.nodeValue||!n.nodeValue.trim())continue;
+      var p=n.parentNode;
+      var inSvg=false,q=p;
+      while(q&&q!==el){ if(q.namespaceURI==='http://www.w3.org/2000/svg'){inSvg=true;break;} q=q.parentNode; }
+      if(!inSvg)noder.push(n);
+    }
+    noder.forEach(function(node){
+      var frag=document.createDocumentFragment();
+      node.nodeValue.split(/(\s+)/).forEach(function(tok){
+        if(!tok)return;
+        if(/^\s+$/.test(tok)){frag.appendChild(document.createTextNode(tok));return;}
+        var s=document.createElement('span');s.className='w';s.textContent=tok;
+        frag.appendChild(s);
+      });
+      node.parentNode.replaceChild(frag,node);
+    });
+    return $$('.w',el);
+  }
+
+  var skrivEls=$$('[data-skriv]');
+  if(!stilla&&!reduced){
+    skrivEls.forEach(function(el){el.__ord=splitOrd(el);el.classList.add('skriv');});
+  }
+
+  /* ---------- pennspetsen (endast desktop + pekare) ---------- */
+  var penna=document.getElementById('penna');
+  var medPenna=penna&&!stilla&&!reduced
+    &&matchMedia('(pointer:fine)').matches&&matchMedia('(min-width:1024px)').matches;
+  var pennJob=null,pennRaf=0;
+  function pennTick(now){
+    pennRaf=0;
+    var j=pennJob;if(!j)return;
+    var t=now-j.t0;
+    if(t>j.dur){penna.style.opacity='0';pennJob=null;return;}
+    var i=Math.min(j.rects.length-1,Math.max(0,Math.floor(t/j.steg)));
+    var r=j.rects[i];
+    var p=Math.max(0,Math.min(1,(t-i*j.steg)/160));
+    penna.style.transform='translate('+(r.l+r.w*p-3)+'px,'+(r.t+r.h*0.42-35)+'px)';
+    pennRaf=requestAnimationFrame(pennTick);
+  }
+  function pennaFolj(ws,steg){
+    if(!medPenna||!ws.length)return;
+    var pr=papper.getBoundingClientRect();
+    var rects=ws.map(function(w){var r=w.getBoundingClientRect();
+      return{l:r.left-pr.left,t:r.top-pr.top,w:r.width,h:r.height};});
+    pennJob={rects:rects,steg:steg,t0:performance.now(),dur:ws.length*steg+220};
+    penna.style.opacity='1';
+    if(!pennRaf)pennRaf=requestAnimationFrame(pennTick);
+  }
+
+  /* ---------- avslöja ett stycke ---------- */
+  function skrivEl(el){
+    var ws=el.__ord||[];
+    var steg=Math.max(9,Math.min(26,520/(ws.length||1)));
+    ws.forEach(function(w,i){w.style.transitionDelay=Math.round(i*steg)+'ms';});
+    el.classList.add('skriven');
+    pennaFolj(ws,steg);
+    var cirklar=$$('.inringad',el);
+    if(cirklar.length){
+      setTimeout(function(){cirklar.forEach(function(c){c.classList.add('rita');});},
+        Math.round(ws.length*steg)+120);
+    }
+  }
+  function visaAllt(){
+    skrivEls.forEach(function(el){
+      el.classList.add('skriven');
+      ($$('.w',el)).forEach(function(w){w.style.transitionDelay='0ms';});
+      $$('.inringad',el).forEach(function(c){c.classList.add('rita');});
+    });
+    $$('.dyk').forEach(function(f){f.classList.add('framme');});
+    var sig=document.querySelector('.signatur');
+    if(sig)sig.classList.add('rita');
+  }
+
+  /* ---------- observers ---------- */
+  var startad=false;
+  function startInk(){
+    if(startad)return;startad=true;
+    if(stilla||reduced)return; /* CSS visar allt direkt */
+    if(!('IntersectionObserver' in window)){visaAllt();return;}
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting)return;
+        io.unobserve(e.target);
+        if(e.target.hasAttribute('data-skriv'))skrivEl(e.target);
+        else if(e.target.classList.contains('dyk'))e.target.classList.add('framme');
+        else if(e.target.classList.contains('signatur'))e.target.classList.add('rita');
+      });
+    },{rootMargin:'0px 0px -7% 0px',threshold:.02});
+    skrivEls.forEach(function(el){io.observe(el);});
+    $$('.dyk').forEach(function(f){io.observe(f);});
+    var sig=document.querySelector('.signatur');
+    if(sig)io.observe(sig);
+  }
+
+  /* ---------- globen: vykort i bläck, lazy-init ---------- */
+  var glob=document.getElementById('glob'),globKlar=false;
+  function startaGlob(){
+    if(globKlar||!glob||typeof JonasGlobe==='undefined')return;
+    globKlar=true;
+    JonasGlobe.create(glob,'../assets/globe-data.json',{
+      mode:'lines',
+      lineColor:'rgba(35,42,77,.85)',
+      lineWidth:1.1,
+      dotColor:'rgba(35,42,77,.5)',
+      graticule:'rgba(35,42,77,.13)',
+      rim:'rgba(35,42,77,.3)',
+      sphereFill:'rgba(35,42,77,.035)',
+      markerColor:'#8a2f1e'
+    }).catch(function(){});
+  }
+  if(glob){
+    if('IntersectionObserver' in window){
+      var gio=new IntersectionObserver(function(es){
+        if(es.some(function(e){return e.isIntersecting;})){gio.disconnect();startaGlob();}
+      },{rootMargin:'500px'});
+      gio.observe(glob);
+    }else startaGlob();
+  }
+
+  /* ---------- aktiv sektion i nav ---------- */
+  var navLankar={};
+  $$('.lankar a').forEach(function(a){navLankar[a.getAttribute('data-nav')]=a;});
+  if('IntersectionObserver' in window){
+    var nio=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting)return;
+        $$('.lankar a').forEach(function(a){a.classList.remove('aktiv');a.removeAttribute('aria-current');});
+        var a=navLankar[e.target.id];
+        if(a){a.classList.add('aktiv');a.setAttribute('aria-current','true');}
+      });
+    },{rootMargin:'-38% 0px -55% 0px'});
+    ['om','meriter','projekt','kurs','kontakt'].forEach(function(id){
+      var s=document.getElementById(id);if(s)nio.observe(s);
+    });
+  }
+
+  /* ---------- formuläret ---------- */
+  var form=document.getElementById('kontaktform');
+  if(form){
+    form.addEventListener('submit',function(e){
+      e.preventDefault();
+      form.hidden=true;
+      var t=document.getElementById('tack');
+      t.hidden=false;t.focus();
+    });
+  }
+
+  /* ---------- laddskärmen: kuvertet ---------- */
+  var loader=document.getElementById('loader');
+  if(docEl.classList.contains('med-loader')&&loader){
+    var klar=false;
+    var avsluta=function(){
+      if(klar)return;klar=true;
+      try{sessionStorage.setItem('brev-sett','1');}catch(err){}
+      loader.classList.add('borta');
+      docEl.classList.remove('laser');
+      window.removeEventListener('keydown',avsluta);
+      setTimeout(function(){if(loader.parentNode)loader.parentNode.removeChild(loader);},600);
+      startInk();
+    };
+    loader.addEventListener('pointerdown',avsluta);
+    window.addEventListener('keydown',avsluta);
+    setTimeout(avsluta,2400);
+  }else{
+    startInk();
+  }
+})();
+</script>
+</body>
+</html>

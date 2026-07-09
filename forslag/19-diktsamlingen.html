@@ -44,7 +44,7 @@
   /* ---------- toppnav ---------- */
   header.top{
     position:sticky;top:0;z-index:50;
-    background:rgba(251,250,247,.94);
+    background:var(--paper);
     border-bottom:1px solid var(--hair);
   }
   .top-inner{
@@ -353,6 +353,7 @@
   @media (max-width:480px){
     .toc .num{flex-basis:1.9rem}
     .toc .under{padding-left:2.8rem}
+    .toc .ar{align-self:flex-end}
   }
 
   /* ---------- projekt ---------- */
@@ -539,6 +540,7 @@
   }
 
   @media (max-width:640px){
+    section{scroll-margin-top:6.2rem}
     .l{padding-left:1.1em;text-indent:-1.1em}
     .l[data-n]::before{right:calc(100% + .45rem);font-size:.58rem}
     .sida{padding:0 1.35rem}

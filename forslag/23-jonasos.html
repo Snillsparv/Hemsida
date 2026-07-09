@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jonas von Essen – Tvåfaldig världsmästare i minne</title>
+<meta name="description" content="Jonas von Essen – tvåfaldig världsmästare i minne, föreläsare och författare. Starta JONAS-OS 26.0: meriter, gratis läroappar, böcker och onlinekursen Skaffa ett superminne.">
+<meta property="og:title" content="Jonas von Essen – Tvåfaldig världsmästare i minne">
+<meta property="og:description" content="Välkommen till JONAS-OS 26.0 – ett skrivbord fullt av minnen: VM-guld, 100 000 π-decimaler, gratis läroappar och en kurs i minnesteknik.">
+<meta property="og:image" content="../assets/img/jonas_vm-md.webp">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#ffdfca">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='26' fill='%237c5cff'/%3E%3Ctext x='50' y='72' font-size='60' text-anchor='middle'%3E%F0%9F%A7%A0%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/fonts.css">
+<script>
+(function(){
+  var d=document.documentElement;
+  d.className+=' js';
+  var noboot=false;
+  try{
+    if(location.search.indexOf('noloader')>-1) noboot=true;
+    if(sessionStorage.getItem('jos-boot')) noboot=true;
+    if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) noboot=true;
+  }catch(e){ if(location.search.indexOf('noloader')>-1) noboot=true; }
+  if(noboot) d.className+=' noboot';
+})();
+</script>
+<style>
+/* ============ GRUND ============ */
+:root{
+  --ink:#2a2150;
+  --ink-soft:#554a80;
+  --win:#fffdfa;
+  --violet:#5b3bd6;
+  --violet-deep:#43289f;
+  --pink:#ff8fb3;
+  --mint:#4ecfa5;
+  --sun:#ffcf5c;
+  --line:rgba(43,33,80,.22);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none !important}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Space Grotesk',system-ui,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(120% 90% at 85% -10%, rgba(255,207,92,.28), transparent 55%),
+    radial-gradient(110% 90% at 10% 110%, rgba(124,92,255,.24), transparent 55%),
+    linear-gradient(160deg,#ffdfca 0%,#f9d3e3 46%,#cdc3f6 100%);
+  background-attachment:fixed;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+html.js body{height:100vh;height:100dvh;overflow:hidden}
+img{max-width:100%;height:auto}
+a{color:var(--violet)}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:3px solid var(--violet);outline-offset:2px;border-radius:6px}
+::selection{background:#ffd0e4;color:var(--ink)}
+button{font:inherit;color:inherit}
+
+/* ============ BOOT ============ */
+#boot{
+  position:fixed;inset:0;z-index:4000;
+  background:
+    radial-gradient(90% 70% at 50% 8%, rgba(124,92,255,.30), transparent 60%),
+    radial-gradient(70% 60% at 80% 100%, rgba(255,143,179,.16), transparent 60%),
+    #171030;
+  display:grid;place-items:center;
+  transition:opacity .45s ease, visibility .45s;
+}
+#boot.boot-done{opacity:0;visibility:hidden}
+html.noboot #boot{display:none}
+html:not(.js) #boot{display:none}
+.boot-inner{width:min(560px,86vw);text-align:center}
+.boot-logo{
+  width:86px;height:86px;margin:0 auto 16px;border-radius:26px;
+  background:linear-gradient(140deg,#ffb98a,#ff8fb3 45%,#8f7bff);
+  display:grid;place-items:center;font-size:46px;
+  box-shadow:0 18px 50px rgba(143,123,255,.42), inset 0 2px 0 rgba(255,255,255,.5);
+}
+.boot-name{color:#fff;font-weight:700;font-size:1.65rem;letter-spacing:.14em}
+.boot-name b{color:#ffb3c9;font-weight:700}
+.boot-sub{color:rgba(255,255,255,.5);font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;margin-top:4px}
+.boot-log{
+  margin:26px auto 18px;text-align:left;
+  font-family:'JetBrains Mono',ui-monospace,monospace;
+  font-size:.82rem;line-height:1.85;color:#9fe8c6;
+  min-height:12.95em;white-space:pre-wrap;
+}
+.boot-bar{height:10px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden;border:1px solid rgba(255,255,255,.16)}
+#bootFill{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffb98a,#ff8fb3,#8f7bff);border-radius:99px;transition:width 2.45s cubic-bezier(.3,.6,.4,1)}
+.boot-hint{margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:rgba(255,255,255,.45)}
+
+/* ============ OS-SKAL ============ */
+html:not(.js) #os{display:none}
+#os{display:flex;flex-direction:column;height:100vh;height:100dvh}
+
+/* menyrad */
+#menubar{
+  height:42px;flex:0 0 42px;display:flex;align-items:center;gap:12px;padding:0 12px;
+  background:rgba(255,253,250,.74);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);position:relative;z-index:2000;
+}
+#menuBtn{
+  display:flex;align-items:center;gap:8px;font-weight:700;letter-spacing:.08em;font-size:.85rem;
+  padding:5px 12px;border-radius:10px;border:1px solid transparent;background:transparent;cursor:pointer;
+}
+#menuBtn:hover,#menuBtn[aria-expanded="true"]{background:rgba(124,92,255,.14);border-color:rgba(124,92,255,.25)}
+.mb-brain{font-size:1.05rem}
+.mb-title{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.12em;opacity:.6}
+#clock{
+  margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:500;
+  background:rgba(255,255,255,.65);padding:4px 10px;border-radius:8px;border:1px solid rgba(43,33,80,.14);
+  white-space:nowrap;
+}
+
+/* startmeny */
+#startMenu{
+  position:absolute;top:48px;left:10px;z-index:2100;min-width:264px;
+  background:rgba(255,253,250,.97);backdrop-filter:blur(12px);
+  border:1px solid var(--line);border-radius:18px;
+  box-shadow:0 24px 60px rgba(64,44,130,.32);padding:8px;
+}
+.menu-head{display:flex;gap:10px;align-items:center;padding:10px 12px 12px;border-bottom:1px solid rgba(43,33,80,.12);margin-bottom:6px}
+.mh-logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(140deg,#ffb98a,#ff8fb3 45%,#8f7bff);display:grid;place-items:center;font-size:20px}
+.menu-head small{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--ink-soft)}
+.mi{display:flex;align-items:center;gap:10px;width:100%;padding:9px 12px;border-radius:10px;border:0;background:transparent;font-size:.92rem;font-weight:500;cursor:pointer;text-align:left}
+.mi:hover,.mi:focus-visible{background:rgba(124,92,255,.13)}
+.mi-ico{width:22px;text-align:center}
+.mi-sep{height:1px;background:rgba(43,33,80,.13);margin:6px 8px}
+.mi-star{margin-left:auto;font-size:.55rem;font-family:'JetBrains Mono',monospace;background:#ffdff0;border:1px solid #f5a3c7;color:#a1246b;padding:2px 7px;border-radius:99px;font-weight:700;letter-spacing:.06em}
+
+/* skrivbord */
+#desk{
+  position:relative;flex:1;min-height:0;overflow:hidden;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='190' height='190'%3E%3Ctext x='28' y='58' font-size='30' fill='%232a2150' opacity='.05' font-family='Georgia' transform='rotate(-12 28 58)'%3E%CF%80%3C/text%3E%3Ctext x='118' y='146' font-size='17' fill='%232a2150' opacity='.045' font-family='monospace' transform='rotate(8 118 146)'%3E3.14159%3C/text%3E%3C/svg%3E");
+}
+.desk-pi{
+  position:absolute;right:-30px;bottom:-90px;font-family:Georgia,serif;font-size:clamp(280px,34vw,460px);
+  line-height:1;color:rgba(255,255,255,.30);pointer-events:none;user-select:none;
+}
+#icons{
+  position:absolute;inset:14px;display:flex;flex-direction:column;flex-wrap:wrap;
+  gap:2px 10px;align-content:flex-start;pointer-events:none;z-index:1;
+}
+.icon{
+  pointer-events:auto;width:96px;display:flex;flex-direction:column;align-items:center;gap:5px;
+  padding:7px 4px;border:0;background:transparent;border-radius:14px;cursor:pointer;position:relative;
+}
+.ic-glyph{
+  width:54px;height:54px;border-radius:17px;display:grid;place-items:center;font-size:28px;
+  background:linear-gradient(150deg,rgba(255,255,255,.92),var(--tint,#fff));
+  border:1px solid rgba(43,33,80,.24);
+  box-shadow:0 6px 16px rgba(64,44,130,.16), inset 0 1px 0 rgba(255,255,255,.8);
+  transition:transform .14s ease;
+}
+.icon:hover .ic-glyph{transform:translateY(-2px) scale(1.05)}
+.icon:active .ic-glyph{transform:scale(.96)}
+.ic-label{
+  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.68rem;font-weight:500;color:var(--ink);
+  background:rgba(255,255,255,.74);padding:2px 7px;border-radius:7px;max-width:100%;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.icon.selected .ic-glyph{outline:2.5px solid var(--violet);outline-offset:1px}
+.icon.selected .ic-label{background:var(--violet);color:#fff}
+.ic-badge{
+  position:absolute;top:-2px;right:-6px;font-family:'JetBrains Mono',monospace;font-size:.5rem;font-weight:700;
+  letter-spacing:.05em;background:#ff5c9d;color:#fff;padding:3px 7px;border-radius:99px;
+  transform:rotate(6deg);box-shadow:0 3px 8px rgba(255,92,157,.5);
+}
+
+/* ============ FÖNSTER ============ */
+#winLayer{position:absolute;inset:0;pointer-events:none;z-index:10}
+.window{
+  pointer-events:auto;position:absolute;background:var(--win);
+  border:1px solid rgba(43,33,80,.30);border-radius:16px;
+  box-shadow:0 10px 24px rgba(64,44,130,.16),0 32px 72px rgba(64,44,130,.22);
+  display:flex;flex-direction:column;max-height:calc(100% - 18px);max-width:calc(100% - 14px);
+  min-width:280px;overflow:hidden;
+}
+.window.active{
+  box-shadow:0 14px 30px rgba(64,44,130,.25),0 46px 96px rgba(64,44,130,.33);
+  border-color:rgba(43,33,80,.44);
+}
+.window:not(.active) .titlebar{filter:saturate(.45) brightness(1.05)}
+.window.opening{animation:winIn .2s cubic-bezier(.2,.9,.3,1.18)}
+.window.closing{animation:winOut .14s ease forwards}
+@keyframes winIn{from{opacity:0;transform:scale(.92) translateY(10px)}to{opacity:1;transform:none}}
+@keyframes winOut{to{opacity:0;transform:scale(.94) translateY(8px)}}
+.titlebar{
+  display:flex;align-items:center;gap:8px;padding:8px 9px;
+  background:linear-gradient(120deg,var(--tb1,#ffd9b3),var(--tb2,#ffc2cf));
+  border-bottom:1px solid rgba(43,33,80,.16);
+  cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none;flex:0 0 auto;
+}
+.window.dragging{opacity:.94}
+.window.dragging .titlebar{cursor:grabbing}
+.tb-title{
+  font-weight:700;font-size:.92rem;display:flex;align-items:center;gap:8px;min-width:0;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.tb-ico{font-size:1rem}
+.tb-btns{margin-left:auto;display:flex;gap:6px}
+.tb-min,.tb-close,.tb-back{
+  width:27px;height:27px;border-radius:9px;border:1px solid rgba(43,33,80,.28);
+  background:rgba(255,255,255,.65);font-size:16px;line-height:1;display:grid;place-items:center;
+  cursor:pointer;color:var(--ink);flex:0 0 auto;padding:0;
+}
+.tb-min:hover{background:#ffe9a3}
+.tb-close:hover{background:#ff8fa3}
+.tb-back{display:none;font-size:19px;font-weight:700}
+.win-body{overflow:auto;padding:20px 22px 24px;overscroll-behavior:contain;min-height:0}
+
+/* fönsterhues */
+.hue-peach{--tb1:#ffd9b3;--tb2:#ffc2cf}
+.hue-sun{--tb1:#ffe9a3;--tb2:#ffd0a6}
+.hue-mint{--tb1:#bfeed4;--tb2:#bfdfff}
+.hue-rose{--tb1:#ffd0c6;--tb2:#ffc7e0}
+.hue-lav{--tb1:#ded3ff;--tb2:#c9c6ff}
+.hue-pink{--tb1:#ffc9e2;--tb2:#e3c6ff}
+.hue-blue{--tb1:#c9e2ff;--tb2:#d6ccff}
+.hue-gray{--tb1:#e7e3ee;--tb2:#d9d5e4}
+.hue-red{--tb1:#ffc4c4;--tb2:#ffb3cd}
+
+/* dialoger */
+.window.dlg{min-width:300px}
+.dialog-body{text-align:center;padding:6px 4px}
+.dlg-logo{width:64px;height:64px;margin:2px auto 10px;border-radius:20px;background:linear-gradient(140deg,#ffb98a,#ff8fb3 45%,#8f7bff);display:grid;place-items:center;font-size:34px;box-shadow:0 10px 26px rgba(143,123,255,.4)}
+.dlg-name{font-weight:700;font-size:1.15rem;letter-spacing:.1em;margin-bottom:8px}
+.dlg-line{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--ink-soft);margin:3px 0}
+.dlg-ok{margin-top:16px;min-width:110px;justify-content:center}
+.dlg-row{display:flex;gap:14px;align-items:flex-start;text-align:left;padding:4px 2px}
+.dlg-warn{font-size:36px;line-height:1;filter:drop-shadow(0 4px 8px rgba(255,92,92,.4))}
+.dlg-row p{font-size:.94rem}
+.dlg-row .mono-sub{display:block;margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--ink-soft)}
+
+/* ============ AKTIVITETSFÄLT ============ */
+#taskbar{
+  height:48px;flex:0 0 48px;display:flex;align-items:center;gap:10px;padding:6px 12px;
+  background:rgba(255,253,250,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-top:1px solid var(--line);z-index:1900;position:relative;
+}
+#tasks{display:flex;gap:8px;overflow-x:auto;flex:1;min-width:0;scrollbar-width:thin}
+.task{
+  display:flex;align-items:center;gap:7px;padding:6px 12px;border-radius:10px;
+  border:1px solid rgba(43,33,80,.18);background:rgba(255,255,255,.6);
+  font-size:.74rem;font-family:'JetBrains Mono',ui-monospace,monospace;font-weight:500;
+  white-space:nowrap;cursor:pointer;flex:0 0 auto;
+}
+.task:hover{background:#fff}
+.task.active{background:rgba(124,92,255,.16);border-color:rgba(108,71,255,.45)}
+.task.min{opacity:.55}
+.task.min i{font-style:normal;opacity:.7}
+.tb-copy{font-size:.68rem;opacity:.6;font-family:'JetBrains Mono',monospace;white-space:nowrap}
+
+/* ============ ASSISTENT ============ */
+#assistant{position:fixed;right:12px;bottom:60px;z-index:1500;display:flex;align-items:flex-end;gap:0;pointer-events:none}
+#assistant.pop{animation:asPop .35s cubic-bezier(.2,.9,.3,1.3)}
+@keyframes asPop{from{opacity:0;transform:translateY(24px) scale(.9)}to{opacity:1;transform:none}}
+.as-bubble{
+  pointer-events:auto;position:relative;max-width:240px;background:#fffdf4;
+  border:1.5px solid rgba(43,33,80,.34);border-radius:18px 18px 4px 18px;
+  padding:10px 32px 10px 15px;box-shadow:0 14px 34px rgba(64,44,130,.28);
+  font-family:'Caveat',cursive;font-size:1.35rem;line-height:1.12;transform:rotate(-1.4deg);
+  margin-bottom:44px;
+}
+.as-bubble::after{
+  content:"";position:absolute;right:-9px;bottom:10px;width:16px;height:16px;
+  background:#fffdf4;border-right:1.5px solid rgba(43,33,80,.34);border-bottom:1.5px solid rgba(43,33,80,.34);
+  transform:rotate(-15deg) skew(-12deg);
+}
+.as-close{
+  position:absolute;top:3px;right:5px;width:22px;height:22px;border:0;background:transparent;
+  font-size:15px;cursor:pointer;color:var(--ink-soft);font-family:'Space Grotesk',sans-serif;
+}
+.as-jonas{width:88px;height:auto;transform:scaleX(-1);filter:drop-shadow(0 10px 16px rgba(64,44,130,.32));flex:0 0 auto}
+
+/* ============ SKÄRMSLÄCKARE ============ */
+#saver{
+  position:fixed;inset:0;z-index:3000;overflow:hidden;cursor:none;
+  background:radial-gradient(120% 100% at 50% 0%,#241a4d,#120c28 72%);
+}
+.sv-row{
+  position:absolute;left:0;white-space:nowrap;font-family:'JetBrains Mono',monospace;font-weight:500;
+  color:#b9a6ff;animation:svDrift linear infinite;will-change:transform;letter-spacing:.14em;
+}
+.sv-alt{color:#ff9fbe}
+.sv-alt2{color:#8fe3bd}
+@keyframes svDrift{from{transform:translateX(0)}to{transform:translateX(-55%)}}
+.sv-hint{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:#fff;text-align:center;
+  font-size:1.5rem;font-weight:700;letter-spacing:.06em;text-shadow:0 4px 30px rgba(0,0,0,.6);
+}
+.sv-hint small{display:block;margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:400;color:rgba(255,255,255,.55);letter-spacing:.12em}
+
+/* ============ INNEHÅLL (delas av fönster + fallback) ============ */
+.kicker{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.7rem;letter-spacing:.1em;color:var(--ink-soft);margin-bottom:10px}
+.sec-h{font-size:1.35rem;font-weight:700;letter-spacing:-.01em;margin:0 0 12px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.sec-h .mono-note{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:400;color:var(--ink-soft);letter-spacing:.06em}
+.hero{display:grid;grid-template-columns:1fr 168px;gap:18px;align-items:end;margin-bottom:20px;padding-bottom:6px;border-bottom:1px dashed rgba(43,33,80,.2)}
+.hero-img{width:168px;filter:drop-shadow(0 12px 22px rgba(64,44,130,.28))}
+.hero h1{font-size:1.72rem;line-height:1.14;letter-spacing:-.015em;margin:6px 0 10px}
+.hero h1 .grad{background:linear-gradient(100deg,#e2497e,#7c4fe0);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tagline{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.7rem;color:var(--ink-soft);letter-spacing:.04em;margin-bottom:10px}
+.ingress{font-size:.98rem;margin-bottom:16px}
+.cta-row{display:flex;gap:10px;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;padding:10px 19px;border-radius:12px;
+  font-weight:700;text-decoration:none;font-size:.93rem;cursor:pointer;
+  background:#fff;color:var(--ink);border:1.5px solid rgba(43,33,80,.8);
+  box-shadow:0 3px 0 rgba(43,33,80,.8);transition:transform .12s ease,box-shadow .12s ease;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 5px 0 rgba(43,33,80,.8)}
+.btn:active{transform:translateY(1px);box-shadow:0 1px 0 rgba(43,33,80,.8)}
+.btn-p{background:linear-gradient(115deg,#5f3fd8,#8c3fc8);color:#fff;border-color:var(--violet-deep);box-shadow:0 3px 0 var(--violet-deep)}
+.btn-p:hover{box-shadow:0 5px 0 var(--violet-deep)}
+.btn-p:active{box-shadow:0 1px 0 var(--violet-deep)}
+.btn-big{font-size:1.05rem;padding:13px 26px}
+.chips{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chips li{
+  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.68rem;font-weight:500;
+  background:rgba(124,92,255,.1);border:1px solid rgba(124,92,255,.3);color:#43289f;
+  padding:4px 11px;border-radius:99px;
+}
+.bio{font-size:.95rem}
+
+/* meriter */
+.merit-figs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:2px 0 18px}
+.merit-figs figure{margin:0}
+.merit-figs img{width:100%;border-radius:12px;border:1px solid rgba(43,33,80,.2);display:block}
+.merit-figs figcaption{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--ink-soft);margin-top:5px;letter-spacing:.03em}
+.log{list-style:none;display:flex;flex-direction:column;gap:12px}
+.log li{display:grid;grid-template-columns:74px 1fr;gap:12px;align-items:start}
+.log-y{
+  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.68rem;font-weight:700;text-align:center;
+  background:linear-gradient(140deg,#fff,#eee6ff);border:1px solid rgba(124,92,255,.35);color:#43289f;
+  border-radius:9px;padding:5px 4px;margin-top:2px;
+}
+.log strong{font-size:.96rem}
+.log p{font-size:.86rem;color:var(--ink-soft);margin-top:1px}
+
+/* projekt */
+.folder-icons{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 10px}
+.folder-icons .icon{width:104px}
+.folder-hint{font-size:.64rem;color:var(--ink-soft);letter-spacing:.03em;border-top:1px dashed rgba(43,33,80,.2);padding-top:10px;margin-top:8px}
+.globe-card{
+  border-radius:16px;padding:14px;margin-bottom:14px;
+  background:radial-gradient(110% 110% at 50% 0%,#2b1e5c,#170f38 75%);
+  border:1px solid rgba(43,33,80,.4);box-shadow:inset 0 0 50px rgba(124,92,255,.2);
+}
+.app-meta{font-size:.66rem;color:var(--ink-soft);letter-spacing:.03em;margin:10px 0 14px}
+.app-img{display:block;margin:0 auto 8px;border-radius:12px}
+.app-img.free{filter:drop-shadow(0 10px 20px rgba(64,44,130,.25))}
+.app-p{font-size:.93rem;margin-bottom:6px}
+
+/* kurs */
+.installer{display:grid;grid-template-columns:1fr 148px;gap:16px;align-items:end}
+.installer .inst-img{width:148px;filter:drop-shadow(0 12px 20px rgba(64,44,130,.3))}
+.checklist{list-style:none;margin:12px 0 16px;display:flex;flex-direction:column;gap:6px;font-size:.76rem;color:#1d7a55}
+.kurs-fine{font-size:.72rem;color:var(--ink-soft);margin-top:12px;font-family:'JetBrains Mono',monospace}
+.kurs-head{
+  background:linear-gradient(120deg,#ffdff0,#e9dcff);border:1px solid rgba(124,92,255,.3);
+  border-radius:14px;padding:14px 16px;margin-bottom:16px;
+}
+.kurs-head .kicker{margin-bottom:4px}
+.kurs-head h2{font-size:1.5rem;letter-spacing:-.01em}
+
+/* böcker */
+.book-fig{margin:0 0 16px}
+.book-fig img{width:100%;border-radius:14px;border:1px solid rgba(43,33,80,.25);display:block}
+.book-fig figcaption{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--ink-soft);margin-top:6px}
+.books{list-style:none;display:flex;flex-direction:column;gap:10px}
+.books li{background:rgba(255,255,255,.7);border:1px solid rgba(43,33,80,.16);border-radius:12px;padding:11px 14px;font-size:.9rem}
+.books .mono{font-size:.66rem;color:var(--ink-soft);display:block;margin-top:2px}
+
+/* tv */
+.tv-cards{list-style:none;display:flex;flex-direction:column;gap:10px}
+.tv-cards a{
+  display:block;text-decoration:none;color:var(--ink);background:rgba(255,255,255,.75);
+  border:1px solid rgba(43,33,80,.2);border-radius:14px;padding:13px 15px;transition:transform .12s ease;
+}
+.tv-cards a:hover{transform:translateY(-2px);border-color:rgba(124,92,255,.5);background:#fff}
+.tv-cards .tv-show{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:#a1246b}
+.tv-cards strong{display:block;font-size:.95rem;margin:3px 0 4px}
+.tv-cards .tv-go{font-size:.74rem;color:var(--violet);font-weight:700}
+
+/* kontakt */
+.kontakt-top{display:grid;grid-template-columns:1fr 96px;gap:12px;align-items:end;margin-bottom:14px}
+.kontakt-top img{width:96px;filter:drop-shadow(0 8px 16px rgba(64,44,130,.25))}
+.form{display:flex;flex-direction:column;gap:12px;margin-top:6px}
+.form label{display:flex;flex-direction:column;gap:5px;font-weight:700;font-size:.82rem}
+.form input,.form textarea{
+  font:inherit;font-size:.92rem;padding:10px 13px;border-radius:11px;
+  border:1.5px solid rgba(43,33,80,.35);background:#fff;color:var(--ink);
+}
+.form input:focus-visible,.form textarea:focus-visible{outline:3px solid var(--violet);outline-offset:1px;border-color:var(--violet)}
+.form button{align-self:flex-start}
+.form-done{
+  background:linear-gradient(120deg,#dcf7e8,#e3f0ff);border:1.5px solid #58bd8f;border-radius:14px;
+  padding:16px 18px;font-weight:500;margin-top:6px;
+}
+.social{list-style:none;display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 4px}
+.social a{
+  display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:700;font-size:.84rem;
+  color:var(--ink);background:rgba(255,255,255,.75);border:1.5px solid rgba(43,33,80,.35);
+  padding:8px 14px;border-radius:99px;transition:transform .12s ease;
+}
+.social a:hover{transform:translateY(-2px);border-color:var(--violet)}
+.social svg{width:17px;height:17px;fill:currentColor}
+.fineprint{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--ink-soft);border-top:1px dashed rgba(43,33,80,.25);padding-top:12px;margin-top:16px;line-height:1.8}
+.fineprint a{color:var(--ink-soft)}
+h3.sub-h{font-size:1rem;margin:18px 0 4px}
+
+/* papperskorg */
+.trash-empty{text-align:center;padding:14px 6px 8px}
+.trash-glyph{font-size:52px;line-height:1;margin-bottom:10px;filter:grayscale(.2) drop-shadow(0 8px 14px rgba(64,44,130,.2))}
+.trash-empty strong{font-size:1.2rem;display:block}
+.trash-empty .trash-sub{color:var(--ink-soft);font-size:.94rem;margin-top:4px}
+.trash-empty .mono{display:block;margin-top:14px;font-size:.62rem;color:var(--ink-soft)}
+
+/* ============ FALLBACK-DOKUMENT (utan JS) ============ */
+html.js #doc,html.js #site-footer{display:none}
+#doc{max-width:800px;margin:0 auto;padding:24px 20px 40px}
+.nojs-banner{
+  font-family:'JetBrains Mono',monospace;font-size:.74rem;background:#2a2150;color:#ffe9a3;
+  border-radius:12px;padding:12px 16px;margin-bottom:20px;line-height:1.7;
+}
+html:not(.js) .app-sec{
+  background:var(--win);border:1px solid rgba(43,33,80,.24);border-radius:20px;
+  padding:28px 26px 30px;margin-bottom:22px;box-shadow:0 14px 40px rgba(64,44,130,.14);
+}
+html:not(.js) .folder-icons{display:none}
+html:not(.js) #glob{display:none}
+html.js .globe-fallback{display:none}
+.globe-fallback{border-radius:12px;display:block;margin:0 auto}
+#site-footer{
+  max-width:800px;margin:0 auto;padding:0 20px 50px;
+  font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--ink-soft);line-height:1.9;
+}
+
+/* ============ MOBIL ============ */
+@media (max-width:799px){
+  #menubar{height:40px;flex-basis:40px;gap:8px}
+  .mb-title{display:none}
+  #icons{
+    inset:12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(86px,1fr));
+    gap:4px 2px;align-content:start;
+  }
+  .icon{width:auto}
+  .window:not(.dlg){
+    position:fixed !important;left:0 !important;top:40px !important;right:0;bottom:0;
+    width:auto !important;max-width:none;max-height:none;border-radius:0;border:0;
+    transform:none !important;z-index:1600 !important;
+  }
+  .window:not(.dlg) .titlebar{cursor:default;border-radius:0}
+  .tb-back{display:grid}
+  .tb-min{display:none}
+  .window.dlg{
+    position:fixed !important;left:4vw !important;right:4vw;top:22vh !important;
+    width:auto !important;min-width:0;z-index:2500 !important;
+  }
+  .hero{grid-template-columns:1fr;gap:8px}
+  .hero-img{width:130px;justify-self:end;margin-top:-8px}
+  .installer{grid-template-columns:1fr}
+  .installer .inst-img{width:120px;justify-self:end}
+  .merit-figs{grid-template-columns:1fr}
+  .kontakt-top{grid-template-columns:1fr 78px}
+  .kontakt-top img{width:78px}
+  #assistant{bottom:14px;right:10px}
+  .as-jonas{width:70px}
+  .as-bubble{font-size:1.2rem;max-width:200px;margin-bottom:34px}
+  .tb-copy{display:none}
+  .log li{grid-template-columns:62px 1fr;gap:9px}
+  .win-body{padding:16px 16px 22px}
+}
+
+/* ============ REDUCERAD RÖRELSE ============ */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important}
+  html{scroll-behavior:auto}
+  .mi-saver{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== BOOT ===================== -->
+<div id="boot" aria-hidden="true">
+  <div class="boot-inner">
+    <div class="boot-logo">🧠</div>
+    <div class="boot-name">JONAS-OS <b>26.0</b></div>
+    <div class="boot-sub">minnesoperativsystem</div>
+    <pre class="boot-log" id="bootLog"></pre>
+    <div class="boot-bar"><i id="bootFill"></i></div>
+    <div class="boot-hint">tryck valfri tangent för att hoppa över bootsekvensen</div>
+  </div>
+</div>
+
+<!-- ===================== OS-SKAL ===================== -->
+<div id="os">
+  <header id="menubar">
+    <button id="menuBtn" aria-haspopup="true" aria-expanded="false" aria-controls="startMenu">
+      <span class="mb-brain" aria-hidden="true">🧠</span> MINNE
+    </button>
+    <span class="mb-title" aria-hidden="true">JONAS-OS 26.0 · jonasvonessen.se</span>
+    <span id="clock" aria-hidden="true"></span>
+  </header>
+
+  <div id="startMenu" role="menu" aria-label="MINNE-menyn" hidden>
+    <div class="menu-head">
+      <span class="mh-logo" aria-hidden="true">🧠</span>
+      <div><strong>JONAS-OS 26.0</strong><br><small>inloggad: jonas · ledigt minne: oändligt</small></div>
+    </div>
+    <button class="mi" role="menuitem" data-open="om"><span class="mi-ico" aria-hidden="true">📄</span> Om mig</button>
+    <button class="mi" role="menuitem" data-open="meriter"><span class="mi-ico" aria-hidden="true">🏆</span> Meriter</button>
+    <button class="mi" role="menuitem" data-open="projekt"><span class="mi-ico" aria-hidden="true">📁</span> Projekt</button>
+    <button class="mi" role="menuitem" data-open="bocker"><span class="mi-ico" aria-hidden="true">📚</span> Böcker</button>
+    <button class="mi" role="menuitem" data-open="tv"><span class="mi-ico" aria-hidden="true">📺</span> Sett på TV</button>
+    <button class="mi" role="menuitem" data-open="kurs"><span class="mi-ico" aria-hidden="true">🎓</span> Skaffa ett superminne <span class="mi-star">REKOMMENDERAS</span></button>
+    <button class="mi" role="menuitem" data-open="kontakt"><span class="mi-ico" aria-hidden="true">💌</span> Kontakt &amp; bokning</button>
+    <div class="mi-sep" role="separator"></div>
+    <button class="mi mi-saver" role="menuitem" id="miSaver"><span class="mi-ico" aria-hidden="true">🌌</span> Starta skärmsläckaren</button>
+    <button class="mi" role="menuitem" data-open="about"><span class="mi-ico" aria-hidden="true">🧠</span> Om JONAS-OS…</button>
+  </div>
+
+  <div id="desk">
+    <span class="desk-pi" aria-hidden="true">π</span>
+    <div id="icons" role="group" aria-label="Skrivbordsikoner">
+      <button class="icon desk-ic" data-app="om" style="--tint:#ffd9b8">
+        <span class="ic-glyph" aria-hidden="true">📄</span><span class="ic-label">om-mig.txt</span>
+      </button>
+      <button class="icon desk-ic" data-app="meriter" style="--tint:#ffe9a8">
+        <span class="ic-glyph" aria-hidden="true">🏆</span><span class="ic-label">meriter.log</span>
+      </button>
+      <button class="icon desk-ic" data-app="projekt" style="--tint:#c5eed8">
+        <span class="ic-glyph" aria-hidden="true">📁</span><span class="ic-label">projekt/</span>
+      </button>
+      <button class="icon desk-ic" data-app="bocker" style="--tint:#ffd4c4">
+        <span class="ic-glyph" aria-hidden="true">📚</span><span class="ic-label">bocker.pdf</span>
+      </button>
+      <button class="icon desk-ic" data-app="tv" style="--tint:#cfe3ff">
+        <span class="ic-glyph" aria-hidden="true">📺</span><span class="ic-label">tv-klipp.mpg</span>
+      </button>
+      <button class="icon desk-ic" data-app="kurs" style="--tint:#ffcfe3">
+        <span class="ic-glyph" aria-hidden="true">🎓</span><span class="ic-label">kurs.exe</span>
+        <span class="ic-badge" aria-hidden="true">REKOMMENDERAS</span>
+      </button>
+      <button class="icon desk-ic" data-app="kontakt" style="--tint:#ded4ff">
+        <span class="ic-glyph" aria-hidden="true">💌</span><span class="ic-label">kontakt.msg</span>
+      </button>
+      <button class="icon desk-ic" data-app="trash" style="--tint:#e8e4ef">
+        <span class="ic-glyph" aria-hidden="true">🗑️</span><span class="ic-label">papperskorgen</span>
+      </button>
+    </div>
+    <div id="winLayer"></div>
+  </div>
+
+  <footer id="taskbar">
+    <div id="tasks" aria-label="Öppna fönster"></div>
+    <span class="tb-copy">© 2026 Jonas von Essen · JONAS-OS 26.0</span>
+  </footer>
+
+  <div id="assistant" hidden>
+    <div class="as-bubble">
+      <button class="as-close" aria-label="Stäng tipset">×</button>
+      <p id="asText"></p>
+    </div>
+    <img class="as-jonas" src="../assets/img/kul.webp" alt="">
+  </div>
+
+  <div id="saver" hidden aria-hidden="true"></div>
+</div>
+
+<!-- ===================== INNEHÅLL ===================== -->
+<main id="doc">
+  <p class="nojs-banner">⚠ JONAS-OS 26.0 kunde inte boota — JavaScript är avstängt.
+  Ingen fara: hela innehållet finns här nedanför som vanligt dokument.</p>
+
+  <!-- om-mig.txt -->
+  <section id="sec-om" class="app-sec" aria-label="Om mig">
+    <div class="hero">
+      <div class="hero-txt">
+        <p class="kicker">C:\Users\jonas&gt; whoami</p>
+        <h1>Hej! Jag är <span class="grad">Jonas</span> — tvåfaldig världsmästare i minne.</h1>
+        <p class="tagline">Tvåfaldig världsmästare i minne · Föreläsare · Frågesportsnörd</p>
+        <p class="ingress">Jag tävlar i att minnas saker – och i att säga dem snyggt. Däremellan
+        bygger jag gratis appar som gör det lättare att lära sig.</p>
+        <p class="cta-row">
+          <a class="btn btn-p" href="#sec-projekt" data-open="projekt">Se vad jag byggt</a>
+          <a class="btn" href="#sec-kontakt" data-open="kontakt">Boka föreläsning</a>
+        </p>
+      </div>
+      <img class="hero-img" src="../assets/img/hej.webp" alt="Jonas von Essen vinkar glatt" width="430" height="720">
+    </div>
+    <h2 class="sec-h">Om mig <span class="mono-note">// om-mig.txt · 1 fil, 0 luckor</span></h2>
+    <p class="bio">Jag heter Jonas von Essen och 2013 blev jag – som förste svensk någonsin –
+    världsmästare i minne. 2014 försvarade jag titeln. Sedan dess har jag gjort det till mitt
+    jobb att visa att hjärnan klarar mer än man tror: i TV-studior, föreläsningssalar, böcker
+    och appar. Jag har memorerat 100&nbsp;000 decimaler av pi, lärt mig hela Talang-publikens
+    namn och vunnit en miljon på Postkodmiljonären. När jag inte tävlar i att minnas saker
+    tävlar jag i att formulera dem – som färsk svensk mästare i poetry slam och
+    Göteborgsmästare i ordvitsar.</p>
+    <ul class="chips">
+      <li>📍 Göteborg</li><li>🎤 Föreläsare &amp; författare</li>
+      <li>📱 3 gratis läroappar</li><li>🥇 2× VM-guld</li>
+    </ul>
+  </section>
+
+  <!-- meriter.log -->
+  <section id="sec-meriter" class="app-sec" aria-label="Meriter">
+    <h2 class="sec-h">Meriter <span class="mono-note">// meriter.log · läses uppifrån, imponeras nedåt</span></h2>
+    <div class="merit-figs">
+      <figure>
+        <img src="../assets/img/jonas_vm-md.webp" alt="Jonas med VM-pokalen, insvept i svenska flaggan" loading="lazy" width="700" height="700">
+        <figcaption>VM-guld — Sveriges förste världsmästare i minne.</figcaption>
+      </figure>
+      <figure>
+        <img src="../assets/img/foto-siffervagg-md.webp" alt="Jonas ler framför en vägg täckt av handskrivna pi-decimaler" loading="lazy" width="700" height="466">
+        <figcaption>100&nbsp;000 decimaler senare. Foto: Jessica Ahrling</figcaption>
+      </figure>
+    </div>
+    <ol class="log">
+      <li><span class="log-y">2013–14</span><div><strong>2× Världsmästare i minne</strong>
+        <p>London 2013 &amp; Haikou, Kina 2014. Sveriges förste världsmästare i minne.</p></div></li>
+      <li><span class="log-y">2020</span><div><strong>100&nbsp;000 π-decimaler</strong>
+        <p>Först i världen att klara ett verifierat test på alla 100&nbsp;000. Europarekord i uppläsning: 24&nbsp;063 decimaler i rad.</p></div></li>
+      <li><span class="log-y">2018</span><div><strong>Talang (TV4)</strong>
+        <p>Golden buzzer av David Batra efter att ha lärt sig hela publikens namn. Finalist.</p></div></li>
+      <li><span class="log-y">2023</span><div><strong>Postkodmiljonären</strong>
+        <p>Svarade rätt på miljonfrågan. En av endast 13 genom tiderna i Sverige.</p></div></li>
+      <li><span class="log-y">2026</span><div><strong>Svensk mästare i Poetry Slam</strong></div></li>
+      <li><span class="log-y">2026</span><div><strong>Göteborgsmästare i ordvitsar</strong>
+        <p>Och klar för SM-final.</p></div></li>
+      <li><span class="log-y">×5</span><div><strong>Svensk mästare i pubquiz</strong>
+        <p>Med laget ”Glenns över sjö och strand”.</p></div></li>
+      <li><span class="log-y">TV</span><div><strong>Fler TV-segrar</strong>
+        <p>Vann Smartare än en femteklassare (2020), besegrade expertpanelen i Muren (SVT, 2021), vann sin utmaning i kinesiska The Brain (bl.a. 200 numrerade valnötter).</p></div></li>
+      <li><span class="log-y">BOK</span><div><strong>Författare</strong>
+        <p>”Så får du ett superminne” (Semic), ”Bli ett minnesgeni!” och ”Pi-boken 2.0”.</p></div></li>
+      <li><span class="log-y">160</span><div><strong>Högskoleprovet</strong>
+        <p>2.0 tolv gånger. 160/160 år 2021, som ende i landet.</p></div></li>
+    </ol>
+  </section>
+
+  <!-- projekt/ -->
+  <section id="sec-projekt" class="app-sec" aria-label="Projekt">
+    <h2 class="sec-h">Projekt <span class="mono-note">// ~/projekt · 3 objekt</span></h2>
+    <p class="app-p">Tre appar, noll kronor. Jag bygger dem för att det är kul – och för att bra
+    inlärning inte ska kosta.</p>
+    <div class="folder-icons">
+      <button class="icon" data-open="geo" style="--tint:#c5eed8">
+        <span class="ic-glyph" aria-hidden="true">🌍</span><span class="ic-label">Geografi.app</span>
+      </button>
+      <button class="icon" data-open="hp" style="--tint:#ffd2cc">
+        <span class="ic-glyph" aria-hidden="true">🚑</span><span class="ic-label">HP-akuten.app</span>
+      </button>
+      <button class="icon" data-open="gt" style="--tint:#e3d2ff">
+        <span class="ic-glyph" aria-hidden="true">✖️</span><span class="ic-label">Gångertabellen</span>
+      </button>
+    </div>
+    <p class="folder-hint mono">3 objekt · 0 kr · här räcker det med ETT klick — jag är inte ett monster</p>
+  </section>
+
+  <!-- Geografi.app -->
+  <section id="sec-geo" class="app-sec" aria-label="jonasgeografi.se">
+    <h2 class="sec-h">jonasgeografi.se <span class="mono-note">// Geografi.app</span></h2>
+    <div class="globe-card">
+      <canvas id="glob" style="width:100%;aspect-ratio:1;display:block" aria-label="Interaktiv jordglob – dra för att snurra"></canvas>
+      <img class="globe-fallback" src="../assets/img/glob-art.webp" alt="Konstglob från jonasgeografi.se" loading="lazy" width="500" height="500">
+    </div>
+    <p class="app-p">Lär dig alla världens länder på en snurrbar jordglob där varje land är ett
+    eget litet konstverk. Utforska, quizza och res jorden runt – med minnesknep för varje land.</p>
+    <p class="app-meta mono">status: 197/197 länder inlästa · globen ovan är på riktigt — dra i den!</p>
+    <a class="btn btn-p" href="https://jonasgeografi.se" target="_blank" rel="noopener">Öppna jonasgeografi.se ↗</a>
+  </section>
+
+  <!-- HP-akuten.app -->
+  <section id="sec-hp" class="app-sec" aria-label="hpakuten.se">
+    <h2 class="sec-h">hpakuten.se <span class="mono-note">// HP-akuten.app</span></h2>
+    <img class="app-img free" src="../assets/img/jonas_hp-md.webp" alt="Jonas som komisk plugghäst med jätteglasögon vid en skolbänk" loading="lazy" width="700" height="527" style="width:min(320px,100%)">
+    <p class="app-p">Gratis träning inför högskoleprovet: simulera gamla prov på tid,
+    videogenomgångar och minnestekniker. Från Sveriges kanske mest rutinerade HP-skrivare.</p>
+    <p class="app-meta mono">utvecklarens meriter: 2.0 tolv gånger · 160/160 år 2021</p>
+    <a class="btn btn-p" href="https://hpakuten.se" target="_blank" rel="noopener">Öppna hpakuten.se ↗</a>
+  </section>
+
+  <!-- Gångertabellen.app -->
+  <section id="sec-gt" class="app-sec" aria-label="gångertabellen.se">
+    <h2 class="sec-h">gångertabellen.se <span class="mono-note">// Gångertabellen.app</span></h2>
+    <img class="app-img free" src="../assets/img/jonas-gangertabellen-md.webp" alt="Jonas med mind blown-min och händerna i luften" loading="lazy" width="700" height="573" style="width:min(300px,100%)">
+    <p class="app-p">Gångertabellen är lättare än den ser ut: med rätt knep är det bara sex tal
+    kvar att memorera. Quiz, minnesbilder och smart repetition – utan inloggning.</p>
+    <p class="app-meta mono">spoiler: 6 tal kvar. resten är gratis mönster.</p>
+    <a class="btn btn-p" href="https://www.gångertabellen.se" target="_blank" rel="noopener">Öppna gångertabellen.se ↗</a>
+  </section>
+
+  <!-- kurs.exe -->
+  <section id="sec-kurs" class="app-sec" aria-label="Onlinekursen Skaffa ett superminne">
+    <div class="kurs-head">
+      <p class="kicker">kurs.exe · installationsguide · steg 1 av 1</p>
+      <h2>Skaffa ett superminne!</h2>
+    </div>
+    <div class="installer">
+      <div>
+        <p class="app-p">Onlinekurs i minnesteknik: lär dig metoderna jag använder – i din egen
+        takt, hur många gånger du vill.</p>
+        <ul class="checklist">
+          <li>[✓] metoderna jag själv tävlar med</li>
+          <li>[✓] i din egen takt</li>
+          <li>[✓] se om hur många gånger du vill</li>
+        </ul>
+        <a class="btn btn-p btn-big" href="https://kurs.jonasvonessen.se" target="_blank" rel="noopener">Till kursen ↗</a>
+        <p class="kurs-fine">Installationen tar ett klick. Ingen omstart krävs.</p>
+      </div>
+      <img class="inst-img" src="../assets/img/stark.webp" alt="Jonas spänner musklerna, nöjd" loading="lazy" width="430" height="720">
+    </div>
+  </section>
+
+  <!-- bocker.pdf -->
+  <section id="sec-bocker" class="app-sec" aria-label="Böcker">
+    <h2 class="sec-h">Böcker <span class="mono-note">// bocker.pdf · 3 sidor om många fler</span></h2>
+    <figure class="book-fig">
+      <img src="../assets/img/foto-knut-rod-md.webp" alt="Jonas tittar storögt på ett snöre knutet i rosett runt sitt pekfinger" loading="lazy" width="800" height="533">
+      <figcaption>Omslagsfotot till ”Så får du ett superminne”. Foto: Stefan Edetoft</figcaption>
+    </figure>
+    <ul class="books">
+      <li><strong>Så får du ett superminne</strong><span class="mono">Semic · ny utgåva 2024</span></li>
+      <li><strong>Bli ett minnesgeni!</strong><span class="mono">2019</span></li>
+      <li><strong>Pi-boken 2.0</strong><span class="mono">2020 · alla 100 000 decimaler, svart på vitt</span></li>
+    </ul>
+  </section>
+
+  <!-- tv-klipp.mpg -->
+  <section id="sec-tv" class="app-sec" aria-label="Sett på TV">
+    <h2 class="sec-h">Sett på TV <span class="mono-note">// tv-klipp.mpg · buffrar aldrig</span></h2>
+    <ul class="tv-cards">
+      <li><a href="https://www.youtube.com/watch?v=PtqSFf3cO04" target="_blank" rel="noopener">
+        <span class="tv-show">Talang · TV4</span>
+        <strong>Jonas memorerar 500 namn på två timmar</strong>
+        <span class="tv-go">▶ Spela upp på YouTube</span></a></li>
+      <li><a href="https://www.youtube.com/results?search_query=jonas+von+essen+postkodmiljon%C3%A4ren" target="_blank" rel="noopener">
+        <span class="tv-show">Postkodmiljonären</span>
+        <strong>Miljonfrågan</strong>
+        <span class="tv-go">▶ Se klippet på YouTube</span></a></li>
+      <li><a href="https://www.youtube.com/@BlueberryClubSparven" target="_blank" rel="noopener">
+        <span class="tv-show">Gratis lektion</span>
+        <strong>Lär dig världens 10 största länder på 5 minuter</strong>
+        <span class="tv-go">▶ Till kanalen på YouTube</span></a></li>
+    </ul>
+  </section>
+
+  <!-- kontakt.msg -->
+  <section id="sec-kontakt" class="app-sec" aria-label="Kontakt och bokning">
+    <div class="kontakt-top">
+      <div>
+        <h2 class="sec-h">Kontakt <span class="mono-note">// kontakt.msg · nytt meddelande</span></h2>
+        <p class="app-p">Vill du boka mig för ett oförglömligt event – föreläsning, konferens
+        eller TV? Skriv en rad!</p>
+      </div>
+      <img src="../assets/img/ner.webp" alt="" loading="lazy" width="430" height="720">
+    </div>
+    <!-- TODO: Formspree — sätt action="https://formspree.io/f/DITT-FORMSPREE-ID" method="POST"
+         och ta bort preventDefault-hanteraren i JS när formuläret ska kopplas på riktigt. -->
+    <form class="form" id="contactForm">
+      <label>Namn <input type="text" name="namn" required autocomplete="name" placeholder="Ditt namn (jag kommer ihåg det)"></label>
+      <label>E-post <input type="email" name="epost" required autocomplete="email" placeholder="du@exempel.se"></label>
+      <label>Meddelande <textarea name="meddelande" rows="4" required placeholder="Berätta om ditt event, din fråga eller din bästa ordvits …"></textarea></label>
+      <button class="btn btn-p" type="submit">Skicka</button>
+    </form>
+    <p class="form-done" id="formDone" hidden role="status">Tack! 🎉 Formuläret kopplas snart –
+    mejla mig så länge, så hörs vi. (Ditt meddelande är redan memorerat.)</p>
+    <h3 class="sub-h">Följ mig</h3>
+    <ul class="social">
+      <li><a href="https://www.instagram.com/jonasvonessen/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.9.07 1.2.06 1.8.25 2.2.42.56.22.96.48 1.38.9.42.42.68.82.9 1.38.17.42.36 1.05.42 2.23.06 1.27.07 1.65.07 4.85s0 3.58-.07 4.85c-.06 1.18-.25 1.8-.42 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.17-1.05.36-2.23.42-1.27.06-1.65.07-4.85.07s-3.58 0-4.85-.07c-1.18-.06-1.8-.25-2.23-.42a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.17-.42-.36-1.05-.42-2.23C2.2 15.6 2.2 15.2 2.2 12s0-3.58.07-4.85c.06-1.18.25-1.8.42-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.17 1.05-.36 2.23-.42C8.4 2.2 8.8 2.2 12 2.2m0-2.2C8.7 0 8.3 0 7 .07 5.8.13 4.9.33 4.1.63a5.9 5.9 0 0 0-2.13 1.4A5.9 5.9 0 0 0 .63 4.1C.33 4.9.13 5.8.07 7 0 8.3 0 8.7 0 12s0 3.7.07 5c.06 1.2.26 2.1.56 2.9.3.8.72 1.5 1.4 2.13a5.9 5.9 0 0 0 2.12 1.4c.8.3 1.7.5 2.9.56 1.3.07 1.7.07 5 .07s3.7 0 5-.07c1.2-.06 2.1-.26 2.9-.56a5.9 5.9 0 0 0 2.13-1.4 5.9 5.9 0 0 0 1.4-2.12c.3-.8.5-1.7.56-2.9.07-1.3.07-1.7.07-5s0-3.7-.07-5c-.06-1.2-.26-2.1-.56-2.9a5.9 5.9 0 0 0-1.4-2.13A5.9 5.9 0 0 0 19.9.63c-.8-.3-1.7-.5-2.9-.56C15.7 0 15.3 0 12 0zm0 5.8a6.2 6.2 0 1 0 0 12.4 6.2 6.2 0 0 0 0-12.4zm0 10.2a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm7.8-10.4a1.44 1.44 0 1 1-2.88 0 1.44 1.44 0 0 1 2.88 0z"/></svg>
+        Instagram</a></li>
+      <li><a href="https://www.tiktok.com/@jonasvonessen" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.75 2h3.1c.2 1.24.83 2.4 1.74 3.28a5.9 5.9 0 0 0 3.31 1.58v3.2a9.2 9.2 0 0 1-5.05-1.62v7.16A6.4 6.4 0 1 1 9.4 9.24c.35 0 .7.03 1.03.09v3.3a3.1 3.1 0 1 0 2.32 3V2z"/></svg>
+        TikTok</a></li>
+      <li><a href="https://www.youtube.com/@BlueberryClubSparven" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.13C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.4.52A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.13c1.9.52 9.4.52 9.4.52s7.5 0 9.4-.52a3 3 0 0 0 2.1-2.13A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
+        YouTube</a></li>
+    </ul>
+    <p class="fineprint">© 2026 Jonas von Essen · byggt i JONAS-OS 26.0 ·
+      <a href="https://jonasgeografi.se" target="_blank" rel="noopener">jonasgeografi.se</a> ·
+      <a href="https://hpakuten.se" target="_blank" rel="noopener">hpakuten.se</a> ·
+      <a href="https://www.gångertabellen.se" target="_blank" rel="noopener">gångertabellen.se</a> ·
+      <a href="https://kurs.jonasvonessen.se" target="_blank" rel="noopener">kurs.jonasvonessen.se</a></p>
+  </section>
+
+  <!-- papperskorgen -->
+  <section id="sec-trash" class="app-sec" aria-label="Papperskorgen">
+    <div class="trash-empty">
+      <p class="trash-glyph" aria-hidden="true">🗑️</p>
+      <strong>Tom.</strong>
+      <p class="trash-sub">Jag slänger aldrig minnen.</p>
+      <span class="mono">0 objekt · 0 byte · 0 ånger</span>
+    </div>
+  </section>
+</main>
+
+<footer id="site-footer">
+  © 2026 Jonas von Essen ·
+  <a href="https://jonasgeografi.se" target="_blank" rel="noopener">jonasgeografi.se</a> ·
+  <a href="https://hpakuten.se" target="_blank" rel="noopener">hpakuten.se</a> ·
+  <a href="https://www.gångertabellen.se" target="_blank" rel="noopener">gångertabellen.se</a> ·
+  <a href="https://kurs.jonasvonessen.se" target="_blank" rel="noopener">kurs.jonasvonessen.se</a><br>
+  Foto: Stefan Edetoft, Jessica Ahrling.
+</footer>
+
+<!-- dialogmallar (endast OS-läget) -->
+<template id="tpl-about">
+  <div class="dialog-body">
+    <div class="dlg-logo" aria-hidden="true">🧠</div>
+    <p class="dlg-name">JONAS-OS</p>
+    <p class="dlg-line">Version 26.0</p>
+    <p class="dlg-line">Minne: 100 000 π-decimaler</p>
+    <p class="dlg-line">Inga kända buggar, bara features.</p>
+    <button class="btn btn-p dlg-ok" data-close>OK</button>
+  </div>
+</template>
+<template id="tpl-error">
+  <div class="dialog-body">
+    <div class="dlg-row">
+      <span class="dlg-warn" aria-hidden="true">⚠️</span>
+      <p><strong>FEL 404: glömska hittades inte.</strong><br>
+      Papperskorgen förblir tom — alla minnen är fortfarande kvar.
+      <span class="mono-sub">felkod: 0x3141592 · åtgärd: acceptera</span></p>
+    </div>
+    <button class="btn btn-p dlg-ok" data-close>OK</button>
+  </div>
+</template>
+
+<script src="../assets/globe.js"></script>
+<script>
+(function(){
+  'use strict';
+  var docEl=document.documentElement;
+  var reduced=window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function isMobile(){return window.innerWidth<800;}
+  function $(id){return document.getElementById(id);}
+
+  var desk=$('desk'), winLayer=$('winLayer'), tasks=$('tasks');
+
+  /* ---------- registret ---------- */
+  var REG={
+    om:     {t:'om-mig.txt',        i:'📄', src:'sec-om',      w:700, hue:'peach'},
+    meriter:{t:'meriter.log',       i:'🏆', src:'sec-meriter', w:640, hue:'sun'},
+    projekt:{t:'projekt/',          i:'📁', src:'sec-projekt', w:520, hue:'mint'},
+    geo:    {t:'Geografi.app',      i:'🌍', src:'sec-geo',     w:480, hue:'mint', onOpen:initGlobe},
+    hp:     {t:'HP-akuten.app',     i:'🚑', src:'sec-hp',      w:480, hue:'rose'},
+    gt:     {t:'Gångertabellen.app',i:'✖️', src:'sec-gt',      w:480, hue:'lav'},
+    kurs:   {t:'kurs.exe',          i:'🎓', src:'sec-kurs',    w:600, hue:'pink'},
+    bocker: {t:'bocker.pdf',        i:'📚', src:'sec-bocker',  w:540, hue:'peach'},
+    tv:     {t:'tv-klipp.mpg',      i:'📺', src:'sec-tv',      w:480, hue:'blue'},
+    kontakt:{t:'kontakt.msg',       i:'💌', src:'sec-kontakt', w:560, hue:'lav'},
+    trash:  {t:'papperskorgen',     i:'🗑️', src:'sec-trash',   w:380, hue:'gray'},
+    about:  {t:'Om JONAS-OS',       i:'🧠', tpl:'tpl-about',   w:380, hue:'pink', dialog:true},
+    error:  {t:'FEL 404',           i:'⚠️', tpl:'tpl-error',   w:420, hue:'red',  dialog:true, alert:true}
+  };
+  var wins={}, zTop=40, casc=0, trashOpens=0, assistDismissed=false;
+
+  /* ---------- fönstersystem ---------- */
+  function buildWin(id, reg){
+    var win=document.createElement('section');
+    win.className='window hue-'+reg.hue+(reg.dialog?' dlg':'');
+    win.id='win-'+id;
+    win.tabIndex=-1;
+    win.setAttribute('role', reg.alert?'alertdialog':'dialog');
+    var tid='wt-'+id;
+    win.setAttribute('aria-labelledby', tid);
+
+    var bar=document.createElement('header');
+    bar.className='titlebar';
+    bar.innerHTML=
+      '<button class="tb-back" aria-label="Tillbaka till skrivbordet"><span aria-hidden="true">‹</span></button>'+
+      '<div class="tb-title" id="'+tid+'"><span class="tb-ico" aria-hidden="true">'+reg.i+'</span><span>'+reg.t+'</span></div>'+
+      '<div class="tb-btns">'+
+        (reg.dialog?'':'<button class="tb-min" aria-label="Minimera"><span aria-hidden="true">–</span></button>')+
+        '<button class="tb-close" aria-label="Stäng fönster"><span aria-hidden="true">×</span></button>'+
+      '</div>';
+
+    var body=document.createElement('div');
+    body.className='win-body';
+    if(reg.tpl){ body.appendChild($(reg.tpl).content.cloneNode(true)); }
+    else{ body.appendChild($(reg.src)); }
+
+    win.appendChild(bar); win.appendChild(body);
+    win.style.width=reg.w+'px';
+
+    // position
+    var dw=desk.clientWidth, dh=desk.clientHeight;
+    var x,y;
+    if(reg.dialog){ x=Math.round((dw-reg.w)/2); y=Math.round(dh*0.2); }
+    else if(id==='om'){ x=Math.round((dw-reg.w)/2)+60; y=22; }
+    else{ x=246+(casc%6)*42; y=26+(casc%6)*36; casc++; }
+    x=Math.max(6, Math.min(x, dw-Math.min(reg.w,dw*0.92)-10));
+    y=Math.max(6, Math.min(y, Math.max(6,dh-160)));
+    win.style.left=x+'px'; win.style.top=y+'px';
+
+    // events
+    bar.querySelector('.tb-close').addEventListener('click', function(){ closeWin(win); });
+    bar.querySelector('.tb-back').addEventListener('click', function(){ closeWin(win); });
+    var mb=bar.querySelector('.tb-min');
+    if(mb) mb.addEventListener('click', function(){ minimizeWin(win); });
+    win.addEventListener('pointerdown', function(){ focusWin(win); }, true);
+    makeDraggable(win, bar);
+
+    winLayer.appendChild(win);
+    return win;
+  }
+
+  function openApp(id, opener, isAuto){
+    var reg=REG[id]; if(!reg) return;
+    if(!isAuto) dismissAssistant();
+    var win=wins[id];
+    if(!win){
+      win=buildWin(id, reg);
+      wins[id]=win;
+      if(!reg.dialog) addTask(id);
+      if(!reduced){
+        win.classList.add('opening');
+        setTimeout(function(){ win.classList.remove('opening'); }, 260);
+      }
+      if(reg.onOpen) reg.onOpen(win);
+    }else{
+      win.hidden=false;
+      win.classList.remove('closing');
+      var task=$('task-'+id); if(task) task.classList.remove('min');
+    }
+    win._opener=opener||null;
+    focusWin(win);
+    var okBtn=win.querySelector('.dlg-ok');
+    (okBtn||win).focus({preventScroll:true});
+    if(id==='trash'){
+      trashOpens++;
+      if(trashOpens>=2){ setTimeout(function(){ openApp('error', null, true); }, 240); }
+    }
+    return win;
+  }
+
+  function focusWin(win){
+    if(win.hidden) return;
+    zTop++;
+    win.style.zIndex=zTop;
+    var all=winLayer.querySelectorAll('.window');
+    for(var k=0;k<all.length;k++) all[k].classList.remove('active');
+    win.classList.add('active');
+    syncTasks();
+  }
+
+  function closeWin(win){
+    var id=win.id.replace('win-','');
+    var finish=function(){
+      win.hidden=true;
+      win.classList.remove('closing');
+      removeTask(id);
+      var nxt=topWin(); if(nxt) focusWin(nxt);
+      if(win._opener && document.contains(win._opener)) win._opener.focus({preventScroll:true});
+    };
+    if(reduced){ finish(); }
+    else{
+      win.classList.add('closing');
+      setTimeout(finish, 140);
+    }
+  }
+
+  function minimizeWin(win){
+    var id=win.id.replace('win-','');
+    win.hidden=true;
+    var task=$('task-'+id); if(task) task.classList.add('min');
+    var nxt=topWin(); if(nxt) focusWin(nxt); else syncTasks();
+  }
+
+  function topWin(){
+    var best=null,bz=-1;
+    var all=winLayer.querySelectorAll('.window');
+    for(var k=0;k<all.length;k++){
+      var w=all[k];
+      if(w.hidden) continue;
+      var z=parseInt(w.style.zIndex||0,10);
+      if(z>bz){bz=z;best=w;}
+    }
+    return best;
+  }
+
+  /* ---------- aktivitetsfält ---------- */
+  function addTask(id){
+    if($('task-'+id)) return;
+    var b=document.createElement('button');
+    b.className='task'; b.id='task-'+id;
+    b.innerHTML='<span aria-hidden="true">'+REG[id].i+'</span><i>'+REG[id].t+'</i>';
+    b.addEventListener('click', function(){
+      var win=wins[id]; if(!win) return;
+      if(win.hidden){ openApp(id, b, true); }
+      else if(win.classList.contains('active')){ minimizeWin(win); }
+      else{ focusWin(win); win.focus({preventScroll:true}); }
+    });
+    tasks.appendChild(b);
+  }
+  function removeTask(id){ var t=$('task-'+id); if(t) t.remove(); }
+  function syncTasks(){
+    var all=tasks.querySelectorAll('.task');
+    for(var k=0;k<all.length;k++){
+      var id=all[k].id.replace('task-','');
+      var win=wins[id];
+      all[k].classList.toggle('active', !!(win && !win.hidden && win.classList.contains('active')));
+      if(win && !win.hidden) all[k].classList.remove('min');
+    }
+  }
+
+  /* ---------- drag ---------- */
+  function makeDraggable(win, bar){
+    var sx,sy,bx,by,dragging=false;
+    bar.addEventListener('pointerdown', function(e){
+      if(isMobile()) return;
+      if(e.target.closest('button')) return;
+      dragging=true;
+      win.classList.add('dragging');
+      sx=e.clientX; sy=e.clientY; bx=win.offsetLeft; by=win.offsetTop;
+      try{ bar.setPointerCapture(e.pointerId); }catch(err){}
+      e.preventDefault();
+    });
+    bar.addEventListener('pointermove', function(e){
+      if(!dragging) return;
+      win.style.transform='translate3d('+(e.clientX-sx)+'px,'+(e.clientY-sy)+'px,0)';
+    });
+    function up(e){
+      if(!dragging) return;
+      dragging=false;
+      win.classList.remove('dragging');
+      var dw=desk.clientWidth, dh=desk.clientHeight;
+      var nx=Math.min(Math.max(bx+(e.clientX-sx), -win.offsetWidth+90), dw-90);
+      var ny=Math.min(Math.max(by+(e.clientY-sy), 0), dh-44);
+      win.style.left=nx+'px'; win.style.top=ny+'px';
+      win.style.transform='';
+    }
+    bar.addEventListener('pointerup', up);
+    bar.addEventListener('pointercancel', up);
+  }
+
+  /* ---------- skrivbordsikoner ---------- */
+  var deskIcons=document.querySelectorAll('.desk-ic');
+  function clearSel(){ for(var k=0;k<deskIcons.length;k++) deskIcons[k].classList.remove('selected'); }
+  Array.prototype.forEach.call(deskIcons, function(btn){
+    btn.addEventListener('click', function(e){
+      if(isMobile() || e.detail===0){ openApp(btn.getAttribute('data-app'), btn, false); }
+      else{ clearSel(); btn.classList.add('selected'); }
+    });
+    btn.addEventListener('dblclick', function(){ openApp(btn.getAttribute('data-app'), btn, false); });
+  });
+  desk.addEventListener('pointerdown', function(e){
+    if(e.target===desk || e.target.id==='icons' || e.target.classList.contains('desk-pi')) clearSel();
+  });
+
+  /* ---------- delegation: data-open / data-close ---------- */
+  document.addEventListener('click', function(e){
+    var o=e.target.closest('[data-open]');
+    if(o){ e.preventDefault(); openApp(o.getAttribute('data-open'), o, false); closeMenu(); return; }
+    var c=e.target.closest('[data-close]');
+    if(c){ var w=c.closest('.window'); if(w) closeWin(w); }
+  });
+
+  /* ---------- tangentbord ---------- */
+  document.addEventListener('keydown', function(e){
+    if(e.key==='Escape'){
+      if(menuOpen){ closeMenu(); menuBtn.focus(); return; }
+      var top=topWin();
+      if(top) closeWin(top);
+    }
+  });
+
+  /* ---------- startmeny ---------- */
+  var menuBtn=$('menuBtn'), startMenu=$('startMenu'), menuOpen=false;
+  menuBtn.addEventListener('click', function(){ menuOpen?closeMenu():openMenu(); });
+  function openMenu(){
+    menuOpen=true; startMenu.hidden=false;
+    menuBtn.setAttribute('aria-expanded','true');
+    var first=startMenu.querySelector('.mi'); if(first) first.focus();
+  }
+  function closeMenu(){
+    if(!menuOpen) return;
+    menuOpen=false; startMenu.hidden=true;
+    menuBtn.setAttribute('aria-expanded','false');
+  }
+  document.addEventListener('pointerdown', function(e){
+    if(menuOpen && !startMenu.contains(e.target) && !menuBtn.contains(e.target)) closeMenu();
+  });
+  startMenu.addEventListener('keydown', function(e){
+    var items=Array.prototype.slice.call(startMenu.querySelectorAll('.mi:not([style*="display: none"])'));
+    var idx=items.indexOf(document.activeElement);
+    if(e.key==='ArrowDown'){ e.preventDefault(); items[(idx+1)%items.length].focus(); }
+    else if(e.key==='ArrowUp'){ e.preventDefault(); items[(idx-1+items.length)%items.length].focus(); }
+  });
+  $('miSaver').addEventListener('click', function(){ closeMenu(); showSaver(); });
+
+  /* ---------- klocka ---------- */
+  var clockEl=$('clock');
+  function updateClock(){
+    var d=new Date();
+    var t=d.toLocaleTimeString('sv-SE',{hour:'2-digit',minute:'2-digit'});
+    var day=d.toLocaleDateString('sv-SE',{weekday:'short',day:'numeric',month:'short'});
+    clockEl.textContent=day.replace(/\./g,'')+' · '+t;
+  }
+
+  /* ---------- glob ---------- */
+  var globeStarted=false;
+  function initGlobe(){
+    if(globeStarted) return;
+    globeStarted=true;
+    var c=$('glob');
+    if(!c || !window.JonasGlobe) return;
+    try{
+      var p=JonasGlobe.create(c, '../assets/globe-data.json', {
+        mode:'both',
+        dotColor:'#b9a6ff',
+        lineColor:'rgba(185,166,255,.55)',
+        graticule:'rgba(255,255,255,.08)',
+        rim:'rgba(255,150,190,.30)',
+        sphereFill:'rgba(23,15,50,.92)',
+        markerColor:'#ffd166'
+      });
+      if(p && p.catch) p.catch(function(){});
+    }catch(err){}
+  }
+
+  /* ---------- formulär ---------- */
+  var form=$('contactForm');
+  if(form){
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      form.hidden=true;
+      $('formDone').hidden=false;
+    });
+  }
+
+  /* ---------- assistent ---------- */
+  var assistant=$('assistant');
+  function showAssistant(){
+    if(assistDismissed) return;
+    $('asText').textContent=isMobile()
+      ? 'psst — tryck ‹ där uppe för skrivbordet, sen på ikonerna!'
+      : 'psst — dubbelklicka på ikonerna för att öppna fler fönster!';
+    assistant.hidden=false;
+    if(!reduced) assistant.classList.add('pop');
+    setTimeout(dismissAssistant, 12000);
+  }
+  function dismissAssistant(){
+    if(assistant.hidden) return;
+    assistDismissed=true;
+    assistant.hidden=true;
+  }
+  assistant.querySelector('.as-close').addEventListener('click', dismissAssistant);
+
+  /* ---------- skärmsläckare ---------- */
+  var saverEl=$('saver'), saverOn=false, saverGuard=0, idleT=null, piText=null, osUp=false;
+  var PI_FALLBACK='3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117067982148086513282306647093844609550582231725359408128481117450284102701938521105559644622948954930381964428810975665933446128475648233786783165271201909145648566923460348610454326648213393607260249141273724587006606315588174881520920962829254091715364367892590360';
+  PI_FALLBACK=PI_FALLBACK+PI_FALLBACK+PI_FALLBACK;
+  function resetIdle(){
+    if(reduced || !osUp) return;
+    clearTimeout(idleT);
+    if(!saverOn) idleT=setTimeout(showSaver, 45000);
+  }
+  ['pointermove','pointerdown','keydown','touchstart','wheel'].forEach(function(ev){
+    document.addEventListener(ev, function(){
+      if(saverOn){ if(Date.now()-saverGuard>600) hideSaver(); return; }
+      resetIdle();
+    }, {passive:true});
+  });
+  function buildSaver(txt){
+    saverEl.innerHTML='';
+    for(var r=0;r<13;r++){
+      var s=document.createElement('span');
+      s.className='sv-row'+(r%3===1?' sv-alt':(r%3===2?' sv-alt2':''));
+      var start=Math.floor(Math.random()*Math.max(1,txt.length-500));
+      s.textContent=txt.substr(start,260);
+      s.style.top=(1.5+r*7.5)+'%';
+      s.style.fontSize=(13+Math.random()*30)+'px';
+      s.style.animationDuration=(36+Math.random()*44)+'s';
+      s.style.animationDelay=(-Math.random()*70)+'s';
+      s.style.opacity=(0.22+Math.random()*0.5).toFixed(2);
+      saverEl.appendChild(s);
+    }
+    var hint=document.createElement('p');
+    hint.className='sv-hint';
+    hint.innerHTML='π · 100 000 decimaler i minnet<small>rör musen eller tryck valfri tangent för att väcka JONAS-OS</small>';
+    saverEl.appendChild(hint);
+  }
+  function showSaver(){
+    if(reduced || saverOn) return;
+    saverOn=true; saverGuard=Date.now();
+    clearTimeout(idleT);
+    buildSaver(piText||PI_FALLBACK);
+    saverEl.hidden=false;
+    if(!piText){
+      fetch('../assets/pi-100k.txt').then(function(r){return r.text();}).then(function(t){
+        piText=t.replace(/\s+/g,'');
+        if(saverOn) buildSaver(piText);
+      }).catch(function(){});
+    }
+  }
+  function hideSaver(){
+    saverOn=false;
+    saverEl.hidden=true;
+    saverEl.innerHTML='';
+    resetIdle();
+  }
+
+  /* ---------- boot ---------- */
+  var bootEl=$('boot');
+  var BOOT_LINES=[
+    '> startar jonas.exe .................. OK',
+    '> laddar minnespalats ................ 100%',
+    '> π-decimaler i minne: 100 000 ....... verifierade',
+    '> länder inlästa: 197/197 ............ klart',
+    '> kalibrerar ordvitsnivå ............. farligt hög',
+    '> monterar skrivbord: /jonas ......... klart',
+    '> välkommen in!'
+  ];
+  function startOS(){
+    if(osUp) return;
+    osUp=true;
+    updateClock();
+    setInterval(updateClock, 20000);
+    openApp('om', null, true);
+    setTimeout(showAssistant, 1200);
+    resetIdle();
+  }
+  function runBoot(){
+    var log=$('bootLog'), fill=$('bootFill'), i=0, done=false, iv=null;
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ fill.style.width='100%'; }); });
+    iv=setInterval(function(){
+      if(i<BOOT_LINES.length){
+        i++;
+        log.textContent=BOOT_LINES.slice(0,i).join('\n')+(i<BOOT_LINES.length?' ▌':'');
+      }else{
+        clearInterval(iv);
+        setTimeout(finish, 300);
+      }
+    }, 330);
+    function finish(){
+      if(done) return;
+      done=true;
+      clearInterval(iv);
+      try{ sessionStorage.setItem('jos-boot','1'); }catch(err){}
+      startOS();
+      bootEl.classList.add('boot-done');
+      setTimeout(function(){ if(bootEl.parentNode) bootEl.parentNode.removeChild(bootEl); }, 500);
+    }
+    bootEl.addEventListener('pointerdown', finish);
+    document.addEventListener('keydown', function onKey(){
+      document.removeEventListener('keydown', onKey);
+      finish();
+    });
+  }
+
+  if(docEl.className.indexOf('noboot')>-1){
+    if(bootEl && bootEl.parentNode) bootEl.parentNode.removeChild(bootEl);
+    try{ sessionStorage.setItem('jos-boot','1'); }catch(err){}
+    startOS();
+  }else{
+    runBoot();
+  }
+})();
+</script>
+</body>
+</html>
