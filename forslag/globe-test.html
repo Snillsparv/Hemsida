@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Globtest</title>
+<style>
+  body { margin: 0; background: #060a14; display: grid; place-items: center; height: 100vh; }
+  canvas { width: 560px; height: 560px; }
+</style>
+</head>
+<body>
+<canvas id="g"></canvas>
+<script src="../assets/globe.js"></script>
+<script>
+  JonasGlobe.create(document.getElementById('g'), '../assets/globe-data.json', {
+    mode: 'both', sphereFill: 'rgba(10,20,38,.85)',
+  }).then(() => { window.__globeReady = true; });
+</script>
+</body>
+</html>

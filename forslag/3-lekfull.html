@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jonas von Essen – Tvåfaldig världsmästare i minne</title>
+<meta name="description" content="Jonas von Essen är tvåfaldig världsmästare i minne, föreläsare och författare. Han har memorerat 100 000 decimaler av pi och bygger gratis läroappar som jonasgeografi.se, hpakuten.se och gångertabellen.se.">
+<meta property="og:title" content="Jonas von Essen – Tvåfaldig världsmästare i minne">
+<meta property="og:description" content="Föreläsare, författare, frågesportsnörd – och byggare av gratis läroappar. 100 000 decimaler av pi. Alla världens länder. Och ditt namn, om vi har setts.">
+<meta property="og:image" content="../assets/img/jonas_vm-md.webp">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23ffdc32' stroke='%231a2440' stroke-width='4'/%3E%3Ctext x='32' y='46' font-size='38' font-family='Georgia,serif' font-weight='bold' text-anchor='middle' fill='%231a2440'%3E%CF%80%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/fonts.css">
+<script>
+/* Körs före första målning: avgör om laddskärmen ska visas alls. */
+(function(){
+  document.documentElement.classList.add('js');
+  var skip = false;
+  try {
+    if (sessionStorage.getItem('jve-boot')) skip = true;
+  } catch(e){}
+  if (/[?&]noloader/.test(location.search)) skip = true;
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) skip = true;
+  if (skip) document.documentElement.classList.add('noboot');
+})();
+</script>
+<style>
+/* ============================================================
+   SNILLE & SPRALL — ljus lekfull (förslag 3)
+   Palett: varmvit bakgrund, mörkblå text, candy-accenter.
+   ============================================================ */
+:root{
+  --bg:#faf7f0;
+  --paper:#fffdf8;
+  --ink:#1a2440;
+  --ink-soft:#3d4766;
+  --blue:#2456e6;
+  --sky:#5bbfff;
+  --yellow:#ffdc32;
+  --green:#06d6a0;
+  --coral:#ef7674;
+  --indigo:#4f46e5;
+  --navy:#0e2438;
+  --sky-soft:#dff0ff;
+  --yellow-soft:#fff3bd;
+  --green-soft:#d3f7ec;
+  --coral-soft:#fcdedd;
+  --indigo-soft:#e4e2fb;
+  --r-sm:12px; --r-md:16px; --r-lg:24px;
+  --shadow-sm:3px 3px 0 var(--ink);
+  --shadow-md:6px 6px 0 var(--ink);
+  --shadow-lg:9px 9px 0 var(--ink);
+  --font-sans:'Space Grotesk', system-ui, -apple-system, sans-serif;
+  --font-mono:'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001s !important;animation-iteration-count:1 !important;transition-duration:.001s !important}
+}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--font-sans);
+  font-size:17px;
+  line-height:1.6;
+  overflow-x:clip;
+}
+body.boot-lock{overflow:hidden}
+img{max-width:100%;display:block}
+a{color:var(--blue)}
+h1,h2,h3{font-weight:700;line-height:1.12;letter-spacing:-.015em;text-wrap:balance}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:4px}
+::selection{background:var(--yellow);color:var(--ink)}
+
+.skip-link{
+  position:absolute;left:16px;top:-60px;z-index:300;
+  background:var(--ink);color:#fff;padding:10px 18px;border-radius:10px;
+  font-family:var(--font-mono);font-size:13px;text-decoration:none;transition:top .2s;
+}
+.skip-link:focus{top:14px}
+
+.container{max-width:1160px;margin:0 auto;padding:0 28px}
+@media (max-width:600px){.container{padding:0 20px}}
+
+/* ---------- Laddskärm: retro-datorfönster ---------- */
+#boot{
+  position:fixed;inset:0;z-index:200;
+  background:var(--bg);
+  background-image:radial-gradient(rgba(26,36,64,.07) 1.1px, transparent 1.4px);
+  background-size:24px 24px;
+  display:flex;align-items:center;justify-content:center;
+  padding:24px;
+  transition:opacity .45s ease, visibility .45s;
+}
+#boot.done{opacity:0;visibility:hidden;pointer-events:none}
+html.noboot #boot{display:none}
+.boot-win{
+  width:min(560px,100%);
+  background:var(--paper);
+  border:2px solid var(--ink);
+  border-radius:var(--r-md);
+  box-shadow:var(--shadow-lg);
+  overflow:hidden;
+  transform:rotate(-.4deg);
+}
+#boot.done .boot-win{transform:rotate(-.4deg) translateY(-14px);transition:transform .45s ease}
+.boot-bar{
+  display:flex;align-items:center;gap:8px;
+  padding:11px 14px;
+  border-bottom:2px solid var(--ink);
+  background:var(--yellow-soft);
+}
+.boot-dot{width:12px;height:12px;border-radius:50%;border:2px solid var(--ink)}
+.boot-dot.r{background:var(--coral)}
+.boot-dot.y{background:var(--yellow)}
+.boot-dot.g{background:var(--green)}
+.boot-title{
+  margin-left:auto;margin-right:auto;
+  font-family:var(--font-mono);font-size:12px;font-weight:500;color:var(--ink);
+  transform:translateX(-26px); /* optiskt centrerad trots prickarna */
+}
+.boot-screen{
+  background:#0c1524;
+  padding:22px 22px 26px;
+  min-height:212px;
+}
+.boot-screen pre{
+  font-family:var(--font-mono);font-size:13.5px;line-height:1.85;
+  color:#35e08c;white-space:pre-wrap;word-break:break-word;
+}
+.boot-cursor{
+  display:inline-block;width:9px;height:16px;vertical-align:-2px;
+  background:#35e08c;
+  animation:blink 1s steps(1) infinite;
+}
+@keyframes blink{50%{opacity:0}}
+.boot-hint{
+  margin-top:14px;text-align:center;
+  font-family:var(--font-mono);font-size:11.5px;color:var(--ink-soft);
+}
+@media (max-width:520px){
+  .boot-screen{padding:18px 15px 22px;min-height:186px}
+  .boot-screen pre{font-size:10.5px}
+}
+
+/* ---------- Toppnav ---------- */
+.nav-wrap{position:sticky;top:14px;z-index:100;padding:0 20px}
+.nav{
+  max-width:900px;margin:0 auto;
+  background:var(--paper);
+  border:2px solid var(--ink);border-radius:999px;
+  box-shadow:var(--shadow-sm);
+  display:flex;align-items:center;gap:6px;
+  padding:8px 10px 8px 14px;
+}
+.brand{
+  display:flex;align-items:center;gap:10px;
+  text-decoration:none;color:var(--ink);
+  font-weight:700;font-size:16px;letter-spacing:-.01em;
+  margin-right:auto;
+}
+.brand-mark{
+  width:30px;height:30px;flex:0 0 auto;
+  background:var(--yellow);border:2px solid var(--ink);border-radius:9px;
+  display:grid;place-items:center;
+  font-family:Georgia, 'Times New Roman', serif;font-size:18px;font-weight:700;line-height:1;
+  transform:rotate(-6deg);
+}
+.nav-links{display:flex;align-items:center;gap:2px;list-style:none}
+.nav-links a{
+  display:block;padding:7px 13px;border-radius:999px;
+  font-family:var(--font-mono);font-size:12px;font-weight:500;
+  letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink);text-decoration:none;
+  border:2px solid transparent;
+  transition:background .15s;
+}
+.nav-links a:hover{background:var(--sky-soft)}
+.nav-links a.active{background:var(--yellow);border-color:var(--ink)}
+.nav-cta{
+  font-family:var(--font-mono);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  background:var(--blue);color:#fff;text-decoration:none;
+  border:2px solid var(--ink);border-radius:999px;
+  padding:7px 15px;box-shadow:var(--shadow-sm);
+  transition:transform .15s, box-shadow .15s;
+}
+.nav-cta:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+.nav-cta:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+@media (max-width:860px){
+  .brand-name{display:none}
+  .nav{padding-left:10px}
+  .nav-links a{padding:7px 8px;font-size:11px}
+  .nav-cta{padding:7px 10px;font-size:11px}
+}
+@media (max-width:420px){
+  .nav-links a{padding:6px 5px;font-size:10px;letter-spacing:.02em}
+  .nav-cta{padding:6px 9px;font-size:10px;letter-spacing:.02em}
+}
+
+/* ---------- Knappar ---------- */
+.btn{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--font-sans);font-weight:700;font-size:17px;
+  padding:14px 26px;border-radius:14px;
+  border:2px solid var(--ink);text-decoration:none;cursor:pointer;
+  box-shadow:var(--shadow-md);
+  transition:transform .15s, box-shadow .15s;
+}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--ink)}
+.btn:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--ink)}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-paper{background:var(--paper);color:var(--ink)}
+.btn-yellow{background:var(--yellow);color:var(--ink)}
+.btn .arr{transition:transform .15s}
+.btn:hover .arr{transform:translateX(3px)}
+
+/* ---------- Sektioner & rubriker ---------- */
+.section{padding:108px 0}
+@media (max-width:720px){.section{padding:72px 0}}
+.kicker{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--font-mono);font-size:12px;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;
+  background:var(--paper);border:2px solid var(--ink);border-radius:999px;
+  padding:6px 14px;box-shadow:var(--shadow-sm);
+  margin-bottom:22px;
+}
+.kicker::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--dot,var(--blue));border:1.5px solid var(--ink)}
+.sec-h{font-size:clamp(30px,4vw,44px);margin-bottom:16px}
+.sec-sub{font-size:clamp(17px,1.6vw,19px);color:var(--ink-soft);max-width:56ch}
+.hl{background-image:linear-gradient(var(--hl,var(--yellow)),var(--hl,var(--yellow)));background-repeat:no-repeat;background-size:100% 38%;background-position:0 82%}
+.hl-sky{--hl:var(--sky)}
+.hl-green{--hl:var(--green)}
+.hl-coral{--hl:var(--coral)}
+
+/* ---------- Reveal-animation ---------- */
+html.js .reveal{opacity:0;transform:translateY(20px);transition:opacity .55s ease, transform .55s ease}
+html.js .reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion: reduce){
+  html.js .reveal{opacity:1;transform:none}
+}
+
+/* ---------- Hero ---------- */
+.hero{
+  position:relative;
+  padding:76px 0 0;
+  background-image:radial-gradient(rgba(26,36,64,.06) 1.1px, transparent 1.4px);
+  background-size:24px 24px;
+  overflow:clip;
+}
+.hero-grid{
+  display:grid;grid-template-columns:1.14fr .86fr;gap:32px;align-items:end;
+}
+.hero-copy{padding:28px 0 96px}
+.hero-tagline{
+  display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px;
+}
+.hero-tagline span{
+  font-family:var(--font-mono);font-size:11.5px;font-weight:500;
+  letter-spacing:.1em;text-transform:uppercase;
+  border:2px solid var(--ink);border-radius:999px;padding:5px 12px;
+  background:var(--paper);
+}
+.hero-tagline span:nth-child(1){background:var(--yellow)}
+.hero-tagline span:nth-child(2){background:var(--green-soft)}
+.hero-tagline span:nth-child(3){background:var(--sky-soft)}
+.hero h1{font-size:clamp(37px,4.4vw,53px);margin-bottom:22px;text-wrap:initial}
+.hero .lead{font-size:clamp(18px,1.8vw,21px);color:var(--ink-soft);max-width:46ch;margin-bottom:34px}
+.cta-row{display:flex;flex-wrap:wrap;gap:16px}
+.hero-foot{
+  margin-top:40px;display:flex;align-items:center;gap:10px;
+  font-family:var(--font-mono);font-size:12.5px;color:var(--ink-soft);
+}
+.hero-foot svg{flex:0 0 auto}
+
+/* Jonas-scenen till höger */
+.hero-stage{
+  position:relative;
+  justify-self:center;
+  width:min(440px,100%);
+  height:600px;
+}
+.hero-blob{
+  position:absolute;left:50%;top:66px;transform:translateX(-50%);
+  width:400px;height:400px;border-radius:50%;
+  background:var(--sky);
+  border:2px solid var(--ink);
+  box-shadow:10px 10px 0 var(--ink);
+}
+.hero-blob::after{ /* liten månkrater-prick för charm */
+  content:"";position:absolute;left:54px;top:88px;
+  width:26px;height:26px;border-radius:50%;
+  background:var(--sky-soft);border:2px solid var(--ink);
+}
+.hero-jonas{
+  position:absolute;left:50%;bottom:0;transform:translateX(-52%);
+  height:568px;width:auto;
+  filter:drop-shadow(0 14px 22px rgba(26,36,64,.28));
+}
+.sticker{
+  position:absolute;
+  font-family:var(--font-mono);font-weight:700;
+  border:2px solid var(--ink);
+  box-shadow:var(--shadow-sm);
+  transform:rotate(var(--rot,0deg));
+  transition:transform .2s;
+}
+.sticker:hover{transform:rotate(0deg) scale(1.04)}
+.stick-hej{
+  left:6px;top:96px;--rot:-5deg;
+  background:var(--paper);border-radius:16px 16px 16px 3px;
+  padding:8px 16px;font-size:18px;
+}
+.stick-vm{
+  left:-14px;bottom:148px;--rot:-4deg;
+  background:var(--yellow);border-radius:12px;
+  padding:9px 14px;font-size:12px;line-height:1.45;letter-spacing:.04em;
+}
+.stick-pi{
+  right:-8px;bottom:74px;--rot:3.5deg;
+  background:var(--green);border-radius:12px;
+  padding:9px 14px;font-size:12px;line-height:1.45;letter-spacing:.04em;
+}
+.stick-vm small,.stick-pi small{display:block;font-weight:500;font-size:10.5px;opacity:.75}
+.doodle{position:absolute;pointer-events:none}
+.doodle-star1{top:34px;right:26px;color:var(--yellow);transform:rotate(12deg)}
+.doodle-star2{top:190px;left:-6px;color:var(--coral);transform:rotate(-10deg) scale(.62)}
+.doodle-plus{top:132px;right:4px;color:var(--indigo);transform:rotate(8deg)}
+.hero-doodle-sq{position:absolute;left:4%;bottom:110px;color:var(--green);pointer-events:none}
+.hero-doodle-pi{
+  position:absolute;left:3.5%;top:128px;pointer-events:none;
+  font-family:Georgia,serif;font-size:44px;font-weight:700;color:var(--coral);
+  transform:rotate(-12deg);opacity:.85;
+}
+@media (max-width:960px){
+  .hero-grid{grid-template-columns:1fr;gap:0}
+  .hero-copy{padding:12px 0 56px;text-align:left}
+  .hero-stage{height:470px;width:min(360px,88%)}
+  .hero-blob{width:320px;height:320px;top:56px}
+  .hero-jonas{height:448px}
+  .stick-vm{left:-8px;bottom:120px}
+  .stick-pi{right:-4px;bottom:56px}
+  .stick-hej{left:0;top:66px}
+  .hero-doodle-pi,.hero-doodle-sq{display:none}
+}
+@media (max-width:420px){
+  .hero-stage{width:100%}
+  .stick-vm{left:-2px}
+  .stick-pi{right:-2px}
+}
+
+/* ---------- Ticker ---------- */
+.ticker{
+  background:var(--yellow);
+  border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);
+  overflow:hidden;padding:13px 0;
+  position:relative;z-index:2;
+}
+.ticker-track{
+  display:flex;width:max-content;
+  animation:tick 32s linear infinite;
+}
+.ticker:hover .ticker-track{animation-play-state:paused}
+@keyframes tick{to{transform:translateX(-50%)}}
+.ticker-seq{
+  display:flex;align-items:center;flex:0 0 auto;
+  font-family:var(--font-mono);font-size:13px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;
+}
+.ticker-seq span{padding:0 14px}
+.ticker-seq i{font-style:normal;color:var(--blue)}
+@media (prefers-reduced-motion: reduce){
+  .ticker-track{animation:none}
+}
+
+/* ---------- Om mig ---------- */
+.om-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:64px;align-items:center}
+.om-text p{margin-bottom:18px;font-size:clamp(17px,1.55vw,19px)}
+.om-text p strong{font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.chip{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--font-mono);font-size:12.5px;font-weight:500;letter-spacing:.03em;
+  background:var(--paper);border:2px solid var(--ink);border-radius:999px;
+  padding:7px 14px;box-shadow:2px 2px 0 var(--ink);
+}
+.polaroid{
+  background:var(--paper);border:2px solid var(--ink);border-radius:var(--r-md);
+  box-shadow:var(--shadow-lg);
+  padding:14px 14px 16px;
+  transform:rotate(2.2deg);
+  transition:transform .25s;
+  max-width:420px;justify-self:center;
+}
+.polaroid:hover{transform:rotate(.6deg) translateY(-4px)}
+.polaroid img{border-radius:10px;border:2px solid var(--ink)}
+.polaroid figcaption{
+  padding-top:13px;text-align:center;
+  font-family:var(--font-mono);font-size:12.5px;color:var(--ink-soft);
+}
+@media (max-width:880px){
+  .om-grid{grid-template-columns:1fr;gap:44px}
+  .polaroid{max-width:380px}
+}
+
+/* ---------- Meriter (stickervägg) ---------- */
+#meriter{position:relative}
+.merit-wall{columns:3;column-gap:24px;margin-top:8px}
+@media (max-width:1020px){.merit-wall{columns:2}}
+@media (max-width:640px){.merit-wall{columns:1}}
+.merit{
+  break-inside:avoid;
+  background:var(--card,var(--paper));
+  border:2px solid var(--ink);border-radius:20px;
+  box-shadow:var(--shadow-md);
+  padding:22px 22px 24px;
+  margin:0 0 24px;
+  transform:rotate(var(--rot,0deg));
+  transition:transform .2s, box-shadow .2s;
+  position:relative;
+}
+.merit:hover{transform:rotate(0deg) translate(-2px,-2px);box-shadow:8px 8px 0 var(--ink)}
+.merit-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.merit-ico{
+  width:46px;height:46px;border-radius:13px;
+  border:2px solid var(--ink);
+  display:grid;place-items:center;
+  font-size:22px;line-height:1;
+  background:var(--ico,var(--sky-soft));
+}
+.merit-ico.pi{font-family:Georgia,serif;font-weight:700;font-size:26px;padding-bottom:2px}
+.merit-year{
+  font-family:var(--font-mono);font-size:11.5px;font-weight:700;letter-spacing:.08em;
+  background:var(--yr,var(--bg));border:2px solid var(--ink);border-radius:999px;
+  padding:4px 11px;
+}
+.merit h3{font-size:19.5px;margin-bottom:9px}
+.merit p{font-size:15px;line-height:1.55;color:var(--ink-soft)}
+.merit.on-color p{color:var(--ink)}
+.merit-photo{padding:13px 13px 14px}
+.merit-photo img{border-radius:12px;border:2px solid var(--ink)}
+.merit-photo figcaption{
+  padding:12px 6px 4px;
+  font-family:var(--font-mono);font-size:12.5px;color:var(--ink-soft);
+}
+.m-blue{--card:var(--blue)}
+.m-blue h3{color:#fff}
+.m-blue p{color:#dbe6ff}
+.m-blue .merit-year{background:var(--yellow)}
+.m-blue .merit-ico{background:var(--yellow)}
+.m-yellow{--card:var(--yellow);--ico:var(--paper);--yr:var(--paper)}
+.m-green{--card:var(--green);--ico:var(--paper);--yr:var(--paper)}
+.m-coral{--card:var(--coral);--ico:var(--paper);--yr:var(--paper)}
+.m-sky{--card:var(--sky);--ico:var(--paper);--yr:var(--paper)}
+
+/* ---------- Projekt ---------- */
+.proj-grid{
+  display:grid;grid-template-columns:1.05fr .95fr;gap:28px;
+  grid-template-rows:auto auto;
+}
+.proj-card{
+  border:2px solid var(--ink);border-radius:var(--r-lg);
+  box-shadow:var(--shadow-md);
+  background:var(--paper);
+  overflow:hidden;
+  display:flex;flex-direction:column;
+  transition:transform .2s, box-shadow .2s;
+  position:relative;
+}
+.proj-card:hover{transform:translate(-3px,-3px);box-shadow:9px 9px 0 var(--ink)}
+a.proj-card{text-decoration:none;color:inherit}
+.proj-globe{grid-row:1 / span 2;background:var(--navy);color:#eaf2ff}
+.globe-frame{position:relative;padding:26px 26px 4px}
+.globe-frame canvas{width:100%;aspect-ratio:1;display:block}
+.globe-badge{
+  position:absolute;top:22px;left:22px;
+  font-family:var(--font-mono);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  background:var(--yellow);color:var(--ink);
+  border:2px solid var(--ink);border-radius:999px;padding:5px 12px;
+  transform:rotate(-3deg);
+  z-index:2;
+}
+.globe-hint{
+  position:absolute;right:26px;bottom:10px;
+  font-family:var(--font-mono);font-size:11.5px;color:#8fb4d9;
+  display:flex;align-items:center;gap:7px;
+}
+.proj-body{padding:24px 28px 28px;display:flex;flex-direction:column;gap:12px;flex:1}
+.proj-url{
+  font-family:var(--font-mono);font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--blue);
+}
+.proj-globe .proj-url{color:var(--sky)}
+.proj-body h3{font-size:clamp(21px,2vw,25px)}
+.proj-body p{font-size:15.5px;line-height:1.6;color:var(--ink-soft);flex:1}
+.proj-globe .proj-body p{color:#b9cde4}
+.proj-link{
+  display:inline-flex;align-items:center;gap:9px;align-self:flex-start;
+  font-weight:700;font-size:15px;text-decoration:none;
+  padding:10px 18px;border-radius:12px;border:2px solid var(--ink);
+  box-shadow:var(--shadow-sm);
+  background:var(--yellow);color:var(--ink);
+  transition:transform .15s, box-shadow .15s;
+}
+.proj-link:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink)}
+.proj-link:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.proj-media{position:relative;border-bottom:2px solid var(--ink);background:var(--sky-soft)}
+.proj-media img{width:100%;height:230px;object-fit:cover}
+.proj-media-gt{
+  background:var(--green);
+  display:flex;align-items:flex-end;justify-content:center;
+  height:230px;overflow:hidden;position:relative;
+}
+.proj-media-gt img{
+  width:auto;height:196px;object-fit:contain;
+  filter:drop-shadow(0 8px 14px rgba(14,36,56,.3));
+}
+.gt-chip{
+  position:absolute;
+  font-family:var(--font-mono);font-size:12px;font-weight:700;
+  background:var(--paper);border:2px solid var(--ink);border-radius:9px;
+  padding:4px 9px;box-shadow:2px 2px 0 var(--ink);
+  transform:rotate(var(--rot,0deg));
+}
+.gt-1{left:7%;top:26px;--rot:-6deg}
+.gt-2{right:7%;top:58px;--rot:5deg}
+.gt-3{left:13%;bottom:30px;--rot:4deg;background:var(--yellow)}
+.proj-arrow{
+  font-family:var(--font-mono);font-weight:700;font-size:14px;
+  display:inline-flex;align-items:center;gap:8px;color:var(--blue);
+}
+a.proj-card:hover .proj-arrow{text-decoration:underline;text-underline-offset:3px}
+@media (max-width:920px){
+  .proj-grid{grid-template-columns:1fr}
+  .proj-globe{grid-row:auto}
+}
+
+/* ---------- Kurs ---------- */
+.kurs-panel{
+  position:relative;
+  background:var(--yellow);
+  border:2px solid var(--ink);border-radius:28px;
+  box-shadow:10px 10px 0 var(--ink);
+  padding:56px 56px 0;
+  display:grid;grid-template-columns:1.2fr .8fr;gap:24px;
+  overflow:visible;
+}
+.kurs-copy{padding-bottom:56px}
+.kurs-chip{
+  display:inline-block;
+  font-family:var(--font-mono);font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  background:var(--ink);color:var(--yellow);
+  border-radius:999px;padding:6px 14px;margin-bottom:18px;
+}
+.kurs-copy h2{font-size:clamp(32px,4.2vw,50px);margin-bottom:16px}
+.kurs-copy .kurs-lead{font-size:clamp(17px,1.7vw,20px);max-width:44ch;margin-bottom:24px}
+.kurs-points{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:8px}
+.kurs-points li{
+  display:flex;align-items:center;gap:11px;
+  font-weight:500;font-size:16px;
+}
+.kurs-points .tick{
+  flex:0 0 auto;width:24px;height:24px;border-radius:8px;
+  background:var(--paper);border:2px solid var(--ink);
+  display:grid;place-items:center;
+}
+.kurs-side{
+  position:relative;display:flex;flex-direction:column;align-items:center;
+  justify-content:flex-end;min-height:400px;
+}
+.kurs-btn-wrap{position:relative;margin-bottom:10px;z-index:2}
+.kurs-note{
+  position:absolute;top:50%;right:calc(100% + 14px);transform:translateY(-50%) rotate(-3deg);
+  font-family:var(--font-mono);font-size:11px;color:var(--ink);
+  background:var(--paper);border:2px solid var(--ink);border-radius:9px;
+  padding:4px 9px;white-space:nowrap;box-shadow:2px 2px 0 var(--ink);
+}
+.kurs-jonas{
+  height:330px;width:auto;
+  filter:drop-shadow(0 10px 16px rgba(26,36,64,.3));
+  margin-bottom:-2px; /* står på panelens kant */
+}
+.kurs-url{
+  display:block;text-align:center;
+  font-family:var(--font-mono);font-size:12px;color:var(--ink-soft);
+  padding:0 0 16px;
+}
+@media (max-width:880px){
+  .kurs-panel{grid-template-columns:1fr;padding:40px 30px 0;gap:8px}
+  .kurs-copy{padding-bottom:8px}
+  .kurs-side{min-height:0;margin-top:18px}
+  .kurs-jonas{height:280px}
+  .kurs-note{display:none}
+}
+
+/* ---------- Kontakt ---------- */
+#kontakt{
+  background-image:radial-gradient(rgba(26,36,64,.06) 1.1px, transparent 1.4px);
+  background-size:24px 24px;
+}
+.kontakt-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:72px;align-items:start}
+.social-label{
+  font-family:var(--font-mono);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-soft);margin:34px 0 14px;
+}
+.socials{display:flex;flex-wrap:wrap;gap:14px}
+.social-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--paper);border:2px solid var(--ink);border-radius:14px;
+  box-shadow:var(--shadow-sm);
+  padding:11px 18px;
+  font-weight:700;font-size:15px;color:var(--ink);text-decoration:none;
+  transform:rotate(var(--rot,0deg));
+  transition:transform .18s, box-shadow .18s;
+}
+.social-btn:hover{transform:rotate(0deg) translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink)}
+.social-btn svg{flex:0 0 auto}
+.social-ig{--rot:-1.6deg}
+.social-tt{--rot:1.4deg}
+.social-yt{--rot:-1deg}
+.ps-card{
+  display:flex;gap:12px;align-items:flex-start;
+  max-width:360px;margin-top:44px;
+  background:var(--paper);border:2px solid var(--ink);border-radius:14px;
+  box-shadow:var(--shadow-sm);
+  padding:15px 18px;
+  font-family:var(--font-mono);font-size:12.5px;line-height:1.65;color:var(--ink-soft);
+  transform:rotate(-1.2deg);
+}
+.ps-card .emoji{font-size:20px;line-height:1.3}
+.kontakt-figure{display:flex;justify-content:flex-end;padding-right:56px;margin-bottom:-30px;position:relative;z-index:2}
+.kontakt-figure img{
+  height:230px;width:auto;
+  filter:drop-shadow(0 10px 14px rgba(26,36,64,.25));
+}
+.form-card{
+  background:var(--paper);border:2px solid var(--ink);border-radius:var(--r-lg);
+  box-shadow:var(--shadow-lg);
+  padding:40px 36px 36px;
+  position:relative;
+}
+.form-card .form-tag{
+  position:absolute;top:-15px;left:30px;z-index:3;
+  font-family:var(--font-mono);font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  background:var(--coral);border:2px solid var(--ink);border-radius:999px;
+  padding:4px 13px;transform:rotate(-2deg);
+}
+.field{margin-bottom:20px}
+.field label{
+  display:block;
+  font-family:var(--font-mono);font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  margin-bottom:8px;
+}
+.field input,.field textarea{
+  width:100%;
+  background:var(--bg);
+  border:2px solid var(--ink);border-radius:12px;
+  padding:13px 15px;
+  font-family:var(--font-sans);font-size:16px;color:var(--ink);
+  transition:box-shadow .15s, background .15s;
+}
+.field textarea{resize:vertical;min-height:120px}
+.field input:focus,.field textarea:focus{
+  outline:none;background:#fff;
+  box-shadow:0 0 0 3px rgba(36,86,230,.35);
+  border-color:var(--blue);
+}
+.field input::placeholder,.field textarea::placeholder{color:#8b93ad}
+.form-done{
+  display:none;
+  background:var(--green-soft);border:2px solid var(--ink);border-radius:14px;
+  padding:22px 24px;font-weight:500;
+}
+.form-done.show{display:flex;gap:14px;align-items:flex-start}
+.form-done .emoji{font-size:26px;line-height:1.2}
+.form-done strong{display:block;margin-bottom:4px;font-size:17px}
+form.done .form-fields{display:none}
+@media (max-width:880px){
+  .kontakt-grid{grid-template-columns:1fr;gap:52px}
+  .kontakt-figure{padding-right:14px}
+  .kontakt-figure img{height:190px}
+  .form-card{padding:34px 24px 28px}
+  .form-card .form-tag{font-size:10px;letter-spacing:.06em}
+}
+
+/* ---------- Footer ---------- */
+footer{
+  background:var(--navy);color:#dbe5f2;
+  border-top:2px solid var(--ink);
+  padding:56px 0 34px;
+}
+.foot-grid{display:flex;flex-wrap:wrap;gap:40px;justify-content:space-between;align-items:flex-start}
+.foot-brand{display:flex;align-items:center;gap:12px;font-weight:700;font-size:18px;color:#fff}
+.foot-brand .brand-mark{transform:rotate(-6deg)}
+.foot-pun{
+  margin-top:12px;max-width:34ch;
+  font-family:var(--font-mono);font-size:12.5px;color:#8fa8c4;
+}
+.foot-col h4{
+  font-family:var(--font-mono);font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:#8fa8c4;margin-bottom:14px;
+}
+.foot-col ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+.foot-col a{color:#eaf2ff;text-decoration:none;font-size:15px}
+.foot-col a:hover{text-decoration:underline;text-underline-offset:3px;color:var(--yellow)}
+.foot-bottom{
+  margin-top:44px;padding-top:22px;
+  border-top:1px solid rgba(219,229,242,.2);
+  display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;
+  font-family:var(--font-mono);font-size:12.5px;color:#8fa8c4;
+}
+footer :focus-visible{outline-color:var(--yellow)}
+</style>
+</head>
+<body>
+
+<!-- ============ LADDSKÄRM ============ -->
+<div id="boot" aria-hidden="true">
+  <div>
+    <div class="boot-win">
+      <div class="boot-bar">
+        <span class="boot-dot r"></span><span class="boot-dot y"></span><span class="boot-dot g"></span>
+        <span class="boot-title">jonas.exe — startar…</span>
+      </div>
+      <div class="boot-screen"><pre id="boot-text"></pre></div>
+    </div>
+    <p class="boot-hint">klicka (eller tryck valfri tangent) för att hoppa över</p>
+  </div>
+</div>
+
+<a class="skip-link" href="#innehall">Hoppa till innehållet</a>
+
+<!-- ============ NAV ============ -->
+<header class="nav-wrap">
+  <nav class="nav" aria-label="Huvudmeny">
+    <a class="brand" href="#innehall">
+      <span class="brand-mark" aria-hidden="true">π</span>
+      <span class="brand-name">Jonas von Essen</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#om" data-nav="om">Om</a></li>
+      <li><a href="#meriter" data-nav="meriter">Meriter</a></li>
+      <li><a href="#projekt" data-nav="projekt">Projekt</a></li>
+      <li><a href="#kurs" data-nav="kurs">Kurs</a></li>
+    </ul>
+    <a class="nav-cta" href="#kontakt">Kontakt</a>
+  </nav>
+</header>
+
+<main id="innehall">
+
+<!-- ============ 1. HERO ============ -->
+<section class="hero" aria-label="Presentation">
+  <span class="hero-doodle-pi" aria-hidden="true">π</span>
+  <svg class="hero-doodle-sq" aria-hidden="true" width="64" height="20" viewBox="0 0 64 20" fill="none"><path d="M2 12c6-12 12-12 18 0s12 12 18 0 12-12 18 0" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/></svg>
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <p class="hero-tagline">
+        <span>Tvåfaldig världsmästare i minne</span>
+        <span>Föreläsare</span>
+        <span>Frågesportsnörd</span>
+      </p>
+      <h1>Hej! Jag är <span class="hl">Jonas</span> –<br>tvåfaldig <span class="hl hl-sky">världsmästare</span> i&nbsp;minne.</h1>
+      <p class="lead">Jag tävlar i att minnas saker – och i att säga dem snyggt. Däremellan bygger jag gratis appar som gör det lättare att lära sig.</p>
+      <div class="cta-row">
+        <a class="btn btn-blue" href="#projekt">Se vad jag byggt <span class="arr" aria-hidden="true">→</span></a>
+        <a class="btn btn-paper" href="#kontakt">Boka föreläsning</a>
+      </div>
+      <p class="hero-foot">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v13m0 0l-5-5m5 5l5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        100 000 decimaler av π. Alla världens länder. Och ditt namn, om vi har setts.
+      </p>
+    </div>
+    <div class="hero-stage" aria-hidden="false">
+      <div class="hero-blob" aria-hidden="true"></div>
+      <svg class="doodle doodle-star1" aria-hidden="true" width="44" height="44" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1.5l2.6 7.3 7.3 2.6-7.3 2.6-2.6 7.3-2.6-7.3-7.3-2.6 7.3-2.6z" stroke="#1a2440" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      <svg class="doodle doodle-star2" aria-hidden="true" width="44" height="44" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1.5l2.6 7.3 7.3 2.6-7.3 2.6-2.6 7.3-2.6-7.3-7.3-2.6 7.3-2.6z" stroke="#1a2440" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      <svg class="doodle doodle-plus" aria-hidden="true" width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>
+      <img class="hero-jonas" src="../assets/img/hej.webp" alt="Jonas von Essen vinkar glatt" width="430" height="720" fetchpriority="high">
+      <span class="sticker stick-hej" aria-hidden="true">hej!</span>
+      <p class="sticker stick-vm">🏆 2× VM-GULD<small>London ’13 · Kina ’14</small></p>
+      <p class="sticker stick-pi">π × 100 000<small>alla verifierade</small></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TICKER ============ -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <p class="ticker-seq"><span>100 000 decimaler av π</span><i>✦</i><span>197 länder i huvudet</span><i>✦</i><span>2× världsmästare i minne</span><i>✦</i><span>Golden buzzer i Talang</span><i>✦</i><span>Miljonfrågan: rätt</span><i>✦</i><span>160/160 på högskoleprovet</span><i>✦</i><span>SM-guld i poetry slam</span><i>✦</i><span>5× SM i pubquiz</span><i>✦</i></p>
+    <p class="ticker-seq"><span>100 000 decimaler av π</span><i>✦</i><span>197 länder i huvudet</span><i>✦</i><span>2× världsmästare i minne</span><i>✦</i><span>Golden buzzer i Talang</span><i>✦</i><span>Miljonfrågan: rätt</span><i>✦</i><span>160/160 på högskoleprovet</span><i>✦</i><span>SM-guld i poetry slam</span><i>✦</i><span>5× SM i pubquiz</span><i>✦</i></p>
+  </div>
+</div>
+
+<!-- ============ 2. OM MIG ============ -->
+<section class="section" id="om">
+  <div class="container om-grid">
+    <div class="om-text reveal">
+      <p class="kicker" style="--dot:var(--green)">01 · Om mig</p>
+      <h2 class="sec-h">Hjärnan klarar mer <span class="hl hl-green">än man tror.</span></h2>
+      <p>Jag heter Jonas von Essen och 2013 blev jag – som förste svensk någonsin – <strong>världsmästare i minne</strong>. 2014 försvarade jag titeln. Sedan dess har jag gjort det till mitt jobb att visa vad hjärnan klarar: i TV-studior, föreläsningssalar, böcker och appar.</p>
+      <p>Jag har memorerat <strong>100 000 decimaler av pi</strong>, lärt mig hela Talang-publikens namn och vunnit en miljon på Postkodmiljonären. När jag inte tävlar i att minnas saker tävlar jag i att formulera dem – som färsk svensk mästare i poetry slam och Göteborgsmästare i ordvitsar.</p>
+      <div class="chips">
+        <span class="chip">📍 Göteborg</span>
+        <span class="chip">🎤 Föreläsare &amp; författare</span>
+        <span class="chip">📱 3 gratis läroappar</span>
+        <span class="chip">🏆 2× VM-guld</span>
+      </div>
+    </div>
+    <figure class="polaroid reveal">
+      <img src="../assets/img/jonas_knut-md.webp" alt="Jonas tittar förtjust på ett snöre knutet i rosett runt sitt pekfinger" loading="lazy" width="700" height="700">
+      <figcaption>Kom-ihåg-teknik, analog version.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============ 3. MERITER ============ -->
+<section class="section" id="meriter">
+  <div class="container">
+    <div class="reveal">
+      <p class="kicker" style="--dot:var(--yellow)">02 · Meriter</p>
+      <h2 class="sec-h">Saker jag råkat <span class="hl">vinna.</span></h2>
+      <p class="sec-sub" style="margin-bottom:52px">Ett urval från troféhyllan – från minnespalats till miljonfråga. Allt är på riktigt, hur osannolikt det än låter.</p>
+    </div>
+    <div class="merit-wall">
+
+      <article class="merit m-blue reveal" style="--rot:-1.2deg">
+        <div class="merit-top"><span class="merit-ico" aria-hidden="true">🏆</span><span class="merit-year">2013 &amp; 2014</span></div>
+        <h3>2× Världsmästare i minne</h3>
+        <p>London 2013 och Haikou, Kina 2014. Sveriges förste världsmästare i minne – och han försvarade titeln direkt.</p>
+      </article>
+
+      <article class="merit m-yellow on-color reveal" style="--rot:1.4deg">
+        <div class="merit-top"><span class="merit-ico pi" aria-hidden="true">π</span><span class="merit-year">2020</span></div>
+        <h3>100 000 π-decimaler</h3>
+        <p>Först i världen att klara ett verifierat test på alla 100 000. Europarekord i uppläsning: 24 063 decimaler i rad.</p>
+      </article>
+
+      <figure class="merit merit-photo reveal" style="--rot:-.8deg">
+        <img src="../assets/img/jonas_vm-md.webp" alt="Jonas med VM-pokal, medaljer och svensk flagga över axlarna" loading="lazy" width="700" height="700">
+        <figcaption>VM-pokalen – omöjlig att glömma kvar.</figcaption>
+      </figure>
+
+      <article class="merit reveal" style="--rot:.9deg;--ico:var(--yellow-soft)">
+        <div class="merit-top"><span class="merit-ico" aria-hidden="true">⭐</span><span class="merit-year">2018</span></div>
+        <h3>Talang (TV4)</h3>
+        <p>Golden buzzer av David Batra efter att ha lärt sig hela publikens namn. Tog sig hela vägen till final.</p>
+      </article>
+
+      <article class="merit reveal" style="--rot:-1.4deg;--ico:var(--green-soft)">
+        <div class="merit-top"><span class="merit-ico" aria-hidden="true">💰</span><span class="merit-year">2023</span></div>
+        <h3>Postkodmiljonären</h3>
+        <p>Svarade rätt på miljonfrågan – en av endast 13 genom tiderna i Sverige.</p>
+      </article>
+
+      <figure class="merit merit-photo reveal" style="--rot:1.1deg">
+        <img src="../assets/img/jonas_pkm-md.webp" alt="Jonas står på stolen och jublar vilt i Postkodmiljonärens studio" loading="lazy" width="700" height="700">
+        <figcaption>Rätt svar, fel sätt att sitta på stolen.</figcaption>
+      </figure>
+
+      <article class="merit m-coral on-color reveal" style="--rot:-.9deg">
+        <div class="merit-top"><span class="merit-ico" aria-hidden="true">🎤</span><span class="merit-year">2026</span></div>
+        <h3>Svensk mästare i poetry slam</h3>
+        <p>Tävlar i att minnas saker – och i att säga dem snyggt. Numera med SM-guld på den senare grenen.</p>
+      </article>
+
+      <article class="merit reveal" style="--rot:1.3deg;--ico:var(--coral-soft)">
+        <div class="merit-top"><span class="merit-ico" aria-hidden="true">😏</span><span class="merit-year">2026</span></div>
+        <h3>Göteborgsmästare i ordvitsar</h3>
+        <p>Och klar för SM-final. Göteborg, grenens självklara huvudstad – vitsen är att vinna.</p>
+      </article>
+
+      <article class="merit m-green on-color reveal" style="--rot:-1.1deg">
+        <div class="merit-top"><span class="merit-ico" aria-hidden="true">🍻</span><span class="merit-year">5×</span></div>
+        <h3>Svensk mästare i pubquiz</h3>
+        <p>Fem SM-guld med laget ”Glenns över sjö och strand”.</p>
+      </article>
+
+      <article class="merit reveal" style="--rot:.8deg;--ico:var(--indigo-soft)">
+        <div class="merit-top"><span class="merit-ico" aria-hidden="true">📺</span><span class="merit-year">2020–21</span></div>
+        <h3>Fler TV-segrar</h3>
+        <p>Vann Smartare än en femteklassare (2020), besegrade expertpanelen i Muren (SVT, 2021) och vann sin utmaning i kinesiska The Brain – bland annat 200 numrerade valnötter.</p>
+      </article>
+
+      <article class="merit m-sky on-color reveal" style="--rot:-1.3deg">
+        <div class="merit-top"><span class="merit-ico" aria-hidden="true">📚</span><span class="merit-year">Författare</span></div>
+        <h3>Tre böcker om minnet</h3>
+        <p>”Så får du ett superminne” (Semic), ”Bli ett minnesgeni!” och ”Pi-boken 2.0”.</p>
+      </article>
+
+      <article class="merit reveal" style="--rot:1deg;--ico:var(--sky-soft)">
+        <div class="merit-top"><span class="merit-ico" aria-hidden="true">✏️</span><span class="merit-year">12× 2.0</span></div>
+        <h3>Högskoleprovet</h3>
+        <p>Maxresultatet 2.0 tolv gånger. År 2021 dessutom 160 rätt av 160 – som ende i landet.</p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. PROJEKT ============ -->
+<section class="section" id="projekt">
+  <div class="container">
+    <div class="reveal">
+      <p class="kicker" style="--dot:var(--coral)">03 · Projekt</p>
+      <h2 class="sec-h">Jag bygger också <span class="hl hl-coral">saker.</span></h2>
+      <p class="sec-sub" style="margin-bottom:52px">Tre appar, noll kronor. Jag bygger dem för att det är kul – och för att bra inlärning inte ska kosta.</p>
+    </div>
+    <div class="proj-grid">
+
+      <article class="proj-card proj-globe reveal">
+        <div class="globe-frame">
+          <span class="globe-badge">Interaktiv – snurra på!</span>
+          <canvas id="glob" aria-label="Interaktiv jordglob över alla världens länder"></canvas>
+          <p class="globe-hint" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 1 1 2.3 5.6M4 12V7m0 5h5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> dra i globen</p>
+        </div>
+        <div class="proj-body">
+          <p class="proj-url">jonasgeografi.se</p>
+          <h3>Alla världens länder – som konstverk</h3>
+          <p>Lär dig alla världens länder på en snurrbar jordglob där varje land är ett eget litet konstverk. Utforska, quizza och res jorden runt – med minnesknep för varje land.</p>
+          <a class="proj-link" href="https://jonasgeografi.se" target="_blank" rel="noopener">Öppna appen <span aria-hidden="true">↗</span></a>
+        </div>
+      </article>
+
+      <a class="proj-card reveal" href="https://hpakuten.se" target="_blank" rel="noopener">
+        <div class="proj-media">
+          <img src="../assets/img/bild_hp-md.webp" alt="Provhäften och svarsblankett från högskoleprovet" loading="lazy" width="700" height="394">
+        </div>
+        <div class="proj-body">
+          <p class="proj-url">hpakuten.se</p>
+          <h3>Gratis träning inför högskoleprovet</h3>
+          <p>Simulera gamla prov på tid, videogenomgångar och minnestekniker. Från Sveriges kanske mest rutinerade HP-skrivare.</p>
+          <span class="proj-arrow">Till hpakuten <span aria-hidden="true">↗</span></span>
+        </div>
+      </a>
+
+      <a class="proj-card reveal" href="https://www.gångertabellen.se" target="_blank" rel="noopener">
+        <div class="proj-media proj-media-gt">
+          <span class="gt-chip gt-1" aria-hidden="true">6×7=42</span>
+          <span class="gt-chip gt-2" aria-hidden="true">7×8=56</span>
+          <span class="gt-chip gt-3" aria-hidden="true">bara 6 kvar!</span>
+          <img src="../assets/img/jonas-gangertabellen-md.webp" alt="Jonas med chockad min och händerna i luften" loading="lazy" width="700" height="573">
+        </div>
+        <div class="proj-body">
+          <p class="proj-url">gångertabellen.se</p>
+          <h3>Gångertabellen är lättare än den ser ut</h3>
+          <p>Med rätt knep är det bara sex tal kvar att memorera. Quiz, minnesbilder och smart repetition – utan inloggning.</p>
+          <span class="proj-arrow">Till gångertabellen <span aria-hidden="true">↗</span></span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. KURS ============ -->
+<section class="section" id="kurs" aria-label="Onlinekurs">
+  <div class="container">
+    <div class="kurs-panel reveal">
+      <div class="kurs-copy">
+        <span class="kurs-chip">Onlinekurs</span>
+        <h2>Skaffa ett superminne!</h2>
+        <p class="kurs-lead">Lär dig metoderna jag använder – i din egen takt, hur många gånger du vill.</p>
+        <ul class="kurs-points">
+          <li><span class="tick" aria-hidden="true">✓</span> Samma tekniker som tog mig till två VM-guld</li>
+          <li><span class="tick" aria-hidden="true">✓</span> Plugga smartare – namn, glosor, tal, listor</li>
+          <li><span class="tick" aria-hidden="true">✓</span> Helt online – börja när du vill, var du vill</li>
+        </ul>
+      </div>
+      <div class="kurs-side">
+        <div class="kurs-btn-wrap">
+          <a class="btn btn-blue" href="https://kurs.jonasvonessen.se" target="_blank" rel="noopener">Till kursen <span class="arr" aria-hidden="true">→</span></a>
+          <span class="kurs-note" aria-hidden="true">det är den här han pekar på →</span>
+        </div>
+        <img class="kurs-jonas" src="../assets/img/pekar.webp" alt="Jonas pekar entusiastiskt uppåt mot kursknappen" loading="lazy" width="430" height="720">
+      </div>
+      <span class="kurs-url" style="grid-column:1 / -1">kurs.jonasvonessen.se</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. KONTAKT ============ -->
+<section class="section" id="kontakt">
+  <div class="container kontakt-grid">
+    <div class="reveal">
+      <p class="kicker" style="--dot:var(--indigo)">04 · Kontakt</p>
+      <h2 class="sec-h">Ska vi <span class="hl hl-sky">höras?</span></h2>
+      <p class="sec-sub">Vill du boka en föreläsning, ett event eller bara säga hej? Skriv en rad – jag lovar att komma ihåg dig.</p>
+      <p class="social-label">Följ mig</p>
+      <div class="socials">
+        <a class="social-btn social-ig" href="https://www.instagram.com/jonasvonessen/" target="_blank" rel="noopener">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5" stroke="#1a2440" stroke-width="2.2"/><circle cx="12" cy="12" r="4.3" stroke="#1a2440" stroke-width="2.2"/><circle cx="17.4" cy="6.6" r="1.5" fill="#1a2440"/></svg>
+          Instagram
+        </a>
+        <a class="social-btn social-tt" href="https://www.tiktok.com/@jonasvonessen" target="_blank" rel="noopener">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="#1a2440" aria-hidden="true"><path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+          TikTok
+        </a>
+        <a class="social-btn social-yt" href="https://www.youtube.com/@BlueberryClubSparven" target="_blank" rel="noopener">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2" y="5" width="20" height="14.5" rx="4" stroke="#1a2440" stroke-width="2.2"/><path d="M10.2 9.3l4.9 2.95-4.9 2.95z" fill="#1a2440"/></svg>
+          YouTube
+        </a>
+      </div>
+      <p class="ps-card"><span class="emoji" aria-hidden="true">📬</span><span>P.S. Jag glömmer inte att svara. Det vore dåligt för varumärket.</span></p>
+    </div>
+    <div class="reveal">
+      <div class="kontakt-figure" aria-hidden="true">
+        <img src="../assets/img/ner.webp" alt="" loading="lazy" width="376" height="720">
+      </div>
+      <div class="form-card">
+        <span class="form-tag">Boka föreläsning? Skriv en rad!</span>
+        <!-- TODO: Koppla till Formspree – byt formulärets action till
+             https://formspree.io/f/DITT-FORMSPREE-ID och method="POST",
+             ta sedan bort JS-hanteraren nedan. -->
+        <form id="kontakt-form" novalidate>
+          <div class="form-fields">
+            <div class="field">
+              <label for="f-namn">Namn</label>
+              <input id="f-namn" name="namn" type="text" autocomplete="name" placeholder="Ditt namn" required>
+            </div>
+            <div class="field">
+              <label for="f-epost">E-post</label>
+              <input id="f-epost" name="epost" type="email" autocomplete="email" placeholder="din@epost.se" required>
+            </div>
+            <div class="field">
+              <label for="f-medd">Meddelande</label>
+              <textarea id="f-medd" name="meddelande" placeholder="Berätta vad du har på hjärtat – till exempel en föreläsning du vill boka." required></textarea>
+            </div>
+            <button class="btn btn-blue" type="submit">Skicka <span class="arr" aria-hidden="true">→</span></button>
+          </div>
+          <div class="form-done" role="status" aria-live="polite">
+            <span class="emoji" aria-hidden="true">🎉</span>
+            <span><strong>Tack för ditt meddelande!</strong> Formuläret kopplas snart – mejla mig så länge, så hörs vi.</span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <p class="foot-brand"><span class="brand-mark" aria-hidden="true">π</span> Jonas von Essen</p>
+        <p class="foot-pun">Tack för besöket. Jag kommer ihåg dig – det är liksom grejen.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Apparna</h4>
+        <ul>
+          <li><a href="https://jonasgeografi.se" target="_blank" rel="noopener">jonasgeografi.se</a></li>
+          <li><a href="https://hpakuten.se" target="_blank" rel="noopener">hpakuten.se</a></li>
+          <li><a href="https://www.gångertabellen.se" target="_blank" rel="noopener">gångertabellen.se</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Lär dig mer</h4>
+        <ul>
+          <li><a href="https://kurs.jonasvonessen.se" target="_blank" rel="noopener">Kursen: Skaffa ett superminne</a></li>
+          <li><a href="#meriter">Meriter</a></li>
+          <li><a href="#kontakt">Boka föreläsning</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Följ mig</h4>
+        <ul>
+          <li><a href="https://www.instagram.com/jonasvonessen/" target="_blank" rel="noopener">Instagram</a></li>
+          <li><a href="https://www.tiktok.com/@jonasvonessen" target="_blank" rel="noopener">TikTok</a></li>
+          <li><a href="https://www.youtube.com/@BlueberryClubSparven" target="_blank" rel="noopener">YouTube</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Jonas von Essen</span>
+      <span>π = 3,14159 26535 89793 … (och 99 985 till)</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../assets/globe.js"></script>
+<script>
+(function(){
+  'use strict';
+
+  /* ========== 0. Laddskärm ========== */
+  var boot = document.getElementById('boot');
+  var noBoot = document.documentElement.classList.contains('noboot');
+  var bootDone = noBoot;
+
+  function finishBoot(){
+    if (bootDone) return;
+    bootDone = true;
+    boot.classList.add('done');
+    document.body.classList.remove('boot-lock');
+    window.removeEventListener('keydown', finishBoot);
+    boot.removeEventListener('click', finishBoot);
+  }
+
+  if (noBoot) {
+    boot.parentNode.removeChild(boot);
+  } else {
+    document.body.classList.add('boot-lock');
+    try { sessionStorage.setItem('jve-boot','1'); } catch(e){}
+    boot.addEventListener('click', finishBoot);
+    window.addEventListener('keydown', finishBoot);
+
+    var lines = [
+      '> startar jonas.exe .............. OK',
+      '> laddar minnespalats ............ 100%',
+      '> π-decimaler i minne: 100 000 ... verifierade',
+      '> länder inlästa: 197/197 ........ klart',
+      '> kalibrerar ordvitsnivå ......... farligt hög',
+      '> minnet är fullt – av möjligheter. kör!'
+    ];
+    var pre = document.getElementById('boot-text');
+    var cursor = document.createElement('span');
+    cursor.className = 'boot-cursor';
+    pre.appendChild(cursor);
+    var li = 0, ci = 0;
+
+    function type(){
+      if (bootDone) return;
+      if (li >= lines.length) { setTimeout(finishBoot, 420); return; }
+      var line = lines[li];
+      if (ci < line.length) {
+        var chunk = line.slice(ci, ci + 2); /* 2 tecken/tick = snabb boot */
+        pre.insertBefore(document.createTextNode(chunk), cursor);
+        ci += 2;
+        setTimeout(type, 13);
+      } else {
+        pre.insertBefore(document.createTextNode('\n'), cursor);
+        li++; ci = 0;
+        setTimeout(type, li === lines.length ? 60 : 90);
+      }
+    }
+    setTimeout(type, 220);
+    /* säkerhetsnät: aldrig längre än ~4 s */
+    setTimeout(finishBoot, 4000);
+  }
+
+  /* ========== Scroll-reveal ========== */
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var reveals = document.querySelectorAll('.reveal');
+  if (!reduce && 'IntersectionObserver' in window) {
+    var ro = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting) { en.target.classList.add('in'); ro.unobserve(en.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: .08 });
+    reveals.forEach(function(el){ ro.observe(el); });
+  } else {
+    reveals.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  /* ========== Aktiv sektion i nav ========== */
+  var navMap = {};
+  document.querySelectorAll('.nav-links a[data-nav]').forEach(function(a){
+    navMap[a.getAttribute('data-nav')] = a;
+  });
+  var sections = ['om','meriter','projekt','kurs'].map(function(id){ return document.getElementById(id); });
+  if ('IntersectionObserver' in window) {
+    var visible = {};
+    var so = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        visible[en.target.id] = en.isIntersecting;
+      });
+      var current = null;
+      sections.forEach(function(s){ if (s && visible[s.id] && !current) current = s.id; });
+      Object.keys(navMap).forEach(function(k){
+        navMap[k].classList.toggle('active', k === current);
+      });
+    }, { rootMargin: '-35% 0px -55% 0px' });
+    sections.forEach(function(s){ if (s) so.observe(s); });
+  }
+
+  /* ========== Jordglob (lazy init) ========== */
+  var globCanvas = document.getElementById('glob');
+  var globStarted = false;
+  function startGlobe(){
+    if (globStarted || !window.JonasGlobe) return;
+    globStarted = true;
+    JonasGlobe.create(globCanvas, '../assets/globe-data.json', {
+      mode: 'both',
+      dotColor: '#5bbfff',
+      lineColor: 'rgba(91,191,255,.5)',
+      graticule: 'rgba(91,191,255,.08)',
+      rim: 'rgba(91,191,255,.3)',
+      sphereFill: 'rgba(8,20,36,.92)',
+      markerColor: '#ffdc32'
+    }).catch(function(err){ /* offline-läge: globen uteblir tyst */ });
+  }
+  if ('IntersectionObserver' in window) {
+    var go = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting) { startGlobe(); go.disconnect(); }
+      });
+    }, { rootMargin: '400px 0px' });
+    go.observe(globCanvas);
+  } else {
+    startGlobe();
+  }
+
+  /* ========== Kontaktformulär (ingen backend ännu) ========== */
+  var form = document.getElementById('kontakt-form');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    form.classList.add('done');
+    form.querySelector('.form-done').classList.add('show');
+  });
+})();
+</script>
+</body>
+</html>
