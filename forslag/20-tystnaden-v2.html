@@ -148,6 +148,7 @@
   .skarmbar i{width:7px;height:7px;border-radius:50%;background:#26262b}
   .skarmbar .adr{margin-left:10px;font-family:var(--mono);font-size:.52rem;letter-spacing:.2em;color:var(--mist)}
   .skarm img{width:100%;display:block}
+  .promoimg{width:100%;display:block;border-radius:20px;border:1px solid rgba(255,255,255,.05)}
   .chip{position:absolute;z-index:2;font-family:var(--mono);font-size:.52rem;letter-spacing:.26em;text-transform:uppercase;color:var(--ink);
     border:1px solid var(--hair);background:rgba(12,12,13,.88);padding:.6rem .85rem;transform:translateZ(48px);white-space:nowrap}
   .chip.nv{left:-1.1rem;bottom:13%}
@@ -160,8 +161,8 @@
 
   /* ————— produktkort med accentfärg — sidan får mer färg ju längre ner man kommer ————— */
   .proj[data-accent="bla"]{--acc:#5fb2ff}
-  .proj[data-accent="varm"]{--acc:#ffab5e}
-  .proj[data-accent="viol"]{--acc:#a78bfa}
+  .proj[data-accent="lila"]{--acc:#b18cff}
+  .proj[data-accent="gron"]{--acc:#57d98a}
   .projgrid{display:grid;gap:2.4rem;align-items:center;width:100%}
   .pvis{position:relative;z-index:0}
   .pvis::before{
@@ -179,7 +180,10 @@
   .feat b{display:block;font-weight:500;font-size:.98rem;letter-spacing:.01em;color:var(--acc)}
   .feat i{display:block;font-style:normal;color:var(--mist);font-size:.88rem;line-height:1.55;margin-top:.18rem}
   .globpromo{width:min(100%,24rem);margin-inline:auto}
-  .globpromo img{width:100%;display:block;-webkit-mask-image:radial-gradient(circle at 50% 47%,#000 54%,transparent 73%);mask-image:radial-gradient(circle at 50% 47%,#000 54%,transparent 73%)}
+  .globpromo img{width:100%;display:block;border-radius:22px;
+    -webkit-mask-image:radial-gradient(ellipse 88% 78% at 50% 48%,#000 55%,transparent 92%);
+    mask-image:radial-gradient(ellipse 88% 78% at 50% 48%,#000 55%,transparent 92%)}
+  .globpromo--stor{width:min(100%,22rem)}
   @media (prefers-reduced-motion:no-preference){
     .globpromo img{animation:flyt 8s ease-in-out infinite}
   }
@@ -202,21 +206,29 @@
   }
   .kursram .knapp{margin-top:2.8rem}
 
-  /* ————— videor ————— */
-  .vgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;width:100%;margin-top:clamp(4rem,9vh,6rem)}
-  @media (max-width:760px){ .vgrid{grid-template-columns:1fr;max-width:24rem;margin-inline:auto} }
-  .vkort{
-    display:grid;justify-items:center;gap:1rem;text-align:center;
-    border:1px solid var(--hair);padding:2.4rem 1.3rem 2.1rem;text-decoration:none;
-    transition:border-color .3s ease;
-  }
-  .vkort svg.spela{width:34px;height:34px;stroke:var(--mist);fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round;transition:stroke .3s ease}
-  .vkort .vtitel{font-size:1.06rem;letter-spacing:.02em;line-height:1.4;border-bottom:1px solid transparent;padding-bottom:.25rem;transition:border-color .3s ease}
-  .vkort .vmeta{font-family:var(--mono);font-size:.58rem;letter-spacing:.26em;text-transform:uppercase;color:var(--mist);line-height:1.9}
-  .vkort:is(:hover,:focus-visible){border-color:var(--ink)}
-  .vkort:is(:hover,:focus-visible) svg.spela{stroke:var(--ink)}
-  .vkort:is(:hover,:focus-visible) .vtitel{border-color:var(--ink);text-shadow:0 0 26px rgba(234,230,220,.45)}
-  html.tp .vkort:is(:hover,:focus-visible){opacity:1}
+  /* ————— videor: spelare bäddas in först vid klick ————— */
+  .vgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:2.6rem 1.4rem;width:100%;margin-top:clamp(4rem,9vh,6rem);align-items:start}
+  .vplayer{display:grid;gap:1.15rem;justify-items:center;text-align:center;min-width:0;margin:0}
+  .vplayer--reel{grid-column:1/-1;justify-self:center;width:min(72vw,270px)}
+  .vram{position:relative;width:100%;aspect-ratio:16/9;background:#0b0b0d;border:1px solid var(--hair);overflow:hidden;transition:border-color .3s ease}
+  .vplayer--reel .vram{aspect-ratio:9/16}
+  .vram iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
+  .vfasad{position:absolute;inset:0;width:100%;height:100%;display:grid;place-items:center;background:transparent;border:0;cursor:pointer;padding:0}
+  .vth{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55;filter:grayscale(.35);transition:opacity .45s ease,filter .45s ease}
+  .vfasad:is(:hover,:focus-visible) .vth{opacity:.85;filter:grayscale(0)}
+  .vplayer:is(:hover,:focus-within) .vram{border-color:var(--ink)}
+  .vspela{position:relative;z-index:1;width:60px;height:60px;border-radius:50%;display:grid;place-items:center;
+          background:rgba(5,5,6,.55);border:1px solid rgba(234,230,220,.45);backdrop-filter:blur(3px);
+          transition:border-color .3s ease,transform .3s ease,box-shadow .3s ease}
+  .vspela svg{width:20px;height:20px;fill:var(--ink);margin-left:3px}
+  .vfasad:is(:hover,:focus-visible) .vspela{border-color:var(--ink);transform:scale(1.07);box-shadow:0 0 44px rgba(234,230,220,.16)}
+  .vfasad:focus-visible{outline:1px solid var(--ink);outline-offset:-1px}
+  .vtitel{font-size:1.06rem;letter-spacing:.02em;line-height:1.4;display:block}
+  .vmeta{font-family:var(--mono);font-size:.58rem;letter-spacing:.26em;text-transform:uppercase;color:var(--mist);line-height:1.9;display:block;margin-top:.3rem}
+  .vmeta a{color:var(--mist);text-decoration:none;border-bottom:1px solid var(--hair);padding-bottom:.1rem}
+  .vmeta a:hover{color:var(--ink);border-color:var(--ink)}
+  @media (max-width:760px){ .vgrid{grid-template-columns:1fr;gap:3rem} }
+  html.tp .vplayer:is(:hover,:focus-within){opacity:1}
 
   .foljmig{margin-top:clamp(5rem,12vh,8rem);text-align:center}
   .soc{display:flex;gap:2.4rem;justify-content:center;flex-wrap:wrap;margin-top:1.8rem}
@@ -240,6 +252,12 @@
   .tack .meta{margin-top:1.2rem}
   form.klar{display:none}
   .klar + .tack{display:block}
+
+  /* ————— nyhetsbrev ————— */
+  form.nbrev{display:flex;align-items:flex-end;gap:1.6rem 2.4rem;flex-wrap:wrap;justify-content:center;margin-top:3.2rem}
+  .nbrev .falt{flex:1 1 15rem;text-align:left}
+  .nbrev .knapp{margin-bottom:.35rem;white-space:nowrap}
+  form.nbrev.klar{display:none}
 
   /* ————— footer ————— */
   footer{padding:clamp(5rem,14vh,9rem) 1.5rem 3rem;text-align:center;
@@ -361,24 +379,24 @@
         </div>
         <div class="pvis" data-line data-min=".35">
           <!-- BILD KOMMER: jonas skickar den exakta globbilden — konstgloben som tillfällig bild så länge -->
-          <div class="globpromo"><img src="../assets/img/glob-art.webp" alt="Jonas geografi-glob där varje land är ett handritat konstverk" loading="lazy"></div>
+          <div class="globpromo globpromo--stor"><img src="../assets/img/promo-geografi.webp" alt="Jonas geografi-glob på fot — varje land ett handritat konstverk" loading="lazy"></div>
           <span class="chip nv" aria-hidden="true">197 handritade länder</span>
           <span class="chip oh" aria-hidden="true">Geografi har aldrig varit roligare!</span>
         </div>
       </div>
     </article>
 
-    <article class="proj" data-accent="varm" data-scene>
+    <article class="proj" data-accent="lila" data-scene>
       <div class="projgrid flip">
         <div class="ptxt">
           <div data-line>
             <h3><a href="https://hpakuten.se" target="_blank" rel="noopener">hpakuten.se<span class="pil">↗</span></a></h3>
-            <p class="desc">Gratis träning inför högskoleprovet — från Sveriges kanske mest rutinerade HP-skrivare.</p>
+            <p class="desc">Din genväg till ett högre resultat — träna smartare med tusentals övningar, tydlig statistik och personliga rekommendationer. Gratis, från Sveriges kanske mest rutinerade HP-skrivare.</p>
           </div>
           <div class="feats" data-line data-min=".3">
-            <div class="feat"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3.5" width="14" height="17" rx="2"/><path d="M9 9h6M9 13h6M9 17h4"/></svg></span><div><b>Riktiga gamla prov</b><i>Simulera på tid, precis som på provdagen.</i></div></div>
-            <div class="feat"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><path d="M10.2 8.9v6.2l5.2-3.1z"/></svg></span><div><b>Videogenomgångar</b><i>Lösningar förklarade steg för steg.</i></div></div>
-            <div class="feat"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.6 17.6h4.8M10.3 20.5h3.4M12 3.6a5.7 5.7 0 0 0-3.8 9.9c.7.7 1.2 1.5 1.4 2.4h4.8c.2-.9.7-1.7 1.4-2.4A5.7 5.7 0 0 0 12 3.6z"/></svg></span><div><b>Minnestekniker</b><i>Plugga som en världsmästare i minne.</i></div></div>
+            <div class="feat"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 19.5V4.5M4.5 19.5h15"/><path d="M8.5 16v-4.5M12.5 16V8M16.5 16v-2.5"/></svg></span><div><b>Tusentals övningar</b><i>Öva på alla delprov med noggrant utvalda frågor.</i></div></div>
+            <div class="feat"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="2.6"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3"/></svg></span><div><b>Adaptiv träning</b><i>Personliga rekommendationer om det du behöver förbättra.</i></div></div>
+            <div class="feat"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><path d="M12 7v5.2l3.4 2"/></svg></span><div><b>Tidsenliga prov</b><i>Träna under provlika former och bli trygg på provdagen.</i></div></div>
           </div>
           <p class="meta aft">Gratis · 2.0 tolv gånger · 160/160 år 2021</p>
         </div>
@@ -386,10 +404,7 @@
           <!-- BILD KOMMER: jonas skickar — tillfälligt foto i rutan så länge -->
           <div class="appvy lut-h" data-line data-min=".35">
             <div class="rymd">
-              <div class="skarm">
-                <div class="skarmbar" aria-hidden="true"><i></i><i></i><i></i><span class="adr">hpakuten.se</span></div>
-                <img src="../assets/img/bild_hp-md.webp" alt="Högskoleprovshäften och svarsblankett" loading="lazy">
-              </div>
+              <img class="promoimg" src="../assets/img/promo-hp.webp" alt="HPAkuten: svarsblankett, timer och delprovsböcker" loading="lazy">
               <span class="chip oh" aria-hidden="true">160 av 160 · 2021</span>
               <span class="chip nv" aria-hidden="true">Gamla prov · på tid</span>
             </div>
@@ -398,17 +413,17 @@
       </div>
     </article>
 
-    <article class="proj" data-accent="viol" data-scene>
+    <article class="proj" data-accent="gron" data-scene>
       <div class="projgrid">
         <div class="ptxt">
           <div data-line>
             <h3><a href="https://www.gångertabellen.se" target="_blank" rel="noopener">gångertabellen.se<span class="pil">↗</span></a></h3>
-            <p class="desc">Gångertabellen är lättare än den ser ut — med rätt knep är det bara sex tal kvar att memorera.</p>
+            <p class="desc">Bemästra multiplikation på ett roligt sätt — interaktiva övningar, tydlig progression och smart repetition. Med rätt knep är det bara sex tal kvar att memorera.</p>
           </div>
           <div class="feats" data-line data-min=".3">
-            <div class="feat"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="4.5" width="15" height="15" rx="2.5"/><path d="M4.5 12h15M12 4.5v15"/></svg></span><div><b>Bara sex tal kvar</b><i>Resten är knep — och knepen får du på köpet.</i></div></div>
-            <div class="feat"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><circle cx="9" cy="10" r="1.5"/><path d="M4 16.5l4.6-4.6 3.6 3.6 2.6-2.6 5.2 5.2"/></svg></span><div><b>Minnesbilder</b><i>För de svåra talen. 8×8? Mario × Luigi = Nintendo 64.</i></div></div>
-            <div class="feat"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 19.5V4.5M4.5 19.5h15"/><path d="M8.5 16v-4.5M12.5 16V8M16.5 16v-2.5"/></svg></span><div><b>Smart repetition</b><i>Hittar dina luckor och tränar bort dem.</i></div></div>
+            <div class="feat"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="4.5" width="15" height="15" rx="2.5"/><path d="M4.5 12h15M12 4.5v15"/></svg></span><div><b>Interaktiv träning</b><i>Öva tabellerna steg för steg i ett lekfullt format.</i></div></div>
+            <div class="feat"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5a8.5 8.5 0 1 0 .4 17c1.5 0 1.9-1 1.4-1.9-.7-1.2 0-2.6 1.5-2.6h1.9c1.8 0 3.3-1.4 3.3-3.2C20.5 7 16.7 3.5 12 3.5z"/><circle cx="8.2" cy="9.2" r="1.1"/><circle cx="12.6" cy="7.4" r="1.1"/><circle cx="16" cy="10.4" r="1.1"/></svg></span><div><b>Färg &amp; mönster</b><i>Se strukturen med visuella samband och färgkodning.</i></div></div>
+            <div class="feat"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 19.5V4.5M4.5 19.5h15"/><path d="M8.5 16v-4.5M12.5 16V8M16.5 16v-2.5"/></svg></span><div><b>Följ dina framsteg</b><i>Bygg säkerhet genom repetition — och se hur du blir snabbare.</i></div></div>
           </div>
           <p class="meta aft">Gratis · Utan inloggning</p>
         </div>
@@ -416,10 +431,7 @@
           <!-- BILD KOMMER: jonas skickar — riktig skärmbild av appen så länge -->
           <div class="appvy lut-v" data-line data-min=".35">
             <div class="rymd">
-              <div class="skarm">
-                <div class="skarmbar" aria-hidden="true"><i></i><i></i><i></i><span class="adr">gångertabellen.se</span></div>
-                <img src="../assets/img/app-gangertabellen.webp" alt="Gångertabellen: träna, tabellen, knepen och statistik" loading="lazy">
-              </div>
+              <img class="promoimg" src="../assets/img/promo-tabellen.webp" alt="Gångertabellen som färgglad interaktiv tavla" loading="lazy">
               <span class="chip nv" aria-hidden="true">Bara 6 tal kvar att memorera</span>
             </div>
           </div>
@@ -454,21 +466,42 @@
       <p class="meta aft">Tre klipp · Fler på Instagram och YouTube</p>
 
       <div class="vgrid">
-        <a class="vkort" href="https://www.instagram.com/reel/DagFf5zBbd-/" target="_blank" rel="noopener" data-line data-min=".3">
-          <svg class="spela" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="15.5"/><path d="M14 11.5v11l9-5.5z"/></svg>
-          <span class="vtitel">Alla världens länder</span>
-          <span class="vmeta">Instagram · Reel ↗</span>
-        </a>
-        <a class="vkort" href="https://www.youtube.com/watch?v=A-oHL2JyIjY" target="_blank" rel="noopener" data-line data-min=".3">
-          <svg class="spela" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="15.5"/><path d="M14 11.5v11l9-5.5z"/></svg>
-          <span class="vtitel">Miljonfrågan</span>
-          <span class="vmeta">Postkodmiljonären · YouTube ↗</span>
-        </a>
-        <a class="vkort" href="https://www.youtube.com/watch?v=WZwQ-zKBBaA" target="_blank" rel="noopener" data-line data-min=".3">
-          <svg class="spela" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="15.5"/><path d="M14 11.5v11l9-5.5z"/></svg>
-          <span class="vtitel">500 namn på två timmar</span>
-          <span class="vmeta">Talang · YouTube ↗</span>
-        </a>
+        <figure class="vplayer vplayer--reel" data-line data-min=".3">
+          <div class="vram">
+            <button class="vfasad" type="button" data-embed="https://www.instagram.com/reel/DagFf5zBbd-/embed/" aria-label="Spela upp: Alla världens länder (Instagram)">
+              <img class="vth" src="../assets/img/glob-art.webp" alt="" loading="lazy">
+              <span class="vspela" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
+            </button>
+          </div>
+          <figcaption>
+            <span class="vtitel">Alla världens länder</span>
+            <span class="vmeta">Instagram · <a href="https://www.instagram.com/reel/DagFf5zBbd-/" target="_blank" rel="noopener">Öppna i appen ↗</a></span>
+          </figcaption>
+        </figure>
+        <figure class="vplayer" data-line data-min=".3">
+          <div class="vram">
+            <button class="vfasad" type="button" data-yt="A-oHL2JyIjY" aria-label="Spela upp: Miljonfrågan (YouTube)">
+              <img class="vth" src="../assets/img/jonas_pkm-md.webp" alt="" loading="lazy">
+              <span class="vspela" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
+            </button>
+          </div>
+          <figcaption>
+            <span class="vtitel">Miljonfrågan</span>
+            <span class="vmeta">Postkodmiljonären · <a href="https://www.youtube.com/watch?v=A-oHL2JyIjY" target="_blank" rel="noopener">YouTube ↗</a></span>
+          </figcaption>
+        </figure>
+        <figure class="vplayer" data-line data-min=".3">
+          <div class="vram">
+            <button class="vfasad" type="button" data-yt="WZwQ-zKBBaA" aria-label="Spela upp: 500 namn på två timmar (YouTube)">
+              <img class="vth" src="../assets/img/foto-scen-md.webp" alt="" loading="lazy">
+              <span class="vspela" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
+            </button>
+          </div>
+          <figcaption>
+            <span class="vtitel">500 namn på två timmar</span>
+            <span class="vmeta">Talang · <a href="https://www.youtube.com/watch?v=WZwQ-zKBBaA" target="_blank" rel="noopener">YouTube ↗</a></span>
+          </figcaption>
+        </figure>
       </div>
 
       <div class="foljmig" data-line data-min=".35">
@@ -484,6 +517,33 @@
             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="3.5"/><path d="M10.2 9.3v5.4l4.8-2.7z" fill="currentColor" stroke="none"/></svg>
             YouTube</a>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="paus paus--stor"></div>
+
+  <!-- ———— NYHETSBREV ———— -->
+  <section id="nyhetsbrev" class="wrap" aria-labelledby="nyhetsbrev-rubrik">
+    <h2 class="label" id="nyhetsbrev-rubrik" data-line>Nyhetsbrev</h2>
+    <div class="scene scene--low" data-scene style="min-height:auto">
+      <p class="big" data-line>Ett brev, då och då. Värt att minnas.</p>
+      <p class="desc" data-line style="max-width:44ch;margin-top:1.6rem;line-height:1.75;font-size:clamp(.95rem,.85rem + .5vw,1.1rem)">
+        Minnestekniker, nya projekt och det jag inte kan hålla tyst om. Inget brus — avsluta när du vill.</p>
+
+      <!-- TODO NYHETSBREV: koppla till en leverantör (t.ex. MailerLite, Brevo, Mailchimp eller Substack).
+           Sätt action="..." method="POST" enligt leverantörens embed-kod (fältnamnet kan behöva bytas)
+           och ta bort submit-stubben i JS (sök på "nbrev"). -->
+      <form id="nbrev" class="nbrev" data-line data-min=".5" aria-label="Prenumerera på nyhetsbrevet">
+        <div class="falt">
+          <label for="nb-epost">Din e-post</label>
+          <input id="nb-epost" name="epost" type="email" autocomplete="email" required>
+        </div>
+        <button class="knapp" type="submit">Prenumerera</button>
+      </form>
+      <div class="tack" role="status" aria-live="polite">
+        <p class="big" style="font-size:clamp(1.2rem,1rem + 1.2vw,1.6rem)">Tack — du är antecknad.</p>
+        <p class="meta">Nyhetsbrevet startar inom kort.</p>
       </div>
     </div>
   </section>
@@ -755,6 +815,29 @@
         });
       });
     }
+  }
+
+  /* ————— videor: bädda in spelaren först när man klickar ————— */
+  Array.prototype.forEach.call(document.querySelectorAll('.vfasad'), function(btn){
+    btn.addEventListener('click', function(){
+      var yt = btn.getAttribute('data-yt');
+      var ifr = document.createElement('iframe');
+      ifr.src = yt ? 'https://www.youtube-nocookie.com/embed/' + yt + '?autoplay=1&rel=0'
+                   : btn.getAttribute('data-embed');
+      ifr.title = btn.getAttribute('aria-label') || 'Videospelare';
+      ifr.setAttribute('allow', 'autoplay; fullscreen; encrypted-media; picture-in-picture; clipboard-write');
+      ifr.setAttribute('allowfullscreen', '');
+      btn.parentNode.replaceChild(ifr, btn);
+    });
+  });
+
+  /* ————— nyhetsbrev (ingen backend ännu — se TODO NYHETSBREV i HTML) ————— */
+  var nbrev = document.getElementById('nbrev');
+  if (nbrev) {
+    nbrev.addEventListener('submit', function(ev){
+      ev.preventDefault();
+      nbrev.classList.add('klar');
+    });
   }
 
   /* ————— kontaktformulär (ingen backend ännu) ————— */
