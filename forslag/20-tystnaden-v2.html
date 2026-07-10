@@ -196,6 +196,13 @@
   .kobj--star{width:clamp(40px,7vw,72px);bottom:24%;left:0;--tx:-58%;--r:-14deg;--d:9.6s;--f:-4s}
   .kobj--raket{width:clamp(66px,11vw,122px);bottom:0;left:0;--tx:-30%;--ty:34%;--d:8.8s;--f:-2.6s}
   .kobj--examen{width:clamp(60px,10vw,112px);bottom:0;right:0;--tx:30%;--ty:32%;--r:7deg;--d:7.8s;--f:-5.2s}
+  @media (max-width:700px){
+    .kobj--hjarna{--tx:-6%;--ty:-42%}
+    .kobj--bulb{--tx:4%;--ty:-42%}
+    .kobj--star{--tx:-26%}
+    .kobj--raket{--tx:-4%;--ty:30%}
+    .kobj--examen{--tx:2%;--ty:30%}
+  }
   @media (prefers-reduced-motion:no-preference){
     .kobj{animation:kflyt var(--d,8s) ease-in-out var(--f,0s) infinite}
   }
@@ -395,7 +402,7 @@
           <p class="meta aft">Gratis · Minnesknep för varje land</p>
         </div>
         <div class="pvis" data-line data-min=".35">
-          <div class="globpromo globpromo--geo"><img src="../assets/img/fri2-geografi.webp" alt="Jordglob där varje land är ett handritat konstverk" loading="lazy"></div>
+          <div class="globpromo globpromo--geo"><img src="../assets/img/fri3-geografi.webp" alt="Jordglob där varje land är ett handritat konstverk" loading="lazy"></div>
         </div>
       </div>
     </article>
@@ -415,7 +422,7 @@
           <p class="meta aft">Gratis · 2.0 tolv gånger · 160/160 år 2021</p>
         </div>
         <div class="pvis" data-line data-min=".35">
-          <div class="globpromo globpromo--hp"><img src="../assets/img/fri2-hp.webp" alt="HPAkuten: svarsblankett, timer och delprovsböcker" loading="lazy"></div>
+          <div class="globpromo globpromo--hp"><img src="../assets/img/fri3-hp.webp" alt="HPAkuten: svarsblankett, timer och delprovsböcker" loading="lazy"></div>
         </div>
       </div>
     </article>
@@ -435,7 +442,7 @@
           <p class="meta aft">Gratis · Utan inloggning</p>
         </div>
         <div class="pvis" data-line data-min=".35">
-          <div class="globpromo globpromo--tab"><img src="../assets/img/fri2-tabellen.webp" alt="Gångertabellen som färgglad interaktiv tavla" loading="lazy"></div>
+          <div class="globpromo globpromo--tab"><img src="../assets/img/fri3-tabellen.webp" alt="Gångertabellen som färgglad interaktiv tavla" loading="lazy"></div>
         </div>
       </div>
     </article>
@@ -812,13 +819,21 @@
     });
   }
 
-  /* ————— videoomslag: riktiga YouTube-miniatyrer, med lokala reservbilder ————— */
+  /* ————— videoomslag: riktiga YouTube-miniatyrer, med lokala reservbilder.
+           OBS: när maxres saknas svarar YouTube ibland 200 med en grå 120x90-
+           platthållare istället för 404 — därför kontrolleras även bildstorleken. ————— */
   Array.prototype.forEach.call(document.querySelectorAll('.vth[data-hq]'), function(img){
-    img.addEventListener('error', function(){
+    function vidare(){
       var hq = img.getAttribute('data-hq'), lokal = img.getAttribute('data-lokal');
       if (hq) { img.removeAttribute('data-hq'); img.src = hq; }
       else if (lokal) { img.removeAttribute('data-lokal'); img.src = lokal; }
-    });
+    }
+    function koll(){
+      if (img.naturalWidth && img.naturalWidth < 320) vidare();
+    }
+    img.addEventListener('error', vidare);
+    img.addEventListener('load', koll);
+    if (img.complete && img.naturalWidth) koll();
   });
 
   /* ————— videor: bädda in spelaren först när man klickar ————— */
