@@ -135,6 +135,29 @@
   }
   .bildyta span{font-family:var(--mono);font-size:.55rem;letter-spacing:.4em;text-transform:uppercase;color:var(--mist);opacity:.55;padding-left:.4em}
 
+  /* ————— appvy: vriden demo-ruta (test — bilder byts när Jonas skickar) ————— */
+  .appvy{width:min(100%,32rem);margin:0 auto 3rem;perspective:1300px}
+  .appvy .rymd{
+    position:relative;transform-style:preserve-3d;
+    transform:rotateX(calc(var(--rx,9deg) + var(--hx,0deg))) rotateY(calc(var(--ry,-8deg) + var(--hy,0deg))) scale(var(--sc,.965));
+    transition:transform .14s linear;will-change:transform;
+  }
+  .skarm{border:1px solid var(--hair);background:#131316;overflow:hidden;border-radius:10px;
+    box-shadow:0 36px 90px rgba(0,0,0,.6),0 4px 18px rgba(0,0,0,.45)}
+  .skarmbar{display:flex;gap:6px;align-items:center;padding:11px 13px;border-bottom:1px solid var(--hair);background:#0f0f11}
+  .skarmbar i{width:7px;height:7px;border-radius:50%;background:#26262b}
+  .skarmbar .adr{margin-left:10px;font-family:var(--mono);font-size:.52rem;letter-spacing:.2em;color:var(--mist)}
+  .skarm img{width:100%;display:block}
+  .chip{position:absolute;z-index:2;font-family:var(--mono);font-size:.52rem;letter-spacing:.26em;text-transform:uppercase;color:var(--ink);
+    border:1px solid var(--hair);background:rgba(12,12,13,.88);padding:.6rem .85rem;transform:translateZ(48px);white-space:nowrap}
+  .chip.nv{left:-1.1rem;bottom:13%}
+  .chip.oh{right:-1.1rem;top:11%}
+  @media (max-width:640px){.chip.nv{left:.4rem}.chip.oh{right:.4rem}}
+  @media (prefers-reduced-motion:reduce){
+    .appvy .rymd{transform:rotateX(5deg) rotateY(-5deg);transition:none}
+    .appvy.lut-h .rymd{transform:rotateX(5deg) rotateY(5deg)}
+  }
+
   /* ————— kurs: lugn inramad inbjudan ————— */
   .kursram{
     width:min(100%,40rem);margin-inline:auto;
@@ -295,11 +318,19 @@
     </div>
 
     <article class="proj" data-scene>
-      <!-- BILD KOMMER: jonas skickar (globen är appens visuella element — bilden kan komplettera eller ersätta den) -->
-      <div class="globwrap" data-line data-min=".4">
-        <canvas id="glob" aria-label="Roterande jordglob med världens länder som ljusa punkter"></canvas>
-      </div>
       <p class="big" data-line>197 länder. Jag kan&nbsp;alla.</p>
+      <!-- BILD KOMMER: jonas skickar — nedan en riktig skärmbild av appen så länge.
+           (Den minimalistiska vita globen finns kvar i koden och kan enkelt återinföras.) -->
+      <div class="appvy lut-v" data-line data-min=".35">
+        <div class="rymd">
+          <div class="skarm">
+            <div class="skarmbar" aria-hidden="true"><i></i><i></i><i></i><span class="adr">jonasgeografi.se</span></div>
+            <img src="../assets/img/app-geografi.webp" alt="Jonas geografi: jordgloben där varje land är ett handritat konstverk" loading="lazy">
+          </div>
+          <span class="chip nv" aria-hidden="true">197 handritade länder</span>
+          <span class="chip oh" aria-hidden="true">Snurra · quizza · res</span>
+        </div>
+      </div>
       <div data-line>
         <h3><a href="https://jonasgeografi.se" target="_blank" rel="noopener">jonasgeografi.se<span class="pil">↗</span></a></h3>
         <p class="desc">Alla världens länder på en snurrbar jordglob där varje land är ett eget litet konstverk. Utforska, quizza och res jorden runt — med minnesknep för varje land.</p>
@@ -308,8 +339,17 @@
     </article>
 
     <article class="proj" data-scene>
-      <!-- BILD KOMMER: jonas skickar -->
-      <div class="bildyta" aria-hidden="true" data-line data-min=".3"><span>Bild på väg</span></div>
+      <!-- BILD KOMMER: jonas skickar — tillfälligt foto i rutan så länge -->
+      <div class="appvy lut-h" data-line data-min=".35">
+        <div class="rymd">
+          <div class="skarm">
+            <div class="skarmbar" aria-hidden="true"><i></i><i></i><i></i><span class="adr">hpakuten.se</span></div>
+            <img src="../assets/img/bild_hp-md.webp" alt="Högskoleprovshäften och svarsblankett" loading="lazy">
+          </div>
+          <span class="chip oh" aria-hidden="true">160 av 160 · 2021</span>
+          <span class="chip nv" aria-hidden="true">Gamla prov · på tid</span>
+        </div>
+      </div>
       <div data-line>
         <h3><a href="https://hpakuten.se" target="_blank" rel="noopener">hpakuten.se<span class="pil">↗</span></a></h3>
         <p class="desc">Gratis träning inför högskoleprovet: simulera gamla prov på tid, videogenomgångar och minnestekniker. Från Sveriges kanske mest rutinerade HP-skrivare.</p>
@@ -318,8 +358,16 @@
     </article>
 
     <article class="proj" data-scene>
-      <!-- BILD KOMMER: jonas skickar -->
-      <div class="bildyta" aria-hidden="true" data-line data-min=".3"><span>Bild på väg</span></div>
+      <!-- BILD KOMMER: jonas skickar — riktig skärmbild av appen så länge -->
+      <div class="appvy lut-v" data-line data-min=".35">
+        <div class="rymd">
+          <div class="skarm">
+            <div class="skarmbar" aria-hidden="true"><i></i><i></i><i></i><span class="adr">gångertabellen.se</span></div>
+            <img src="../assets/img/app-gangertabellen.webp" alt="Gångertabellen: träna, tabellen, knepen och statistik" loading="lazy">
+          </div>
+          <span class="chip nv" aria-hidden="true">Bara 6 tal kvar att memorera</span>
+        </div>
+      </div>
       <div data-line>
         <h3><a href="https://www.gångertabellen.se" target="_blank" rel="noopener">gångertabellen.se<span class="pil">↗</span></a></h3>
         <p class="desc">Gångertabellen är lättare än den ser ut: med rätt knep är det bara sex tal kvar att memorera. Quiz, minnesbilder och smart repetition — utan inloggning.</p>
@@ -625,6 +673,43 @@
       var el = document.getElementById(id);
       if (el) sio.observe(el);
     });
+  }
+
+  /* ————— appvyer: vrids upp mot rakt läge när de närmar sig mitten ————— */
+  var vys = [].slice.call(document.querySelectorAll('.appvy'));
+  if (vys.length && !reduced) {
+    var vyTick = false;
+    function vyUpd(){
+      vyTick = false;
+      var vh = innerHeight;
+      vys.forEach(function(el){
+        var r = el.getBoundingClientRect();
+        if (r.bottom < -80 || r.top > vh + 80) return;
+        var c = (r.top + r.height/2 - vh/2) / (vh/2);          // -1..1, 0 = mitt
+        var p = Math.max(0, 1 - Math.min(1, Math.abs(c)));      // 1 i mitten
+        var dir = el.classList.contains('lut-h') ? 1 : -1;
+        el.style.setProperty('--rx', (10 - 7.5*p).toFixed(2) + 'deg');
+        el.style.setProperty('--ry', (dir * (9 - 7*p)).toFixed(2) + 'deg');
+        el.style.setProperty('--sc', (0.96 + 0.04*p).toFixed(3));
+      });
+    }
+    addEventListener('scroll', function(){ if(!vyTick){ vyTick = true; requestAnimationFrame(vyUpd); } }, {passive:true});
+    addEventListener('resize', function(){ if(!vyTick){ vyTick = true; requestAnimationFrame(vyUpd); } });
+    vyUpd();
+    if (matchMedia('(hover:hover) and (pointer:fine)').matches) {
+      vys.forEach(function(el){
+        el.addEventListener('mousemove', function(e){
+          var r = el.getBoundingClientRect();
+          var mx = (e.clientX - r.left)/r.width - .5, my = (e.clientY - r.top)/r.height - .5;
+          el.style.setProperty('--hx', (my * -3.5).toFixed(2) + 'deg');
+          el.style.setProperty('--hy', (mx * 3.5).toFixed(2) + 'deg');
+        });
+        el.addEventListener('mouseleave', function(){
+          el.style.setProperty('--hx', '0deg');
+          el.style.setProperty('--hy', '0deg');
+        });
+      });
+    }
   }
 
   /* ————— kontaktformulär (ingen backend ännu) ————— */
