@@ -365,13 +365,8 @@
     66%{opacity:.55;transform:translateY(9px)}
     100%{opacity:0;transform:none}
   }
-  html.glitchin main,html.glitchin .nav{animation:glIn .32s steps(2,end) both}
-  @keyframes glIn{
-    0%{transform:translateX(-8px);filter:hue-rotate(14deg) contrast(1.18)}
-    35%{transform:translateX(6px) skewX(-1.5deg);filter:none}
-    65%{transform:translateX(-3px)}
-    100%{transform:none;filter:none}
-  }
+  html.mjukin main,html.mjukin .nav{animation:mjukIn 1.1s ease both}
+  @keyframes mjukIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
   /* ————— redigeringsläge (öppna sidan med ?redigera) ————— */
   html.redig [data-line]{opacity:1 !important}
@@ -752,10 +747,10 @@
                 if (!loader) return;
                 loader.classList.add('glitchar');            // … så glitchar det till …
                 timers.push(setTimeout(function(){
-                  endLoader(true);                           // … och sidan tar över med ett ryck
-                  docEl.classList.add('glitchin');
-                  setTimeout(function(){ docEl.classList.remove('glitchin'); }, 450);
-                }, 380));
+                  docEl.classList.add('mjukin');             // … och sidan tonar mjukt in
+                  endLoader(false);                          //     medan laddaren tonar bort
+                  setTimeout(function(){ docEl.classList.remove('mjukin'); }, 1400);
+                }, 400));
               }, 750));
             }
           }
