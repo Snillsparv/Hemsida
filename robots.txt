@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /forslag/
+Disallow: /galleri.html
+Sitemap: https://www.jonasvonessen.se/sitemap.xml

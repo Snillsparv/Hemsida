@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>jonasvonessen.se — 18 designförslag</title>
+<meta name="description" content="Samlingssida med alla designförslag för nya jonasvonessen.se">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #05080f, #0b1026 60%, #0d1230);
+    color: #e8ecf4; font-family: 'Space Grotesk', system-ui, sans-serif;
+    padding: clamp(20px, 4vw, 48px) clamp(16px, 4vw, 40px) 60px;
+  }
+  main { max-width: 1080px; margin: 0 auto; }
+  .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+  .prompt { color: #39d98a; font-size: .9rem; margin-bottom: 14px; overflow-wrap: anywhere; }
+  h1 { font-size: clamp(1.7rem, 5vw, 2.6rem); margin-bottom: 8px; text-wrap: balance; }
+  p.lead { color: #9aa7bd; margin-bottom: 12px; max-width: 60ch; }
+  p.tips { color: #6b7890; font-size: .9rem; margin-bottom: 34px; max-width: 60ch; }
+  p.tips strong { color: #ffd166; font-weight: 500; }
+  h2.grupp {
+    font-size: 1.05rem; color: #ffd166; margin: 38px 0 6px;
+    font-family: 'JetBrains Mono', ui-monospace, monospace; letter-spacing: .08em;
+  }
+  p.grupp-desc { color: #7d8aa3; font-size: .92rem; margin-bottom: 16px; }
+  .grid {
+    display: grid; gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+  }
+  a.card {
+    display: flex; flex-direction: column; text-decoration: none; color: inherit;
+    border: 1px solid rgba(120,160,255,.18); border-radius: 14px; overflow: hidden;
+    background: rgba(255,255,255,.03);
+    transition: border-color .2s, transform .2s;
+  }
+  a.card:hover, a.card:focus-visible { border-color: #39d98a; transform: translateY(-2px); }
+  a.card:focus-visible { outline: 2px solid #39d98a; outline-offset: 2px; }
+  .card img { width: 100%; aspect-ratio: 480/346; object-fit: cover; object-position: top; display: block; background: #10182b; border-bottom: 1px solid rgba(120,160,255,.12); }
+  .card .txt { padding: 12px 14px 14px; }
+  .card .nr { color: #ffd166; font-size: .72rem; letter-spacing: .12em; }
+  .card h3 { font-size: 1.05rem; margin: 4px 0 3px; }
+  .card p { color: #9aa7bd; font-size: .86rem; line-height: 1.45; }
+  footer { margin-top: 44px; color: #5a6678; font-size: .85rem; }
+</style>
+</head>
+<body>
+<main>
+  <div class="mono prompt">jonas@hemsida:~$ visa designförslag --alla</div>
+  <h1>Ny hemsida — 18 designförslag</h1>
+  <p class="lead">Samma innehåll (presentation, meriter, appar med jordglob, kurs, kontakt) — arton olika karaktärer. Tryck på ett kort för att öppna förslaget.</p>
+  <p class="tips"><strong>Tips:</strong> varje förslag öppnar med en terminal-laddskärm (tryck var som helst för att hoppa över — den visas bara en gång per flik). Alla sidor funkar i mobilen.</p>
+
+  <h2 class="grupp">★ UTVECKLAS NU · ERT VAL</h2>
+  <p class="grupp-desc">Tystnaden, version 2 — med er feedback: cirkel-laddskärm, gula knappar, ny struktur.</p>
+  <div class="grid">
+    <a class="card" href="forslag/20-tystnaden-v2.html">
+      <img src="assets/thumbs/20-tystnaden-v2.webp" alt="" loading="lazy">
+      <div class="txt"><div class="mono nr">20 · V2</div><h3>Tystnaden — version 2</h3><p>"Cirkeln är sluten. Välkommen in." — ny laddskärm, gula CTA:er, byggt → kurs → videor → kontakt.</p></div>
+    </a>
+  </div>
+
+  <h2 class="grupp">OMGÅNG 1 · TRE KARAKTÄRER</h2>
+  <p class="grupp-desc">De första tre riktningarna: mörk terminal, elegant natt, ljus lekfullhet.</p>
+  <div class="grid">
+    <a class="card" href="forslag/1-terminal.html">
+      <img src="assets/thumbs/1-terminal.webp" alt="" loading="lazy">
+      <div class="txt"><div class="mono nr">01</div><h3>Superminne OS</h3><p>Mörk terminal — meriterna som git-logg, boot-sekvens, fosforgrönt.</p></div>
+    </a>
+    <a class="card" href="forslag/2-observatoriet.html">
+      <img src="assets/thumbs/2-observatoriet.webp" alt="" loading="lazy">
+      <div class="txt"><div class="mono nr">02</div><h3>Observatoriet</h3><p>Elegant natt — stjärnfält, guld, serif och meriterna som stjärnbild.</p></div>
+    </a>
+    <a class="card" href="forslag/3-lekfull.html">
+      <img src="assets/thumbs/3-lekfull.webp" alt="" loading="lazy">
+      <div class="txt"><div class="mono nr">03</div><h3>Snille &amp; sprall</h3><p>Ljust och färgstarkt — sticker-meriter och poserna i huvudrollen.</p></div>
+    </a>
+  </div>
+
+  <h2 class="grupp">OMGÅNG 2 · TIO KONCEPT</h2>
+  <p class="grupp-desc">Bredare spann: från arkitektritning och tidning till cirkusaffisch och brutalism.</p>
+  <div class="grid">
+    <a class="card" href="forslag/4-minnespalatset.html">
+      <img src="assets/thumbs/4-minnespalatset.webp" alt="" loading="lazy">
+      <div class="txt"><div class="mono nr">04</div><h3>Minnespalatset</h3><p>Cyanotypi-ritning — klickbar planritning som tänds rum för rum.</p></div>
+    </a>
+    <a class="card" href="forslag/5-pi.html">
+      <img src="assets/thumbs/5-pi.webp" alt="" loading="lazy">
+      <div class="txt"><div class="mono nr">05</div><h3>π-katedralen</h3><p>Cinematiskt sifferregn — hitta ditt födelsedatum i 100 000 decimaler.</p></div>
+    </a>
+    <a class="card" href="forslag/6-forstasidan.html">
+      <img src="assets/thumbs/6-forstasidan.webp" alt="" loading="lazy">
+      <div class="txt"><div class="mono nr">06</div><h3>Förstasidan</h3><p>Tidningen von Essens Allehanda — notiser, annonser och korsord.</p></div>
+    </a>
+    <a class="card" href="forslag/7-crt.html">
+      <img src="assets/thumbs/7-crt.webp" alt="" loading="lazy">
+      <div class="txt"><div class="mono nr">07</div><h3>CRT-arkivet</h3><p>Amber-terminal — ASCII-porträtt i realtid, skrivbar kommandorad.</p></div>
+    </a>
+    <a class="card" href="forslag/8-varieteaffischen.html">
+      <img src="assets/thumbs/8-varieteaffischen.webp" alt="" loading="lazy">
+      <div class="txt"><div class="mono nr">08</div><h3>Varietéaffischen</h3><p>Vintage sensationsposter — marquee-lampor och riv-en-biljett.</p></div>
+    </a>
+    <a class="card" href="forslag/9-synapsen.html">
+      <img src="assets/thumbs/9-synapsen.webp" alt="" loading="lazy">
+      <div class="txt"><div class="mono nr">09</div><h3>Synapsen</h3><p>Elektrisk hjärna — interaktivt neuronnät där meriterna är noder.</p></div>
+    </a>
+    <a class="card" href="forslag/10-bento.html">
+      <img src="assets/thumbs/10-bento.webp" alt="" loading="lazy">
+      <div class="txt"><div class="mono nr">10</div><h3>Bento-studion</h3><p>Premium bento-grid — 3D-tilt och en levande π-bricka.</p></div>
+    </a>
+    <a class="card" href="forslag/11-gameshow.html">
+      <img src="assets/thumbs/11-gameshow.webp" alt="" loading="lazy">
+      <div class="txt"><div class="mono nr">11</div><h3>Gameshow</h3><p>TV-studio — jackpot-odometer och A/B/C/D-fråga med konfetti.</p></div>
+    </a>
+    <a class="card" href="forslag/12-skissboken.html">
+      <img src="assets/thumbs/12-skissboken.webp" alt="" loading="lazy">
+      <div class="txt"><div class="mono nr">12</div><h3>Skissboken</h3><p>Anteckningsboken — handskrivna marginalkommentarer och doodles.</p></div>
+    </a>
+    <a class="card" href="forslag/13-monoliten.html">
+      <img src="assets/thumbs/13-monoliten.webp" alt="" loading="lazy">
+      <div class="txt"><div class="mono nr">13</div><h3>Monoliten</h3><p>Brutalist Swiss — gigantisk typografi och IKB-blå accent.</p></div>
+    </a>
+  </div>
+
+  <h2 class="grupp">OMGÅNG 3 · FEM MODERNA</h2>
+  <p class="grupp-desc">2026-känsla: glas, scrollberättelse, ljuskägla, mjuk 3D och lime.</p>
+  <div class="grid">
+    <a class="card" href="forslag/14-aurora.html">
+      <img src="assets/thumbs/14-aurora.webp" alt="" loading="lazy">
+      <div class="txt"><div class="mono nr">14</div><h3>Aurora</h3><p>Glassmorphism — levande mesh-gradienter och glaskort med ljusreflex.</p></div>
+    </a>
+    <a class="card" href="forslag/15-resan.html">
+      <img src="assets/thumbs/15-resan.webp" alt="" loading="lazy">
+      <div class="txt"><div class="mono nr">15</div><h3>Resan</h3><p>Scrollytelling — karriären som filmkapitel med pinnad VM-scen.</p></div>
+    </a>
+    <a class="card" href="forslag/16-stralkastaren.html">
+      <img src="assets/thumbs/16-stralkastaren.webp" alt="" loading="lazy">
+      <div class="txt"><div class="mono nr">16</div><h3>Strålkastaren</h3><p>Mörk lyx — ljuskägla som avslöjar gömda π-decimaler i mörkret.</p></div>
+    </a>
+    <a class="card" href="forslag/17-mjukstudion.html">
+      <img src="assets/thumbs/17-mjukstudion.webp" alt="" loading="lazy">
+      <div class="txt"><div class="mono nr">17</div><h3>Mjukstudion</h3><p>Soft 3D/clay — squishande kuddar och en hemlig klämräknare.</p></div>
+    </a>
+    <a class="card" href="forslag/18-limelight.html">
+      <img src="assets/thumbs/18-limelight.webp" alt="" loading="lazy">
+      <div class="txt"><div class="mono nr">18</div><h3>Limelight</h3><p>Off-svart + lime — meriterna som kortlek som staplas när man scrollar.</p></div>
+    </a>
+  </div>
+
+  <h2 class="grupp">OMGÅNG 4 · POETISKT & OVÄNTAT</h2>
+  <p class="grupp-desc">Två poetiskt minimalistiska, en handskriven, en Willy Wonka — och en "vad är det här?!".</p>
+  <div class="grid">
+    <a class="card" href="forslag/19-diktsamlingen.html">
+      <img src="assets/thumbs/19-diktsamlingen.webp" alt="" loading="lazy">
+      <div class="txt"><div class="mono nr">19</div><h3>Diktsamlingen</h3><p>Ljus poetisk minimalism — hela sidan är en dikt, med fakta i marginalfotnoter.</p></div>
+    </a>
+    <a class="card" href="forslag/20-tystnaden.html">
+      <img src="assets/thumbs/20-tystnaden.webp" alt="" loading="lazy">
+      <div class="txt"><div class="mono nr">20</div><h3>Tystnaden</h3><p>Mörk meditation — en tanke i taget, bara raden du läser är tänd.</p></div>
+    </a>
+    <a class="card" href="forslag/21-brevet.html">
+      <img src="assets/thumbs/21-brevet.webp" alt="" loading="lazy">
+      <div class="txt"><div class="mono nr">21</div><h3>Brevet</h3><p>Helt handskrivet brev som skriver sig självt — öppnas ur ett kuvert med sigill.</p></div>
+    </a>
+    <a class="card" href="forslag/22-chokladfabriken.html">
+      <img src="assets/thumbs/22-chokladfabriken.webp" alt="" loading="lazy">
+      <div class="txt"><div class="mono nr">22</div><h3>Minnesfabriken</h3><p>Willy Wonka — sammetsridå, meriter under glaskupor och en gyllene biljett.</p></div>
+    </a>
+    <a class="card" href="forslag/23-jonasos.html">
+      <img src="assets/thumbs/23-jonasos.webp" alt="" loading="lazy">
+      <div class="txt"><div class="mono nr">23</div><h3>JonasOS 26.0</h3><p>"Vad är det här?!" — hemsidan är ett operativsystem med dragbara fönster.</p></div>
+    </a>
+  </div>
+
+  <footer class="mono">© 2026 Jonas von Essen · arbetsmaterial — välj favorit och säg till! :)</footer>
+</main>
+</body>
+</html>
