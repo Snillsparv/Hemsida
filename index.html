@@ -632,21 +632,23 @@
       <p class="desc" data-line style="max-width:40ch;margin-top:1.6rem;line-height:1.75;font-size:clamp(.95rem,.85rem + .5vw,1.1rem)">
         Vill du boka en föreläsning för ett oförglömligt event? Eller har du något du funderar på? Skriv en rad eller två&nbsp;nedan.</p>
 
-      <!-- FORMSPREE: när formuläret ska kopplas, sätt action="https://formspree.io/f/DITT_FORMSPREE_ID" method="POST" och ta bort submit-hanteraren i JS. -->
-      <form id="kform" data-line data-min=".55">
+      <!-- KONTAKT: kopplat till Formspree — AJAX-skick så att besökaren stannar på sidan;
+           utan JS postas formuläret till Formspreys egen tacksida. -->
+      <form id="kform" data-line data-min=".55" action="https://formspree.io/f/xaqgrkvq" method="POST">
         <div class="falt">
           <label for="f-namn">Namn</label>
           <input id="f-namn" name="namn" type="text" autocomplete="name" required>
         </div>
         <div class="falt">
           <label for="f-epost">E-post</label>
-          <input id="f-epost" name="epost" type="email" autocomplete="email" required>
+          <input id="f-epost" name="email" type="email" autocomplete="email" required>
         </div>
         <div class="falt">
           <label for="f-medd">Meddelande</label>
           <textarea id="f-medd" name="meddelande" rows="3" required></textarea>
         </div>
         <button class="knapp skicka" type="submit">Skicka</button>
+        <p class="nbfel" role="alert" hidden></p>
       </form>
       <div class="tack" role="status" aria-live="polite">
         <p class="big" style="font-size:clamp(1.2rem,1rem + 1.2vw,1.6rem)">Tack. Jag hör av mig! :)</p>
@@ -942,12 +944,32 @@
     });
   }
 
-  /* ————— kontaktformulär (ingen backend ännu) ————— */
+  /* ————— kontaktformulär: Formspree — besökaren stannar på sidan ————— */
   var form = document.getElementById('kform');
-  if (form) {
+  if (form && window.fetch) {
+    var kBtn = form.querySelector('.skicka');
+    var kFel = form.querySelector('.nbfel');
     form.addEventListener('submit', function(ev){
       ev.preventDefault();
-      form.classList.add('klar');
+      if (kBtn.disabled) return;
+      kFel.hidden = true;
+      kBtn.disabled = true;
+      kBtn.textContent = 'Skickar\u2026';
+      fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      }).then(function(r){
+        if (r.ok) { form.classList.add('klar'); return; }
+        return r.json().then(function(j){
+          throw new Error((j && j.errors && j.errors[0] && j.errors[0].message) || 'fel');
+        }, function(){ throw new Error('fel'); });
+      }).catch(function(){
+        kFel.textContent = 'N\u00e5got gick fel \u2014 prova igen om en stund.';
+        kFel.hidden = false;
+        kBtn.disabled = false;
+        kBtn.textContent = 'Skicka';
+      });
     });
   }
 
