@@ -344,28 +344,7 @@
   .lmark{display:inline-block;width:.55ch;height:1em;background:var(--ink);margin-left:.18ch;vertical-align:-.12em;animation:lblink .95s steps(1) infinite}
   @keyframes lblink{50%{opacity:0}}
 
-  /* ————— glitch i överlämningen laddare → sida ————— */
-  #loader.glitchar #lscen{animation:glRyck .38s steps(2,end) both}
-  #loader.glitchar #lfrastxt{text-shadow:-5px 0 rgba(255,59,107,.75),5px 0 rgba(53,230,255,.75)}
-  #loader.glitchar::after{content:"";position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;
-    background:repeating-linear-gradient(0deg,transparent 0 7px,rgba(234,230,220,.055) 7px 8px);
-    animation:glRand .38s steps(3) both}
-  @keyframes glRyck{
-    0%{transform:none}
-    15%{transform:translate(-7px,1px) skewX(-3deg)}
-    30%{transform:translate(5px,-2px) skewX(2deg) scaleY(1.03)}
-    45%{transform:translate(-9px,0)}
-    60%{transform:translate(6px,2px) skewX(-2deg)}
-    75%{transform:translate(-4px,-1px)}
-    90%{transform:translate(2px,0)}
-    100%{transform:none}
-  }
-  @keyframes glRand{
-    0%{opacity:0;transform:translateY(0)}
-    33%{opacity:1;transform:translateY(-6px)}
-    66%{opacity:.55;transform:translateY(9px)}
-    100%{opacity:0;transform:none}
-  }
+  /* ————— överlämningen: laddaren tonar bort, sidan tonar in ————— */
   html.mjukin main,html.mjukin .nav{animation:mjukIn 1.1s ease both}
   @keyframes mjukIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
@@ -751,13 +730,10 @@
             } else {
               timers.push(setTimeout(function(){            // kort andrum …
                 if (!loader) return;
-                loader.classList.add('glitchar');            // … så glitchar det till …
-                timers.push(setTimeout(function(){
-                  docEl.classList.add('mjukin');             // … och sidan tonar mjukt in
-                  endLoader(false);                          //     medan laddaren tonar bort
-                  setTimeout(function(){ docEl.classList.remove('mjukin'); }, 1400);
-                }, 400));
-              }, 750));
+                docEl.classList.add('mjukin');               // … sidan tonar mjukt in …
+                endLoader(false);                            // … medan laddaren tonar bort
+                setTimeout(function(){ docEl.classList.remove('mjukin'); }, 1400);
+              }, 900));
             }
           }
           typa();
