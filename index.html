@@ -343,6 +343,36 @@
   .lmark{display:inline-block;width:.55ch;height:1em;background:var(--ink);margin-left:.18ch;vertical-align:-.12em;animation:lblink .95s steps(1) infinite}
   @keyframes lblink{50%{opacity:0}}
 
+  /* ————— glitch i överlämningen laddare → sida ————— */
+  #loader.glitchar #lscen{animation:glRyck .38s steps(2,end) both}
+  #loader.glitchar #lfrastxt{text-shadow:-5px 0 rgba(255,59,107,.75),5px 0 rgba(53,230,255,.75)}
+  #loader.glitchar::after{content:"";position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;
+    background:repeating-linear-gradient(0deg,transparent 0 7px,rgba(234,230,220,.055) 7px 8px);
+    animation:glRand .38s steps(3) both}
+  @keyframes glRyck{
+    0%{transform:none}
+    15%{transform:translate(-7px,1px) skewX(-3deg)}
+    30%{transform:translate(5px,-2px) skewX(2deg) scaleY(1.03)}
+    45%{transform:translate(-9px,0)}
+    60%{transform:translate(6px,2px) skewX(-2deg)}
+    75%{transform:translate(-4px,-1px)}
+    90%{transform:translate(2px,0)}
+    100%{transform:none}
+  }
+  @keyframes glRand{
+    0%{opacity:0;transform:translateY(0)}
+    33%{opacity:1;transform:translateY(-6px)}
+    66%{opacity:.55;transform:translateY(9px)}
+    100%{opacity:0;transform:none}
+  }
+  html.glitchin main,html.glitchin .nav{animation:glIn .32s steps(2,end) both}
+  @keyframes glIn{
+    0%{transform:translateX(-8px);filter:hue-rotate(14deg) contrast(1.18)}
+    35%{transform:translateX(6px) skewX(-1.5deg);filter:none}
+    65%{transform:translateX(-3px)}
+    100%{transform:none;filter:none}
+  }
+
   /* ————— redigeringsläge (öppna sidan med ?redigera) ————— */
   html.redig [data-line]{opacity:1 !important}
   html.redig .aft{opacity:1 !important}
@@ -718,7 +748,15 @@
                 timers.push(setTimeout(typa, 34));
               }
             } else {
-              timers.push(setTimeout(function(){ endLoader(false); }, 1150));
+              timers.push(setTimeout(function(){            // kort andrum …
+                if (!loader) return;
+                loader.classList.add('glitchar');            // … så glitchar det till …
+                timers.push(setTimeout(function(){
+                  endLoader(true);                           // … och sidan tar över med ett ryck
+                  docEl.classList.add('glitchin');
+                  setTimeout(function(){ docEl.classList.remove('glitchin'); }, 450);
+                }, 380));
+              }, 750));
             }
           }
           typa();
