@@ -114,7 +114,8 @@
   .proj{display:grid;justify-items:center;text-align:center}
   .proj + .proj{margin-top:clamp(6rem,17vh,11rem)}
   .proj h3{font-size:clamp(1.6rem,1rem + 2.6vw,2.7rem);font-weight:400;letter-spacing:.02em;line-height:1.25}
-  .proj h3 a{text-decoration:none;border-bottom:1px solid transparent;padding-bottom:.3rem}
+  .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+  .proj h3 a{text-decoration:none;display:inline-block;border:1px solid transparent;padding:.3rem .85rem .4rem;margin-inline:-.85rem;transition:border-color .3s ease}
   .proj h3 .pil{font-family:var(--mono);font-size:.55em;vertical-align:.45em;letter-spacing:0;color:var(--mist);margin-left:.45em}
   .proj p.desc{margin-top:1.3rem;max-width:44ch;color:var(--ink);font-size:clamp(.95rem,.85rem + .5vw,1.1rem);line-height:1.75;font-weight:400}
   html.tp .proj:is(:hover,:focus-within) [data-line]{opacity:1}
@@ -125,13 +126,6 @@
   #glob{width:100%;aspect-ratio:1;display:block;cursor:grab}
   #glob:active{cursor:grabbing}
   .proj .big{font-size:clamp(1.35rem,.95rem + 2vw,2.3rem);margin-bottom:2.4rem}
-
-  /* ————— chips: små faktaetiketter över appbilderna ————— */
-  .chip{position:absolute;z-index:2;font-family:var(--mono);font-size:.52rem;letter-spacing:.26em;text-transform:uppercase;color:var(--ink);
-    border:1px solid var(--hair);background:rgba(12,12,13,.88);padding:.6rem .85rem;white-space:nowrap}
-  .chip.nv{left:-1.1rem;bottom:13%}
-  .chip.oh{right:-1.1rem;top:11%}
-  @media (max-width:640px){.chip.nv{left:.4rem}.chip.oh{right:.4rem}}
 
   /* ————— produktkort med accentfärg — sidan får mer färg ju längre ner man kommer ————— */
   .proj[data-accent="bla"]{--acc:#5fb2ff}
@@ -197,7 +191,7 @@
 
   /* ————— kurs: inramad inbjudan med varm, andande glöd ————— */
   .kursram{
-    width:min(100%,40rem);margin-inline:auto;
+    width:min(100%,40rem);margin-inline:auto;position:relative;
     border:1px solid rgba(255,209,102,.24);
     padding:clamp(3rem,8vh,5rem) clamp(1.5rem,5vw,3.5rem);
     display:grid;justify-items:center;text-align:center;
@@ -211,6 +205,21 @@
     50%{box-shadow:0 0 110px rgba(255,209,102,.15),0 0 26px rgba(255,209,102,.09),inset 0 0 70px rgba(255,209,102,.07);border-color:rgba(255,209,102,.42)}
   }
   .kursram .knapp{margin-top:2.8rem}
+  .kobj{position:absolute;z-index:1;pointer-events:none;
+        transform:translate(var(--tx,0px),var(--ty,0px)) rotate(var(--r,0deg));
+        filter:drop-shadow(0 16px 28px rgba(0,0,0,.5))}
+  .kobj--hjarna{width:clamp(74px,13vw,148px);top:0;left:0;--tx:-36%;--ty:-44%;--r:-7deg;--d:8.4s}
+  .kobj--bulb{width:clamp(56px,9.5vw,102px);top:0;right:0;--tx:32%;--ty:-42%;--r:8deg;--d:7.2s;--f:-1.4s}
+  .kobj--star{width:clamp(40px,7vw,72px);bottom:24%;left:0;--tx:-58%;--r:-14deg;--d:9.6s;--f:-4s}
+  .kobj--raket{width:clamp(66px,11vw,122px);bottom:0;left:0;--tx:-30%;--ty:34%;--d:8.8s;--f:-2.6s}
+  .kobj--examen{width:clamp(60px,10vw,112px);bottom:0;right:0;--tx:30%;--ty:32%;--r:7deg;--d:7.8s;--f:-5.2s}
+  @media (prefers-reduced-motion:no-preference){
+    .kobj{animation:kflyt var(--d,8s) ease-in-out var(--f,0s) infinite}
+  }
+  @keyframes kflyt{
+    0%,100%{transform:translate(var(--tx,0px),var(--ty,0px)) rotate(var(--r,0deg))}
+    50%{transform:translate(var(--tx,0px),calc(var(--ty,0px) - 13px)) rotate(calc(var(--r,0deg) + 2deg))}
+  }
 
   /* ————— videor: spelare bäddas in först vid klick ————— */
   .vgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:2.6rem 1.4rem;width:100%;margin-top:clamp(4rem,9vh,6rem);align-items:start}
@@ -236,11 +245,16 @@
   html.tp .vplayer:is(:hover,:focus-within){opacity:1}
 
   .foljmig{margin-top:clamp(5rem,12vh,8rem);text-align:center}
-  .soc{display:flex;gap:2.4rem;justify-content:center;flex-wrap:wrap;margin-top:1.8rem}
-  .soc a{display:inline-flex;align-items:center;gap:.6rem;text-decoration:none;
-         font-family:var(--mono);font-size:.62rem;letter-spacing:.26em;text-transform:uppercase;color:var(--mist)}
+  .soc{display:flex;gap:clamp(2.4rem,7vw,4rem);justify-content:center;flex-wrap:wrap;margin-top:2.4rem}
+  .soc a{display:grid;justify-items:center;gap:1rem;text-decoration:none;
+         font-family:var(--mono);font-size:.6rem;letter-spacing:.26em;text-transform:uppercase;color:var(--mist);transition:color .35s ease}
   .soc a:hover{color:var(--ink)}
-  .soc svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+  .soc svg{width:clamp(38px,6vw,46px);height:clamp(38px,6vw,46px);stroke:currentColor;fill:none;stroke-width:1.1;stroke-linecap:round;stroke-linejoin:round;
+           color:var(--ink);filter:drop-shadow(0 0 13px rgba(234,230,220,.25));transition:color .35s ease,filter .35s ease,transform .35s ease}
+  .soc a:hover svg{transform:translateY(-4px)}
+  .soc a.ig:hover svg{color:#ff6b9d;filter:drop-shadow(0 0 20px rgba(255,107,157,.6))}
+  .soc a.tt:hover svg{color:#5ee7e0;filter:drop-shadow(0 0 20px rgba(94,231,224,.6))}
+  .soc a.yt:hover svg{color:#ff5252;filter:drop-shadow(0 0 20px rgba(255,82,82,.6))}
 
   /* ————— kontakt ————— */
   form{width:min(100%,30rem);margin-top:3.5rem;text-align:left;display:grid;gap:2.4rem}
@@ -346,7 +360,7 @@
   <section class="wrap scene scene--hero" data-scene aria-label="Introduktion">
     <div data-line>
       <h1>Jonas von Essen</h1>
-      <p class="big tagline" style="margin-inline:auto">Världsmästare i att komma ihåg saker.</p>
+      <p class="big tagline" style="margin-inline:auto">Världsmästare i att komma ihåg.</p>
     </div>
     <p class="meta merits aft"><span class="mer">Tvåfaldig världsmästare i minne</span><span class="dot" aria-hidden="true">·</span><span class="mer">Femfaldig svensk mästare i pubquiz</span><span class="dot" aria-hidden="true">·</span><span class="mer">Svensk mästare i Poetry Slam 2026</span><span class="dot" aria-hidden="true">·</span><span class="mer">Göteborgsmästare i ordvitsar</span></p>
     <div class="ctas aft">
@@ -360,15 +374,9 @@
 
   <!-- ———— SAKER JAG HAR BYGGT ———— -->
   <section id="byggt" class="wrap" aria-labelledby="byggt-rubrik">
-    <h2 class="label" id="byggt-rubrik" data-line>Saker jag har byggt</h2>
-
-    <div class="scene scene--low" data-scene style="min-height:auto;margin-bottom:clamp(6rem,17vh,11rem)">
-      <p class="big" data-line style="margin-bottom:0">Tre appar. Noll kronor.</p>
-      <p class="meta aft">Jag bygger dem för att det är kul — och för att bra inlärning inte ska kosta</p>
-    </div>
+    <h2 class="label sr" id="byggt-rubrik">Saker jag har byggt</h2>
 
     <article class="proj" data-accent="bla" data-scene>
-      <p class="big" data-line>197 länder. Jag kan&nbsp;alla.</p>
       <div class="projgrid">
         <div class="ptxt">
           <div data-line>
@@ -384,8 +392,6 @@
         </div>
         <div class="pvis" data-line data-min=".35">
           <div class="globpromo globpromo--geo"><img src="../assets/img/fri-geografi.webp" alt="Jordglob där varje land är ett handritat konstverk" loading="lazy"></div>
-          <span class="chip nv" aria-hidden="true">197 handritade länder</span>
-          <span class="chip oh" aria-hidden="true">Geografi har aldrig varit roligare!</span>
         </div>
       </div>
     </article>
@@ -406,8 +412,6 @@
         </div>
         <div class="pvis" data-line data-min=".35">
           <div class="globpromo globpromo--hp"><img src="../assets/img/fri-hp.webp" alt="HPAkuten: svarsblankett, timer och delprovsböcker" loading="lazy"></div>
-          <span class="chip oh" aria-hidden="true">160 av 160 · 2021</span>
-          <span class="chip nv" aria-hidden="true">Gamla prov · på tid</span>
         </div>
       </div>
     </article>
@@ -428,7 +432,6 @@
         </div>
         <div class="pvis" data-line data-min=".35">
           <div class="globpromo globpromo--tab"><img src="../assets/img/fri-tabellen.webp" alt="Gångertabellen som färgglad interaktiv tavla" loading="lazy"></div>
-          <span class="chip nv" aria-hidden="true">Bara 6 tal kvar att memorera</span>
         </div>
       </div>
     </article>
@@ -441,6 +444,11 @@
     <div class="scene scene--low" data-scene style="min-height:auto">
       <h2 class="label" id="kurs-rubrik" data-line style="margin-bottom:clamp(3rem,8vh,5rem)">Kurs</h2>
       <div class="kursram" data-line data-min=".45">
+        <img class="kobj kobj--hjarna" src="../assets/img/a-hjarna.webp" alt="" aria-hidden="true" loading="lazy">
+        <img class="kobj kobj--bulb" src="../assets/img/a-bulb.webp" alt="" aria-hidden="true" loading="lazy">
+        <img class="kobj kobj--star" src="../assets/img/a-star.webp" alt="" aria-hidden="true" loading="lazy">
+        <img class="kobj kobj--raket" src="../assets/img/a-raket.webp" alt="" aria-hidden="true" loading="lazy">
+        <img class="kobj kobj--examen" src="../assets/img/a-examen.webp" alt="" aria-hidden="true" loading="lazy">
         <p class="big">Skaffa ett superminne!</p>
         <p class="desc" style="max-width:40ch;margin-top:1.6rem;line-height:1.75;font-size:clamp(.95rem,.85rem + .5vw,1.1rem)">
           En onlinekurs i minnesteknik. Lär dig metoderna jag använder — i din egen takt, hur många gånger du&nbsp;vill.</p>
@@ -456,20 +464,20 @@
   <section id="videor" class="wrap" aria-labelledby="videor-rubrik">
     <h2 class="label" id="videor-rubrik" data-line>Videor</h2>
     <div class="scene scene--low" data-scene style="min-height:auto">
-      <p class="big" data-line style="margin-bottom:0">Man tror det inte förrän man sett&nbsp;det.</p>
+      <p class="big" data-line style="margin-bottom:0">Se det med egna&nbsp;ögon.</p>
       <p class="meta aft">Tre klipp · Fler på Instagram och YouTube</p>
 
       <div class="vgrid">
         <figure class="vplayer vplayer--stor" data-line data-min=".3">
           <div class="vram">
-            <button class="vfasad" type="button" data-yt="VTyU4WqDDYw" aria-label="Spela upp: Alla världens länder (YouTube)">
-              <img class="vth" src="../assets/img/glob-art.webp" alt="" loading="lazy">
+            <button class="vfasad" type="button" data-yt="VTyU4WqDDYw" aria-label="Spela upp: Testa minnestekniker (YouTube)">
+              <img class="vth" src="../assets/img/foto-siffervagg-md.webp" alt="" loading="lazy">
               <span class="vspela" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
             </button>
           </div>
           <figcaption>
-            <span class="vtitel">Alla världens länder</span>
-            <span class="vmeta">YouTube · <a href="https://www.youtube.com/watch?v=VTyU4WqDDYw" target="_blank" rel="noopener">Öppna på YouTube ↗</a></span>
+            <span class="vtitel">Testa minnestekniker</span>
+            <span class="vmeta"><a href="https://www.youtube.com/watch?v=VTyU4WqDDYw" target="_blank" rel="noopener">Öppna på YouTube ↗</a></span>
           </figcaption>
         </figure>
         <figure class="vplayer" data-line data-min=".3">
@@ -486,14 +494,14 @@
         </figure>
         <figure class="vplayer" data-line data-min=".3">
           <div class="vram">
-            <button class="vfasad" type="button" data-yt="WZwQ-zKBBaA" aria-label="Spela upp: 500 namn på två timmar (YouTube)">
+            <button class="vfasad" type="button" data-yt="WZwQ-zKBBaA" aria-label="Spela upp: 500 namn i Talang (YouTube)">
               <img class="vth" src="../assets/img/foto-scen-md.webp" alt="" loading="lazy">
               <span class="vspela" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
             </button>
           </div>
           <figcaption>
-            <span class="vtitel">500 namn på två timmar</span>
-            <span class="vmeta">Talang · <a href="https://www.youtube.com/watch?v=WZwQ-zKBBaA" target="_blank" rel="noopener">YouTube ↗</a></span>
+            <span class="vtitel">500 namn i Talang</span>
+            <span class="vmeta">TV4 · <a href="https://www.youtube.com/watch?v=WZwQ-zKBBaA" target="_blank" rel="noopener">YouTube ↗</a></span>
           </figcaption>
         </figure>
       </div>
@@ -501,13 +509,13 @@
       <div class="foljmig" data-line data-min=".35">
         <p class="meta" style="margin-top:0">Följ mig</p>
         <div class="soc">
-          <a href="https://www.instagram.com/jonasvonessen/" target="_blank" rel="noopener">
+          <a class="ig" href="https://www.instagram.com/jonasvonessen/" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6" fill="currentColor" stroke="none"/></svg>
             Instagram</a>
-          <a href="https://www.tiktok.com/@jonasvonessen" target="_blank" rel="noopener">
+          <a class="tt" href="https://www.tiktok.com/@jonasvonessen" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 11.5a4.25 4.25 0 1 0 4.25 4.25V3.5c.6 2.6 2.6 4.6 5.25 5"/></svg>
             TikTok</a>
-          <a href="https://www.youtube.com/@BlueberryClubSparven" target="_blank" rel="noopener">
+          <a class="yt" href="https://www.youtube.com/@BlueberryClubSparven" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="3.5"/><path d="M10.2 9.3v5.4l4.8-2.7z" fill="currentColor" stroke="none"/></svg>
             YouTube</a>
         </div>
@@ -521,9 +529,7 @@
   <section id="nyhetsbrev" class="wrap" aria-labelledby="nyhetsbrev-rubrik">
     <h2 class="label" id="nyhetsbrev-rubrik" data-line>Nyhetsbrev</h2>
     <div class="scene scene--low" data-scene style="min-height:auto">
-      <p class="big" data-line>Ett brev, då och då. Värt att minnas.</p>
-      <p class="desc" data-line style="max-width:44ch;margin-top:1.6rem;line-height:1.75;font-size:clamp(.95rem,.85rem + .5vw,1.1rem)">
-        Minnestekniker, nya projekt och det jag inte kan hålla tyst om. Inget brus — avsluta när du vill.</p>
+      <p class="big" data-line>Prenumerera på ett minnesvärt nyhetsbrev.</p>
 
       <!-- TODO NYHETSBREV: koppla till en leverantör (t.ex. MailerLite, Brevo, Mailchimp eller Substack).
            Sätt action="..." method="POST" enligt leverantörens embed-kod (fältnamnet kan behöva bytas)
@@ -548,7 +554,7 @@
   <section id="kontakt" class="wrap" aria-labelledby="kontakt-rubrik">
     <div class="scene" data-scene style="min-height:auto;justify-items:center;text-align:center">
       <h2 class="label" id="kontakt-rubrik" data-line style="margin-bottom:clamp(3rem,8vh,5rem)">Boka föreläsning</h2>
-      <p class="big" data-line>Säg något. Jag kommer ihåg&nbsp;det.</p>
+      <p class="big" data-line>Säg hej! Jag lovar att aldrig glömma&nbsp;dig.</p>
       <p class="desc" data-line style="max-width:40ch;margin-top:1.6rem;line-height:1.75;font-size:clamp(.95rem,.85rem + .5vw,1.1rem)">
         Vill du boka en föreläsning för ett oförglömligt event? Skriv en rad om vad ni planerar — jag återkommer snabbt.</p>
 
