@@ -52,7 +52,7 @@
   @media (max-width:560px){ .nav{font-size:.55rem;letter-spacing:.18em} .nav .brand{display:none} .nav ul{width:100%;justify-content:center} }
 
   /* ————— grundscener ————— */
-  main{display:block}
+  main{display:block;overflow-x:clip}
   .wrap{max-width:52rem;margin-inline:auto;padding-inline:clamp(1.25rem,5vw,2.5rem)}
   section{scroll-margin-top:3.5rem}
   .scene{min-height:78vh;min-height:78svh;display:grid;align-content:center;justify-items:center;text-align:center}
@@ -158,6 +158,41 @@
     .appvy.lut-h .rymd{transform:rotateX(5deg) rotateY(5deg)}
   }
 
+  /* ————— produktkort med accentfärg — sidan får mer färg ju längre ner man kommer ————— */
+  .proj[data-accent="bla"]{--acc:#5fb2ff}
+  .proj[data-accent="varm"]{--acc:#ffab5e}
+  .proj[data-accent="viol"]{--acc:#a78bfa}
+  .projgrid{display:grid;gap:2.4rem;align-items:center;width:100%}
+  .pvis{position:relative;z-index:0}
+  .pvis::before{
+    content:"";position:absolute;inset:-24% -32%;z-index:-1;pointer-events:none;
+    background:radial-gradient(48% 48% at 50% 50%, color-mix(in srgb, var(--acc) 19%, transparent), transparent 72%);
+  }
+  .proj[data-accent] h3 a{color:var(--acc)}
+  .proj[data-accent]:is(:hover,:focus-within) h3 a{border-color:var(--acc);text-shadow:0 0 34px color-mix(in srgb, var(--acc) 50%, transparent)}
+  .feats{display:grid;gap:1.15rem;margin:1.9rem auto 0;justify-items:start;text-align:left;width:fit-content}
+  .feat{display:flex;gap:1rem;align-items:flex-start;max-width:29rem}
+  .feat .fico{flex:0 0 auto;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;
+    border:1px solid color-mix(in srgb, var(--acc) 45%, transparent);color:var(--acc);
+    background:color-mix(in srgb, var(--acc) 7%, transparent)}
+  .feat .fico svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+  .feat b{display:block;font-weight:500;font-size:.98rem;letter-spacing:.01em;color:var(--acc)}
+  .feat i{display:block;font-style:normal;color:var(--mist);font-size:.88rem;line-height:1.55;margin-top:.18rem}
+  .globpromo{width:min(100%,24rem);margin-inline:auto}
+  .globpromo img{width:100%;display:block;-webkit-mask-image:radial-gradient(circle at 50% 47%,#000 54%,transparent 73%);mask-image:radial-gradient(circle at 50% 47%,#000 54%,transparent 73%)}
+  @media (prefers-reduced-motion:no-preference){
+    .globpromo img{animation:flyt 8s ease-in-out infinite}
+  }
+  @keyframes flyt{0%,100%{transform:translateY(0)}50%{transform:translateY(-11px)}}
+  @media (min-width:960px){
+    .projgrid{grid-template-columns:1fr 1fr;gap:3.2rem}
+    .projgrid .ptxt{text-align:left}
+    .projgrid .ptxt .desc{margin-inline:0}
+    .projgrid .ptxt .meta{margin-inline:0}
+    .projgrid .ptxt .feats{margin-inline:0}
+    .projgrid.flip .pvis{order:-1}
+  }
+
   /* ————— kurs: lugn inramad inbjudan ————— */
   .kursram{
     width:min(100%,40rem);margin-inline:auto;
@@ -217,7 +252,7 @@
   .paus{height:clamp(7rem,22vh,15rem)}
   .paus--stor{height:clamp(9rem,30vh,20rem)}
 
-  /* ————— laddskärm: cirkeln sluts medan decimalerna räknas upp ————— */
+  /* ————— laddskärm: decimalerna räknas upp — sedan "Cirkeln är sluten." ————— */
   #loader{
     position:fixed;inset:0;z-index:100;background:var(--bg);
     display:grid;place-items:center;transition:opacity .6s ease;
@@ -225,10 +260,9 @@
   #loader.borta{opacity:0;pointer-events:none}
   #lscen{display:grid;place-items:center;padding:1.5rem}
   #lscen>*{grid-area:1/1}
-  #lring{position:relative;width:min(62vw,242px);transition:opacity .5s ease,transform .5s ease}
-  #lring svg{display:block;width:100%;height:auto}
-  #lsiffror{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;text-align:center;row-gap:.7rem}
-  #lnum{font-family:var(--mono);font-size:clamp(1.28rem,4.8vw,1.62rem);letter-spacing:.05em;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1}
+  #lring{position:relative;transition:opacity .5s ease,transform .5s ease}
+  #lsiffror{display:grid;place-content:center;justify-items:center;text-align:center;row-gap:1rem}
+  #lnum{font-family:var(--mono);font-size:clamp(2.1rem,7vw,3.3rem);letter-spacing:.06em;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1;min-width:9ch}
   .ldec{font-family:var(--mono);font-size:.56rem;letter-spacing:.42em;text-transform:uppercase;color:var(--mist);padding-left:.42em}
   #lfras{
     opacity:0;transform:translateY(9px);
@@ -258,17 +292,10 @@
 </head>
 <body>
 
-<!-- laddskärm: en tunn cirkel sluts medurs medan räknaren går 0 → 100 000 decimaler.
-     När cirkeln sluts: "Cirkeln är sluten. Välkommen in." -->
+<!-- laddskärm: räknaren går 0 → 100 000 decimaler, sedan "Cirkeln är sluten. Välkommen in." -->
 <div id="loader" aria-hidden="true">
   <div id="lscen">
     <div id="lring">
-      <svg viewBox="0 0 200 200" aria-hidden="true">
-        <circle cx="100" cy="100" r="95" fill="none" stroke="rgba(234,230,220,.13)" stroke-width="1.25"/>
-        <circle id="lbar" cx="100" cy="100" r="95" fill="none" stroke="#eae6dc" stroke-width="1.5"
-                stroke-linecap="round" transform="rotate(-90 100 100)"
-                stroke-dasharray="596.903" stroke-dashoffset="596.903"/>
-      </svg>
       <div id="lsiffror">
         <span id="lnum">0</span>
         <span class="ldec">decimaler</span>
@@ -298,7 +325,7 @@
       <h1>Jonas von Essen</h1>
       <p class="big tagline" style="margin-inline:auto">Världsmästare i att komma ihåg saker.</p>
     </div>
-    <p class="meta merits aft"><span class="mer">Tvåfaldig världsmästare i minne</span><span class="dot" aria-hidden="true">·</span><span class="mer">Femfaldig svensk mästare i pubquiz</span><span class="dot" aria-hidden="true">·</span><span class="mer">Svensk mästare i Poetry Slam 2026</span><span class="dot" aria-hidden="true">·</span><span class="mer">Göteborgsmästare i ordvitsar</span><span class="dot" aria-hidden="true">·</span><span class="mer">Föreläsare</span></p>
+    <p class="meta merits aft"><span class="mer">Tvåfaldig världsmästare i minne</span><span class="dot" aria-hidden="true">·</span><span class="mer">Femfaldig svensk mästare i pubquiz</span><span class="dot" aria-hidden="true">·</span><span class="mer">Svensk mästare i Poetry Slam 2026</span><span class="dot" aria-hidden="true">·</span><span class="mer">Göteborgsmästare i ordvitsar</span></p>
     <div class="ctas aft">
       <a class="knapp" href="#byggt">Lär dig minnas</a>
       <a class="knapp" href="#kontakt">Boka föreläsning</a>
@@ -317,62 +344,87 @@
       <p class="meta aft">Jag bygger dem för att det är kul — och för att bra inlärning inte ska kosta</p>
     </div>
 
-    <article class="proj" data-scene>
+    <article class="proj" data-accent="bla" data-scene>
       <p class="big" data-line>197 länder. Jag kan&nbsp;alla.</p>
-      <!-- BILD KOMMER: jonas skickar — nedan en riktig skärmbild av appen så länge.
-           (Den minimalistiska vita globen finns kvar i koden och kan enkelt återinföras.) -->
-      <div class="appvy lut-v" data-line data-min=".35">
-        <div class="rymd">
-          <div class="skarm">
-            <div class="skarmbar" aria-hidden="true"><i></i><i></i><i></i><span class="adr">jonasgeografi.se</span></div>
-            <img src="../assets/img/app-geografi.webp" alt="Jonas geografi: jordgloben där varje land är ett handritat konstverk" loading="lazy">
+      <div class="projgrid">
+        <div class="ptxt">
+          <div data-line>
+            <h3><a href="https://jonasgeografi.se" target="_blank" rel="noopener">jonasgeografi.se<span class="pil">↗</span></a></h3>
+            <p class="desc">Hela världen i dina händer — en interaktiv jordglob fylld av färg, kunskap och äventyr, där varje land är ett eget litet konstverk.</p>
           </div>
+          <div class="feats" data-line data-min=".3">
+            <div class="feat"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><path d="M3.4 12h17.2M12 3.4c3 3.4 3 13.8 0 17.2M12 3.4c-3 3.4-3 13.8 0 17.2"/></svg></span><div><b>Interaktiv 3D-glob</b><i>Zooma, vrid och utforska länder och fakta.</i></div></div>
+            <div class="feat"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4l2.1 5.4 5.5 2.2-5.5 2.2-2.1 5.4-2.1-5.4-5.5-2.2 5.5-2.2z"/></svg></span><div><b>Roligt &amp; lärorikt</b><i>Spel, quiz och utmaningar för alla åldrar.</i></div></div>
+            <div class="feat"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3.1"/><path d="M3.6 19c.6-3 2.8-4.6 5.4-4.6s4.8 1.6 5.4 4.6"/><circle cx="16.7" cy="10" r="2.5"/><path d="M15.6 14.7c2.3.2 4.2 1.7 4.8 4.3"/></svg></span><div><b>Samla &amp; tävla</b><i>Samla high fives och klättra på topplistorna.</i></div></div>
+          </div>
+          <p class="meta aft">Gratis · Minnesknep för varje land</p>
+        </div>
+        <div class="pvis" data-line data-min=".35">
+          <!-- BILD KOMMER: jonas skickar den exakta globbilden — konstgloben som tillfällig bild så länge -->
+          <div class="globpromo"><img src="../assets/img/glob-art.webp" alt="Jonas geografi-glob där varje land är ett handritat konstverk" loading="lazy"></div>
           <span class="chip nv" aria-hidden="true">197 handritade länder</span>
-          <span class="chip oh" aria-hidden="true">Snurra · quizza · res</span>
+          <span class="chip oh" aria-hidden="true">Geografi har aldrig varit roligare!</span>
         </div>
       </div>
-      <div data-line>
-        <h3><a href="https://jonasgeografi.se" target="_blank" rel="noopener">jonasgeografi.se<span class="pil">↗</span></a></h3>
-        <p class="desc">Alla världens länder på en snurrbar jordglob där varje land är ett eget litet konstverk. Utforska, quizza och res jorden runt — med minnesknep för varje land.</p>
-      </div>
-      <p class="meta aft">Gratis · Minnesknep för varje land</p>
     </article>
 
-    <article class="proj" data-scene>
-      <!-- BILD KOMMER: jonas skickar — tillfälligt foto i rutan så länge -->
-      <div class="appvy lut-h" data-line data-min=".35">
-        <div class="rymd">
-          <div class="skarm">
-            <div class="skarmbar" aria-hidden="true"><i></i><i></i><i></i><span class="adr">hpakuten.se</span></div>
-            <img src="../assets/img/bild_hp-md.webp" alt="Högskoleprovshäften och svarsblankett" loading="lazy">
+    <article class="proj" data-accent="varm" data-scene>
+      <div class="projgrid flip">
+        <div class="ptxt">
+          <div data-line>
+            <h3><a href="https://hpakuten.se" target="_blank" rel="noopener">hpakuten.se<span class="pil">↗</span></a></h3>
+            <p class="desc">Gratis träning inför högskoleprovet — från Sveriges kanske mest rutinerade HP-skrivare.</p>
           </div>
-          <span class="chip oh" aria-hidden="true">160 av 160 · 2021</span>
-          <span class="chip nv" aria-hidden="true">Gamla prov · på tid</span>
+          <div class="feats" data-line data-min=".3">
+            <div class="feat"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3.5" width="14" height="17" rx="2"/><path d="M9 9h6M9 13h6M9 17h4"/></svg></span><div><b>Riktiga gamla prov</b><i>Simulera på tid, precis som på provdagen.</i></div></div>
+            <div class="feat"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><path d="M10.2 8.9v6.2l5.2-3.1z"/></svg></span><div><b>Videogenomgångar</b><i>Lösningar förklarade steg för steg.</i></div></div>
+            <div class="feat"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.6 17.6h4.8M10.3 20.5h3.4M12 3.6a5.7 5.7 0 0 0-3.8 9.9c.7.7 1.2 1.5 1.4 2.4h4.8c.2-.9.7-1.7 1.4-2.4A5.7 5.7 0 0 0 12 3.6z"/></svg></span><div><b>Minnestekniker</b><i>Plugga som en världsmästare i minne.</i></div></div>
+          </div>
+          <p class="meta aft">Gratis · 2.0 tolv gånger · 160/160 år 2021</p>
+        </div>
+        <div class="pvis">
+          <!-- BILD KOMMER: jonas skickar — tillfälligt foto i rutan så länge -->
+          <div class="appvy lut-h" data-line data-min=".35">
+            <div class="rymd">
+              <div class="skarm">
+                <div class="skarmbar" aria-hidden="true"><i></i><i></i><i></i><span class="adr">hpakuten.se</span></div>
+                <img src="../assets/img/bild_hp-md.webp" alt="Högskoleprovshäften och svarsblankett" loading="lazy">
+              </div>
+              <span class="chip oh" aria-hidden="true">160 av 160 · 2021</span>
+              <span class="chip nv" aria-hidden="true">Gamla prov · på tid</span>
+            </div>
+          </div>
         </div>
       </div>
-      <div data-line>
-        <h3><a href="https://hpakuten.se" target="_blank" rel="noopener">hpakuten.se<span class="pil">↗</span></a></h3>
-        <p class="desc">Gratis träning inför högskoleprovet: simulera gamla prov på tid, videogenomgångar och minnestekniker. Från Sveriges kanske mest rutinerade HP-skrivare.</p>
-      </div>
-      <p class="meta aft">Gratis · Gamla prov på tid</p>
     </article>
 
-    <article class="proj" data-scene>
-      <!-- BILD KOMMER: jonas skickar — riktig skärmbild av appen så länge -->
-      <div class="appvy lut-v" data-line data-min=".35">
-        <div class="rymd">
-          <div class="skarm">
-            <div class="skarmbar" aria-hidden="true"><i></i><i></i><i></i><span class="adr">gångertabellen.se</span></div>
-            <img src="../assets/img/app-gangertabellen.webp" alt="Gångertabellen: träna, tabellen, knepen och statistik" loading="lazy">
+    <article class="proj" data-accent="viol" data-scene>
+      <div class="projgrid">
+        <div class="ptxt">
+          <div data-line>
+            <h3><a href="https://www.gångertabellen.se" target="_blank" rel="noopener">gångertabellen.se<span class="pil">↗</span></a></h3>
+            <p class="desc">Gångertabellen är lättare än den ser ut — med rätt knep är det bara sex tal kvar att memorera.</p>
           </div>
-          <span class="chip nv" aria-hidden="true">Bara 6 tal kvar att memorera</span>
+          <div class="feats" data-line data-min=".3">
+            <div class="feat"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="4.5" width="15" height="15" rx="2.5"/><path d="M4.5 12h15M12 4.5v15"/></svg></span><div><b>Bara sex tal kvar</b><i>Resten är knep — och knepen får du på köpet.</i></div></div>
+            <div class="feat"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><circle cx="9" cy="10" r="1.5"/><path d="M4 16.5l4.6-4.6 3.6 3.6 2.6-2.6 5.2 5.2"/></svg></span><div><b>Minnesbilder</b><i>För de svåra talen. 8×8? Mario × Luigi = Nintendo 64.</i></div></div>
+            <div class="feat"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 19.5V4.5M4.5 19.5h15"/><path d="M8.5 16v-4.5M12.5 16V8M16.5 16v-2.5"/></svg></span><div><b>Smart repetition</b><i>Hittar dina luckor och tränar bort dem.</i></div></div>
+          </div>
+          <p class="meta aft">Gratis · Utan inloggning</p>
+        </div>
+        <div class="pvis">
+          <!-- BILD KOMMER: jonas skickar — riktig skärmbild av appen så länge -->
+          <div class="appvy lut-v" data-line data-min=".35">
+            <div class="rymd">
+              <div class="skarm">
+                <div class="skarmbar" aria-hidden="true"><i></i><i></i><i></i><span class="adr">gångertabellen.se</span></div>
+                <img src="../assets/img/app-gangertabellen.webp" alt="Gångertabellen: träna, tabellen, knepen och statistik" loading="lazy">
+              </div>
+              <span class="chip nv" aria-hidden="true">Bara 6 tal kvar att memorera</span>
+            </div>
+          </div>
         </div>
       </div>
-      <div data-line>
-        <h3><a href="https://www.gångertabellen.se" target="_blank" rel="noopener">gångertabellen.se<span class="pil">↗</span></a></h3>
-        <p class="desc">Gångertabellen är lättare än den ser ut: med rätt knep är det bara sex tal kvar att memorera. Quiz, minnesbilder och smart repetition — utan inloggning.</p>
-      </div>
-      <p class="meta aft">Gratis · Utan inloggning</p>
     </article>
   </section>
 
@@ -402,23 +454,20 @@
       <p class="meta aft">Tre klipp · Fler på Instagram och YouTube</p>
 
       <div class="vgrid">
-        <!-- TODO: exakt reel-länk från Jonas -->
-        <a class="vkort" href="https://www.instagram.com/jonasvonessen/" target="_blank" rel="noopener" data-line data-min=".3">
+        <a class="vkort" href="https://www.instagram.com/reel/DagFf5zBbd-/" target="_blank" rel="noopener" data-line data-min=".3">
           <svg class="spela" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="15.5"/><path d="M14 11.5v11l9-5.5z"/></svg>
           <span class="vtitel">Alla världens länder</span>
           <span class="vmeta">Instagram · Reel ↗</span>
         </a>
-        <!-- TODO: exakt klipplänk -->
-        <a class="vkort" href="https://www.youtube.com/results?search_query=jonas+von+essen+postkodmiljon%C3%A4ren" target="_blank" rel="noopener" data-line data-min=".3">
+        <a class="vkort" href="https://www.youtube.com/watch?v=A-oHL2JyIjY" target="_blank" rel="noopener" data-line data-min=".3">
           <svg class="spela" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="15.5"/><path d="M14 11.5v11l9-5.5z"/></svg>
           <span class="vtitel">Miljonfrågan</span>
           <span class="vmeta">Postkodmiljonären · YouTube ↗</span>
         </a>
-        <!-- TODO: exakt videolänk -->
-        <a class="vkort" href="https://www.youtube.com/@BlueberryClubSparven" target="_blank" rel="noopener" data-line data-min=".3">
+        <a class="vkort" href="https://www.youtube.com/watch?v=WZwQ-zKBBaA" target="_blank" rel="noopener" data-line data-min=".3">
           <svg class="spela" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="15.5"/><path d="M14 11.5v11l9-5.5z"/></svg>
-          <span class="vtitel">Minnestekniker</span>
-          <span class="vmeta">YouTube ↗</span>
+          <span class="vtitel">500 namn på två timmar</span>
+          <span class="vmeta">Talang · YouTube ↗</span>
         </a>
       </div>
 
@@ -494,7 +543,6 @@
   /* ————— laddskärm: cirkeln sluts, räknaren går 0 → 100 000 ————— */
   var loader = document.getElementById('loader');
   var lnum = document.getElementById('lnum');
-  var lbar = document.getElementById('lbar');
   var timers = [], raf = 0;
   function seen(){ try { return sessionStorage.getItem('jve-tyst2'); } catch(e){ return false; } }
   function markSeen(){ try { sessionStorage.setItem('jve-tyst2','1'); } catch(e){} }
@@ -524,7 +572,6 @@
 
     var TOTAL = 100000;
     var DUR = 1800;                       // räkningen
-    var C = 596.903;                      // 2π·95 — cirkelns omkrets
     function fmt(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
     var t0 = 0;
     function frame(ts){
@@ -533,12 +580,10 @@
       var p = 1 - Math.pow(1 - t, 3);     // snabb i början, landar mjukt
       var n = t >= 1 ? TOTAL : Math.round(TOTAL * p);
       lnum.textContent = fmt(n);
-      lbar.style.strokeDashoffset = (C * (1 - p)).toFixed(2);
       if (t < 1) { raf = requestAnimationFrame(frame); }
       else {
         raf = 0;
-        lbar.style.strokeDashoffset = '0';
-        timers.push(setTimeout(function(){          // kort paus när cirkeln slutits …
+        timers.push(setTimeout(function(){          // kort paus vid 100 000 …
           if (loader) loader.classList.add('sluten'); // … sedan tonar frasen fram
           timers.push(setTimeout(function(){ endLoader(false); }, 1300));
         }, 280));
