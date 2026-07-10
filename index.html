@@ -151,12 +151,6 @@
   .proj[data-accent="bla"]{--acc:#5fb2ff}
   .proj[data-accent="lila"]{--acc:#b18cff}
   .proj[data-accent="gron"]{--acc:#57d98a}
-  .proj[data-accent]{
-    border:1px solid color-mix(in srgb, var(--acc) 26%, transparent);
-    padding:clamp(2.4rem,6vh,4rem) clamp(1.2rem,4vw,3rem);
-    box-shadow:0 0 60px color-mix(in srgb, var(--acc) 7%, transparent),
-               inset 0 0 52px color-mix(in srgb, var(--acc) 4%, transparent);
-  }
   .projgrid{display:grid;gap:2.4rem;align-items:center;width:100%}
   .pvis{position:relative;z-index:0}
   .pvis::before{
@@ -188,6 +182,25 @@
     .globpromo--tab img{animation-duration:8.6s;animation-delay:-5s}
   }
   @keyframes flyt{0%,100%{transform:translateY(0)}50%{transform:translateY(-11px)}}
+
+  /* ————— entré: bilderna glider mjukt in när de når synfältet ————— */
+  html.tp .globpromo{opacity:0;transform:translateY(32px) scale(.95);
+    transition:opacity 1s ease .08s,transform 1.15s cubic-bezier(.16,1,.3,1) .08s}
+  html.tp .pvis.in .globpromo{opacity:1;transform:none}
+  html.tp .kobj{opacity:0;transition:opacity .9s ease var(--ed,0s)}
+  html.tp .kursram.in .kobj{opacity:1}
+  .kobj--hjarna{--ed:.05s}
+  .kobj--bulb{--ed:.22s}
+  .kobj--star{--ed:.38s}
+  .kobj--raket{--ed:.54s}
+  .kobj--examen{--ed:.7s}
+  html.tp .soc a{opacity:0;transform:translateY(16px);
+    transition:opacity .7s ease var(--ed,0s),transform .85s cubic-bezier(.16,1,.3,1) var(--ed,0s),color .35s ease}
+  html.tp .soc a.ig{--ed:0s}
+  html.tp .soc a.tt{--ed:.13s}
+  html.tp .soc a.yt{--ed:.26s}
+  html.tp .foljmig.in .soc a{opacity:1;transform:none}
+  html.redig .globpromo,html.redig .kobj,html.redig .soc a{opacity:1 !important;transform:none !important}
   .projgrid .pvis{order:-1}   /* mobil: bilden ovanför rubrik och text */
   @media (min-width:960px){
     .projgrid{grid-template-columns:1fr 1fr;gap:3.2rem}
@@ -841,6 +854,17 @@
       var el = document.getElementById(id);
       if (el) sio.observe(el);
     });
+  }
+
+  /* ————— entré: sätt .in första gången elementen når synfältet ————— */
+  if (!reduced && 'IntersectionObserver' in window) {
+    var entreMal = [].slice.call(document.querySelectorAll('.pvis, .kursram, .foljmig'));
+    var eio = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting) { e.target.classList.add('in'); eio.unobserve(e.target); }
+      });
+    }, { threshold: .22 });
+    entreMal.forEach(function(el){ eio.observe(el); });
   }
 
   /* ————— videoomslag: riktiga YouTube-miniatyrer, med lokala reservbilder.
