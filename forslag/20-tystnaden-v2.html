@@ -147,27 +147,11 @@
   .feat b{display:block;font-weight:500;font-size:.98rem;letter-spacing:.01em;color:var(--acc)}
   .feat i{display:block;font-style:normal;color:var(--mist);font-size:.88rem;line-height:1.55;margin-top:.18rem}
   .globpromo{margin-inline:auto;position:relative}
-  .globpromo::after{content:"";position:absolute;inset:-1px;pointer-events:none;
-    box-shadow:inset 0 0 52px 24px var(--bg)}
+  /* mjuk kantton i bakgrundsfärgen — inre skugga funkar likadant i alla webbläsare (även iOS Safari) */
+  .globpromo::after{content:"";position:absolute;inset:-2px;pointer-events:none;
+    box-shadow:inset 0 0 clamp(26px,4.5vw,44px) clamp(10px,1.8vw,16px) var(--bg),
+               inset 0 0 clamp(64px,11vw,110px) clamp(18px,3.2vw,32px) rgba(12,12,13,.72)}
   .globpromo img{width:100%;display:block}
-  .globpromo--geo img{
-    -webkit-mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent),linear-gradient(180deg,transparent,#000 6%,#000 94%,transparent);
-    -webkit-mask-composite:source-in;
-    mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent),linear-gradient(180deg,transparent,#000 6%,#000 94%,transparent);
-    mask-composite:intersect;
-  }
-  .globpromo--hp img{
-    -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent),linear-gradient(180deg,transparent,#000 5%,#000 94%,transparent);
-    -webkit-mask-composite:source-in;
-    mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent),linear-gradient(180deg,transparent,#000 5%,#000 94%,transparent);
-    mask-composite:intersect;
-  }
-  .globpromo--tab img{
-    -webkit-mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent),linear-gradient(180deg,transparent,#000 8%,#000 94%,transparent);
-    -webkit-mask-composite:source-in;
-    mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent),linear-gradient(180deg,transparent,#000 8%,#000 94%,transparent);
-    mask-composite:intersect;
-  }
   .globpromo--geo{width:min(100%,22rem)}
   .globpromo--hp{width:min(88%,20rem)}
   .globpromo--tab{width:min(100%,23rem)}
@@ -411,7 +395,7 @@
           <p class="meta aft">Gratis · Minnesknep för varje land</p>
         </div>
         <div class="pvis" data-line data-min=".35">
-          <div class="globpromo globpromo--geo"><img src="../assets/img/fri-geografi.webp" alt="Jordglob där varje land är ett handritat konstverk" loading="lazy"></div>
+          <div class="globpromo globpromo--geo"><img src="../assets/img/fri2-geografi.webp" alt="Jordglob där varje land är ett handritat konstverk" loading="lazy"></div>
         </div>
       </div>
     </article>
@@ -431,7 +415,7 @@
           <p class="meta aft">Gratis · 2.0 tolv gånger · 160/160 år 2021</p>
         </div>
         <div class="pvis" data-line data-min=".35">
-          <div class="globpromo globpromo--hp"><img src="../assets/img/fri-hp.webp" alt="HPAkuten: svarsblankett, timer och delprovsböcker" loading="lazy"></div>
+          <div class="globpromo globpromo--hp"><img src="../assets/img/fri2-hp.webp" alt="HPAkuten: svarsblankett, timer och delprovsböcker" loading="lazy"></div>
         </div>
       </div>
     </article>
@@ -451,7 +435,7 @@
           <p class="meta aft">Gratis · Utan inloggning</p>
         </div>
         <div class="pvis" data-line data-min=".35">
-          <div class="globpromo globpromo--tab"><img src="../assets/img/fri-tabellen.webp" alt="Gångertabellen som färgglad interaktiv tavla" loading="lazy"></div>
+          <div class="globpromo globpromo--tab"><img src="../assets/img/fri2-tabellen.webp" alt="Gångertabellen som färgglad interaktiv tavla" loading="lazy"></div>
         </div>
       </div>
     </article>
