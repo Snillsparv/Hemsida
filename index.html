@@ -169,14 +169,14 @@
   .feat b{display:block;font-weight:500;font-size:.98rem;letter-spacing:.01em;color:var(--acc)}
   .feat i{display:block;font-style:normal;color:var(--mist);font-size:.88rem;line-height:1.55;margin-top:.18rem}
   .globpromo{margin-inline:auto;position:relative}
-  /* mjuk kantton i bakgrundsfärgen — inre skugga funkar likadant i alla webbläsare (även iOS Safari) */
-  .globpromo::after{content:"";position:absolute;inset:-2px;pointer-events:none;
-    box-shadow:inset 0 0 clamp(26px,4.5vw,44px) clamp(10px,1.8vw,16px) var(--bg),
-               inset 0 0 clamp(64px,11vw,110px) clamp(18px,3.2vw,32px) rgba(12,12,13,.72)}
-  .globpromo img{width:100%;display:block}
-  .globpromo--geo{width:min(100%,22rem)}
-  .globpromo--hp{width:min(88%,20rem)}
-  .globpromo--tab{width:min(100%,23rem)}
+  /* frilagda objekt — glöden läggs i appens accentfärg och följer silhuetten */
+  .globpromo img{width:100%;display:block;
+    filter:drop-shadow(0 0 26px color-mix(in srgb, var(--acc) 32%, transparent))
+           drop-shadow(0 0 80px color-mix(in srgb, var(--acc) 22%, transparent))
+           drop-shadow(0 22px 40px rgba(0,0,0,.45))}
+  .globpromo--geo{width:min(78%,17rem)}
+  .globpromo--hp{width:min(70%,15rem)}
+  .globpromo--tab{width:min(82%,18rem)}
   @media (prefers-reduced-motion:no-preference){
     .globpromo img{animation:flyt 8s ease-in-out infinite}
     .globpromo--hp img{animation-duration:9.4s;animation-delay:-3s}
@@ -449,7 +449,7 @@
           <p class="meta aft">Gratis · Minnesknep för varje land</p>
         </div>
         <div class="pvis" data-line data-min=".35">
-          <div class="globpromo globpromo--geo"><img src="assets/img/fade-geografi.webp" alt="Jordglob där varje land är ett handritat konstverk" loading="lazy"></div>
+          <div class="globpromo globpromo--geo"><img src="assets/img/ensam-geografi.webp" alt="Jordglob där varje land är ett handritat konstverk" loading="lazy"></div>
         </div>
       </div>
     </article>
@@ -469,7 +469,7 @@
           <p class="meta aft">Gratis · 2.0 tolv gånger · 160/160</p>
         </div>
         <div class="pvis" data-line data-min=".35">
-          <div class="globpromo globpromo--hp"><img src="assets/img/fade-hp.webp" alt="HPAkuten: svarsblankett, timer och delprovsböcker" loading="lazy"></div>
+          <div class="globpromo globpromo--hp"><img src="assets/img/ensam-hp.webp" alt="HPAkuten: svarsblankett, timer och delprovsböcker" loading="lazy"></div>
         </div>
       </div>
     </article>
@@ -489,7 +489,7 @@
           <p class="meta aft">Gratis · Trevlig mattehjälp</p>
         </div>
         <div class="pvis" data-line data-min=".35">
-          <div class="globpromo globpromo--tab"><img src="assets/img/fade-tabellen.webp" alt="Gångertabellen som färgglad interaktiv tavla" loading="lazy"></div>
+          <div class="globpromo globpromo--tab"><img src="assets/img/ensam-tabellen.webp" alt="Gångertabellen som färgglad interaktiv tavla" loading="lazy"></div>
         </div>
       </div>
     </article>
@@ -610,7 +610,6 @@
       </form>
       <div class="tack" role="status" aria-live="polite">
         <p class="big" style="font-size:clamp(1.2rem,1rem + 1.2vw,1.6rem)">Tack.</p>
-        <p class="meta">Kolla din inkorg om något behöver bekräftas.</p>
       </div>
     </div>
   </section>
@@ -643,7 +642,6 @@
       </form>
       <div class="tack" role="status" aria-live="polite">
         <p class="big" style="font-size:clamp(1.2rem,1rem + 1.2vw,1.6rem)">Tack. Jag hör av mig! :)</p>
-        <p class="meta">Formuläret kopplas snart — mejla mig så länge.</p>
       </div>
     </div>
   </section>
@@ -674,11 +672,14 @@
   function seen(){ try { return sessionStorage.getItem('jve-tyst2'); } catch(e){ return false; } }
   function markSeen(){ try { sessionStorage.setItem('jve-tyst2','1'); } catch(e){} }
   var skipLoader = reduced || seen() || /[?&]noloader/.test(location.search);
+  var laddarKlar = !!skipLoader;        // .aft-texterna väntar tills laddaren tonat bort
 
   function endLoader(now){
     timers.forEach(clearTimeout); timers = [];
     if (raf) { cancelAnimationFrame(raf); raf = 0; }
     docEl.classList.remove('noscroll');
+    laddarKlar = true;
+    if (typeof scenes === 'object' && scenes.length) update();
     if (!loader) return;
     if (now) { loader.remove(); loader = null; }
     else {
@@ -799,7 +800,7 @@
     }
     for (s = 0; s < scenes.length; s++) {
       var S = scenes[s];
-      if (!S.lit && S.max > 0.92) { S.lit = true; S.el.classList.add('lit'); }
+      if (!S.lit && S.max > 0.92 && laddarKlar) { S.lit = true; S.el.classList.add('lit'); }
       else if (S.lit && S.max < 0.45) { S.lit = false; S.el.classList.remove('lit'); }
     }
   }
