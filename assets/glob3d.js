@@ -99,12 +99,15 @@
       canvas.style.touchAction = pa ? 'none' : 'pan-y';
       var pv = wrap.closest('.pvis');
       if (pv) pv.classList.toggle('grepp', pa);
-      if (hint) hint.textContent = pa ? 'Globen \u00e4r greppad \u2014 r\u00f6r sidan utanf\u00f6r f\u00f6r att sl\u00e4ppa' : hintText;
+      if (hint) hint.textContent = pa ? 'R\u00f6r utanf\u00f6r globen f\u00f6r att sl\u00e4ppa' : hintText;
     }
     document.addEventListener('pointerdown', function (e) {
       if (aktiv && e.target !== canvas) sattAktiv(false);
     }, true);
-    addEventListener('scroll', function () { if (aktiv && !drar) sattAktiv(false); }, { passive: true });
+    // avsiktlig skrollning släpper greppet: mushjul på desktop, svep utanför
+    // globen fångas av pointerdown-lyssnaren ovan (scroll-händelser är för
+    // opålitliga — mjukscroll och momentum skulle släppa i förtid)
+    addEventListener('wheel', function () { if (aktiv && !drar) sattAktiv(false); }, { passive: true });
     var synlig = false, ritad = false, texKlar = false;
 
     var tex = gl.createTexture();

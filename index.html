@@ -180,11 +180,39 @@
   .glob3dyta{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab;
     touch-action:pan-y;opacity:0;transition:opacity .8s ease;outline-offset:8px}
   .glob3dyta:active{cursor:grabbing}
-  .globhint{display:none;text-align:center;transition:color .4s ease}
+  .globhint{display:none;text-align:center;min-height:1.5em;transition:color .4s ease}
   .pvis.glob3d-klar .globhint{display:block}
   .pvis.grepp .globhint{color:var(--acc)}
   .globpromo--hp{width:min(70%,15rem)}
-  .globpromo--tab{width:min(76%,16.5rem)}
+  .globpromo--tab{width:min(84%,18rem)}
+  /* ————— tabspel: interaktiv gångertabell ————— */
+  .tstavla{display:grid;grid-template-columns:repeat(11,1fr);gap:2.2%;aspect-ratio:1;
+    padding:4.2%;border-radius:9%/9%;
+    background:linear-gradient(148deg,#101a29 0%,#0b111d 55%,#0d1522 100%);
+    border:1px solid rgba(95,178,255,.22);
+    box-shadow:0 0 26px color-mix(in srgb, var(--acc) 26%, transparent),
+               0 0 80px color-mix(in srgb, var(--acc) 18%, transparent),
+               0 22px 40px rgba(0,0,0,.45),
+               inset 0 0 34px rgba(87,196,221,.07);
+    transform:perspective(950px) rotateX(5deg) rotateY(-7deg);
+    transition:transform .7s cubic-bezier(.16,1,.3,1)}
+  .tstavla:hover{transform:perspective(950px) rotateX(1.5deg) rotateY(-2deg)}
+  .tcell{aspect-ratio:1;border:0;padding:0;display:grid;place-items:center;min-width:0;
+    font-family:var(--sans);font-weight:500;font-size:1em;line-height:1;color:#fff;cursor:pointer;
+    background:transparent;border-radius:50%}
+  .tcell:focus-visible{outline:1px solid var(--ink);outline-offset:2px}
+  .thorn{color:var(--mist);font-size:1.15em}
+  .tmarg{color:#bfe3ff;text-shadow:0 0 9px rgba(95,178,255,.85);border-radius:24%;font-size:.95em}
+  .tmarg:hover,.thorn:hover{background:rgba(95,178,255,.12)}
+  .tchip{background:radial-gradient(circle at 34% 28%, color-mix(in srgb, var(--tc) 68%, #fff) 0%, var(--tc) 46%, color-mix(in srgb, var(--tc) 72%, #000) 100%);
+    box-shadow:inset 0 -.16em .3em rgba(0,0,0,.35),inset 0 .1em .22em rgba(255,255,255,.32),0 .12em .28em rgba(0,0,0,.45);
+    text-shadow:0 1px 2px rgba(0,0,0,.4);
+    transition:background .3s ease,box-shadow .3s ease,color .3s ease}
+  .tchip.av{background:#141b28;color:rgba(233,236,244,.28);text-shadow:none;
+    box-shadow:inset 0 .14em .35em rgba(0,0,0,.65),inset 0 -.06em .14em rgba(255,255,255,.04)}
+  @keyframes tvag{0%,100%{transform:none}45%{transform:translateY(-16%) scale(1.22)}}
+  .tchip.vag{animation:tvag .55s cubic-bezier(.34,1.56,.64,1) both;position:relative;z-index:1}
+  @media (prefers-reduced-motion:reduce){ .tchip.vag{animation:none} .tstavla{transform:none} }
   @media (prefers-reduced-motion:no-preference){
     .globpromo img{animation:flyt 8s ease-in-out infinite}
     .globpromo--hp img{animation-duration:9.4s;animation-delay:-3s}
@@ -458,7 +486,7 @@
         </div>
         <div class="pvis" data-line data-min=".35">
           <div class="globpromo globpromo--geo" id="glob3d"><img src="assets/img/ensam-geografi.webp" alt="Jordglob där varje land är ett handritat konstverk" loading="lazy"></div>
-          <p class="meta globhint">Dra i globen — varje land är handritat!</p>
+          <p class="meta globhint" aria-live="polite"></p>
         </div>
       </div>
     </article>
@@ -498,7 +526,7 @@
           <p class="meta aft">Gratis · Trevlig mattehjälp</p>
         </div>
         <div class="pvis" data-line data-min=".35">
-          <div class="globpromo globpromo--tab"><img src="assets/img/ensam-tabellen.webp" alt="Gångertabellen som färgglad interaktiv tavla" loading="lazy"></div>
+          <div class="globpromo globpromo--tab" id="tabspel"><img src="assets/img/ensam-tabellen.webp" alt="Gångertabellen som färgglad interaktiv tavla" loading="lazy"></div>
         </div>
       </div>
     </article>
@@ -670,6 +698,7 @@
 </footer>
 
 <script defer src="assets/glob3d.js"></script>
+<script defer src="assets/tabspel.js"></script>
 <script>
 (function(){
   'use strict';
