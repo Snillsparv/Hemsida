@@ -126,38 +126,12 @@
   #glob:active{cursor:grabbing}
   .proj .big{font-size:clamp(1.35rem,.95rem + 2vw,2.3rem);margin-bottom:2.4rem}
 
-  /* diskret bildyta — fylls när Jonas skickar bilder */
-  .bildyta{
-    width:min(100%,26rem);aspect-ratio:16/10;margin:0 auto 2.6rem;
-    border:1px dashed var(--hair);
-    background:radial-gradient(60% 60% at 50% 45%,rgba(234,230,220,.035),transparent 75%);
-    display:grid;place-content:center;
-  }
-  .bildyta span{font-family:var(--mono);font-size:.55rem;letter-spacing:.4em;text-transform:uppercase;color:var(--mist);opacity:.55;padding-left:.4em}
-
-  /* ————— appvy: vriden demo-ruta (test — bilder byts när Jonas skickar) ————— */
-  .appvy{width:min(100%,32rem);margin:0 auto 3rem;perspective:1300px}
-  .appvy .rymd{
-    position:relative;transform-style:preserve-3d;
-    transform:rotateX(calc(var(--rx,9deg) + var(--hx,0deg))) rotateY(calc(var(--ry,-8deg) + var(--hy,0deg))) scale(var(--sc,.965));
-    transition:transform .14s linear;will-change:transform;
-  }
-  .skarm{border:1px solid var(--hair);background:#131316;overflow:hidden;border-radius:10px;
-    box-shadow:0 36px 90px rgba(0,0,0,.6),0 4px 18px rgba(0,0,0,.45)}
-  .skarmbar{display:flex;gap:6px;align-items:center;padding:11px 13px;border-bottom:1px solid var(--hair);background:#0f0f11}
-  .skarmbar i{width:7px;height:7px;border-radius:50%;background:#26262b}
-  .skarmbar .adr{margin-left:10px;font-family:var(--mono);font-size:.52rem;letter-spacing:.2em;color:var(--mist)}
-  .skarm img{width:100%;display:block}
-  .promoimg{width:100%;display:block;border-radius:20px;border:1px solid rgba(255,255,255,.05)}
+  /* ————— chips: små faktaetiketter över appbilderna ————— */
   .chip{position:absolute;z-index:2;font-family:var(--mono);font-size:.52rem;letter-spacing:.26em;text-transform:uppercase;color:var(--ink);
-    border:1px solid var(--hair);background:rgba(12,12,13,.88);padding:.6rem .85rem;transform:translateZ(48px);white-space:nowrap}
+    border:1px solid var(--hair);background:rgba(12,12,13,.88);padding:.6rem .85rem;white-space:nowrap}
   .chip.nv{left:-1.1rem;bottom:13%}
   .chip.oh{right:-1.1rem;top:11%}
   @media (max-width:640px){.chip.nv{left:.4rem}.chip.oh{right:.4rem}}
-  @media (prefers-reduced-motion:reduce){
-    .appvy .rymd{transform:rotateX(5deg) rotateY(-5deg);transition:none}
-    .appvy.lut-h .rymd{transform:rotateX(5deg) rotateY(5deg)}
-  }
 
   /* ————— produktkort med accentfärg — sidan får mer färg ju längre ner man kommer ————— */
   .proj[data-accent="bla"]{--acc:#5fb2ff}
@@ -179,17 +153,41 @@
   .feat .fico svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
   .feat b{display:block;font-weight:500;font-size:.98rem;letter-spacing:.01em;color:var(--acc)}
   .feat i{display:block;font-style:normal;color:var(--mist);font-size:.88rem;line-height:1.55;margin-top:.18rem}
-  .globpromo{width:min(100%,24rem);margin-inline:auto}
-  .globpromo img{width:100%;display:block;border-radius:22px;
-    -webkit-mask-image:radial-gradient(ellipse 88% 78% at 50% 48%,#000 55%,transparent 92%);
-    mask-image:radial-gradient(ellipse 88% 78% at 50% 48%,#000 55%,transparent 92%)}
-  .globpromo--stor{width:min(100%,22rem)}
+  .globpromo{margin-inline:auto;position:relative}
+  .globpromo::after{content:"";position:absolute;inset:-1px;pointer-events:none;
+    box-shadow:inset 0 0 52px 24px var(--bg)}
+  .globpromo img{width:100%;display:block}
+  .globpromo--geo img{
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent),linear-gradient(180deg,transparent,#000 6%,#000 94%,transparent);
+    -webkit-mask-composite:source-in;
+    mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent),linear-gradient(180deg,transparent,#000 6%,#000 94%,transparent);
+    mask-composite:intersect;
+  }
+  .globpromo--hp img{
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent),linear-gradient(180deg,transparent,#000 5%,#000 94%,transparent);
+    -webkit-mask-composite:source-in;
+    mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent),linear-gradient(180deg,transparent,#000 5%,#000 94%,transparent);
+    mask-composite:intersect;
+  }
+  .globpromo--tab img{
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent),linear-gradient(180deg,transparent,#000 8%,#000 94%,transparent);
+    -webkit-mask-composite:source-in;
+    mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent),linear-gradient(180deg,transparent,#000 8%,#000 94%,transparent);
+    mask-composite:intersect;
+  }
+  .globpromo--geo{width:min(100%,22rem)}
+  .globpromo--hp{width:min(88%,20rem)}
+  .globpromo--tab{width:min(100%,23rem)}
   @media (prefers-reduced-motion:no-preference){
     .globpromo img{animation:flyt 8s ease-in-out infinite}
+    .globpromo--hp img{animation-duration:9.4s;animation-delay:-3s}
+    .globpromo--tab img{animation-duration:8.6s;animation-delay:-5s}
   }
   @keyframes flyt{0%,100%{transform:translateY(0)}50%{transform:translateY(-11px)}}
+  .projgrid .pvis{order:-1}   /* mobil: bilden ovanför rubrik och text */
   @media (min-width:960px){
     .projgrid{grid-template-columns:1fr 1fr;gap:3.2rem}
+    .projgrid .pvis{order:0}
     .projgrid .ptxt{text-align:left}
     .projgrid .ptxt .desc{margin-inline:0}
     .projgrid .ptxt .meta{margin-inline:0}
@@ -197,21 +195,28 @@
     .projgrid.flip .pvis{order:-1}
   }
 
-  /* ————— kurs: lugn inramad inbjudan ————— */
+  /* ————— kurs: inramad inbjudan med varm, andande glöd ————— */
   .kursram{
     width:min(100%,40rem);margin-inline:auto;
-    border:1px solid var(--hair);
+    border:1px solid rgba(255,209,102,.24);
     padding:clamp(3rem,8vh,5rem) clamp(1.5rem,5vw,3.5rem);
     display:grid;justify-items:center;text-align:center;
+    box-shadow:0 0 70px rgba(255,209,102,.08),0 0 18px rgba(255,209,102,.05),inset 0 0 52px rgba(255,209,102,.045);
+  }
+  @media (prefers-reduced-motion:no-preference){
+    .kursram{animation:kursglod 6s ease-in-out infinite}
+  }
+  @keyframes kursglod{
+    0%,100%{box-shadow:0 0 70px rgba(255,209,102,.08),0 0 18px rgba(255,209,102,.05),inset 0 0 52px rgba(255,209,102,.045);border-color:rgba(255,209,102,.24)}
+    50%{box-shadow:0 0 110px rgba(255,209,102,.15),0 0 26px rgba(255,209,102,.09),inset 0 0 70px rgba(255,209,102,.07);border-color:rgba(255,209,102,.42)}
   }
   .kursram .knapp{margin-top:2.8rem}
 
   /* ————— videor: spelare bäddas in först vid klick ————— */
   .vgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:2.6rem 1.4rem;width:100%;margin-top:clamp(4rem,9vh,6rem);align-items:start}
   .vplayer{display:grid;gap:1.15rem;justify-items:center;text-align:center;min-width:0;margin:0}
-  .vplayer--reel{grid-column:1/-1;justify-self:center;width:min(72vw,270px)}
+  .vplayer--stor{grid-column:1/-1;justify-self:center;width:min(100%,44rem)}
   .vram{position:relative;width:100%;aspect-ratio:16/9;background:#0b0b0d;border:1px solid var(--hair);overflow:hidden;transition:border-color .3s ease}
-  .vplayer--reel .vram{aspect-ratio:9/16}
   .vram iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
   .vfasad{position:absolute;inset:0;width:100%;height:100%;display:grid;place-items:center;background:transparent;border:0;cursor:pointer;padding:0}
   .vth{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55;filter:grayscale(.35);transition:opacity .45s ease,filter .45s ease}
@@ -378,8 +383,7 @@
           <p class="meta aft">Gratis · Minnesknep för varje land</p>
         </div>
         <div class="pvis" data-line data-min=".35">
-          <!-- BILD KOMMER: jonas skickar den exakta globbilden — konstgloben som tillfällig bild så länge -->
-          <div class="globpromo globpromo--stor"><img src="../assets/img/promo-geografi.webp" alt="Jonas geografi-glob på fot — varje land ett handritat konstverk" loading="lazy"></div>
+          <div class="globpromo globpromo--geo"><img src="../assets/img/fri-geografi.webp" alt="Jordglob där varje land är ett handritat konstverk" loading="lazy"></div>
           <span class="chip nv" aria-hidden="true">197 handritade länder</span>
           <span class="chip oh" aria-hidden="true">Geografi har aldrig varit roligare!</span>
         </div>
@@ -400,15 +404,10 @@
           </div>
           <p class="meta aft">Gratis · 2.0 tolv gånger · 160/160 år 2021</p>
         </div>
-        <div class="pvis">
-          <!-- BILD KOMMER: jonas skickar — tillfälligt foto i rutan så länge -->
-          <div class="appvy lut-h" data-line data-min=".35">
-            <div class="rymd">
-              <img class="promoimg" src="../assets/img/promo-hp.webp" alt="HPAkuten: svarsblankett, timer och delprovsböcker" loading="lazy">
-              <span class="chip oh" aria-hidden="true">160 av 160 · 2021</span>
-              <span class="chip nv" aria-hidden="true">Gamla prov · på tid</span>
-            </div>
-          </div>
+        <div class="pvis" data-line data-min=".35">
+          <div class="globpromo globpromo--hp"><img src="../assets/img/fri-hp.webp" alt="HPAkuten: svarsblankett, timer och delprovsböcker" loading="lazy"></div>
+          <span class="chip oh" aria-hidden="true">160 av 160 · 2021</span>
+          <span class="chip nv" aria-hidden="true">Gamla prov · på tid</span>
         </div>
       </div>
     </article>
@@ -427,14 +426,9 @@
           </div>
           <p class="meta aft">Gratis · Utan inloggning</p>
         </div>
-        <div class="pvis">
-          <!-- BILD KOMMER: jonas skickar — riktig skärmbild av appen så länge -->
-          <div class="appvy lut-v" data-line data-min=".35">
-            <div class="rymd">
-              <img class="promoimg" src="../assets/img/promo-tabellen.webp" alt="Gångertabellen som färgglad interaktiv tavla" loading="lazy">
-              <span class="chip nv" aria-hidden="true">Bara 6 tal kvar att memorera</span>
-            </div>
-          </div>
+        <div class="pvis" data-line data-min=".35">
+          <div class="globpromo globpromo--tab"><img src="../assets/img/fri-tabellen.webp" alt="Gångertabellen som färgglad interaktiv tavla" loading="lazy"></div>
+          <span class="chip nv" aria-hidden="true">Bara 6 tal kvar att memorera</span>
         </div>
       </div>
     </article>
@@ -466,16 +460,16 @@
       <p class="meta aft">Tre klipp · Fler på Instagram och YouTube</p>
 
       <div class="vgrid">
-        <figure class="vplayer vplayer--reel" data-line data-min=".3">
+        <figure class="vplayer vplayer--stor" data-line data-min=".3">
           <div class="vram">
-            <button class="vfasad" type="button" data-embed="https://www.instagram.com/reel/DagFf5zBbd-/embed/" aria-label="Spela upp: Alla världens länder (Instagram)">
+            <button class="vfasad" type="button" data-yt="VTyU4WqDDYw" aria-label="Spela upp: Alla världens länder (YouTube)">
               <img class="vth" src="../assets/img/glob-art.webp" alt="" loading="lazy">
               <span class="vspela" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
             </button>
           </div>
           <figcaption>
             <span class="vtitel">Alla världens länder</span>
-            <span class="vmeta">Instagram · <a href="https://www.instagram.com/reel/DagFf5zBbd-/" target="_blank" rel="noopener">Öppna i appen ↗</a></span>
+            <span class="vmeta">YouTube · <a href="https://www.youtube.com/watch?v=VTyU4WqDDYw" target="_blank" rel="noopener">Öppna på YouTube ↗</a></span>
           </figcaption>
         </figure>
         <figure class="vplayer" data-line data-min=".3">
@@ -780,52 +774,13 @@
     });
   }
 
-  /* ————— appvyer: vrids upp mot rakt läge när de närmar sig mitten ————— */
-  var vys = [].slice.call(document.querySelectorAll('.appvy'));
-  if (vys.length && !reduced) {
-    var vyTick = false;
-    function vyUpd(){
-      vyTick = false;
-      var vh = innerHeight;
-      vys.forEach(function(el){
-        var r = el.getBoundingClientRect();
-        if (r.bottom < -80 || r.top > vh + 80) return;
-        var c = (r.top + r.height/2 - vh/2) / (vh/2);          // -1..1, 0 = mitt
-        var p = Math.max(0, 1 - Math.min(1, Math.abs(c)));      // 1 i mitten
-        var dir = el.classList.contains('lut-h') ? 1 : -1;
-        el.style.setProperty('--rx', (10 - 7.5*p).toFixed(2) + 'deg');
-        el.style.setProperty('--ry', (dir * (9 - 7*p)).toFixed(2) + 'deg');
-        el.style.setProperty('--sc', (0.96 + 0.04*p).toFixed(3));
-      });
-    }
-    addEventListener('scroll', function(){ if(!vyTick){ vyTick = true; requestAnimationFrame(vyUpd); } }, {passive:true});
-    addEventListener('resize', function(){ if(!vyTick){ vyTick = true; requestAnimationFrame(vyUpd); } });
-    vyUpd();
-    if (matchMedia('(hover:hover) and (pointer:fine)').matches) {
-      vys.forEach(function(el){
-        el.addEventListener('mousemove', function(e){
-          var r = el.getBoundingClientRect();
-          var mx = (e.clientX - r.left)/r.width - .5, my = (e.clientY - r.top)/r.height - .5;
-          el.style.setProperty('--hx', (my * -3.5).toFixed(2) + 'deg');
-          el.style.setProperty('--hy', (mx * 3.5).toFixed(2) + 'deg');
-        });
-        el.addEventListener('mouseleave', function(){
-          el.style.setProperty('--hx', '0deg');
-          el.style.setProperty('--hy', '0deg');
-        });
-      });
-    }
-  }
-
   /* ————— videor: bädda in spelaren först när man klickar ————— */
   Array.prototype.forEach.call(document.querySelectorAll('.vfasad'), function(btn){
     btn.addEventListener('click', function(){
-      var yt = btn.getAttribute('data-yt');
       var ifr = document.createElement('iframe');
-      ifr.src = yt ? 'https://www.youtube-nocookie.com/embed/' + yt + '?autoplay=1&rel=0'
-                   : btn.getAttribute('data-embed');
+      ifr.src = 'https://www.youtube-nocookie.com/embed/' + btn.getAttribute('data-yt') + '?autoplay=1&rel=0';
       ifr.title = btn.getAttribute('aria-label') || 'Videospelare';
-      ifr.setAttribute('allow', 'autoplay; fullscreen; encrypted-media; picture-in-picture; clipboard-write');
+      ifr.setAttribute('allow', 'autoplay; fullscreen; encrypted-media; picture-in-picture');
       ifr.setAttribute('allowfullscreen', '');
       btn.parentNode.replaceChild(ifr, btn);
     });
