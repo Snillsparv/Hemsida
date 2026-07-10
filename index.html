@@ -40,7 +40,7 @@
     --nav:#a9a396;
     --hair:#3f3d37;   /* dekorativa linjer/understrykningar */
     --accent:#ffd166; /* enda accentfärgen: primära CTA:er. Svart text på gult ≈ 13,6:1 (AAA) */
-    --mini:1;         /* skala för småtexten — provas live med ?textprov */
+    --mini:1.15;      /* skala för småtexten — provas live med ?textprov */
     --sans:'Space Grotesk',system-ui,sans-serif;
     --mono:'JetBrains Mono',ui-monospace,monospace;
   }
@@ -87,7 +87,7 @@
     max-width:24ch;text-wrap:balance;
   }
   h1{
-    font-size:clamp(2.5rem,1.4rem + 5.4vw,5rem);
+    font-size:clamp(2.65rem,1.5rem + 5.7vw,5.3rem);
     font-weight:400;letter-spacing:.055em;line-height:1.1;text-wrap:balance;
   }
   .meta{
@@ -108,7 +108,7 @@
   html.tp [data-scene].lit .aft{opacity:1;transition:opacity 2.3s ease 1.15s}
 
   /* ————— hero ————— */
-  .tagline{margin-top:1.4rem}
+  .tagline{margin-top:1.4rem;font-size:clamp(1.7rem,1.1rem + 2.9vw,3.05rem)}
   .merits{max-width:46rem;text-wrap:balance}
   .merits .dot{padding-inline:.55em;color:var(--mist)}
   @media (max-width:640px){
@@ -176,7 +176,7 @@
            drop-shadow(0 22px 40px rgba(0,0,0,.45))}
   .globpromo--geo{width:min(78%,17rem)}
   .globpromo--hp{width:min(70%,15rem)}
-  .globpromo--tab{width:min(82%,18rem)}
+  .globpromo--tab{width:min(76%,16.5rem)}
   @media (prefers-reduced-motion:no-preference){
     .globpromo img{animation:flyt 8s ease-in-out infinite}
     .globpromo--hp img{animation-duration:9.4s;animation-delay:-3s}
@@ -321,7 +321,7 @@
   .paus{height:clamp(7rem,22vh,15rem)}
   .paus--stor{height:clamp(9rem,30vh,20rem)}
 
-  /* ————— laddskärm: decimalerna räknas upp — sedan "Cirkeln är sluten." ————— */
+  /* ————— laddskärm: decimalerna räknas upp — sedan "Välkommen in." ————— */
   #loader{
     position:fixed;inset:0;z-index:100;background:var(--bg);
     display:grid;place-items:center;transition:opacity .6s ease;
@@ -387,7 +387,7 @@
 </head>
 <body>
 
-<!-- laddskärm: räknaren går 0 → 100 000 decimaler, sedan "Cirkeln är sluten. Välkommen in." -->
+<!-- laddskärm: räknaren går 0 → 100 000 decimaler, sedan "Välkommen in." -->
 <div id="loader" aria-hidden="true">
   <div id="lscen">
     <div id="lring">
@@ -620,7 +620,7 @@
   <section id="kontakt" class="wrap" aria-labelledby="kontakt-rubrik">
     <div class="scene" data-scene style="min-height:auto;justify-items:center;text-align:center">
       <h2 class="label" id="kontakt-rubrik" data-line style="margin-bottom:clamp(3rem,8vh,5rem)">Boka föreläsning/ställ en fråga</h2>
-      <p class="big" data-line>Säg hej! Jag lovar att aldrig glömma&nbsp;dig.</p>
+      <p class="big" data-line>Säg&nbsp;hej!</p>
       <p class="desc" data-line style="max-width:40ch;margin-top:1.6rem;line-height:1.75;font-size:clamp(.95rem,.85rem + .5vw,1.1rem)">
         Vill du boka en föreläsning för ett oförglömligt event? Eller har du något du funderar på? Skriv en rad eller två&nbsp;nedan.</p>
 
@@ -714,7 +714,7 @@
         timers.push(setTimeout(function(){            // kort paus vid 100 000 …
           if (!loader) return;
           loader.classList.add('sluten');              // … sedan skrivs frasen ut, tecken för tecken
-          var FRAS = 'Cirkeln \u00e4r sluten.\nV\u00e4lkommen in.';
+          var FRAS = 'V\u00e4lkommen in.';
           var ftxt = document.getElementById('lfrastxt');
           var fi = 0;
           function typa(){
@@ -972,7 +972,7 @@
   /* ————— textprov: öppna sidan med ?textprov och dra i reglaget ————— */
   var tprov = location.search.match(/[?&]textprov(?:=([\d.]+))?/);
   if (tprov) (function(){
-    var v = parseFloat(tprov[1]) || 1.1;
+    var v = parseFloat(tprov[1]) || 1.15;
     docEl.style.setProperty('--mini', v);
     var bar = document.createElement('div');
     bar.id = 'textprovbar';
