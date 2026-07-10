@@ -174,7 +174,14 @@
     filter:drop-shadow(0 0 26px color-mix(in srgb, var(--acc) 32%, transparent))
            drop-shadow(0 0 80px color-mix(in srgb, var(--acc) 22%, transparent))
            drop-shadow(0 22px 40px rgba(0,0,0,.45))}
-  .globpromo--geo{width:min(78%,17rem)}
+  .globpromo--geo{width:min(86%,21rem);aspect-ratio:1;position:relative}
+  #glob3d img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+  #glob3d.glob3d-klar img{opacity:0;transition:opacity .6s ease}
+  .glob3dyta{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab;
+    touch-action:pan-y;opacity:0;transition:opacity .8s ease;outline-offset:8px}
+  .glob3dyta:active{cursor:grabbing}
+  .globhint{display:none;text-align:center}
+  .pvis.glob3d-klar .globhint{display:block}
   .globpromo--hp{width:min(70%,15rem)}
   .globpromo--tab{width:min(76%,16.5rem)}
   @media (prefers-reduced-motion:no-preference){
@@ -449,7 +456,8 @@
           <p class="meta aft">Gratis · Minnesknep för varje land</p>
         </div>
         <div class="pvis" data-line data-min=".35">
-          <div class="globpromo globpromo--geo"><img src="assets/img/ensam-geografi.webp" alt="Jordglob där varje land är ett handritat konstverk" loading="lazy"></div>
+          <div class="globpromo globpromo--geo" id="glob3d"><img src="assets/img/ensam-geografi.webp" alt="Jordglob där varje land är ett handritat konstverk" loading="lazy"></div>
+          <p class="meta globhint">Dra i globen — varje land är handritat!</p>
         </div>
       </div>
     </article>
@@ -658,7 +666,7 @@
   <p>© 2026 Jonas von Essen · Foto: Memory Games</p>
 </footer>
 
-<script src="assets/globe.js"></script>
+<script defer src="assets/glob3d.js"></script>
 <script>
 (function(){
   'use strict';
@@ -823,32 +831,6 @@
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(function(){ measure(); update(); });
     }
-  }
-
-  /* ————— globen: liten och ensam i mörkret ————— */
-  var glob = document.getElementById('glob');
-  var globStarted = false;
-  function startGlobe(){
-    if (globStarted || !window.JonasGlobe) return;
-    globStarted = true;
-    JonasGlobe.create(glob, 'assets/globe-data.json', {
-      mode: 'dots',
-      dotColor: '#e7e3d9',
-      dotSize: 1.35,
-      graticule: '',
-      rim: '',
-      sphereFill: '',
-      marker: null,
-      speed: 0.035
-    });
-  }
-  if (glob) {
-    if ('IntersectionObserver' in window) {
-      var gio = new IntersectionObserver(function(entries){
-        if (entries[0].isIntersecting) { startGlobe(); gio.disconnect(); }
-      }, { rootMargin: '500px' });
-      gio.observe(glob);
-    } else { startGlobe(); }
   }
 
   /* ————— aktiv sektion i nav ————— */
