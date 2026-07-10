@@ -97,17 +97,18 @@
   .cue{width:1px;height:52px;margin-top:5vh;background:linear-gradient(var(--ink),transparent);opacity:.5;animation:cue 3.2s ease-in-out infinite}
   @keyframes cue{0%,100%{opacity:.15}50%{opacity:.6}}
 
-  /* ————— gula primärknappar (svart text på #ffd166 ≈ 13,6:1) ————— */
+  /* ————— primära CTA:er: gul TEXT, inga plattor — minimalistiskt och tidlöst ————— */
   .knapp{
-    display:inline-block;padding:1.02rem 2.5rem;
-    background:var(--accent);color:#0c0c0d;border:1px solid var(--accent);cursor:pointer;
+    display:inline-block;padding:.45rem .15rem;
+    background:transparent;color:var(--accent);border:none;cursor:pointer;
     font-family:var(--mono);font-size:.7rem;font-weight:500;letter-spacing:.24em;text-transform:uppercase;
     text-decoration:none;
-    transition:background .3s ease,border-color .3s ease,box-shadow .3s ease,transform .3s ease;
+    border-bottom:1px solid rgba(255,209,102,.32);
+    transition:border-color .3s ease,text-shadow .3s ease,opacity .3s ease;
   }
-  .knapp:hover{background:#ffdc85;border-color:#ffdc85;box-shadow:0 0 38px rgba(255,209,102,.22)}
-  .knapp:active{transform:translateY(1px)}
-  @media (max-width:560px){ .knapp{padding:.95rem 1.9rem;font-size:.66rem} }
+  .knapp:hover{border-color:var(--accent);text-shadow:0 0 30px rgba(255,209,102,.35)}
+  .knapp:active{opacity:.75}
+  @media (max-width:560px){ .knapp{font-size:.66rem} }
 
   /* ————— saker jag har byggt ————— */
   .proj{display:grid;justify-items:center;text-align:center}
