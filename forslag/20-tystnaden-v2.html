@@ -276,7 +276,11 @@
   form.nbrev{display:flex;align-items:flex-end;gap:1.6rem 2.4rem;flex-wrap:wrap;justify-content:center;margin-top:3.2rem}
   .nbrev .falt{flex:1 1 15rem;text-align:left}
   .nbrev .knapp{margin-bottom:.35rem;white-space:nowrap}
+  .nbrev .knapp:disabled{opacity:.55;cursor:default}
   form.nbrev.klar{display:none}
+  .nbhp{position:absolute;left:-5000px;top:auto}
+  .nbfel{flex-basis:100%;margin:0;font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;color:#ff9d8f;line-height:1.8;text-align:center}
+  .nbfel[hidden]{display:none}
 
   /* ————— footer ————— */
   footer{padding:clamp(5rem,14vh,9rem) 1.5rem 3rem;text-align:center;
@@ -531,19 +535,24 @@
     <div class="scene scene--low" data-scene style="min-height:auto">
       <p class="big" data-line>Prenumerera på ett minnesvärt nyhetsbrev.</p>
 
-      <!-- TODO NYHETSBREV: koppla till en leverantör (t.ex. MailerLite, Brevo, Mailchimp eller Substack).
-           Sätt action="..." method="POST" enligt leverantörens embed-kod (fältnamnet kan behöva bytas)
-           och ta bort submit-stubben i JS (sök på "nbrev"). -->
-      <form id="nbrev" class="nbrev" data-line data-min=".5" aria-label="Prenumerera på nyhetsbrevet">
+      <!-- NYHETSBREV: kopplat till Mailchimp-listan "Jonas von Essen - Nyhetsbrev".
+           JS använder JSONP-endpointen (post-json) så att besökaren stannar på sidan;
+           utan JS faller formuläret tillbaka på Mailchimps egen sida. -->
+      <form id="nbrev" class="nbrev" data-line data-min=".5" aria-label="Prenumerera på nyhetsbrevet"
+            action="https://jonasvonessen.us3.list-manage.com/subscribe/post" method="post">
+        <input type="hidden" name="u" value="f3c6c9c6a1fa3f7def382e372">
+        <input type="hidden" name="id" value="cb5e0cbcc0">
         <div class="falt">
           <label for="nb-epost">Din e-post</label>
-          <input id="nb-epost" name="epost" type="email" autocomplete="email" required>
+          <input id="nb-epost" name="EMAIL" type="email" autocomplete="email" required>
         </div>
+        <div class="nbhp" aria-hidden="true"><input type="text" name="b_f3c6c9c6a1fa3f7def382e372_cb5e0cbcc0" tabindex="-1" value="" autocomplete="off"></div>
         <button class="knapp" type="submit">Prenumerera</button>
+        <p class="nbfel" role="alert" hidden></p>
       </form>
       <div class="tack" role="status" aria-live="polite">
         <p class="big" style="font-size:clamp(1.2rem,1rem + 1.2vw,1.6rem)">Tack — du är antecknad.</p>
-        <p class="meta">Nyhetsbrevet startar inom kort.</p>
+        <p class="meta">Kolla din inkorg om något behöver bekräftas.</p>
       </div>
     </div>
   </section>
@@ -792,12 +801,49 @@
     });
   });
 
-  /* ————— nyhetsbrev (ingen backend ännu — se TODO NYHETSBREV i HTML) ————— */
+  /* ————— nyhetsbrev: Mailchimp via JSONP — besökaren stannar på sidan ————— */
   var nbrev = document.getElementById('nbrev');
   if (nbrev) {
+    var nbBtn = nbrev.querySelector('.knapp');
+    var nbFel = nbrev.querySelector('.nbfel');
+    var nbTimer = null;
+    function nbrevFel(txt){
+      nbFel.textContent = txt;
+      nbFel.hidden = false;
+      nbBtn.disabled = false;
+      nbBtn.textContent = 'Prenumerera';
+    }
+    window.nbrevSvar = function(resp){
+      clearTimeout(nbTimer);
+      if (resp && resp.result === 'success') {
+        nbrev.classList.add('klar');
+      } else {
+        var d = document.createElement('div');
+        d.innerHTML = (resp && resp.msg) || '';
+        nbrevFel((d.textContent || '').replace(/^\d+\s*-\s*/, '') ||
+                 'Något gick fel — prova igen om en stund.');
+      }
+    };
     nbrev.addEventListener('submit', function(ev){
       ev.preventDefault();
-      nbrev.classList.add('klar');
+      if (nbBtn.disabled) return;
+      var hp = nbrev.querySelector('input[name^="b_"]');
+      if (hp && hp.value) return;
+      nbFel.hidden = true;
+      nbBtn.disabled = true;
+      nbBtn.textContent = 'Skickar\u2026';
+      var sc = document.createElement('script');
+      sc.src = 'https://jonasvonessen.us3.list-manage.com/subscribe/post-json' +
+               '?u=f3c6c9c6a1fa3f7def382e372&id=cb5e0cbcc0&c=nbrevSvar' +
+               '&EMAIL=' + encodeURIComponent(document.getElementById('nb-epost').value);
+      sc.onerror = function(){
+        clearTimeout(nbTimer);
+        nbrevFel('Kunde inte n\u00e5 Mailchimp \u2014 prova igen om en stund.');
+      };
+      nbTimer = setTimeout(function(){
+        nbrevFel('Det tog f\u00f6r l\u00e5ng tid \u2014 prova igen om en stund.');
+      }, 10000);
+      document.head.appendChild(sc);
     });
   }
 
