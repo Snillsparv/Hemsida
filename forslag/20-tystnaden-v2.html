@@ -114,8 +114,7 @@
   .proj{display:grid;justify-items:center;text-align:center}
   .proj + .proj{margin-top:clamp(6rem,17vh,11rem)}
   .proj h3{font-size:clamp(1.6rem,1rem + 2.6vw,2.7rem);font-weight:400;letter-spacing:.02em;line-height:1.25}
-  .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
-  .proj h3 a{text-decoration:none;display:inline-block;border:1px solid transparent;padding:.3rem .85rem .4rem;margin-inline:-.85rem;transition:border-color .3s ease}
+  .proj h3 a{text-decoration:none;border-bottom:1px solid transparent;padding-bottom:.3rem;transition:border-color .3s ease}
   .proj h3 .pil{font-family:var(--mono);font-size:.55em;vertical-align:.45em;letter-spacing:0;color:var(--mist);margin-left:.45em}
   .proj p.desc{margin-top:1.3rem;max-width:44ch;color:var(--ink);font-size:clamp(.95rem,.85rem + .5vw,1.1rem);line-height:1.75;font-weight:400}
   html.tp .proj:is(:hover,:focus-within) [data-line]{opacity:1}
@@ -228,7 +227,7 @@
   .vram{position:relative;width:100%;aspect-ratio:16/9;background:#0b0b0d;border:1px solid var(--hair);overflow:hidden;transition:border-color .3s ease}
   .vram iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
   .vfasad{position:absolute;inset:0;width:100%;height:100%;display:grid;place-items:center;background:transparent;border:0;cursor:pointer;padding:0}
-  .vth{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55;filter:grayscale(.35);transition:opacity .45s ease,filter .45s ease}
+  .vth{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.65;filter:grayscale(.25);transition:opacity .45s ease,filter .45s ease}
   .vfasad:is(:hover,:focus-visible) .vth{opacity:.85;filter:grayscale(0)}
   .vplayer:is(:hover,:focus-within) .vram{border-color:var(--ink)}
   .vspela{position:relative;z-index:1;width:60px;height:60px;border-radius:50%;display:grid;place-items:center;
@@ -302,9 +301,9 @@
   #lscen{display:grid;place-items:center;padding:1.5rem}
   #lscen>*{grid-area:1/1}
   #lring{position:relative;transition:opacity .5s ease,transform .5s ease}
-  #lsiffror{display:grid;place-content:center;justify-items:center;text-align:center;row-gap:1rem}
-  #lnum{font-family:var(--mono);font-size:clamp(2.1rem,7vw,3.3rem);letter-spacing:.06em;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1;min-width:9ch}
-  .ldec{font-family:var(--mono);font-size:.56rem;letter-spacing:.42em;text-transform:uppercase;color:var(--mist);padding-left:.42em}
+  #lsiffror{display:flex;align-items:baseline;justify-content:center;gap:.55em}
+  .lpi{font-family:'Fraunces',Georgia,serif;font-style:italic;font-size:clamp(1.9rem,6.2vw,3rem);color:var(--mist);line-height:1}
+  #lnum{font-family:var(--mono);font-size:clamp(2.1rem,7vw,3.3rem);letter-spacing:.06em;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1;min-width:7.5ch;text-align:left}
   #lfras{
     opacity:0;transform:translateY(9px);
     transition:opacity .6s ease .14s,transform .6s ease .14s;
@@ -313,6 +312,23 @@
   }
   #loader.sluten #lring{opacity:0;transform:scale(.97)}
   #loader.sluten #lfras{opacity:1;transform:none}
+  .lmark{display:inline-block;width:.55ch;height:1em;background:var(--ink);margin-left:.18ch;vertical-align:-.12em;animation:lblink .95s steps(1) infinite}
+  @keyframes lblink{50%{opacity:0}}
+
+  /* ————— redigeringsläge (öppna sidan med ?redigera) ————— */
+  html.redig [data-line]{opacity:1 !important}
+  html.redig .aft{opacity:1 !important}
+  html.redig .tack{display:block;outline:1px dotted var(--hair);outline-offset:8px}
+  html.redig body{padding-bottom:5.5rem}
+  [data-redig]{outline:1px dashed rgba(255,209,102,.3);outline-offset:3px}
+  [data-redig]:hover{outline-color:rgba(255,209,102,.6)}
+  [data-redig]:focus{outline:1px solid var(--accent);outline-offset:3px}
+  #redigbar{position:fixed;left:0;right:0;bottom:0;z-index:200;display:flex;gap:.9rem 1.2rem;align-items:center;justify-content:center;flex-wrap:wrap;
+    padding:.85rem 1rem;background:rgba(12,12,13,.97);border-top:1px solid var(--hair);
+    font-family:var(--mono);font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mist)}
+  #redigbar button{background:transparent;border:1px solid var(--hair);color:var(--ink);cursor:pointer;
+    font:inherit;letter-spacing:inherit;text-transform:inherit;padding:.55rem .9rem}
+  #redigbar button:hover{border-color:var(--accent);color:var(--accent)}
 
   @media (prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
@@ -338,11 +354,11 @@
   <div id="lscen">
     <div id="lring">
       <div id="lsiffror">
+        <span class="lpi" aria-hidden="true">π</span>
         <span id="lnum">0</span>
-        <span class="ldec">decimaler</span>
       </div>
     </div>
-    <p id="lfras">Cirkeln är sluten.<br>Välkommen in.</p>
+    <p id="lfras"><span id="lfrastxt"></span><span class="lmark" aria-hidden="true"></span></p>
   </div>
 </div>
 
@@ -350,7 +366,7 @@
   <a class="brand" href="#topp">Jonas von Essen</a>
   <nav aria-label="Sidnavigering">
     <ul>
-      <li><a href="#byggt" data-nav="byggt">Byggt</a></li>
+      <li><a href="#byggt" data-nav="byggt">Appar</a></li>
       <li><a href="#kurs" data-nav="kurs">Kurs</a></li>
       <li><a href="#videor" data-nav="videor">Videor</a></li>
       <li><a href="#kontakt" data-nav="kontakt">Kontakt</a></li>
@@ -378,7 +394,7 @@
 
   <!-- ———— SAKER JAG HAR BYGGT ———— -->
   <section id="byggt" class="wrap" aria-labelledby="byggt-rubrik">
-    <h2 class="label sr" id="byggt-rubrik">Saker jag har byggt</h2>
+    <h2 class="label" id="byggt-rubrik" data-line>Gratisappar</h2>
 
     <article class="proj" data-accent="bla" data-scene>
       <div class="projgrid">
@@ -475,7 +491,7 @@
         <figure class="vplayer vplayer--stor" data-line data-min=".3">
           <div class="vram">
             <button class="vfasad" type="button" data-yt="VTyU4WqDDYw" aria-label="Spela upp: Testa minnestekniker (YouTube)">
-              <img class="vth" src="../assets/img/foto-siffervagg-md.webp" alt="" loading="lazy">
+              <img class="vth" src="https://i.ytimg.com/vi/VTyU4WqDDYw/maxresdefault.jpg" data-hq="https://i.ytimg.com/vi/VTyU4WqDDYw/hqdefault.jpg" data-lokal="../assets/img/foto-siffervagg-md.webp" alt="" loading="lazy">
               <span class="vspela" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
             </button>
           </div>
@@ -487,7 +503,7 @@
         <figure class="vplayer" data-line data-min=".3">
           <div class="vram">
             <button class="vfasad" type="button" data-yt="A-oHL2JyIjY" aria-label="Spela upp: Miljonfrågan (YouTube)">
-              <img class="vth" src="../assets/img/jonas_pkm-md.webp" alt="" loading="lazy">
+              <img class="vth" src="https://i.ytimg.com/vi/A-oHL2JyIjY/maxresdefault.jpg" data-hq="https://i.ytimg.com/vi/A-oHL2JyIjY/hqdefault.jpg" data-lokal="../assets/img/jonas_pkm-md.webp" alt="" loading="lazy">
               <span class="vspela" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
             </button>
           </div>
@@ -499,7 +515,7 @@
         <figure class="vplayer" data-line data-min=".3">
           <div class="vram">
             <button class="vfasad" type="button" data-yt="WZwQ-zKBBaA" aria-label="Spela upp: 500 namn i Talang (YouTube)">
-              <img class="vth" src="../assets/img/foto-scen-md.webp" alt="" loading="lazy">
+              <img class="vth" src="https://i.ytimg.com/vi/WZwQ-zKBBaA/maxresdefault.jpg" data-hq="https://i.ytimg.com/vi/WZwQ-zKBBaA/hqdefault.jpg" data-lokal="../assets/img/foto-scen-md.webp" alt="" loading="lazy">
               <span class="vspela" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
             </button>
           </div>
@@ -542,6 +558,10 @@
             action="https://jonasvonessen.us3.list-manage.com/subscribe/post" method="post">
         <input type="hidden" name="u" value="f3c6c9c6a1fa3f7def382e372">
         <input type="hidden" name="id" value="cb5e0cbcc0">
+        <!-- TODO TAGG "NYASIDAN": Mailchimp taggar via numeriskt ID, inte namn.
+             Skapa taggen i Mailchimp (Audience -> Tags), välj den sedan i Forms -> Embedded forms
+             och kopiera siffran ur raden <input type="hidden" name="tags" value="SIFFRAN"> hit: -->
+        <input type="hidden" name="tags" value="">
         <div class="falt">
           <label for="nb-epost">Din e-post</label>
           <input id="nb-epost" name="EMAIL" type="email" autocomplete="email" required>
@@ -652,9 +672,28 @@
       if (t < 1) { raf = requestAnimationFrame(frame); }
       else {
         raf = 0;
-        timers.push(setTimeout(function(){          // kort paus vid 100 000 …
-          if (loader) loader.classList.add('sluten'); // … sedan tonar frasen fram
-          timers.push(setTimeout(function(){ endLoader(false); }, 1300));
+        timers.push(setTimeout(function(){            // kort paus vid 100 000 …
+          if (!loader) return;
+          loader.classList.add('sluten');              // … sedan skrivs frasen ut, tecken för tecken
+          var FRAS = 'Cirkeln \u00e4r sluten.\nV\u00e4lkommen in.';
+          var ftxt = document.getElementById('lfrastxt');
+          var fi = 0;
+          function typa(){
+            if (!loader || !ftxt) return;
+            if (fi < FRAS.length) {
+              var c = FRAS.charAt(fi++);
+              if (c === '\n') {
+                ftxt.appendChild(document.createElement('br'));
+                timers.push(setTimeout(typa, 380));
+              } else {
+                ftxt.appendChild(document.createTextNode(c));
+                timers.push(setTimeout(typa, 34));
+              }
+            } else {
+              timers.push(setTimeout(function(){ endLoader(false); }, 1150));
+            }
+          }
+          typa();
         }, 280));
       }
     }
@@ -789,6 +828,15 @@
     });
   }
 
+  /* ————— videoomslag: riktiga YouTube-miniatyrer, med lokala reservbilder ————— */
+  Array.prototype.forEach.call(document.querySelectorAll('.vth[data-hq]'), function(img){
+    img.addEventListener('error', function(){
+      var hq = img.getAttribute('data-hq'), lokal = img.getAttribute('data-lokal');
+      if (hq) { img.removeAttribute('data-hq'); img.src = hq; }
+      else if (lokal) { img.removeAttribute('data-lokal'); img.src = lokal; }
+    });
+  });
+
   /* ————— videor: bädda in spelaren först när man klickar ————— */
   Array.prototype.forEach.call(document.querySelectorAll('.vfasad'), function(btn){
     btn.addEventListener('click', function(){
@@ -833,8 +881,10 @@
       nbBtn.disabled = true;
       nbBtn.textContent = 'Skickar\u2026';
       var sc = document.createElement('script');
+      var nbTagg = nbrev.querySelector('input[name="tags"]');
       sc.src = 'https://jonasvonessen.us3.list-manage.com/subscribe/post-json' +
                '?u=f3c6c9c6a1fa3f7def382e372&id=cb5e0cbcc0&c=nbrevSvar' +
+               (nbTagg && nbTagg.value ? '&tags=' + encodeURIComponent(nbTagg.value) : '') +
                '&EMAIL=' + encodeURIComponent(document.getElementById('nb-epost').value);
       sc.onerror = function(){
         clearTimeout(nbTimer);
@@ -855,6 +905,83 @@
       form.classList.add('klar');
     });
   }
+
+  /* ————— redigeringsläge: öppna sidan med ?redigera — klicka på text och skriv,
+           "Kopiera ändringar" ger en lista att klistra in i chatten ————— */
+  if (/[?&]redigera/.test(location.search)) (function(){
+    docEl.classList.add('redig');
+    endLoader(true);
+
+    // blockera navigering, uppspelning och formulärskick medan man redigerar
+    document.addEventListener('submit', function(e){ e.preventDefault(); e.stopPropagation(); }, true);
+    document.addEventListener('click', function(e){
+      if (e.target.closest && e.target.closest('#redigbar')) return;
+      var mal = e.target.closest ? e.target.closest('a,button') : null;
+      if (mal) { e.preventDefault(); e.stopPropagation(); }
+    }, true);
+
+    var SEL = 'h1, .tagline, .merits .mer, .knapp, .label, h3 a, p.desc, .feat b, .feat i, ' +
+              'p.meta, p.big, .vtitel, .vmeta, .soc a, label, footer p, footer a, .nav a';
+    var alla = [].slice.call(document.querySelectorAll(SEL));
+    var els = alla.filter(function(el){           // bara "löv" — inga redigerbara i redigerbara
+      return !alla.some(function(b){ return b !== el && el.contains(b); });
+    });
+
+    var LS = 'jve-redig';
+    var sparat = {};
+    try { sparat = JSON.parse(localStorage.getItem(LS) || '{}'); } catch(e){}
+    var orig = [];
+    els.forEach(function(el, i){
+      var id = 't' + i;
+      el.setAttribute('data-redig', id);
+      try { el.contentEditable = 'plaintext-only'; } catch(err) {}
+      if (el.contentEditable !== 'plaintext-only') el.contentEditable = 'true';
+      orig[i] = el.innerText;
+      if (sparat[id] != null && sparat[id] !== el.innerText) el.innerText = sparat[id];
+    });
+
+    function sparaAlla(){
+      var ut = {};
+      els.forEach(function(el, i){
+        if (el.innerText !== orig[i]) ut['t' + i] = el.innerText;
+      });
+      try { localStorage.setItem(LS, JSON.stringify(ut)); } catch(e){}
+      return ut;
+    }
+    var rt;
+    document.addEventListener('input', function(){ clearTimeout(rt); rt = setTimeout(sparaAlla, 400); });
+
+    var bar = document.createElement('div');
+    bar.id = 'redigbar';
+    bar.innerHTML =
+      '<span id="rediginfo">Redigeringsl\u00e4ge \u00b7 klicka p\u00e5 en text och skriv</span>' +
+      '<button type="button" id="redigkopiera">Kopiera \u00e4ndringar</button>' +
+      '<button type="button" id="redigrensa">B\u00f6rja om</button>' +
+      '<button type="button" id="redigstang">St\u00e4ng</button>';
+    document.body.appendChild(bar);
+    var info = document.getElementById('rediginfo');
+
+    document.getElementById('redigkopiera').addEventListener('click', function(){
+      var d = sparaAlla();
+      var lista = Object.keys(d).map(function(id){
+        return { id: id, fran: orig[parseInt(id.slice(1), 10)], till: d[id] };
+      });
+      if (!lista.length) { info.textContent = 'Inga \u00e4ndringar \u00e4nnu'; return; }
+      var text = JSON.stringify(lista, null, 2);
+      function ok(){ info.textContent = lista.length + (lista.length > 1 ? ' \u00e4ndringar kopierade' : ' \u00e4ndring kopierad') +
+                                        ' \u2014 klistra in i chatten med Claude'; }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(ok, function(){ window.prompt('Kopiera texten:', text); ok(); });
+      } else { window.prompt('Kopiera texten:', text); ok(); }
+    });
+    document.getElementById('redigrensa').addEventListener('click', function(){
+      try { localStorage.removeItem(LS); } catch(e){}
+      location.reload();
+    });
+    document.getElementById('redigstang').addEventListener('click', function(){
+      location.href = location.pathname;
+    });
+  })();
 })();
 </script>
 </body>
