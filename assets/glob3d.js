@@ -80,6 +80,7 @@
     var yaw = 0.28, pitch = -0.55;         // startvy: Europa/Afrika i blickfånget
     var vYaw = 0, vPitch = 0;              // tröghet
     var drar = false, senast = 0, sistaRor = 0;
+    var lage = 0, startP = null;           // 0 = obestämt (touch), 1 = roterar, -1 = sidan skrollar
     var synlig = false, ritad = false, texKlar = false;
 
     var tex = gl.createTexture();
@@ -146,32 +147,41 @@
     requestAnimationFrame(tick);
 
     canvas.addEventListener('pointerdown', function (e) {
-      drar = true; senast = ts0(e); sistaRor = performance.now();
+      drar = true; senast = ts0(e); startP = ts0(e); sistaRor = performance.now();
+      lage = (e.pointerType === 'touch') ? 0 : 1;
       vYaw = vPitch = 0;
-      canvas.setPointerCapture(e.pointerId);
-      e.preventDefault();
+      try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+      if (lage === 1) e.preventDefault();
     });
     function ts0(e) { return { x: e.clientX, y: e.clientY }; }
     canvas.addEventListener('pointermove', function (e) {
       if (!drar) return;
+      if (lage === 0) {                    // touch: vänta in riktningen
+        var ax = Math.abs(e.clientX - startP.x), ay = Math.abs(e.clientY - startP.y);
+        if (ax < 7 && ay < 7) return;      // dödzon
+        lage = (ax > ay * 1.15) ? 1 : -1;  // sidledes → snurra, lodrätt → låt sidan skrolla
+        senast = ts0(e);
+        if (lage !== 1) return;
+      }
+      if (lage !== 1) return;
       var w = canvas.getBoundingClientRect().width;
       var dx = (e.clientX - senast.x) / (w * 0.42);
       var dy = (e.clientY - senast.y) / (w * 0.42);
       senast = ts0(e);
-      yaw -= dx; pitch += dy; klampa();
-      vYaw = -dx * 0.55; vPitch = dy * 0.55;
+      yaw -= dx; pitch -= dy; klampa();    // ytan följer fingret, även i höjdled
+      vYaw = -dx * 0.55; vPitch = -dy * 0.55;
       sistaRor = performance.now();
       rita();
     });
-    function slapp() { drar = false; sistaRor = performance.now(); }
+    function slapp() { drar = false; lage = 0; sistaRor = performance.now(); }
     canvas.addEventListener('pointerup', slapp);
     canvas.addEventListener('pointercancel', slapp);
     canvas.addEventListener('keydown', function (e) {
       var steg = 0.09;
       if (e.key === 'ArrowLeft') { yaw += steg; }
       else if (e.key === 'ArrowRight') { yaw -= steg; }
-      else if (e.key === 'ArrowUp') { pitch -= steg; }
-      else if (e.key === 'ArrowDown') { pitch += steg; }
+      else if (e.key === 'ArrowUp') { pitch += steg; }
+      else if (e.key === 'ArrowDown') { pitch -= steg; }
       else return;
       klampa(); sistaRor = performance.now(); rita();
       e.preventDefault();
