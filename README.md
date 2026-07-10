@@ -33,6 +33,7 @@ men helt olika karaktär:
 | `forslag/21-brevet.html` | **Brevet** | Handskrivet brev som skriver sig självt, kuvert + sigill |
 | `forslag/22-chokladfabriken.html` | **Minnesfabriken** | Willy Wonka — sammetsridå, glaskupor, gyllene biljett |
 | `forslag/23-jonasos.html` | **JonasOS 26.0** | Hemsidan som operativsystem — ikoner, dragbara fönster |
+| `forslag/20-tystnaden-v2.html` | **★ Tystnaden v2 (VALD — utvecklas)** | Cirkel-laddskärm ("Cirkeln är sluten. Välkommen in."), gul text-CTA, struktur: byggt → kurs → videor → kontakt |
 
 Alla tre öppnas med en terminal-laddskärm (klickbar för att hoppa över, visas en gång
 per session, respekterar `prefers-reduced-motion`).
