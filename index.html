@@ -151,6 +151,12 @@
   .proj[data-accent="bla"]{--acc:#5fb2ff}
   .proj[data-accent="lila"]{--acc:#b18cff}
   .proj[data-accent="gron"]{--acc:#57d98a}
+  .proj[data-accent]{
+    border:1px solid color-mix(in srgb, var(--acc) 26%, transparent);
+    padding:clamp(2.4rem,6vh,4rem) clamp(1.2rem,4vw,3rem);
+    box-shadow:0 0 60px color-mix(in srgb, var(--acc) 7%, transparent),
+               inset 0 0 52px color-mix(in srgb, var(--acc) 4%, transparent);
+  }
   .projgrid{display:grid;gap:2.4rem;align-items:center;width:100%}
   .pvis{position:relative;z-index:0}
   .pvis::before{
