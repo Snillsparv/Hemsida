@@ -91,15 +91,12 @@
     var drar = false, senast = 0, sistaRor = 0;
     var lage = 0, startP = null;           // 0 = obestämt (touch), 1 = roterar, -1 = sidan skrollar
     var aktiv = false, grepp = 0;          // greppläge: globen äger alla svep tills man släpper
-    var hint = document.querySelector('.globhint');
-    var hintText = hint ? hint.textContent : '';
     function sattAktiv(pa) {
       if (aktiv === pa) return;
       aktiv = pa;
       canvas.style.touchAction = pa ? 'none' : 'pan-y';
       var pv = wrap.closest('.pvis');
       if (pv) pv.classList.toggle('grepp', pa);
-      if (hint) hint.textContent = pa ? 'R\u00f6r utanf\u00f6r globen f\u00f6r att sl\u00e4ppa' : hintText;
     }
     document.addEventListener('pointerdown', function (e) {
       if (aktiv && e.target !== canvas) sattAktiv(false);

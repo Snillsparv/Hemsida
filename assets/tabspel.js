@@ -6,6 +6,7 @@
   'use strict';
   var wrap = document.getElementById('tabspel');
   if (!wrap) return;
+  var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   var FARG = ['#e23b4e', '#f07f28', '#eeb02c', '#a9cc2e', '#4fbf46',
               '#37c489', '#57c4dd', '#3d8fe0', '#3f5bd8', '#8c4fd0'];
@@ -56,6 +57,7 @@
     stavla.addEventListener('click', function (e) {
       var b = e.target.closest('button');
       if (!b) return;
+      sistKlick = Date.now();
       var chips = stavla.querySelectorAll('.tchip');
       if (b.classList.contains('tchip')) {
         var av = b.classList.toggle('av');
@@ -77,6 +79,27 @@
         });
       }
     });
+
+    // då och då rullar en våg av sig själv genom en slumpad rad eller kolumn
+    var synligBrada = false, sistKlick = 0;
+    if ('IntersectionObserver' in window) {
+      var vio = new IntersectionObserver(function (en) { synligBrada = en[0].isIntersecting; }, { threshold: .35 });
+      vio.observe(stavla);
+    }
+    (function autovag() {
+      setTimeout(function () {
+        if (synligBrada && !reduced && !document.hidden && Date.now() - sistKlick > 6000) {
+          var chips = stavla.querySelectorAll('.tchip');
+          var radled = Math.random() < 0.5;
+          var n = String(1 + Math.floor(Math.random() * 10));
+          chips.forEach(function (ch) {
+            if ((radled ? ch.getAttribute('data-r') : ch.getAttribute('data-c')) === n)
+              vag(ch, ((radled ? ch.getAttribute('data-c') : ch.getAttribute('data-r')) - 1) * 45);
+          });
+        }
+        autovag();
+      }, 3800 + Math.random() * 5200);
+    })();
 
     var poster = wrap.querySelector('img');
     if (poster) poster.remove();
