@@ -98,7 +98,7 @@
           });
         }
         autovag();
-      }, 3800 + Math.random() * 5200);
+      }, 2200 + Math.random() * 3200);
     })();
 
     var poster = wrap.querySelector('img');

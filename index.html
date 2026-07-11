@@ -262,9 +262,15 @@
     50%{box-shadow:0 0 110px rgba(255,209,102,.15),0 0 26px rgba(255,209,102,.09),inset 0 0 70px rgba(255,209,102,.07);border-color:rgba(255,209,102,.42)}
   }
   .kursram .knapp{margin-top:2.8rem}
-  .kobj{position:absolute;z-index:1;pointer-events:none;
+  .kobj{position:absolute;z-index:1;cursor:pointer;
         transform:translate(var(--tx,0px),var(--ty,0px)) rotate(var(--r,0deg));
         filter:drop-shadow(0 16px 28px rgba(0,0,0,.5))}
+  .kobj.studs{animation:kstuds .65s cubic-bezier(.34,1.56,.64,1) both}
+  @keyframes kstuds{
+    0%,100%{transform:translate(var(--tx,0px),var(--ty,0px)) rotate(var(--r,0deg)) scale(1)}
+    35%{transform:translate(var(--tx,0px),calc(var(--ty,0px) - 16px)) rotate(calc(var(--r,0deg) - 7deg)) scale(1.22)}
+    68%{transform:translate(var(--tx,0px),var(--ty,0px)) rotate(calc(var(--r,0deg) + 3deg)) scale(.95)}
+  }
   .kobj--hjarna{width:clamp(74px,13vw,148px);top:0;left:0;--tx:-36%;--ty:-44%;--r:-7deg;--d:8.4s}
   .kobj--bulb{width:clamp(56px,9.5vw,102px);top:0;right:0;--tx:32%;--ty:-42%;--r:8deg;--d:7.2s;--f:-1.4s}
   .kobj--star{width:clamp(40px,7vw,72px);bottom:24%;left:0;--tx:-58%;--r:-14deg;--d:9.6s;--f:-4s}
@@ -919,6 +925,18 @@
       ifr.setAttribute('allow', 'autoplay; fullscreen; encrypted-media; picture-in-picture');
       ifr.setAttribute('allowfullscreen', '');
       btn.parentNode.replaceChild(ifr, btn);
+    });
+  });
+
+  /* ————— kursobjekten studsar till när man klickar på dem ————— */
+  Array.prototype.forEach.call(document.querySelectorAll('.kobj'), function(o){
+    o.addEventListener('click', function(){
+      o.classList.remove('studs');
+      void o.offsetWidth;
+      o.classList.add('studs');
+    });
+    o.addEventListener('animationend', function(e){
+      if (e.animationName === 'kstuds') o.classList.remove('studs');
     });
   });
 
