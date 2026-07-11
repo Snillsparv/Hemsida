@@ -181,6 +181,9 @@
     touch-action:pan-y;opacity:0;transition:opacity .8s ease;outline-offset:8px}
   .glob3dyta:active{cursor:grabbing}
   .globpromo--hp{width:min(70%,15rem)}
+  .hpur{position:absolute;left:45.3%;top:50.8%;width:29.3%;height:6.5%;
+        transform:rotate(-3.8deg);pointer-events:none}
+  @keyframes hpflyt{0%,100%{transform:translateY(0) rotate(-3.8deg)}50%{transform:translateY(-11px) rotate(-3.8deg)}}
   .globpromo--tab{width:min(84%,18rem)}
   /* ————— tabspel: interaktiv gångertabell ————— */
   .tstavla{display:grid;grid-template-columns:repeat(11,1fr);gap:2.2%;aspect-ratio:1;
@@ -213,6 +216,7 @@
   @media (prefers-reduced-motion:no-preference){
     .globpromo img{animation:flyt 8s ease-in-out infinite}
     .globpromo--hp img{animation-duration:9.4s;animation-delay:-3s}
+    .hpur{animation:hpflyt 9.4s ease-in-out -3s infinite}
     .globpromo--tab img{animation-duration:8.6s;animation-delay:-5s}
   }
   @keyframes flyt{0%,100%{transform:translateY(0)}50%{transform:translateY(-11px)}}
@@ -701,6 +705,7 @@
 
 <script defer src="assets/glob3d.js"></script>
 <script defer src="assets/tabspel.js"></script>
+<script defer src="assets/hpur.js"></script>
 <script>
 (function(){
   'use strict';
