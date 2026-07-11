@@ -375,6 +375,15 @@
   footer a{color:var(--mist);text-decoration:none;border-bottom:1px solid var(--hair);padding-bottom:.1rem}
   footer a:hover{color:var(--ink);border-color:var(--ink)}
   footer .rad{display:flex;gap:1.4rem 2rem;justify-content:center;flex-wrap:wrap}
+  /* π-strömmen: decimalerna glider förbi ovanför copyrightraden */
+  .pistrom{overflow:hidden;margin:2.4rem auto 0;max-width:min(92vw,64rem);
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 16%,#000 84%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 16%,#000 84%,transparent)}
+  .pispar{display:flex;width:max-content;animation:pirull 90s linear infinite}
+  .pispar span{display:block;padding-right:.65em;opacity:.5}
+  .pistrom.vila .pispar{animation-play-state:paused}
+  @keyframes pirull{to{transform:translateX(-50%)}}
+  @media (prefers-reduced-motion:reduce){ .pispar{animation:none} }
 
   /* ————— mellanrum (mörkret mellan tankarna) ————— */
   .paus{height:clamp(7rem,22vh,15rem)}
@@ -716,6 +725,9 @@
     <a href="https://www.gångertabellen.se" target="_blank" rel="noopener">gångertabellen.se</a>
     <a href="https://kurs.jonasvonessen.se" target="_blank" rel="noopener">kurs.jonasvonessen.se</a>
   </div>
+  <div class="pistrom" aria-hidden="true">
+    <div class="pispar"><span>141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117067982148086513282306647093844609550582231725359408128481117450284102701938521105559644622948954930381964428810975665933446128475648233786783165271201909145648566923460348610454326648213393607260249141273</span><span>141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117067982148086513282306647093844609550582231725359408128481117450284102701938521105559644622948954930381964428810975665933446128475648233786783165271201909145648566923460348610454326648213393607260249141273</span></div>
+  </div>
   <p>© 2026 Jonas von Essen · Foto: Memory Games</p>
 </footer>
 
@@ -985,6 +997,14 @@
       setTimeout(visa, direkt ? 700 : 4500);
     })();
   })();
+
+  /* ————— π-strömmen i sidfoten pausar när den inte syns ————— */
+  var pist = document.querySelector('.pistrom');
+  if (pist && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function(en){
+      pist.classList.toggle('vila', !en[0].isIntersecting);
+    }, { rootMargin: '120px' }).observe(pist);
+  }
 
   /* ————— nyhetsbrev: Mailchimp via JSONP — besökaren stannar på sidan ————— */
   var nbrev = document.getElementById('nbrev');
