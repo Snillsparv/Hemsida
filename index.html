@@ -296,6 +296,22 @@
     50%{transform:translate(var(--tx,0px),calc(var(--ty,0px) - 13px)) rotate(calc(var(--r,0deg) + 2deg))}
   }
 
+  /* ————— hej-gästen: Jonas kikar in från kanten, vinkar och glider ut igen ————— */
+  #hejgast{position:fixed;left:0;bottom:-6px;z-index:90;width:min(38vw,200px);
+           pointer-events:none;transform:translateX(-110%);transform-origin:34% 100%;
+           filter:drop-shadow(14px 10px 34px rgba(0,0,0,.55))}
+  #hejgast.visas{animation:hejgast 6.4s ease-in-out both}
+  @media (max-width:700px){ #hejgast{width:32vw} }
+  @keyframes hejgast{
+    0%{transform:translateX(-110%) rotate(-14deg)}
+    15%{transform:translateX(-13%) rotate(8deg)}
+    24%{transform:translateX(-10%) rotate(3.5deg)}
+    33%{transform:translateX(-12%) rotate(7.5deg)}
+    42%{transform:translateX(-10%) rotate(4deg)}
+    50%,84%{transform:translateX(-11%) rotate(6deg)}
+    100%{transform:translateX(-112%) rotate(-16deg)}
+  }
+
   /* ————— videor: spelare bäddas in först vid klick ————— */
   .vgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:2.6rem 1.4rem;width:100%;margin-top:clamp(4rem,9vh,6rem);align-items:start}
   .vplayer{display:grid;gap:1.15rem;justify-items:center;text-align:center;min-width:0;margin:0}
@@ -945,6 +961,31 @@
       if (e.animationName === 'kstuds') o.classList.remove('studs');
     });
   });
+
+  /* ————— hej-gästen: en stund efter laddningen kikar Jonas in från
+     kanten, vinkar, stannar ett par sekunder och glider ut. En gång per
+     besök — eller varje gång med ?hej i adressen (för att provtitta). */
+  (function(){
+    var direkt = /[?&]hej(&|=|$)/.test(location.search);
+    if (reduced || /[?&]redigera/.test(location.search)) return;
+    try { if (!direkt && sessionStorage.getItem('jve-hej')) return; } catch(e){}
+    function visa(){
+      if (document.hidden) { setTimeout(visa, 4000); return; }
+      try { sessionStorage.setItem('jve-hej','1'); } catch(e){}
+      var b = document.createElement('img');
+      b.id = 'hejgast'; b.alt = ''; b.setAttribute('aria-hidden','true');
+      b.decoding = 'async'; b.src = 'assets/img/hej.webp';
+      b.addEventListener('animationend', function(){ b.remove(); });
+      b.addEventListener('error', function(){ b.remove(); });
+      document.body.appendChild(b);
+      function igang(){ requestAnimationFrame(function(){ b.classList.add('visas'); }); }
+      if (b.complete && b.naturalWidth) igang(); else b.addEventListener('load', igang);
+    }
+    (function vanta(){
+      if (!laddarKlar) { setTimeout(vanta, 400); return; }
+      setTimeout(visa, direkt ? 700 : 4500);
+    })();
+  })();
 
   /* ————— nyhetsbrev: Mailchimp via JSONP — besökaren stannar på sidan ————— */
   var nbrev = document.getElementById('nbrev');
