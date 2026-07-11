@@ -295,8 +295,8 @@
   .vram{position:relative;width:100%;aspect-ratio:16/9;background:#0b0b0d;border:1px solid var(--hair);overflow:hidden;transition:border-color .3s ease}
   .vram iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
   .vfasad{position:absolute;inset:0;width:100%;height:100%;display:grid;place-items:center;background:transparent;border:0;cursor:pointer;padding:0}
-  .vth{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.65;filter:grayscale(.25);transition:opacity .45s ease,filter .45s ease}
-  .vfasad:is(:hover,:focus-visible) .vth{opacity:.85;filter:grayscale(0)}
+  .vth{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+  .vfasad:is(:hover,:focus-visible) .vth{transform:scale(1.03)}
   .vplayer:is(:hover,:focus-within) .vram{border-color:var(--ink)}
   .vspela{position:relative;z-index:1;width:60px;height:60px;border-radius:50%;display:grid;place-items:center;
           background:rgba(5,5,6,.55);border:1px solid rgba(234,230,220,.45);backdrop-filter:blur(3px);
