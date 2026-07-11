@@ -373,9 +373,9 @@
   #lscen{display:grid;place-items:center;padding:1.5rem}
   #lscen>*{grid-area:1/1}
   #lring{position:relative;transition:opacity .5s ease,transform .5s ease}
-  #lsiffror{display:flex;align-items:baseline;justify-content:center;gap:.55em}
-  .lpi{font-family:'Fraunces',Georgia,serif;font-style:italic;font-size:clamp(1.9rem,6.2vw,3rem);color:var(--mist);line-height:1}
-  #lnum{font-family:var(--mono);font-size:clamp(2.1rem,7vw,3.3rem);letter-spacing:.06em;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1;min-width:7.5ch;text-align:left}
+  #lsiffror{display:grid;place-content:center;justify-items:center;row-gap:1.1rem}
+  #lnum{font-family:var(--mono);font-size:clamp(2.1rem,7vw,3.3rem);letter-spacing:.06em;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1;min-width:7.5ch;text-align:center}
+  .ldec{font-family:var(--mono);font-size:calc(.56rem * var(--mini));letter-spacing:.42em;text-transform:uppercase;color:var(--mist);padding-left:.42em}
   #lfras{
     opacity:0;transform:translateY(9px);
     transition:opacity .6s ease .14s,transform .6s ease .14s;
@@ -435,8 +435,8 @@
   <div id="lscen">
     <div id="lring">
       <div id="lsiffror">
-        <span class="lpi" aria-hidden="true">π</span>
         <span id="lnum">0</span>
+        <span class="ldec">laddade decimaler</span>
       </div>
     </div>
     <p id="lfras"><span id="lfrastxt"></span><span class="lmark" aria-hidden="true"></span></p>

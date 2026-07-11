@@ -139,6 +139,16 @@
     g = cv.getContext('2d');
     if (!g) return;
     wrap.appendChild(cv);
+    // synka svävningen: CSS-animationer får sin fas från när elementet skapas,
+    // så klockans animation måste ärva bildens starttid för att gunga i takt
+    try {
+      var ia = img.getAnimations()[0], ca = cv.getAnimations()[0];
+      if (ia && ca) { ca.startTime = ia.startTime; }
+      else if (ca) { cv.style.animation = 'none'; img.style.animation = 'none'; }
+    } catch (e) {
+      cv.style.animation = 'none';
+      img.style.animation = 'none';
+    }
     if (img.complete && img.naturalWidth) rita();
     else img.addEventListener('load', rita);
     setInterval(tick, 1000);
