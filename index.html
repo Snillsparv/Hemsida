@@ -117,7 +117,12 @@
     .merits .dot{display:none}
   }
   .ctas{display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;margin-top:3rem}
-  .cue{width:1px;height:52px;margin-top:5vh;background:linear-gradient(var(--ink),transparent);opacity:.5;animation:cue 3.2s ease-in-out infinite}
+  .cue{width:1px;height:52px;margin-top:5vh;position:relative;
+       background:linear-gradient(var(--ink),color-mix(in srgb, var(--ink) 40%, transparent));
+       opacity:.5;animation:cue 3.2s ease-in-out infinite}
+  .cue::after{content:"";position:absolute;left:50%;bottom:0;width:7px;height:7px;
+       border-right:1px solid var(--ink);border-bottom:1px solid var(--ink);
+       transform:translate(-50%,32%) rotate(45deg);opacity:.6}
   @keyframes cue{0%,100%{opacity:.15}50%{opacity:.6}}
 
   /* ————— primära CTA:er: gul TEXT, inga plattor — minimalistiskt och tidlöst ————— */
