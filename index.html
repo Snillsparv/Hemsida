@@ -44,7 +44,7 @@
     --sans:'Space Grotesk',system-ui,sans-serif;
     --mono:'JetBrains Mono',ui-monospace,monospace;
   }
-  *{margin:0;padding:0;box-sizing:border-box}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html{scroll-behavior:smooth;background:var(--bg)}
   html.noscroll{overflow:hidden}
   body{
@@ -56,6 +56,7 @@
   ::selection{background:var(--ink);color:var(--bg)}
   a{color:inherit}
   :focus-visible{outline:2px solid var(--ink);outline-offset:5px;border-radius:2px}
+  :focus:not(:focus-visible){outline:none}
 
   /* ————— nav ————— */
   .nav{
