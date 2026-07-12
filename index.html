@@ -305,9 +305,7 @@
      bara huvudet och den vinkande handen tittar fram — och drar sig ut igen ————— */
   #hejgast{position:fixed;left:0;top:50%;z-index:90;width:min(32vw,170px);
            pointer-events:none;transform:translate(-110%,-50%);transform-origin:0% 100%;
-           filter:drop-shadow(0 0 12px rgba(255,209,102,.55))
-                  drop-shadow(0 0 30px rgba(255,209,102,.25))
-                  drop-shadow(10px 8px 26px rgba(0,0,0,.5))}
+           filter:url(#neonkant) drop-shadow(10px 8px 26px rgba(0,0,0,.5))}
   #hejgast.visas{animation:hejgast 3.35s ease-in-out both}
   @media (max-width:700px){ #hejgast{width:33vw} }
   @keyframes hejgast{
@@ -722,6 +720,20 @@
   </section>
 
 </main>
+
+<!-- neonkant: guldlinje som följer hej-bildens silhuett (dilaterad alfa bakom fotot) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="neonkant" x="-25%" y="-25%" width="150%" height="150%">
+    <feMorphology in="SourceAlpha" operator="dilate" radius="2" result="fet"/>
+    <feFlood flood-color="#ffd166" flood-opacity=".95" result="guld"/>
+    <feComposite in="guld" in2="fet" operator="in" result="kant"/>
+    <feGaussianBlur in="kant" stdDeviation="5" result="glod"/>
+    <feMerge>
+      <feMergeNode in="glod"/><feMergeNode in="glod"/>
+      <feMergeNode in="kant"/><feMergeNode in="SourceGraphic"/>
+    </feMerge>
+  </filter>
+</svg>
 
 <footer>
   <div class="rad" style="margin-bottom:1.2rem">
