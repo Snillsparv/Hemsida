@@ -724,10 +724,10 @@
 <!-- neonkant: guldlinje som följer hej-bildens silhuett (dilaterad alfa bakom fotot) -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <filter id="neonkant" x="-25%" y="-25%" width="150%" height="150%">
-    <feMorphology in="SourceAlpha" operator="dilate" radius="2" result="fet"/>
-    <feFlood flood-color="#ffd166" flood-opacity=".95" result="guld"/>
+    <feMorphology in="SourceAlpha" operator="dilate" radius=".75" result="fet"/>
+    <feFlood flood-color="#5fb2ff" flood-opacity=".95" result="guld"/>
     <feComposite in="guld" in2="fet" operator="in" result="kant"/>
-    <feGaussianBlur in="kant" stdDeviation="5" result="glod"/>
+    <feGaussianBlur in="kant" stdDeviation="4" result="glod"/>
     <feMerge>
       <feMergeNode in="glod"/><feMergeNode in="glod"/>
       <feMergeNode in="kant"/><feMergeNode in="SourceGraphic"/>
