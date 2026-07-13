@@ -11,7 +11,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.jonasvonessen.se/">
 <link rel="canonical" href="https://www.jonasvonessen.se/">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230c0c0d'/%3E%3Ctext x='32' y='45' font-size='34' text-anchor='middle' fill='%23eae6dc' font-family='Georgia,serif'%3E%CF%80%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23e23b4e'/%3E%3Ctext x='32' y='45' font-size='34' text-anchor='middle' fill='%23eae6dc' font-family='Georgia,serif'%3E%CF%80%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/fonts.css">
 <script type="application/ld+json">
 {
@@ -46,6 +46,7 @@
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html{scroll-behavior:smooth;background:var(--bg)}
+  html,body{overflow-x:hidden;overflow-x:clip}   /* aldrig vågrät rullningslist */
   html.noscroll{overflow:hidden}
   body{
     background:var(--bg);color:var(--ink);
@@ -304,11 +305,10 @@
   #hejgast{position:absolute;left:0;top:50vh;z-index:90;width:min(32vw,280px);
            pointer-events:none;transform:translate(-110%,-50%);transform-origin:0% 100%;
            filter:drop-shadow(10px 8px 26px rgba(0,0,0,.5))}
-  #hejgast.visas{animation:hejgast 1.9s cubic-bezier(.2,.9,.25,1) both}
+  #hejgast.visas{animation:hejgast 1.8s cubic-bezier(.16,1,.3,1) both}
   @media (max-width:700px){ #hejgast{width:33vw} }
   @keyframes hejgast{
     0%{transform:translate(-108%,-50%) rotate(0deg)}
-    70%{transform:translate(-76%,-50%) rotate(26deg)}
     100%{transform:translate(-77%,-50%) rotate(25deg)}
   }
 
@@ -530,7 +530,7 @@
           <p class="meta aft">Gratis · Minnesknep för varje land</p>
         </div>
         <div class="pvis" data-line data-min=".35">
-          <div class="globpromo globpromo--geo" id="glob3d"><img src="assets/img/ensam-geografi.webp" alt="Jordglob där varje land är ett handritat konstverk" loading="lazy"></div>
+          <div class="globpromo globpromo--geo" id="glob3d"><img src="assets/img/ensam-geografi.webp" alt="Jordglob där varje land är ett handritat konstverk" loading="lazy" width="760" height="1036"></div>
         </div>
       </div>
     </article>
@@ -550,7 +550,7 @@
           <p class="meta aft">Gratis · 2.0 tolv gånger · 160/160</p>
         </div>
         <div class="pvis" data-line data-min=".35">
-          <div class="globpromo globpromo--hp"><img src="assets/img/ensam-hp.webp" alt="HPAkuten: svarsblankett, timer och delprovsböcker" loading="lazy"></div>
+          <div class="globpromo globpromo--hp"><img src="assets/img/ensam-hp.webp" alt="HPAkuten: svarsblankett, timer och delprovsböcker" loading="lazy" width="760" height="1125"></div>
         </div>
       </div>
     </article>
@@ -570,7 +570,7 @@
           <p class="meta aft">Gratis · Trevlig mattehjälp</p>
         </div>
         <div class="pvis" data-line data-min=".35">
-          <div class="globpromo globpromo--tab" id="tabspel"><img src="assets/img/ensam-tabellen.webp" alt="Gångertabellen som färgglad interaktiv tavla" loading="lazy"></div>
+          <div class="globpromo globpromo--tab" id="tabspel"><img src="assets/img/ensam-tabellen.webp" alt="Gångertabellen som färgglad interaktiv tavla" loading="lazy" width="760" height="883"></div>
         </div>
       </div>
     </article>
@@ -649,13 +649,13 @@
         <p class="meta" style="margin-top:0">Håll dig uppdaterad!</p>
         <div class="soc">
           <a class="ig" href="https://www.instagram.com/jonasvonessen/" target="_blank" rel="noopener">
-            <img src="assets/img/soc-instagram.webp" alt="" aria-hidden="true" loading="lazy">
+            <img src="assets/img/soc-instagram.webp" alt="" aria-hidden="true" loading="lazy" width="340" height="352">
             Instagram</a>
           <a class="tt" href="https://www.tiktok.com/@jonasvonessen" target="_blank" rel="noopener">
-            <img src="assets/img/soc-tiktok.webp" alt="" aria-hidden="true" loading="lazy">
+            <img src="assets/img/soc-tiktok.webp" alt="" aria-hidden="true" loading="lazy" width="340" height="349">
             TikTok</a>
           <a class="yt" href="https://www.youtube.com/@BlueberryClubSparven" target="_blank" rel="noopener">
-            <img src="assets/img/soc-youtube.webp" alt="" aria-hidden="true" loading="lazy">
+            <img src="assets/img/soc-youtube.webp" alt="" aria-hidden="true" loading="lazy" width="340" height="349">
             YouTube</a>
         </div>
       </div>
@@ -1103,8 +1103,37 @@
     }
     (function vanta(){
       if (!laddarKlar) { setTimeout(vanta, 400); return; }
-      setTimeout(visa, direkt ? 700 : 2000);
+      setTimeout(visa, direkt ? 700 : 1200);
     })();
+  })();
+
+  /* ————— ankarvakt: laddas bilder eller byggs moduler om medan sidan
+     glider mot ett ankare hamnar målet fel — knäpp rätt när scrollen
+     stannat. Avbryts om besökaren tar över med hjul eller finger. ————— */
+  (function(){
+    var mal = null, tidur = null, frist = 0;
+    document.addEventListener('click', function(e){
+      var a = e.target.closest ? e.target.closest('a[href^="#"]') : null;
+      if (!a) return;
+      var el = document.getElementById((a.getAttribute('href') || '').slice(1));
+      if (!el) return;
+      mal = el; frist = Date.now() + 6000;
+      vakta();
+    });
+    function avbryt(){ mal = null; }
+    window.addEventListener('wheel', avbryt, { passive: true });
+    window.addEventListener('touchstart', avbryt, { passive: true });
+    function vakta(){
+      clearTimeout(tidur);
+      tidur = setTimeout(function(){
+        if (!mal) return;
+        if (Date.now() > frist) { mal = null; return; }
+        var d = mal.getBoundingClientRect().top - 56;   // scroll-margin-top 3.5rem
+        if (Math.abs(d) > 24) scrollBy({ top: d, left: 0, behavior: 'instant' });
+        mal = null;
+      }, 260);
+    }
+    window.addEventListener('scroll', function(){ if (mal) vakta(); }, { passive: true });
   })();
 
   /* ————— π-strömmen i sidfoten pausar när den inte syns ————— */
