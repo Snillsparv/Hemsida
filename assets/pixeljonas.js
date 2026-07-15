@@ -1,0 +1,255 @@
+/* pixeljonas — en liten pixelfigur (Jonas i röd tröja) som springer fram
+   och tillbaka, hoppar och vinkar på linjen under kontaktformuläret.
+   Helt ritad i kod — inga bildfiler. Pausar när scenen inte syns. */
+(function () {
+  'use strict';
+  var scen = document.querySelector('.pixelscen');
+  if (!scen || !window.HTMLCanvasElement) return;
+  var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* spriten: 14x20 pixlar, sex frames — "." är genomskinlig */
+  var SPRITE = {
+    width: 14, height: 20,
+    palette: {"H":"#7a4a24","S":"#f6c99f","E":"#22242e","M":"#803024","R":"#e23b4e","P":"#3a4468","K":"#8a5a2b"},
+    frames: {
+      idle: [
+        '..............',
+        '..............',
+        '....H.HH.H....',
+        '....HHHHHH....',
+        '...HHHHHHHH...',
+        '...HHHHHHHH...',
+        '...HHSSSSSS...',
+        '...HSSESSES...',
+        '.....SSMMMS...',
+        '......SSSS....',
+        '....RRRRRR....',
+        '...RRRRRRRR...',
+        '...SRRRRRRS...',
+        '...SRRRRRRS...',
+        '...SPPPPPPS...',
+        '....PPPPPP....',
+        '....PP..PP....',
+        '....PP..PP....',
+        '....PP..PP....',
+        '....KKK.KKK...',
+      ],
+      run1: [
+        '..............',
+        '..............',
+        '.....H.HH.H...',
+        '.....HHHHHH...',
+        '....HHHHHHHH..',
+        '....HHHHHHHH..',
+        '....HHSSSSSS..',
+        '....HSSESSES..',
+        '......SSMMMS..',
+        '.......SSSS...',
+        '....RRRRRR....',
+        '...RRRRRRRR...',
+        '..SSRRRRRRSS..',
+        '....RRRRRR....',
+        '....PPPPPP....',
+        '...PPP..PPP...',
+        '..KKP....PP...',
+        '.........PP...',
+        '.........PP...',
+        '.........KKK..',
+      ],
+      run2: [
+        '..............',
+        '..............',
+        '.....H.HH.H...',
+        '.....HHHHHH...',
+        '....HHHHHHHH..',
+        '....HHHHHHHH..',
+        '....HHSSSSSS..',
+        '....HSSESSES..',
+        '......SSMMMS..',
+        '.......SSSS...',
+        '....RRRRRR....',
+        '...RRRRRRRR...',
+        '...SRRRRRRS...',
+        '....RRRRRR....',
+        '....PPPPPP....',
+        '....PPP.PPP...',
+        '....PP...KKK..',
+        '....PP........',
+        '....PP........',
+        '....KKK.......',
+      ],
+      jump: [
+        '..............',
+        '..............',
+        '..............',
+        '....H.HH.H....',
+        '....HHHHHH....',
+        '...HHHHHHHH...',
+        '...HHHHHHHH...',
+        '...HHSSSSSS...',
+        '...HSSESSES...',
+        '..S..SSMMMS.S.',
+        '..R...SSSS..R.',
+        '..RRRRRRRRRR..',
+        '....RRRRRR....',
+        '....RRRRRR....',
+        '....PPPPPP....',
+        '...PPP..PPP...',
+        '..KKK....KKK..',
+        '..............',
+        '..............',
+        '..............',
+      ],
+      vinka1: [
+        '...........SS.',
+        '...........S..',
+        '....H.HH.H.S..',
+        '....HHHHHH.S..',
+        '...HHHHHHHHS..',
+        '...HHHHHHHHR..',
+        '...HHSSSSSSR..',
+        '...HSSESSESR..',
+        '.....SSMMMSR..',
+        '......SSSS.R..',
+        '....RRRRRRRR..',
+        '...RRRRRRRR...',
+        '...SRRRRRR....',
+        '...SRRRRRR....',
+        '...SPPPPPP....',
+        '....PPPPPP....',
+        '....PP..PP....',
+        '....PP..PP....',
+        '....PP..PP....',
+        '....KKK.KKK...',
+      ],
+      vinka2: [
+        '..............',
+        '..............',
+        '....H.HH.H....',
+        '....HHHHHH....',
+        '...HHHHHHHH.SS',
+        '...HHHHHHHH.S.',
+        '...HHSSSSSSR..',
+        '...HSSESSESR..',
+        '.....SSMMMSR..',
+        '......SSSS.R..',
+        '....RRRRRRRR..',
+        '...RRRRRRRR...',
+        '...SRRRRRR....',
+        '...SRRRRRR....',
+        '...SPPPPPP....',
+        '....PPPPPP....',
+        '....PP..PP....',
+        '....PP..PP....',
+        '....PP..PP....',
+        '....KKK.KKK...',
+      ],
+    }
+  };
+
+  var SKALA = 3;
+  var W = SPRITE.width * SKALA, H = SPRITE.height * SKALA;
+  var cv = document.createElement('canvas');
+  cv.className = 'pixfig';
+  cv.width = SPRITE.width;
+  cv.height = SPRITE.height;
+  cv.style.width = W + 'px';
+  cv.style.height = H + 'px';
+  scen.appendChild(cv);
+  var g = cv.getContext('2d');
+  if (!g) return;
+
+  var ritad = '';
+  function rita(namn) {
+    if (namn === ritad) return;
+    ritad = namn;
+    var f = SPRITE.frames[namn];
+    g.clearRect(0, 0, cv.width, cv.height);
+    for (var y = 0; y < f.length; y++) {
+      for (var x = 0; x < f[y].length; x++) {
+        var farg = SPRITE.palette[f[y].charAt(x)];
+        if (farg) { g.fillStyle = farg; g.fillRect(x, y, 1, 1); }
+      }
+    }
+  }
+
+  function spann() { return Math.max(20, scen.clientWidth - W); }
+
+  /* stillsam variant: står och vinkar i mitten */
+  if (reduced) {
+    rita('vinka1');
+    cv.style.transform = 'translateX(' + Math.round(spann() / 2) + 'px)';
+    return;
+  }
+
+  var x = 6, dir = 1, mal = 0;
+  var FART = 46;                     // px/s
+  var lage = 'spring';               // spring | vinka | sta
+  var lageT = 0, lageSlut = 0;
+  var stegT = 0, steg = 0;           // springsteg / vinkväxling
+  var hoppT = -1;                    // 0..1 medan hopp pågår
+  var synlig = false, rafId = 0, senast = 0;
+
+  function nyttMal() {
+    var s = spann();
+    mal = 6 + Math.random() * (s - 12);
+    if (Math.abs(mal - x) < 40) mal = x < s / 2 ? s - 8 : 8;
+    dir = mal > x ? 1 : -1;
+    lage = 'spring';
+  }
+  nyttMal();
+
+  function tick(ts) {
+    rafId = 0;
+    if (!synlig || document.hidden) { senast = 0; return; }
+    var dt = senast ? Math.min(0.05, (ts - senast) / 1000) : 0.016;
+    senast = ts;
+    var hoppY = 0;
+
+    if (hoppT >= 0) {                                  // hopp ovanpå pågående läge
+      hoppT += dt / 0.55;
+      if (hoppT >= 1) { hoppT = -1; }
+      else { hoppY = Math.round(15 * Math.sin(Math.PI * hoppT)); }
+    }
+
+    if (lage === 'spring') {
+      x += dir * FART * dt;
+      stegT += dt;
+      if (stegT > 0.13) { stegT = 0; steg = 1 - steg; }
+      rita(hoppT >= 0 ? 'jump' : (steg ? 'run2' : 'run1'));
+      if (hoppT < 0 && Math.random() < dt * 0.35) hoppT = 0;   // ibland: skutt
+      if ((dir > 0 && x >= mal) || (dir < 0 && x <= mal)) {
+        x = mal;
+        lage = Math.random() < 0.62 ? 'vinka' : 'sta';
+        lageT = 0;
+        lageSlut = lage === 'vinka' ? 1.5 + Math.random() * 1.1 : 0.4 + Math.random() * 0.6;
+        stegT = 0; steg = 0;
+      }
+    } else {
+      lageT += dt;
+      if (lage === 'vinka') {
+        stegT += dt;
+        if (stegT > 0.24) { stegT = 0; steg = 1 - steg; }
+        rita(hoppT >= 0 ? 'jump' : (steg ? 'vinka2' : 'vinka1'));
+        if (hoppT < 0 && Math.random() < dt * 0.25) hoppT = 0; // glädjeskutt mitt i vinket
+      } else {
+        rita(hoppT >= 0 ? 'jump' : 'idle');
+      }
+      if (lageT >= lageSlut) nyttMal();
+    }
+
+    cv.style.transform = 'translate(' + Math.round(x) + 'px,' + (-hoppY) + 'px) scaleX(' + dir + ')';
+    rafId = requestAnimationFrame(tick);
+  }
+
+  function start() { if (!rafId && synlig && !document.hidden) rafId = requestAnimationFrame(tick); }
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (en) {
+      synlig = en[0].isIntersecting;
+      if (synlig) start();
+    }, { rootMargin: '60px' }).observe(scen);
+  } else { synlig = true; start(); }
+  document.addEventListener('visibilitychange', start);
+  addEventListener('resize', function () { x = Math.min(x, spann()); mal = Math.min(mal, spann()); });
+})();

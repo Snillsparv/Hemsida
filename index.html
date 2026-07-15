@@ -319,6 +319,9 @@
   @media (prefers-reduced-motion:no-preference){ .nbplan{animation:kflyt 7.4s ease-in-out -2s infinite} }
   @media (max-width:700px){ .nbplan{left:auto;right:3vw;top:-34%;width:clamp(60px,15vw,92px)} }
 
+  /* ————— pixel-Jonas: liten figur som springer och vinkar under formuläret ————— */
+  .pixelscen{position:relative;height:60px;margin-top:2.6rem;border-bottom:1px solid var(--hair)}
+  .pixfig{position:absolute;left:0;bottom:0;image-rendering:pixelated;transform-origin:50% 100%}
   .kformhus{width:min(100%,30rem);margin-top:3.5rem}
   .kformhus form{width:100%;margin-top:0}
   .kformhus .tack{margin-inline:auto}
@@ -728,6 +731,7 @@
       <div class="tack" role="status" aria-live="polite">
         <p class="big" style="font-size:clamp(1.2rem,1rem + 1.2vw,1.6rem)">Tack. Jag hör av mig! :)</p>
       </div>
+      <div class="pixelscen" aria-hidden="true"></div>
       </div>
     </div>
   </section>
@@ -750,6 +754,7 @@
 <script defer src="assets/glob3d.js"></script>
 <script defer src="assets/tabspel.js"></script>
 <script defer src="assets/hpur.js"></script>
+<script defer src="assets/pixeljonas.js"></script>
 <script>
 (function(){
   'use strict';
