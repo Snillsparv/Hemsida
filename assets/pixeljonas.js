@@ -2,8 +2,9 @@
    och tillbaka, hoppar, vinkar, står och blinkar, rabblar ibland några
    pi-decimaler i en pratbubbla (och fortsätter där han slutade), tar en
    tupplur och drömmer om pokaler, klappar en hund som kommer på besök,
-   gör någon enstaka gång en volt — och besegrar efter en minuts tittande
-   en AI-robot med sitt gröna lasersvärd. Helt ritad i kod. */
+   gör någon enstaka gång en volt, besegrar efter en minuts tittande en
+   AI-robot med sitt gröna lasersvärd — och den som klickar på honom får
+   mata honom med chokladkakor. Helt ritad i kod. */
 (function () {
   'use strict';
   var scen = document.querySelector('.pixelscen');
@@ -13,7 +14,7 @@
   /* spriten: 14x20 pixlar, tolv frames — "." är genomskinlig */
   var SPRITE = {
     width: 14, height: 20,
-    palette: {"H":"#7a4a24","S":"#f6c99f","E":"#22242e","M":"#803024","R":"#e23b4e","P":"#3a4468","K":"#8a5a2b","G":"#45ff70","g":"#b9ffc9","D":"#9aa3ae"},
+    palette: {"H":"#7a4a24","S":"#f6c99f","E":"#22242e","M":"#803024","R":"#e23b4e","P":"#3a4468","K":"#8a5a2b","G":"#45ff70","g":"#b9ffc9","D":"#9aa3ae","C":"#6b4226"},
     frames: {
       idle: [
         '..............',
@@ -345,6 +346,50 @@
         '....PP..PP....',
         '....KKK.KKK...',
       ],
+      ata1: [
+        '..............',
+        '..............',
+        '....H.HH.H....',
+        '....HHHHHH....',
+        '...HHHHHHHH...',
+        '...HHHHHHHH...',
+        '...HHSSSSSS...',
+        '...HSSESSES...',
+        '...SCCCCCCS...',
+        '...R..SSSS.R..',
+        '....RRRRRR....',
+        '...RRRRRRRR...',
+        '....RRRRRR....',
+        '....RRRRRR....',
+        '....PPPPPP....',
+        '....PPPPPP....',
+        '....PP..PP....',
+        '....PP..PP....',
+        '....PP..PP....',
+        '....KKK.KKK...',
+      ],
+      ata2: [
+        '..............',
+        '..............',
+        '....H.HH.H....',
+        '....HHHHHH....',
+        '...HHHHHHHH...',
+        '...HHHHHHHH...',
+        '...HHSSSSSS...',
+        '...HSSESSES...',
+        '.....SSMEMS...',
+        '...SCCCCCCS...',
+        '....RRRRRR....',
+        '...RRRRRRRR...',
+        '....RRRRRR....',
+        '....RRRRRR....',
+        '....PPPPPP....',
+        '....PPPPPP....',
+        '....PP..PP....',
+        '....PP..PP....',
+        '....PP..PP....',
+        '....KKK.KKK...',
+      ],
     }
   };
 
@@ -500,6 +545,36 @@
     }
   };
 
+  /* chokladkakan (foliekant + brytrutor) och tackhjärtat */
+  var CHOK = {
+    width: 10, height: 6,
+    palette: {"C":"#6b4226","D":"#4a2c17","W":"#c9ced6"},
+    frames: {
+      hel: [
+        'WWDDDDDDDD',
+        'WWCCDCCDCC',
+        'WWCCDCCDCC',
+        'WWCCDCCDCC',
+        'WWCCDCCDCC',
+        'WWDDDDDDDD',
+      ],
+    }
+  };
+  var HJARTA = {
+    width: 7, height: 6,
+    palette: {"V":"#ff6b8a"},
+    frames: {
+      hjarta: [
+        '.VV.VV.',
+        'VVVVVVV',
+        'VVVVVVV',
+        '.VVVVV.',
+        '..VVV..',
+        '...V...',
+      ],
+    }
+  };
+
   var SKALA = 3;
   function nyCanvas(sprite, klass) {
     var c = document.createElement('canvas');
@@ -508,6 +583,7 @@
     c.height = sprite.height;
     c.style.width = sprite.width * SKALA + 'px';
     c.style.height = sprite.height * SKALA + 'px';
+    c.style.pointerEvents = 'none';               // bara Jonas själv är klickbar
     scen.appendChild(c);
     return c;
   }
@@ -683,6 +759,29 @@
     scen.dataset.robot = robot.fas;
   }
 
+  /* chokladmatningen: klicka på Jonas — han hoppar till, fångar och mumsar */
+  var CHOKW = CHOK.width * SKALA;
+  var chokCv = nyCanvas(CHOK, 'pixfig pixchok');
+  chokCv.style.opacity = '0';
+  nyRitare(chokCv, CHOK)('hel');
+  var hjartaCv = nyCanvas(HJARTA, 'pixfig pixhjarta');
+  hjartaCv.style.opacity = '0';
+  nyRitare(hjartaCv, HJARTA)('hjarta');
+  var chokX = 0, chokY = 0, hjartaT = -1;
+
+  cv.style.pointerEvents = 'auto';
+  cv.style.cursor = 'pointer';
+  cv.addEventListener('pointerdown', function () {
+    if (lage === 'fanga' || lage === 'ata' || lage === 'strid' ||
+        lage === 'klappa' || voltT >= 0) return;
+    bubbla.classList.remove('syns');              // ev. rabbel/dröm avbryts
+    lage = 'fanga'; lageT = 0; lageSlut = 6;      // nödutgång
+    hoppT = 0;                                    // hoppar till av klicket!
+    chokX = x + (W - CHOKW) / 2;
+    chokY = -84;
+    chokCv.style.opacity = '1';
+  });
+
   function nyttMal() {
     var s = spann();
     mal = 6 + Math.random() * (s - 12);
@@ -806,6 +905,20 @@
         if (robot.fas === 'in') rita(avst < 130 ? (avst < 88 ? 'svardupp' : 'svarddra') : 'idle');
         else if (robot.fas === 'fall') rita(robot.t < 0.45 ? 'svardhugg' : 'svardupp');
         else rita('svardupp');                          // standoff, anfall, segerskutt
+      } else if (lage === 'fanga') {                    // chokladkakan är på väg ner
+        rita(hoppT >= 0 ? 'jump' : 'idle');
+        chokY += 115 * dt;
+        chokCv.style.transform = 'translate(' + Math.round(chokX) + 'px,' + Math.round(chokY) +
+          'px) rotate(' + Math.round(Math.sin(chokY * 0.08) * 10) + 'deg)';
+        if (chokY >= -30) {                             // fångad i höjd med munnen!
+          chokCv.style.opacity = '0';
+          lage = 'ata'; lageT = 0; lageSlut = 1.7;
+          stegT = 0; steg = 0;
+        }
+      } else if (lage === 'ata') {                      // mums, mums
+        stegT += dt;
+        if (stegT > 0.24) { stegT = 0; steg = 1 - steg; }
+        rita(steg ? 'ata2' : 'ata1');
       } else {                                          // står stilla, tittar och blinkar
         blinkOm -= dt;
         if (blinkOm <= 0) { blinkOm = 1.2 + Math.random() * 2.4; blinkT = 0.13; }
@@ -829,6 +942,15 @@
           robot.fas = ''; robotCv.style.opacity = '0';
           nyttMal();
         }
+        else if (lage === 'fanga') {                    // nödutgång: kakan togs bort
+          chokCv.style.opacity = '0';
+          nyttMal();
+        }
+        else if (lage === 'ata') {                      // tack för kakan! ett hjärta
+          hjartaT = 0;
+          lage = 'sta'; lageT = 0; lageSlut = 0.9 + Math.random() * 0.8;
+          blinkOm = 0.5; blinkT = 0;
+        }
         else if (lage === 'vinka' && Math.random() < 0.45) { // efter vinket: stå kvar en stund
           lage = 'sta'; lageT = 0; lageSlut = 1 + Math.random() * 2.2;
           blinkOm = 0.7 + Math.random() * 1.5;
@@ -839,6 +961,16 @@
     aktivT += dt;
     uppdateraHund(dt);
     uppdateraRobot(dt);
+
+    if (hjartaT >= 0) {                                // tackhjärtat svävar uppåt
+      hjartaT += dt / 1.1;
+      if (hjartaT >= 1) { hjartaT = -1; hjartaCv.style.opacity = '0'; }
+      else {
+        hjartaCv.style.opacity = (hjartaT < 0.55 ? 1 : (1 - hjartaT) / 0.45).toFixed(2);
+        hjartaCv.style.transform = 'translate(' + Math.round(x + W / 2 - 10) + 'px,' +
+          Math.round(-H + 4 - 22 * hjartaT) + 'px)';
+      }
+    }
 
     var rot = voltT >= 0 ? Math.round(voltT * 360) : 0;
     cv.style.transform = 'translate(' + Math.round(x) + 'px,' + (-hoppY) + 'px) rotate(' + rot + 'deg) scaleX(' + dir + ')';
