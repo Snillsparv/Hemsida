@@ -1,8 +1,9 @@
 /* pixeljonas — en liten pixelfigur (Jonas i röd tröja) som springer fram
    och tillbaka, hoppar, vinkar, står och blinkar, rabblar ibland några
    pi-decimaler i en pratbubbla (och fortsätter där han slutade), tar en
-   tupplur och drömmer om pokaler, klappar en hund som kommer på besök —
-   och gör någon enstaka gång en volt. Helt ritad i kod. */
+   tupplur och drömmer om pokaler, klappar en hund som kommer på besök,
+   gör någon enstaka gång en volt — och besegrar efter en minuts tittande
+   en AI-robot med sitt gröna lasersvärd. Helt ritad i kod. */
 (function () {
   'use strict';
   var scen = document.querySelector('.pixelscen');
@@ -12,7 +13,7 @@
   /* spriten: 14x20 pixlar, tolv frames — "." är genomskinlig */
   var SPRITE = {
     width: 14, height: 20,
-    palette: {"H":"#7a4a24","S":"#f6c99f","E":"#22242e","M":"#803024","R":"#e23b4e","P":"#3a4468","K":"#8a5a2b"},
+    palette: {"H":"#7a4a24","S":"#f6c99f","E":"#22242e","M":"#803024","R":"#e23b4e","P":"#3a4468","K":"#8a5a2b","G":"#45ff70","g":"#b9ffc9","D":"#9aa3ae"},
     frames: {
       idle: [
         '..............',
@@ -278,6 +279,72 @@
         '.HHHHRRRRRPPP.',
         '.HSSHRRRRRPKKK',
       ],
+      svarddra: [
+        '..............',
+        '..............',
+        '....H.HH.H....',
+        '....HHHHHH....',
+        '...HHHHHHHH...',
+        '...HHHHHHHHD..',
+        '...HHSSSSSSD..',
+        '...HSSESSESS..',
+        '.....SSMMMSR..',
+        '......SSSS.R..',
+        '....RRRRRRRR..',
+        '...RRRRRRRR...',
+        '...SRRRRRR....',
+        '...SRRRRRR....',
+        '...SPPPPPP....',
+        '....PPPPPP....',
+        '....PP..PP....',
+        '....PP..PP....',
+        '....PP..PP....',
+        '....KKK.KKK...',
+      ],
+      svardupp: [
+        '...........g..',
+        '...........G..',
+        '....H.HH.H.G..',
+        '....HHHHHH.G..',
+        '...HHHHHHHHG..',
+        '...HHHHHHHHD..',
+        '...HHSSSSSSD..',
+        '...HSSESSESS..',
+        '.....SSMMMSR..',
+        '......SSSS.R..',
+        '....RRRRRRRR..',
+        '...RRRRRRRR...',
+        '...SRRRRRR....',
+        '...SRRRRRR....',
+        '...SPPPPPP....',
+        '....PPPPPP....',
+        '....PP..PP....',
+        '....PP..PP....',
+        '....PP..PP....',
+        '....KKK.KKK...',
+      ],
+      svardhugg: [
+        '..............',
+        '..............',
+        '....H.HH.H....',
+        '....HHHHHH....',
+        '...HHHHHHHH..g',
+        '...HHHHHHHH..G',
+        '...HHSSSSSS..G',
+        '...HSSESSES..G',
+        '.....SSMMMS.G.',
+        '......SSSS..G.',
+        '....RRRRRR..G.',
+        '...RRRRRRRRSS.',
+        '...SRRRRRR....',
+        '...SRRRRRR....',
+        '...SPPPPPP....',
+        '....PPPPPP....',
+        '....PP..PP....',
+        '....PP..PP....',
+        '....PP..PP....',
+        '....KKK.KKK...',
+      ],
     }
   };
 
@@ -333,6 +400,102 @@
         '..K...KKKKKK..',
         '.....KKKKK.KK.',
         '.....KKKK..KK.',
+      ],
+    }
+  };
+
+  /* AI-roboten: 14x20 pixlar, marscherar in efter en minuts tittande */
+  var ROBOT = {
+    width: 14, height: 20,
+    palette: {"L":"#9aa3ae","D":"#4d545e","E":"#ff4b4b","A":"#6ec1ff","G":"#2a2e35"},
+    frames: {
+      sta: [
+        '.......A......',
+        '.......D......',
+        '....DDDDDD....',
+        '...DLLLLLLD...',
+        '...DLEEEELD...',
+        '...DLLLLLLD...',
+        '....DDDDDD....',
+        '......DD......',
+        '..DDDDDDDDDD..',
+        '..DDLLLLLLDD..',
+        '..DDLLAALLDD..',
+        '..DDLLAALLDD..',
+        '..DDLLLLLLDD..',
+        '...DLLLLLLD...',
+        '....DDDDDD....',
+        '....DD..DD....',
+        '....DD..DD....',
+        '....DD..DD....',
+        '....DD..DD....',
+        '...DDD..DDD...',
+      ],
+      ga1: [
+        '.......A......',
+        '.......D......',
+        '....DDDDDD....',
+        '...DLLLLLLD...',
+        '...DLEEEELD...',
+        '...DLLLLLLD...',
+        '....DDDDDD....',
+        '......DD......',
+        '..DDDDDDDDDD..',
+        '..DDLLLLLLDD..',
+        '..DDLLAALLDD..',
+        '..DDLLAALLDD..',
+        '..DDLLLLLLDD..',
+        '...DLLLLLLD...',
+        '....DDDDDD....',
+        '...DD....DD...',
+        '...DD....DD...',
+        '..DD......DD..',
+        '..DD......DD..',
+        '.DDD......DDD.',
+      ],
+      ga2: [
+        '.......A......',
+        '.......D......',
+        '....DDDDDD....',
+        '...DLLLLLLD...',
+        '...DLEEEELD...',
+        '...DLLLLLLD...',
+        '....DDDDDD....',
+        '......DD......',
+        '..DDDDDDDDDD..',
+        '..DDLLLLLLDD..',
+        '..DDLLAALLDD..',
+        '..DDLLAALLDD..',
+        '..DDLLLLLLDD..',
+        '...DLLLLLLD...',
+        '....DDDDDD....',
+        '....DD..DD....',
+        '....DD..DD....',
+        '....DD..DD....',
+        '....DD..DD....',
+        '...DDD..DDD...',
+      ],
+      trasig: [
+        '......A.......',
+        '.......D......',
+        '....DDDDDD....',
+        '...DLLLLLLD...',
+        '...DLGGGGLD...',
+        '...DLLGLLLD...',
+        '....DDDDDD....',
+        '......DD......',
+        '..DDDDDDDDDD..',
+        '..DDLGLLLLDD..',
+        '..DDLLGGLLDD..',
+        '..DDLLGGLLDD..',
+        '..DDLGLLGLDD..',
+        '...DLLLLLLD...',
+        '....DDDDDD....',
+        '....DD..DD....',
+        '....DD..DD....',
+        '....DD..DD....',
+        '....DD..DD....',
+        '...DDD..DDD...',
       ],
     }
   };
@@ -469,6 +632,57 @@
     scen.dataset.hund = hund.fas;
   }
 
+  /* roboten: belöning för den som tittar länge — marsch, standoff, duell */
+  var ROBW = ROBOT.width * SKALA;
+  var robotCv = nyCanvas(ROBOT, 'pixfig pixrobot');
+  robotCv.style.opacity = '0';
+  var ritaRobot = nyRitare(robotCv, ROBOT);
+  var robot = { fas: '', x: -60, dir: 1, mal: 0, t: 0, steg: 0, stegT: 0 };
+  var aktivT = 0, senasteRobot = -100;
+
+  function uppdateraRobot(dt) {
+    if (!robot.fas) return;
+    robot.stegT += dt;
+    if (robot.stegT > 0.16) { robot.stegT = 0; robot.steg = 1 - robot.steg; }
+    if (robot.fas === 'in') {                            // olycksbådande marsch
+      robot.x += robot.dir * 62 * dt;
+      ritaRobot(robot.steg ? 'ga2' : 'ga1');
+      if ((robot.dir > 0 && robot.x >= robot.mal) || (robot.dir < 0 && robot.x <= robot.mal)) {
+        robot.x = robot.mal; robot.fas = 'standoff'; robot.t = 0;
+      }
+    } else if (robot.fas === 'standoff') {               // de mäter varandra med blicken
+      robot.t += dt;
+      ritaRobot('sta');
+      if (robot.t > 0.75) { robot.fas = 'anfall'; robot.t = 0; }
+    } else if (robot.fas === 'anfall') {                 // Jonas rusar fram
+      x += dir * 150 * dt;
+      ritaRobot('sta');
+      if (Math.abs(robot.x - x) < 32) { robot.fas = 'fall'; robot.t = 0; }
+    } else if (robot.fas === 'fall') {                   // träffad: välter och slocknar
+      robot.t += dt / 0.7;
+      ritaRobot('trasig');
+      if (robot.t >= 1) {
+        robot.fas = 'seger'; robot.t = 0;
+        robotCv.style.opacity = '0';
+        hoppT = 0;                                       // segerskutt!
+      }
+    } else if (robot.fas === 'seger') {                  // svärdet i vädret en stund
+      robot.t += dt;
+      if (robot.t > 1.5) {
+        robot.fas = '';
+        lage = 'sta'; lageT = 0; lageSlut = 0.9;
+        blinkOm = 0.5; blinkT = 0;
+      }
+    }
+    if (robot.fas && robot.fas !== 'seger') {
+      var vinkel = robot.fas === 'fall' ? Math.round(-88 * Math.min(1, robot.t) * robot.dir) : 0;
+      robotCv.style.opacity = robot.fas === 'fall'
+        ? String(Math.max(0, 1 - Math.max(0, robot.t - 0.55) / 0.45).toFixed(2)) : '1';
+      robotCv.style.transform = 'translate(' + Math.round(robot.x) + 'px,0) rotate(' + vinkel + 'deg) scaleX(' + robot.dir + ')';
+    }
+    scen.dataset.robot = robot.fas;
+  }
+
   function nyttMal() {
     var s = spann();
     mal = 6 + Math.random() * (s - 12);
@@ -507,7 +721,21 @@
           cv.style.transformOrigin = '50% 50%';
         } else { hoppT = 0; }
       }
-      if ((dir > 0 && x >= mal) || (dir < 0 && x <= mal)) {
+      if (robot.fas === '' && hoppT < 0 && voltT < 0 &&
+          aktivT > 60 && aktivT - senasteRobot > 100) {   // den tålmodige belönas
+        senasteRobot = aktivT;
+        lage = 'strid'; lageT = 0; lageSlut = 30;         // nödutgång om något hakar
+        var vr = x > spann() / 2;                         // roboten tar sidan med plats
+        robot.fas = 'in';
+        robot.dir = vr ? 1 : -1;
+        robot.x = vr ? -ROBW - 20 : spann() + ROBW + 20;
+        robot.mal = vr ? x - 72 : x + 72;
+        robot.t = 0; robot.stegT = 0; robot.steg = 0;
+        robotCv.style.opacity = '1';
+        dir = vr ? -1 : 1;                                // Jonas vänder sig mot hotet
+        stegT = 0; steg = 0;
+      }
+      if (lage === 'spring' && ((dir > 0 && x >= mal) || (dir < 0 && x <= mal))) {
         x = mal;
         var br = spann();
         if (ts - senasteHund > 35000 && Math.random() < 0.14) {  // ibland: hundbesök!
@@ -573,6 +801,11 @@
         if (stegT > 0.32) { stegT = 0; steg = 1 - steg; }
         rita(hoppT >= 0 ? 'jump' :
              (hund.fas === 'klapp' ? (steg ? 'klappa2' : 'klappa1') : 'idle'));
+      } else if (lage === 'strid') {                    // AI-roboten: fram med lasersvärdet
+        var avst = Math.abs(robot.x - x);
+        if (robot.fas === 'in') rita(avst < 130 ? (avst < 88 ? 'svardupp' : 'svarddra') : 'idle');
+        else if (robot.fas === 'fall') rita(robot.t < 0.45 ? 'svardhugg' : 'svardupp');
+        else rita('svardupp');                          // standoff, anfall, segerskutt
       } else {                                          // står stilla, tittar och blinkar
         blinkOm -= dt;
         if (blinkOm <= 0) { blinkOm = 1.2 + Math.random() * 2.4; blinkT = 0.13; }
@@ -592,6 +825,10 @@
           lage = 'vinka'; lageT = 0; lageSlut = 1.4;
           stegT = 0; steg = 0;
         }
+        else if (lage === 'strid') {                    // nödutgång: roboten släcks
+          robot.fas = ''; robotCv.style.opacity = '0';
+          nyttMal();
+        }
         else if (lage === 'vinka' && Math.random() < 0.45) { // efter vinket: stå kvar en stund
           lage = 'sta'; lageT = 0; lageSlut = 1 + Math.random() * 2.2;
           blinkOm = 0.7 + Math.random() * 1.5;
@@ -599,7 +836,9 @@
       }
     }
 
+    aktivT += dt;
     uppdateraHund(dt);
+    uppdateraRobot(dt);
 
     var rot = voltT >= 0 ? Math.round(voltT * 360) : 0;
     cv.style.transform = 'translate(' + Math.round(x) + 'px,' + (-hoppY) + 'px) rotate(' + rot + 'deg) scaleX(' + dir + ')';
