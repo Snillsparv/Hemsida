@@ -1,6 +1,6 @@
 /* pixeljonas — en liten pixelfigur (Jonas i röd tröja) som springer fram
-   och tillbaka, hoppar och vinkar på linjen under kontaktformuläret.
-   Helt ritad i kod — inga bildfiler. Pausar när scenen inte syns. */
+   och tillbaka, hoppar, vinkar, står och blinkar — och gör någon enstaka
+   gång en volt. Helt ritad i kod. Pausar när scenen inte syns. */
 (function () {
   'use strict';
   var scen = document.querySelector('.pixelscen');
@@ -21,6 +21,28 @@
         '...HHHHHHHH...',
         '...HHSSSSSS...',
         '...HSSESSES...',
+        '.....SSMMMS...',
+        '......SSSS....',
+        '....RRRRRR....',
+        '...RRRRRRRR...',
+        '...SRRRRRRS...',
+        '...SRRRRRRS...',
+        '...SPPPPPPS...',
+        '....PPPPPP....',
+        '....PP..PP....',
+        '....PP..PP....',
+        '....PP..PP....',
+        '....KKK.KKK...',
+      ],
+      blink: [
+        '..............',
+        '..............',
+        '....H.HH.H....',
+        '....HHHHHH....',
+        '...HHHHHHHH...',
+        '...HHHHHHHH...',
+        '...HHSSSSSS...',
+        '...HSSSSSSS...',
         '.....SSMMMS...',
         '......SSSS....',
         '....RRRRRR....',
@@ -188,6 +210,8 @@
   var lageT = 0, lageSlut = 0;
   var stegT = 0, steg = 0;           // springsteg / vinkväxling
   var hoppT = -1;                    // 0..1 medan hopp pågår
+  var voltT = -1, senasteVolt = 0;   // 0..1 medan volt pågår (sällsynt)
+  var blinkOm = 1.5, blinkT = 0;     // blinkning i stillastående
   var synlig = false, rafId = 0, senast = 0;
 
   function nyttMal() {
@@ -206,7 +230,11 @@
     senast = ts;
     var hoppY = 0;
 
-    if (hoppT >= 0) {                                  // hopp ovanpå pågående läge
+    if (voltT >= 0) {                                  // volt: högre luftfärd + helsnurr
+      voltT += dt / 0.8;
+      if (voltT >= 1) { voltT = -1; cv.style.transformOrigin = ''; }
+      else { hoppY = Math.round(24 * Math.sin(Math.PI * voltT)); }
+    } else if (hoppT >= 0) {                           // hopp ovanpå pågående läge
       hoppT += dt / 0.55;
       if (hoppT >= 1) { hoppT = -1; }
       else { hoppY = Math.round(15 * Math.sin(Math.PI * hoppT)); }
@@ -216,14 +244,21 @@
       x += dir * FART * dt;
       stegT += dt;
       if (stegT > 0.13) { stegT = 0; steg = 1 - steg; }
-      rita(hoppT >= 0 ? 'jump' : (steg ? 'run2' : 'run1'));
-      if (hoppT < 0 && Math.random() < dt * 0.35) hoppT = 0;   // ibland: skutt
+      rita(hoppT >= 0 || voltT >= 0 ? 'jump' : (steg ? 'run2' : 'run1'));
+      if (hoppT < 0 && voltT < 0 && Math.random() < dt * 0.35) {
+        if (ts - senasteVolt > 20000 && Math.random() < 0.14 &&
+            Math.abs(mal - x) > 60) {                             // sällsynt: volt!
+          voltT = 0; senasteVolt = ts;
+          cv.style.transformOrigin = '50% 50%';
+        } else { hoppT = 0; }
+      }
       if ((dir > 0 && x >= mal) || (dir < 0 && x <= mal)) {
         x = mal;
-        lage = Math.random() < 0.62 ? 'vinka' : 'sta';
+        lage = Math.random() < 0.55 ? 'vinka' : 'sta';
         lageT = 0;
-        lageSlut = lage === 'vinka' ? 1.5 + Math.random() * 1.1 : 0.4 + Math.random() * 0.6;
+        lageSlut = lage === 'vinka' ? 1.6 + Math.random() * 1.4 : 1.2 + Math.random() * 2.6;
         stegT = 0; steg = 0;
+        blinkOm = 0.9 + Math.random() * 1.8; blinkT = 0;
       }
     } else {
       lageT += dt;
@@ -232,13 +267,24 @@
         if (stegT > 0.24) { stegT = 0; steg = 1 - steg; }
         rita(hoppT >= 0 ? 'jump' : (steg ? 'vinka2' : 'vinka1'));
         if (hoppT < 0 && Math.random() < dt * 0.25) hoppT = 0; // glädjeskutt mitt i vinket
-      } else {
-        rita(hoppT >= 0 ? 'jump' : 'idle');
+      } else {                                          // står stilla, tittar och blinkar
+        blinkOm -= dt;
+        if (blinkOm <= 0) { blinkOm = 1.2 + Math.random() * 2.4; blinkT = 0.13; }
+        if (blinkT > 0) blinkT -= dt;
+        rita(hoppT >= 0 ? 'jump' : (blinkT > 0 ? 'blink' : 'idle'));
+        if (Math.random() < dt * 0.45) dir = -dir;      // kikar åt andra hållet
       }
-      if (lageT >= lageSlut) nyttMal();
+      if (lageT >= lageSlut) {
+        if (lage === 'vinka' && Math.random() < 0.45) { // efter vinket: stå kvar en stund
+          lage = 'sta'; lageT = 0; lageSlut = 1 + Math.random() * 2.2;
+          blinkOm = 0.7 + Math.random() * 1.5;
+        } else { nyttMal(); }
+      }
     }
 
-    cv.style.transform = 'translate(' + Math.round(x) + 'px,' + (-hoppY) + 'px) scaleX(' + dir + ')';
+    var rot = voltT >= 0 ? Math.round(voltT * 360) : 0;
+    cv.style.transform = 'translate(' + Math.round(x) + 'px,' + (-hoppY) + 'px) rotate(' + rot + 'deg) scaleX(' + dir + ')';
+    scen.dataset.lage = voltT >= 0 ? 'volt' : lage;
     rafId = requestAnimationFrame(tick);
   }
 
