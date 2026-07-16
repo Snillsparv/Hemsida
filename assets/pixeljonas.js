@@ -1,13 +1,14 @@
 /* pixeljonas — en liten pixelfigur (Jonas i röd tröja) som springer fram
-   och tillbaka, hoppar, vinkar, står och blinkar — och gör någon enstaka
-   gång en volt. Helt ritad i kod. Pausar när scenen inte syns. */
+   och tillbaka, hoppar, vinkar, står och blinkar, rabblar ibland några
+   pi-decimaler i en pratbubbla (och fortsätter där han slutade) — och gör
+   någon enstaka gång en volt. Helt ritad i kod. Pausar när scenen inte syns. */
 (function () {
   'use strict';
   var scen = document.querySelector('.pixelscen');
   if (!scen || !window.HTMLCanvasElement) return;
   var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* spriten: 14x20 pixlar, sex frames — "." är genomskinlig */
+  /* spriten: 14x20 pixlar, åtta frames — "." är genomskinlig */
   var SPRITE = {
     width: 14, height: 20,
     palette: {"H":"#7a4a24","S":"#f6c99f","E":"#22242e","M":"#803024","R":"#e23b4e","P":"#3a4468","K":"#8a5a2b"},
@@ -45,6 +46,28 @@
         '...HSSSSSSS...',
         '.....SSMMMS...',
         '......SSSS....',
+        '....RRRRRR....',
+        '...RRRRRRRR...',
+        '...SRRRRRRS...',
+        '...SRRRRRRS...',
+        '...SPPPPPPS...',
+        '....PPPPPP....',
+        '....PP..PP....',
+        '....PP..PP....',
+        '....PP..PP....',
+        '....KKK.KKK...',
+      ],
+      prat: [
+        '..............',
+        '..............',
+        '....H.HH.H....',
+        '....HHHHHH....',
+        '...HHHHHHHH...',
+        '...HHHHHHHH...',
+        '...HHSSSSSS...',
+        '...HSSESSES...',
+        '.....SSMEMS...',
+        '......SEES....',
         '....RRRRRR....',
         '...RRRRRRRR...',
         '...SRRRRRRS...',
@@ -206,13 +229,30 @@
 
   var x = 6, dir = 1, mal = 0;
   var FART = 46;                     // px/s
-  var lage = 'spring';               // spring | vinka | sta
+  var lage = 'spring';               // spring | vinka | sta | rabbla
   var lageT = 0, lageSlut = 0;
   var stegT = 0, steg = 0;           // springsteg / vinkväxling
   var hoppT = -1;                    // 0..1 medan hopp pågår
   var voltT = -1, senasteVolt = 0;   // 0..1 medan volt pågår (sällsynt)
   var blinkOm = 1.5, blinkT = 0;     // blinkning i stillastående
   var synlig = false, rafId = 0, senast = 0;
+
+  /* pi-rabblet: han fortsätter där han slutade, decimal för decimal */
+  var RABBEL = '14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196';
+  var rabbelPos = 0, rabbelKvar = 0, senasteRabbel = 0;
+  var bubbla = document.createElement('div');
+  bubbla.className = 'pratbubbla';
+  scen.appendChild(bubbla);
+
+  function placeraBubbla() {
+    var s = scen.clientWidth;
+    var mitt = x + W / 2;
+    var bw = bubbla.offsetWidth || 40;
+    var c = Math.max(bw / 2 + 2, Math.min(s - bw / 2 - 2, mitt));
+    bubbla.style.left = Math.round(c) + 'px';
+    var pil = Math.max(8 - bw / 2, Math.min(bw / 2 - 8, mitt - c));
+    bubbla.style.setProperty('--pil', Math.round(pil) + 'px');
+  }
 
   function nyttMal() {
     var s = spann();
@@ -254,9 +294,18 @@
       }
       if ((dir > 0 && x >= mal) || (dir < 0 && x <= mal)) {
         x = mal;
-        lage = Math.random() < 0.55 ? 'vinka' : 'sta';
+        if (ts - senasteRabbel > 9000 && Math.random() < 0.28) { // ibland: rabbla pi
+          lage = 'rabbla'; senasteRabbel = ts;
+          rabbelKvar = 6 + Math.floor(Math.random() * 8);
+          lageSlut = rabbelKvar * 0.22 + 1.4;
+          bubbla.textContent = rabbelPos ? '…' : '3,';
+          bubbla.classList.add('syns');
+          placeraBubbla();
+        } else {
+          lage = Math.random() < 0.55 ? 'vinka' : 'sta';
+          lageSlut = lage === 'vinka' ? 1.6 + Math.random() * 1.4 : 1.2 + Math.random() * 2.6;
+        }
         lageT = 0;
-        lageSlut = lage === 'vinka' ? 1.6 + Math.random() * 1.4 : 1.2 + Math.random() * 2.6;
         stegT = 0; steg = 0;
         blinkOm = 0.9 + Math.random() * 1.8; blinkT = 0;
       }
@@ -267,6 +316,16 @@
         if (stegT > 0.24) { stegT = 0; steg = 1 - steg; }
         rita(hoppT >= 0 ? 'jump' : (steg ? 'vinka2' : 'vinka1'));
         if (hoppT < 0 && Math.random() < dt * 0.25) hoppT = 0; // glädjeskutt mitt i vinket
+      } else if (lage === 'rabbla') {                   // står och rabblar pi-decimaler
+        stegT += dt;
+        if (rabbelKvar > 0 && stegT > 0.22) {
+          stegT = 0; steg = 1 - steg;
+          bubbla.textContent += RABBEL.charAt(rabbelPos % RABBEL.length);
+          rabbelPos++; rabbelKvar--;
+          if (!rabbelKvar) bubbla.textContent += '…';
+          placeraBubbla();
+        }
+        rita(hoppT >= 0 ? 'jump' : (rabbelKvar > 0 && steg ? 'prat' : 'idle'));
       } else {                                          // står stilla, tittar och blinkar
         blinkOm -= dt;
         if (blinkOm <= 0) { blinkOm = 1.2 + Math.random() * 2.4; blinkT = 0.13; }
@@ -275,7 +334,8 @@
         if (Math.random() < dt * 0.45) dir = -dir;      // kikar åt andra hållet
       }
       if (lageT >= lageSlut) {
-        if (lage === 'vinka' && Math.random() < 0.45) { // efter vinket: stå kvar en stund
+        if (lage === 'rabbla') { bubbla.classList.remove('syns'); nyttMal(); }
+        else if (lage === 'vinka' && Math.random() < 0.45) { // efter vinket: stå kvar en stund
           lage = 'sta'; lageT = 0; lageSlut = 1 + Math.random() * 2.2;
           blinkOm = 0.7 + Math.random() * 1.5;
         } else { nyttMal(); }

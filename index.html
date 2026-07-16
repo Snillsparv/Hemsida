@@ -322,6 +322,20 @@
   /* ————— pixel-Jonas: liten figur som springer och vinkar under formuläret ————— */
   .pixelscen{position:relative;height:60px;margin-top:2.6rem;border-bottom:1px solid var(--hair)}
   .pixfig{position:absolute;left:0;bottom:0;image-rendering:pixelated;transform-origin:50% 100%}
+  .pratbubbla{
+    position:absolute;left:0;bottom:64px;transform:translate(-50%,4px);
+    background:#161614;border:1px solid var(--hair);padding:.32rem .5rem;
+    font:500 10px/1 var(--mono);letter-spacing:.08em;color:var(--ink);
+    white-space:nowrap;pointer-events:none;opacity:0;
+    transition:opacity .22s ease,transform .22s ease;
+  }
+  .pratbubbla.syns{opacity:1;transform:translate(-50%,0)}
+  .pratbubbla::after{
+    content:"";position:absolute;left:calc(50% + var(--pil,0px));bottom:-3.5px;
+    width:6px;height:6px;background:#161614;
+    border-right:1px solid var(--hair);border-bottom:1px solid var(--hair);
+    transform:translateX(-50%) rotate(45deg);
+  }
   .kformhus{width:min(100%,30rem);margin-top:3.5rem}
   .kformhus form{width:100%;margin-top:0}
   .kformhus .tack{margin-inline:auto}
