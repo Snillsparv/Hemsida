@@ -1,4 +1,5 @@
-/* pixeljonas — en liten pixelfigur (Jonas i röd tröja) som springer fram
+/* pixeljonas — en liten pixelfigur (Jonas i röd tröja och olikfärgade
+   strumpor, en gul och en turkos) som springer fram
    och tillbaka, hoppar, vinkar, står och blinkar, rabblar ibland några
    pi-decimaler i en pratbubbla (och fortsätter där han slutade), tar en
    tupplur och drömmer om pokaler, klappar en hund som kommer på besök,
@@ -14,7 +15,7 @@
   /* spriten: 14x20 pixlar, tolv frames — "." är genomskinlig */
   var SPRITE = {
     width: 14, height: 20,
-    palette: {"H":"#7a4a24","S":"#f6c99f","E":"#22242e","M":"#803024","R":"#e23b4e","P":"#3a4468","K":"#8a5a2b","G":"#45ff70","g":"#b9ffc9","D":"#9aa3ae","C":"#6b4226"},
+    palette: {"H":"#7a4a24","S":"#f6c99f","E":"#22242e","M":"#803024","R":"#e23b4e","P":"#3a4468","K":"#8a5a2b","G":"#45ff70","g":"#b9ffc9","D":"#9aa3ae","C":"#6b4226","Y":"#ffd166","T":"#4ecdc4"},
     frames: {
       idle: [
         '..............',
@@ -34,8 +35,8 @@
         '...SPPPPPPS...',
         '....PPPPPP....',
         '....PP..PP....',
-        '....PP..PP....',
-        '....PP..PP....',
+        '....YY..TT....',
+        '....YY..TT....',
         '....KKK.KKK...',
       ],
       blink: [
@@ -56,8 +57,8 @@
         '...SPPPPPPS...',
         '....PPPPPP....',
         '....PP..PP....',
-        '....PP..PP....',
-        '....PP..PP....',
+        '....YY..TT....',
+        '....YY..TT....',
         '....KKK.KKK...',
       ],
       prat: [
@@ -78,8 +79,8 @@
         '...SPPPPPPS...',
         '....PPPPPP....',
         '....PP..PP....',
-        '....PP..PP....',
-        '....PP..PP....',
+        '....YY..TT....',
+        '....YY..TT....',
         '....KKK.KKK...',
       ],
       run1: [
@@ -99,9 +100,9 @@
         '....RRRRRR....',
         '....PPPPPP....',
         '...PPP..PPP...',
-        '..KKP....PP...',
-        '.........PP...',
-        '.........PP...',
+        '..KKY....PP...',
+        '.........TT...',
+        '.........TT...',
         '.........KKK..',
       ],
       run2: [
@@ -121,9 +122,9 @@
         '....RRRRRR....',
         '....PPPPPP....',
         '....PPP.PPP...',
-        '....PP...KKK..',
-        '....PP........',
-        '....PP........',
+        '....PP..TKKK..',
+        '....YY........',
+        '....YY........',
         '....KKK.......',
       ],
       jump: [
@@ -142,7 +143,7 @@
         '....RRRRRR....',
         '....RRRRRR....',
         '....PPPPPP....',
-        '...PPP..PPP...',
+        '...YPP..PPT...',
         '..KKK....KKK..',
         '..............',
         '..............',
@@ -166,8 +167,8 @@
         '...SPPPPPP....',
         '....PPPPPP....',
         '....PP..PP....',
-        '....PP..PP....',
-        '....PP..PP....',
+        '....YY..TT....',
+        '....YY..TT....',
         '....KKK.KKK...',
       ],
       vinka2: [
@@ -188,8 +189,8 @@
         '...SPPPPPP....',
         '....PPPPPP....',
         '....PP..PP....',
-        '....PP..PP....',
-        '....PP..PP....',
+        '....YY..TT....',
+        '....YY..TT....',
         '....KKK.KKK...',
       ],
       klappa1: [
@@ -210,8 +211,8 @@
         '...SPPPPPP....',
         '....PPPPPP....',
         '....PP..PP....',
-        '....PP..PP....',
-        '....PP..PP....',
+        '....YY..TT....',
+        '....YY..TT....',
         '....KKK.KKK...',
       ],
       klappa2: [
@@ -232,8 +233,8 @@
         '...SPPPPPP.SS.',
         '....PPPPPP....',
         '....PP..PP....',
-        '....PP..PP....',
-        '....PP..PP....',
+        '....YY..TT....',
+        '....YY..TT....',
         '....KKK.KKK...',
       ],
       sov1: [
@@ -255,8 +256,8 @@
         '..............',
         '..............',
         '.HHHH.........',
-        '.HHHHRRRRRPPP.',
-        '.HSSHRRRRRPKKK',
+        '.HHHHRRRRRPPT.',
+        '.HSSHRRRRRYKKK',
       ],
       sov2: [
         '..............',
@@ -277,8 +278,8 @@
         '..............',
         '.....RRR......',
         '.HHHH.........',
-        '.HHHHRRRRRPPP.',
-        '.HSSHRRRRRPKKK',
+        '.HHHHRRRRRPPT.',
+        '.HSSHRRRRRYKKK',
       ],
       svarddra: [
         '..............',
@@ -298,8 +299,8 @@
         '...SPPPPPP....',
         '....PPPPPP....',
         '....PP..PP....',
-        '....PP..PP....',
-        '....PP..PP....',
+        '....YY..TT....',
+        '....YY..TT....',
         '....KKK.KKK...',
       ],
       svardupp: [
@@ -320,8 +321,8 @@
         '...SPPPPPP....',
         '....PPPPPP....',
         '....PP..PP....',
-        '....PP..PP....',
-        '....PP..PP....',
+        '....YY..TT....',
+        '....YY..TT....',
         '....KKK.KKK...',
       ],
       svardhugg: [
@@ -342,8 +343,8 @@
         '...SPPPPPP....',
         '....PPPPPP....',
         '....PP..PP....',
-        '....PP..PP....',
-        '....PP..PP....',
+        '....YY..TT....',
+        '....YY..TT....',
         '....KKK.KKK...',
       ],
       ata1: [
@@ -364,8 +365,8 @@
         '....PPPPPP....',
         '....PPPPPP....',
         '....PP..PP....',
-        '....PP..PP....',
-        '....PP..PP....',
+        '....YY..TT....',
+        '....YY..TT....',
         '....KKK.KKK...',
       ],
       ata2: [
@@ -386,8 +387,8 @@
         '....PPPPPP....',
         '....PPPPPP....',
         '....PP..PP....',
-        '....PP..PP....',
-        '....PP..PP....',
+        '....YY..TT....',
+        '....YY..TT....',
         '....KKK.KKK...',
       ],
     }
