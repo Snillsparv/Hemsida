@@ -47,6 +47,8 @@
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html{scroll-behavior:smooth;background:var(--bg)}
   html,body{overflow-x:hidden;overflow-x:clip}   /* aldrig vågrät rullningslist */
+  html{scrollbar-width:none}                     /* göm lodrät rullningslist … */
+  html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none} /* … även i äldre webkit */
   html.noscroll{overflow:hidden}
   body{
     background:var(--bg);color:var(--ink);
