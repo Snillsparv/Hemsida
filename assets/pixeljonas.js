@@ -1,7 +1,8 @@
 /* pixeljonas — en liten pixelfigur (Jonas i röd tröja) som springer fram
    och tillbaka, hoppar, vinkar, står och blinkar, rabblar ibland några
    pi-decimaler i en pratbubbla (och fortsätter där han slutade), tar en
-   tupplur och drömmer om pokaler, klappar en hund som kommer på besök,
+   tupplur och drömmer om pokaler eller räknar hoppande får, klappar en
+   hund som kommer på besök,
    gör någon enstaka gång en volt, besegrar efter en minuts tittande en
    AI-robot med sitt gröna lasersvärd — och den som klickar på honom får
    mata honom med chokladkakor. Helt ritad i kod. */
@@ -575,6 +576,34 @@
     }
   };
 
+  /* drömfåren: små ulliga får som hoppar över den sovande */
+  var FAR = {
+    width: 12, height: 8,
+    palette: {"U":"#e8e4da","F":"#2b2b30"},
+    frames: {
+      far1: [
+        '...UUUUUU...',
+        '.F.UUUUUUUU.',
+        'FFUUUUUUUUU.',
+        'FFUUUUUUUUUU',
+        '..UUUUUUUUU.',
+        '...F....F...',
+        '...F....F...',
+        '..F......F..',
+      ],
+      far2: [
+        '...UUUUUU...',
+        '.F.UUUUUUUU.',
+        'FFUUUUUUUUU.',
+        'FFUUUUUUUUUU',
+        '..UUUUUUUUU.',
+        '....F...F...',
+        '....F...F...',
+        '....F...F...',
+      ],
+    }
+  };
+
   var SKALA = 3;
   function nyCanvas(sprite, klass) {
     var c = document.createElement('canvas');
@@ -659,14 +688,76 @@
     }
     return c;
   })();
+  /* fårräkningen: en pool av får som springer in från höger och hoppar */
+  var FARW = FAR.width * SKALA;
+  var farLista = [];
+  for (var fi = 0; fi < 4; fi++) {
+    var fCv = nyCanvas(FAR, 'pixfig pixfar');
+    fCv.style.opacity = '0';
+    farLista.push({ cv: fCv, rita: nyRitare(fCv, FAR), x: 0, aktiv: false, raknad: false, steg: 0, stegT: 0 });
+  }
+  var dromTyp = 'pokal', antalFar = 0, farNasta = 0, farText = null;
+  var minifar = (function () {
+    var c = document.createElement('canvas');
+    c.width = FAR.width; c.height = FAR.height;
+    c.style.cssText = 'width:24px;height:16px;image-rendering:pixelated;vertical-align:-3px;margin-right:.3rem';
+    nyRitare(c, FAR)('far2');
+    return c;
+  })();
+
+  function slappFar() {
+    for (var i = 0; i < farLista.length; i++) {
+      if (!farLista[i].aktiv) {
+        var f = farLista[i];
+        f.aktiv = true; f.raknad = false;
+        f.x = spann() + FARW + 10;
+        f.stegT = 0; f.steg = 0;
+        f.cv.style.opacity = '1';
+        return;
+      }
+    }
+  }
+
+  function uppdateraFar(dt) {
+    var mittJ = x + W / 2;
+    for (var i = 0; i < farLista.length; i++) {
+      var f = farLista[i];
+      if (!f.aktiv) continue;
+      f.x -= 100 * dt;
+      var mittF = f.x + FARW / 2;
+      var d = mittF - mittJ;
+      var hopp = 0;
+      if (d > -42 && d < 42) hopp = Math.round(22 * Math.sin(Math.PI * (d + 42) / 84));
+      if (!f.raknad && mittF < mittJ) {                 // ett får till räknat
+        f.raknad = true;
+        antalFar++;
+        if (lage === 'sov' && farText) farText.textContent = String(antalFar);
+      }
+      f.stegT += dt;
+      if (f.stegT > 0.12) { f.stegT = 0; f.steg = 1 - f.steg; }
+      f.rita(hopp > 2 ? 'far2' : (f.steg ? 'far2' : 'far1'));
+      f.cv.style.transform = 'translate(' + Math.round(f.x) + 'px,' + (-hopp) + 'px)';
+      if (f.x < -FARW - 12) { f.aktiv = false; f.cv.style.opacity = '0'; }
+    }
+    scen.dataset.far = String(antalFar);
+  }
+
   function visaDrom() {
     bubbla.classList.add('drom');
+    bubbla.classList.toggle('hog', dromTyp === 'far');
     bubbla.textContent = '';
-    bubbla.appendChild(trofe);
-    var z = document.createElement('span');
-    z.className = 'zz';
-    z.textContent = 'zzz';
-    bubbla.appendChild(z);
+    if (dromTyp === 'far') {                            // räkna får!
+      bubbla.appendChild(minifar);
+      farText = document.createElement('span');
+      farText.textContent = '…';
+      bubbla.appendChild(farText);
+    } else {                                            // pokaldrömmen
+      bubbla.appendChild(trofe);
+      var z = document.createElement('span');
+      z.className = 'zz';
+      z.textContent = 'zzz';
+      bubbla.appendChild(z);
+    }
     bubbla.classList.add('syns');
   }
 
@@ -851,13 +942,16 @@
           dir = vanster ? -1 : 1;                        // Jonas vänder sig mot hunden
         } else if (ts - senasteSomn > 28000 && Math.random() < 0.14) { // ibland: tupplur
           lage = 'sov'; senasteSomn = ts;
-          lageSlut = 4.5 + Math.random() * 3;
+          dromTyp = Math.random() < 0.5 ? 'far' : 'pokal';
+          antalFar = 0; farNasta = 0.2;
+          lageSlut = dromTyp === 'far' ? 6.5 + Math.random() * 2.5 : 4.5 + Math.random() * 3;
           dromPa = false;
+          scen.dataset.drom = dromTyp;
         } else if (ts - senasteRabbel > 9000 && Math.random() < 0.28) { // ibland: rabbla pi
           lage = 'rabbla'; senasteRabbel = ts;
           rabbelKvar = 6 + Math.floor(Math.random() * 8);
           lageSlut = rabbelKvar * 0.22 + 1.4;
-          bubbla.classList.remove('drom');
+          bubbla.classList.remove('drom'); bubbla.classList.remove('hog');
           bubbla.textContent = rabbelPos ? '…' : '3,';
           bubbla.classList.add('syns');
           placeraBubbla();
@@ -894,6 +988,10 @@
           dromPa = true;
           visaDrom();
           placeraBubbla(-10 * dir);                     // bubblan över huvudet, inte fötterna
+        }
+        if (dromPa && dromTyp === 'far') {              // släpp in nästa får
+          farNasta -= dt;
+          if (farNasta <= 0) { farNasta = 1.5 + Math.random() * 0.5; slappFar(); }
         }
       } else if (lage === 'klappa') {                   // hunden är på besök
         stegT += dt;
@@ -961,6 +1059,7 @@
     aktivT += dt;
     uppdateraHund(dt);
     uppdateraRobot(dt);
+    uppdateraFar(dt);
 
     if (hjartaT >= 0) {                                // tackhjärtat svävar uppåt
       hjartaT += dt / 1.1;
