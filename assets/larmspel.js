@@ -27,6 +27,8 @@
     'html.larm #hejgast{display:none}' +
     'html.larm .pixelscen.figurborta canvas,html.larm .pixelscen.figurborta .pratbubbla{visibility:hidden}' +   /* figuren blir spelaren */
     'html.larm .nav{transform:translateY(130vh) rotate(-8deg);transition:transform 1.3s cubic-bezier(.5,.02,.9,.55) .15s;pointer-events:none}' +
+    'html.larm #glob3d.boostlyser{animation:globsnurr .55s linear infinite;animation-play-state:running !important}' +
+    '@keyframes globsnurr{to{transform:rotate(360deg)}}' +
     'html.larmslut .nav{transition:transform 1.1s cubic-bezier(.16,1,.3,1)}' +
     'html.larm main{animation:larmskalv .18s linear 9}' +
     '@keyframes larmskalv{0%,100%{transform:translate(0,0)}25%{transform:translate(-6px,3px)}50%{transform:translate(5px,-4px)}75%{transform:translate(-4px,-3px)}}' +
@@ -77,6 +79,7 @@
     '#larmseger button:hover{background:rgba(87,217,138,.12);border-color:#57d98a}' +
     '@media (prefers-reduced-motion:reduce){' +
       'html.larm main{animation:none}' +
+      'html.larm #glob3d.boostlyser{animation:none}' +
       '#larmflash.blink{animation:none;background:rgba(255,30,20,.18)}' +
       '#larmflash.lugn{animation:none}' +
       '#larmhud .lh-varning{animation:none}' +
@@ -322,6 +325,20 @@
       n.start(t);
     }
     function hopp() { if (ctx) ton('square', 150, 330, nu(), 0.09, 0.06); }
+    function vind(glob) {                              // uppvinden — globen klingar till
+      if (!ctx) return;
+      var t = nu();
+      var n = ctx.createBufferSource(); n.buffer = brus(0.4);
+      var f = ctx.createBiquadFilter(); f.type = 'bandpass'; f.Q.value = 0.8;
+      f.frequency.setValueAtTime(500, t);
+      f.frequency.exponentialRampToValueAtTime(2400, t + 0.35);
+      var g = ctx.createGain();
+      g.gain.setValueAtTime(0.09, t);
+      g.gain.exponentialRampToValueAtTime(0.0008, t + 0.4);
+      n.connect(f); f.connect(g); g.connect(master);
+      n.start(t);
+      if (glob) ton('sine', 520, 1560, t, 0.4, 0.05);
+    }
     function boing() {                                 // studsmattan
       if (!ctx) return;
       var t = nu();
@@ -417,7 +434,7 @@
       if (gml) setTimeout(function () { try { gml.close(); } catch (e) {} }, 800);
     }
     return { start: start, siren: siren, muller: muller, dunk: dunk, klank: klank,
-             hopp: hopp, boing: boing, stomp: stomp, aj: aj, skott: skott,
+             hopp: hopp, vind: vind, boing: boing, stomp: stomp, aj: aj, skott: skott,
              robotvak: robotvak, fanfar: fanfar, plocka: plocka, jetStart: jetStart, jetStopp: jetStopp,
              dronStart: dronStart, dronStopp: dronStopp, tyst: tyst,
              arTyst: function () { return tystat; }, stangAv: stangAv };
@@ -579,6 +596,25 @@
     markY = varldH - 4;
     plattformar = [];
     fallna.forEach(function (f) { samlaPlattor(f.el, sy); });
+    matBoostZoner(sy);
+  }
+
+  /* ————— uppvindarna: appgrafiken bär en uppåt när man åker förbi ————— */
+  var boostZoner = [];
+  var ACCFARG = { bla: '#5fb2ff', lila: '#b18cff', gron: '#57d98a' };
+  var ACCRGB = { bla: '95,178,255', lila: '177,140,255', gron: '87,217,138' };
+  function matBoostZoner(sy) {
+    boostZoner.forEach(function (z) { z.el.classList.remove('boostlyser'); });
+    boostZoner = [];
+    [].forEach.call(document.querySelectorAll('.globpromo'), function (el) {
+      var r = el.getBoundingClientRect();
+      if (r.width < 40 || r.height < 40) return;
+      var proj = el.closest('.proj');
+      var acc = proj && proj.getAttribute('data-accent');
+      boostZoner.push({ el: el, x: r.left - 20, y: r.top + sy, w: r.width + 40, h: r.height,
+                        farg: ACCFARG[acc] || '#5fb2ff', rgb: ACCRGB[acc] || ACCRGB.bla,
+                        glob: el.id === 'glob3d', inne: false, sist: 0 });
+    });
   }
 
   /* ————— tangenter, pekare och touch-knappar ————— */
@@ -690,6 +726,33 @@
                          farg: fl ? '#ffd166' : '#ff8c3a', st: 3, g: 0 });
       }
     } else ljud.jetStopp();
+
+    /* uppvindarna: glid in framför appgrafiken och dras med uppåt */
+    if (!styrLast) {
+      for (var bz = 0; bz < boostZoner.length; bz++) {
+        var z = boostZoner[bz];
+        var inne = sp.x + 14 > z.x && sp.x - 14 < z.x + z.w &&
+                   sp.y > z.y && sp.y - SPH < z.y + z.h;
+        if (inne) {
+          sp.vy = Math.max(-700, sp.vy - 3200 * dt);
+          sp.mark = false;
+          z.sist = spel.t;
+          if (!z.inne) {                               // in i vinden: grafiken lyser till
+            z.inne = true;
+            if (z.glob) z.el.classList.add('boostlyser');   // globen snurrar loss
+            ljud.vind(z.glob);
+          }
+          if (Math.random() < dt * 40) {
+            partiklar.push({ x: sp.x - 16 + Math.random() * 32, y: sp.y - Math.random() * 30,
+                             vx: (Math.random() - 0.5) * 50, vy: -120 - Math.random() * 160,
+                             t: 0, liv: 0.4 + Math.random() * 0.25, farg: z.farg, st: 3, g: 0 });
+          }
+        } else if (z.inne && spel.t - z.sist > 0.45) {
+          z.inne = false;
+          if (z.glob) z.el.classList.remove('boostlyser');
+        }
+      }
+    }
 
     var fotY0 = sp.y;
     sp.x += sp.vx * dt;
@@ -1109,6 +1172,23 @@
     ritk.clearRect(0, 0, window.innerWidth, window.innerHeight);
     var sy = kamY;
 
+    /* uppvindarnas glöd i respektive appfärg */
+    for (var zg = 0; zg < boostZoner.length; zg++) {
+      var zo = boostZoner[zg];
+      if (!zo.sist) continue;
+      var sedan = spel.t - zo.sist;
+      if (!zo.inne && sedan > 0.5) continue;
+      var alfa = (zo.inne ? 0.3 : 0.3 * (1 - sedan / 0.5)) * (0.8 + 0.2 * Math.sin(spel.t * 9));
+      var zcx = zo.x + zo.w / 2, zcy = zo.y + zo.h / 2 - sy;
+      var rad = Math.max(zo.w, zo.h) * 0.66;
+      var grad = ritk.createRadialGradient(zcx, zcy, rad * 0.25, zcx, zcy, rad);
+      grad.addColorStop(0, 'rgba(' + zo.rgb + ',' + (alfa * 0.55).toFixed(3) + ')');
+      grad.addColorStop(0.7, 'rgba(' + zo.rgb + ',' + (alfa * 0.22).toFixed(3) + ')');
+      grad.addColorStop(1, 'rgba(' + zo.rgb + ',0)');
+      ritk.fillStyle = grad;
+      ritk.fillRect(zcx - rad, zcy - rad, rad * 2, rad * 2);
+    }
+
     /* π-symbolen i sin vajer (eller i fritt fall) */
     if (pi && !pi.klar && piBild) {
       if (!pi.faller) {
@@ -1368,6 +1448,8 @@
     });
 
     if (scenEl) { scenEl.classList.remove('figurborta'); scenEl = null; }
+    boostZoner.forEach(function (z) { z.el.classList.remove('boostlyser'); });
+    boostZoner = [];
     sp = null; robo = null; skotten = []; partiklar = []; pi = null; jet = null;
     knapp.textContent = segrade
       ? 'Roboten är besegrad. Men klicka ändå inte här igen.'
@@ -1392,6 +1474,9 @@
       },
       plattor: function () {
         return plattformar.map(function (p) { return { x: p.x, y: p.y, w: p.w, s: !!p.studs }; });
+      },
+      zoner: function () {
+        return boostZoner.map(function (z) { return { x: z.x, y: z.y, w: z.w, h: z.h, glob: z.glob, inne: z.inne }; });
       },
       flytta: function (x, y) { if (sp) { sp.x = x; sp.y = y; sp.vx = 0; sp.vy = 0; kamY = Math.max(0, y - innerHeight * 0.58); } },
       tillRobot: function () {

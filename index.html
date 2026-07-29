@@ -1058,7 +1058,9 @@
     }
     img.addEventListener('error', vidare);
     img.addEventListener('load', koll);
-    if (img.complete && img.naturalWidth) koll();
+    if (img.complete) {                    // hann bilden ladda — eller misslyckas — före oss?
+      if (img.naturalWidth) koll(); else vidare();
+    }
   });
 
   /* ————— videor: bädda in spelaren först när man klickar ————— */
