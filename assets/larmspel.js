@@ -1172,14 +1172,14 @@
         return;
       }
     }
-    robo.dir = dxSp < 0 ? -1 : 1;                       // vänd mot Jonas
-    robo.gick = false;
-    if (Math.abs(dySp) < 260 && Math.abs(dxSp) > 60) {  // jaga på plattformen
-      var fore = robo.x;
-      robo.x += robo.dir * 105 * dt;
-      robo.x = klamm(robo.x, robo.plat.x + ROW / 2, robo.plat.x + robo.plat.w - ROW / 2);
-      robo.gick = robo.x !== fore;
-    }
+    /* vaken: rastlös marsch över hela plattformen — tajma π-ögonblicket!
+       (en stamp på pansaret stunnar den en kort stund) */
+    robo.x += robo.dir * 88 * dt;
+    var kantV = robo.plat.x + ROW / 2, kantH = robo.plat.x + robo.plat.w - ROW / 2;
+    if (kantH <= kantV) { robo.x = (kantV + kantH) / 2; }
+    else if (robo.x <= kantV) { robo.x = kantV; robo.dir = 1; }
+    else if (robo.x >= kantH) { robo.x = kantH; robo.dir = -1; }
+    robo.gick = true;
     robo.skottT -= dt;
     if (robo.skottT <= 0 && Math.hypot(dxSp, dySp) < 860) {
       robo.skottT = 1.8 + Math.random() * 1.2;
