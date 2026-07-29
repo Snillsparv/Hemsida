@@ -699,7 +699,7 @@
 
   /* ————— tangenter, pekare och touch-knappar ————— */
   var tang = { v: false, h: false, upp: false, ner: false, jet: false };
-  var hoppBuf = 0;
+  var hoppBuf = 0, jetTand = false;   // jetTand: andra trycket i luften tänder jetpacken
   var jet = null;                                     // { x, y, tagen, fuel } — sätts när spelet startar
   var finPekare = matchMedia('(pointer:fine)').matches;
 
@@ -722,7 +722,10 @@
       if (jet && jet.tagen) tang.jet = true;
       return;
     }
-    if (n === 'upp' && !tang.upp) hoppBuf = 0.14;
+    if (n === 'upp' && !tang.upp) {
+      if (jet && jet.tagen && sp && !sp.mark && !sp.tumla) jetTand = true;
+      else hoppBuf = 0.14;
+    }
     tang[n] = true;
   }
   function tangUpp(e) {
@@ -730,11 +733,12 @@
     if (!n || n === 'avbryt') return;
     e.preventDefault();
     if (n === 'trad') { tang.jet = false; return; }
+    if (n === 'upp') jetTand = false;
     tang[n] = false;
   }
   function slappAllt() {                                // keyup:ar som försvann vid Alt-Tab
     tang.v = tang.h = tang.upp = tang.ner = tang.jet = false;
-    hoppBuf = 0;
+    hoppBuf = 0; jetTand = false;
   }
 
   /* ————— spelaren: pixel-Jonas med tyngdlag, hopp och jetpack ————— */
@@ -784,9 +788,11 @@
     }
     sp.vx = klamm(sp.vx, -SPRING, SPRING);
 
-    /* hopp (med coyotetid) — hålls knappen inne studsar man vidare */
+    /* hopp (med coyotetid) — utan jetpack studsar man vidare om knappen hålls;
+       med jetpack är det ett tryck = hopp, ett till i luften = raketerna */
     if (sp.mark) sp.coyote = 0.09; else if (sp.coyote > 0) sp.coyote -= dt;
-    if ((hoppBuf > 0 || tang.upp) && !styrLast && sp.coyote > 0) {
+    var hallHopp = tang.upp && !(jet && jet.tagen);
+    if ((hoppBuf > 0 || hallHopp) && !styrLast && sp.coyote > 0) {
       sp.vy = -HOPPV; sp.mark = false; sp.coyote = 0;
       hoppBuf = 0; ljud.hopp();
     }
@@ -794,9 +800,9 @@
     /* tyngdlag + integrering */
     sp.vy = Math.min(MAXFALL, sp.vy + G * dt);
 
-    /* jetpacken: håll hoppknappen i luften (eller X/🚀) så bär raketerna
-       uppåt — tills tanken sinar */
-    if (jet && jet.tagen && (tang.jet || (tang.upp && !sp.mark)) && jet.fuel > 0 && !styrLast) {
+    /* jetpacken: andra trycket i luften tänder — håll kvar så bär raketerna
+       uppåt tills tanken sinar (X/🚀 flyger direkt) */
+    if (jet && jet.tagen && (tang.jet || (jetTand && tang.upp)) && jet.fuel > 0 && !styrLast) {
       sp.vy = Math.max(-560, sp.vy - 4300 * dt);
       sp.mark = false;
       jet.fuel = Math.max(0, jet.fuel - dt / 1.7);
@@ -872,6 +878,7 @@
       poff(sp.x, sp.y - SPH / 2, '#ffd166', 16);
       ljud.dunk(0, 0.8);
     }
+    if (sp.mark) jetTand = false;                       // på marken: nytt hopp krävs först
     if (jet && jet.tagen && sp.mark && jet.fuel < 1) {  // på fast mark laddar tanken snabbt
       jet.fuel = Math.min(1, jet.fuel + dt / 1.8);
     }
@@ -883,7 +890,7 @@
       jet.fuel = 1;
       ljud.plocka();
       poff(jet.x, jet.y - 22, '#ffd166', 20);
-      medd(finPekare ? 'Jetpack! Håll mellanslag i luften för att flyga' : 'Jetpack! Håll ▲ i luften för att flyga', 3.2);
+      medd(finPekare ? 'Jetpack! Tryck mellanslag igen i luften för att flyga' : 'Jetpack! Tryck ▲ igen i luften för att flyga', 3.2);
       if (touch) {
         var tb = touch.querySelector('button[data-t="trad"]');
         if (tb) tb.style.display = '';
@@ -1196,12 +1203,16 @@
           if (jet && jet.tagen) tang.jet = true;
           return;
         }
-        if (t === 'upp' && !tang.upp) hoppBuf = 0.14;
+        if (t === 'upp' && !tang.upp) {
+          if (jet && jet.tagen && sp && !sp.mark && !sp.tumla) jetTand = true;
+          else hoppBuf = 0.14;
+        }
         tang[t] = true;
       }
       function upp(e) {
         e.preventDefault();
         if (t === 'trad') { tang.jet = false; return; }
+        if (t === 'upp') jetTand = false;
         tang[t] = false;
       }
       b.addEventListener('pointerdown', ner);
@@ -1358,20 +1369,24 @@
       ritk.arc(jet.x, jy - 20, 36, 0, Math.PI * 2);
       ritk.fill();
       ritaSprite(jetBild, jet.x, jy, 3, 1, 0);
-      if (finPekare) {
+      if (finPekare) {                                 // skylt: hoppa + mellanslagstangent
         var skx = jet.x + 66, sky = jet.y - sy;
         ritk.fillStyle = '#4d545e';
-        ritk.fillRect(skx - 2, sky - 36, 4, 36);
+        ritk.fillRect(skx - 2, sky - 38, 4, 38);
         ritk.fillStyle = '#161614';
-        ritk.fillRect(skx - 40, sky - 66, 80, 30);
+        ritk.fillRect(skx - 48, sky - 76, 96, 38);
         ritk.strokeStyle = '#9aa3ae';
         ritk.lineWidth = 2;
-        ritk.strokeRect(skx - 40, sky - 66, 80, 30);
+        ritk.strokeRect(skx - 48, sky - 76, 96, 38);
         ritk.fillStyle = '#ffd166';
-        ritk.font = '700 13px "JetBrains Mono",monospace';
+        ritk.font = '700 12px "JetBrains Mono",monospace';
         ritk.textAlign = 'center';
         ritk.textBaseline = 'middle';
-        ritk.fillText('FLYG: X', skx, sky - 51);
+        ritk.fillText('FLYG:', skx, sky - 65);
+        ritk.strokeStyle = '#ffd166';
+        ritk.lineWidth = 1.5;
+        ritk.strokeRect(skx - 27, sky - 55, 54, 10);   // mellanslagstangenten
+        ritk.strokeRect(skx - 21, sky - 52, 42, 2);
       }
     }
 
