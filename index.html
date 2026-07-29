@@ -1065,7 +1065,7 @@
   Array.prototype.forEach.call(document.querySelectorAll('.vfasad'), function(btn){
     btn.addEventListener('click', function(){
       var ifr = document.createElement('iframe');
-      ifr.src = 'https://www.youtube-nocookie.com/embed/' + btn.getAttribute('data-yt') + '?autoplay=1&rel=0';
+      ifr.src = 'https://www.youtube-nocookie.com/embed/' + btn.getAttribute('data-yt') + '?autoplay=1&rel=0&enablejsapi=1';
       ifr.title = btn.getAttribute('aria-label') || 'Videospelare';
       ifr.setAttribute('allow', 'autoplay; fullscreen; encrypted-media; picture-in-picture');
       ifr.setAttribute('allowfullscreen', '');

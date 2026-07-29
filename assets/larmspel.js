@@ -20,6 +20,7 @@
     'html.larm{scroll-behavior:auto;cursor:crosshair;user-select:none;-webkit-user-select:none}' +
     'html.larm,html.larm body{overscroll-behavior:none}' +
     'html.larm main *,html.larm footer *{animation-play-state:paused !important}' +
+    'html.larm .nbplan,html.larm #intelarm{animation:none !important}' +   /* transform-keyframes slår inline-fallet */
     'html.larm [data-line]{opacity:1 !important}' +
     'html.larm .aft{opacity:1 !important}' +
     'html.larm .globpromo,html.larm .kobj,html.larm .soc a,html.larm .nbplan{opacity:1 !important}' +
@@ -76,7 +77,9 @@
     '@media (prefers-reduced-motion:reduce){' +
       'html.larm main{animation:none}' +
       '#larmflash.blink{animation:none;background:rgba(255,30,20,.18)}' +
+      '#larmflash.lugn{animation:none}' +
       '#larmhud .lh-varning{animation:none}' +
+      'html.larm .nav,html.larmslut .nav{transition:none}' +
     '}';
   document.head.appendChild(stil);
 
@@ -192,10 +195,12 @@
       var AC = window.AudioContext || window.webkitAudioContext;
       if (!AC) return;
       if (!ctx) {
-        ctx = new AC();
-        master = ctx.createGain();
-        master.gain.value = tystat ? 0 : 0.5;
-        master.connect(ctx.destination);
+        try {
+          ctx = new AC();
+          master = ctx.createGain();
+          master.gain.value = tystat ? 0 : 0.5;
+          master.connect(ctx.destination);
+        } catch (e) { ctx = null; master = null; return; }   // spelet funkar utan ljud
       }
       if (ctx.state === 'suspended') ctx.resume();
     }
@@ -405,7 +410,8 @@
 
   function res(el4) {                                  // allt svävar tillbaka på plats
     fallna.forEach(function (f, i) {
-      f.el.style.transition = 'transform 1.05s cubic-bezier(.16,1,.3,1) ' + ((i % 7) * 0.05).toFixed(2) + 's';
+      f.el.style.transition = reduced ? 'none'
+        : 'transform 1.05s cubic-bezier(.16,1,.3,1) ' + ((i % 7) * 0.05).toFixed(2) + 's';
       f.el.style.transform = f.transform0 || '';
     });
     setTimeout(function () {
@@ -464,6 +470,10 @@
     e.preventDefault();
     tang[n] = false;
   }
+  function slappAllt() {                                // keyup:ar som försvann vid Alt-Tab
+    tang.v = tang.h = tang.upp = tang.ner = false;
+    hoppBuf = 0; tradTryck = false; pekMal = null;
+  }
 
   /* ————— spelaren: pixel-Jonas med tyngdlag, hopp och spindeltråd ————— */
   var SK = 3, SPW = JONAS.width * SK, SPH = JONAS.height * SK;   // ritstorlek
@@ -512,6 +522,7 @@
 
   function uppdateraSpelare(dt) {
     if (!sp) return;
+    var varMark = sp.mark;
     if (sp.invuln > 0) sp.invuln -= dt;
     if (trad.miss > 0) trad.miss -= dt;
     if (hoppBuf > 0) hoppBuf -= dt;
@@ -538,17 +549,11 @@
     }
     sp.vx = klamm(sp.vx, -SPRING, SPRING);
 
-    /* hopp (med coyotetid) — hopp i tråden släpper den med extra skjuts */
+    /* hopp (med coyotetid) — i tråden betyder ↑ klättra, inte hoppa */
     if (sp.mark) sp.coyote = 0.09; else if (sp.coyote > 0) sp.coyote -= dt;
-    if (hoppBuf > 0) {
-      if (trad.fast) {
-        trad.fast = false;
-        sp.vy = Math.min(sp.vy, -560);
-        hoppBuf = 0; ljud.hopp();
-      } else if (sp.coyote > 0) {
-        sp.vy = -HOPPV; sp.mark = false; sp.coyote = 0;
-        hoppBuf = 0; ljud.hopp();
-      }
+    if (hoppBuf > 0 && !trad.fast && sp.coyote > 0) {
+      sp.vy = -HOPPV; sp.mark = false; sp.coyote = 0;
+      hoppBuf = 0; ljud.hopp();
     }
 
     /* tyngdlag + integrering */
@@ -561,6 +566,13 @@
     if (trad.fast) {
       if (tang.upp) trad.L = Math.max(56, trad.L - 200 * dt);
       if (tang.ner) trad.L = Math.min(660, trad.L + 260 * dt);
+      if (tang.upp && trad.L <= 58) {                   // uppklättrad: skutta upp på kanten
+        trad.fast = false;
+        sp.vy = Math.min(sp.vy, -560);
+        hoppBuf = 0; ljud.hopp();
+      }
+    }
+    if (trad.fast) {
       var hx = sp.x, hy = sp.y - SPH * 0.6;
       var dx = hx - trad.ax, dy = hy - trad.ay;
       var d = Math.hypot(dx, dy);
@@ -592,7 +604,8 @@
         }
       }
     }
-    if (sp.mark && trad.fast) trad.fast = false;        // landad: släpp tråden
+    if (sp.mark && !varMark && trad.fast) trad.fast = false;   // nyss landad: släpp tråden
+                                                        // (men stående går det att fira sig upp)
 
     /* springsteg för animationen */
     if (sp.mark && Math.abs(sp.vx) > 20) {
@@ -632,7 +645,10 @@
       if (p.w < 180) continue;
       if (!plat || p.y < plat.y) plat = p;
     }
-    if (!plat) plat = { x: varldB * 0.2, y: 420, w: varldB * 0.6, h: 20 };
+    if (!plat) {                                        // reserv: måste gå att nå och stå på
+      plat = { x: varldB * 0.2, y: 420, w: varldB * 0.6, h: 20 };
+      plattformar.push(plat);
+    }
     robo = { x: plat.x + plat.w * 0.62, y: plat.y, dir: -1, hp: 3, plat: plat, gick: false,
              vaknat: false, dod: 0, rot: 0, stegT: 0, steg: 0, skottT: 2.2, stagger: 0, segerVisad: false };
     skotten = [];
@@ -787,6 +803,8 @@
 
     meddEl = document.createElement('div');
     meddEl.id = 'larmmedd';
+    meddEl.setAttribute('role', 'status');
+    meddEl.setAttribute('aria-live', 'polite');
     document.body.appendChild(meddEl);
 
     hint = document.createElement('div');
@@ -845,8 +863,10 @@
       segerEl = document.createElement('div');
       segerEl.id = 'larmseger';
       segerEl.setAttribute('role', 'dialog');
+      segerEl.setAttribute('aria-modal', 'true');
+      segerEl.setAttribute('aria-labelledby', 'ls-rubrik');
       segerEl.innerHTML =
-        '<p class="ls-rubrik">Hotet neutraliserat</p>' +
+        '<p class="ls-rubrik" id="ls-rubrik">Hotet neutraliserat</p>' +
         '<p class="ls-text">Du besegrade roboten — sidan är räddad!<br>Snyggt jobbat.</p>' +
         '<div class="ls-knappar"><button type="button" id="ls-laga">Läk sidan</button>' +
         '<button type="button" id="ls-vidare">Hoppa vidare</button></div>';
@@ -855,6 +875,7 @@
       segerEl.querySelector('#ls-vidare').addEventListener('click', function () {
         if (segerEl) { segerEl.remove(); segerEl = null; }
       });
+      try { segerEl.querySelector('#ls-laga').focus({ preventScroll: true }); } catch (e) {}
     }, 900);
   }
 
@@ -1007,6 +1028,8 @@
         robo.plat = narmast;
         robo.x = klamm(robo.x, narmast.x + ROW / 2, narmast.x + narmast.w - ROW / 2);
         robo.y = narmast.y;
+      } else {
+        plattformar.push(robo.plat);                    // behåll gamla ytan som plattform
       }
     }
     if (sp) sp.x = klamm(sp.x, SPW / 2, varldB - SPW / 2);
@@ -1014,6 +1037,13 @@
 
   /* ————— start och avslut ————— */
   var startTimers = [];
+
+  function inerta(pa) {                                 // göm sidan för Tab och skärmläsare
+    [].forEach.call(document.querySelectorAll('main, footer, .nav'), function (el) {
+      if ('inert' in el) el.inert = pa;
+      if (pa) el.setAttribute('aria-hidden', 'true'); else el.removeAttribute('aria-hidden');
+    });
+  }
 
   function start() {
     if (spel.igang) return;
@@ -1029,9 +1059,23 @@
     else ljud.siren(1.6);
 
     docEl.classList.add('larm');
-    knapp.blur();
     byggOverlays();
     faller();
+
+    /* Esc ska funka redan under blinket, och bakgrunden görs inert
+       så att Tab inte vandrar osynligt bakom canvasen */
+    window.addEventListener('keydown', tangNer);
+    window.addEventListener('keyup', tangUpp);
+    window.addEventListener('blur', slappAllt);
+    canvas.addEventListener('pointerdown', canvasPek);
+    window.addEventListener('resize', vidStorlek);
+    inerta(true);
+    try { hud.querySelector('#lh-exit').focus({ preventScroll: true }); } catch (e) {}
+
+    /* pausa ev. spelande YouTube-inbäddning — larmet räcker gott som ljudspår */
+    [].forEach.call(document.querySelectorAll('.vram iframe'), function (f) {
+      try { f.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*'); } catch (e) {}
+    });
 
     kamY = window.scrollY || window.pageYOffset;
 
@@ -1050,11 +1094,7 @@
       if (hint) hint.classList.add('syns');
       startTimers.push(setTimeout(function () { if (hint) hint.classList.remove('syns'); }, 9000));
 
-      window.addEventListener('keydown', tangNer);
-      window.addEventListener('keyup', tangUpp);
-      canvas.addEventListener('pointerdown', canvasPek);
-      window.addEventListener('resize', vidStorlek);
-
+      slappAllt();                                      // inga spöktryck från rasfilmen
       rafId = requestAnimationFrame(tick);
     }, reduced ? 150 : 1750));
   }
@@ -1067,8 +1107,9 @@
     if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
     window.removeEventListener('keydown', tangNer);
     window.removeEventListener('keyup', tangUpp);
+    window.removeEventListener('blur', slappAllt);
     window.removeEventListener('resize', vidStorlek);
-    tang.v = tang.h = tang.upp = tang.ner = false;
+    slappAllt();
     ljud.stangAv();
 
     [canvas, hud, hint, meddEl, touch, segerEl].forEach(function (el) { if (el) el.remove(); });
@@ -1082,10 +1123,12 @@
 
     docEl.classList.add('larmslut');                    // navigationen glider tillbaka mjukt
     docEl.classList.remove('larm');
+    inerta(false);
     knapp.disabled = true;                              // inte förrän allt läkt klart
     res(function () {
       docEl.classList.remove('larmslut');
       knapp.disabled = false;
+      try { knapp.focus({ preventScroll: true }); } catch (e) {}
       try { window.dispatchEvent(new Event('scroll')); } catch (e) {}   // väck teleprompterljuset
     });
 
