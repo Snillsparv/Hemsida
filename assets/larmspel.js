@@ -526,16 +526,54 @@
      för formulärfältens streck. Lutningen är alltid tan(elementets vinkel). */
   function lutKant(l, t, W, H, rad, botten) {
     var s = Math.sin(rad), c = Math.cos(rad);
-    if (Math.abs(s) < 0.008) return { x: l, y: botten ? t + H - 3 : t, w: W };
+    if (Math.abs(s) < 0.008) return { x: l, y: botten ? t + H - 3 : t, w: W, h0: H, lut: 0 };
     var nam = c * c - s * s;
     var w0 = (W * c - H * Math.abs(s)) / nam;
     var h0 = (H * c - W * Math.abs(s)) / nam;
-    if (w0 < 8 || h0 < 0) return { x: l, y: botten ? t + H - 3 : t, w: W };
+    if (w0 < 8 || h0 < 0) return { x: l, y: botten ? t + H - 3 : t, w: W, h0: H, lut: 0 };
     var cx = l + W / 2, cy = t + H / 2;
     var teck = botten ? 1 : -1;
     return { x: cx - w0 / 2 * c - teck * h0 / 2 * s,
              y: cy - w0 / 2 * s + teck * h0 / 2 * c - (botten ? 3 : 0),
-             w: w0 * c, lut: s / c };
+             w: w0 * c, h0: h0, lut: s / c };
+  }
+
+  /* texten: plattformen ska ligga PÅ bläcket, inte på radrutan — och i stor
+     text får versaler och staplar (som J:et) stå högre än gemenerna */
+  var matCtx = document.createElement('canvas').getContext('2d');
+  var inkCache = {};
+  function inkAsc(tecken) {
+    var nyckel = matCtx.font + '|' + tecken;
+    if (!(nyckel in inkCache)) {
+      var mm = matCtx.measureText(tecken);
+      inkCache[nyckel] = mm.actualBoundingBoxAscent || 0;
+    }
+    return inkCache[nyckel];
+  }
+  function textPlattor(ord, ko, hRad, fontPx, sy) {
+    var fm = matCtx.measureText(ord);
+    if (!fm.width || fm.fontBoundingBoxAscent === undefined) {   // äldre motor: radrutan får duga
+      laggPlatta(ko.x, ko.y, ko.w, hRad, sy, false, ko.lut);
+      return;
+    }
+    var halvRad = (ko.h0 - (fm.fontBoundingBoxAscent + fm.fontBoundingBoxDescent)) / 2;
+    var basY = halvRad + fm.fontBoundingBoxAscent;      // baslinjens läge i radrutan
+    function dyFor(asc) { return klamm(basY - asc, 0, ko.h0 * 0.7); }
+    if (fontPx < 40 || ord.length < 2) {                // smått: ett steg per ord räcker
+      laggPlatta(ko.x, ko.y + dyFor(fm.actualBoundingBoxAscent || 0), ko.w, hRad, sy, false, ko.lut);
+      return;
+    }
+    var pre = [0];                                      // stor text: dela i höjdgrupper
+    for (var i = 1; i <= ord.length; i++) pre.push(matCtx.measureText(ord.slice(0, i)).width);
+    var skala = ko.w / (pre[ord.length] || 1);
+    var i0 = 0, asc = inkAsc(ord.charAt(0));
+    for (var j = 1; j <= ord.length; j++) {
+      var a2 = j < ord.length ? inkAsc(ord.charAt(j)) : -1;
+      if (j < ord.length && Math.abs(a2 - asc) < fontPx * 0.07) { asc = Math.max(asc, a2); continue; }
+      var x0 = ko.x + pre[i0] * skala, x1 = ko.x + pre[j] * skala;
+      laggPlatta(x0, ko.y + (x0 - ko.x) * (ko.lut || 0) + dyFor(asc), x1 - x0, hRad, sy, false, ko.lut);
+      i0 = j; asc = a2;
+    }
   }
   /* frilagda bilder: krympa lådan till det synliga innehållet (alfakanalen) */
   var trimCache = {};
@@ -569,6 +607,10 @@
     if (nod.nodeType === 3) {                          // textnod: ord för ord
       var txt = nod.nodeValue;
       if (!txt || !txt.trim()) return;
+      var pcs = getComputedStyle(nod.parentNode);
+      var fontPx = parseFloat(pcs.fontSize) || 16;
+      matCtx.font = pcs.fontStyle + ' ' + pcs.fontWeight + ' ' + pcs.fontSize + ' ' + pcs.fontFamily;
+      try { matCtx.letterSpacing = pcs.letterSpacing === 'normal' ? '0px' : pcs.letterSpacing; } catch (e) {}
       var re = /\S+/g, m;
       while ((m = re.exec(txt))) {
         var rng = document.createRange();
@@ -578,7 +620,7 @@
         for (var i = 0; i < rs.length; i++) {
           if (rs[i].height > 240) continue;            // roterad jättelång rad: skev låda
           var ko = lutKant(rs[i].left, rs[i].top, rs[i].width, rs[i].height, rad, false);
-          laggPlatta(ko.x, ko.y, ko.w, rs[i].height, sy, false, ko.lut);
+          textPlattor(m[0], ko, rs[i].height, fontPx, sy);
         }
       }
       return;
@@ -731,9 +773,9 @@
     }
     sp.vx = klamm(sp.vx, -SPRING, SPRING);
 
-    /* hopp (med coyotetid) */
+    /* hopp (med coyotetid) — hålls knappen inne studsar man vidare */
     if (sp.mark) sp.coyote = 0.09; else if (sp.coyote > 0) sp.coyote -= dt;
-    if (hoppBuf > 0 && !styrLast && sp.coyote > 0) {
+    if ((hoppBuf > 0 || tang.upp) && !styrLast && sp.coyote > 0) {
       sp.vy = -HOPPV; sp.mark = false; sp.coyote = 0;
       hoppBuf = 0; ljud.hopp();
     }
@@ -741,8 +783,9 @@
     /* tyngdlag + integrering */
     sp.vy = Math.min(MAXFALL, sp.vy + G * dt);
 
-    /* jetpacken: håll X (eller 🚀) så bär raketerna uppåt — tills tanken sinar */
-    if (jet && jet.tagen && tang.jet && jet.fuel > 0 && !styrLast) {
+    /* jetpacken: håll hoppknappen i luften (eller X/🚀) så bär raketerna
+       uppåt — tills tanken sinar */
+    if (jet && jet.tagen && (tang.jet || (tang.upp && !sp.mark)) && jet.fuel > 0 && !styrLast) {
       sp.vy = Math.max(-560, sp.vy - 4300 * dt);
       sp.mark = false;
       jet.fuel = Math.max(0, jet.fuel - dt / 1.7);
@@ -829,7 +872,7 @@
       jet.fuel = 1;
       ljud.plocka();
       poff(jet.x, jet.y - 22, '#ffd166', 20);
-      medd(finPekare ? 'Jetpack! Håll X för att flyga' : 'Jetpack! Håll 🚀 för att flyga', 3.2);
+      medd(finPekare ? 'Jetpack! Håll mellanslag i luften för att flyga' : 'Jetpack! Håll ▲ i luften för att flyga', 3.2);
       if (touch) {
         var tb = touch.querySelector('button[data-t="trad"]');
         if (tb) tb.style.display = '';
