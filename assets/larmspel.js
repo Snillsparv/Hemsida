@@ -36,6 +36,7 @@
     '#larmflash.blink{opacity:1;background:rgba(255,30,20,.26);animation:larmblink .5s steps(2,end) infinite}' +
     '#larmflash.lugn{opacity:1;background:radial-gradient(ellipse at 50% 50%,transparent 52%,rgba(255,30,20,.17) 100%);animation:larmpuls 2.6s ease-in-out infinite}' +
     '#larmflash.aj{background:rgba(255,30,20,.34)}' +
+    '#larmflash.boss{opacity:1;background:rgba(255,30,20,.14);animation:larmblink 1.15s steps(2,end) infinite}' +
     '@keyframes larmblink{0%{box-shadow:inset 0 0 18vmax rgba(255,0,0,.55);background:rgba(255,30,20,.32)}50%{box-shadow:inset 0 0 6vmax rgba(255,0,0,.18);background:rgba(255,30,20,.07)}}' +
     '@keyframes larmpuls{0%,100%{opacity:.72}50%{opacity:1}}' +
     '#larmcanvas{position:fixed;inset:0;z-index:130;display:block;touch-action:none}' +
@@ -51,7 +52,9 @@
     '#larmhud button:hover{border-color:#ff4b4b;color:#fff}' +
     '#larmmedd{position:fixed;left:50%;top:22%;transform:translateX(-50%);z-index:140;pointer-events:none;' +
       'font-family:var(--mono,monospace);font-size:clamp(.75rem,2.6vw,1.05rem);letter-spacing:.3em;text-transform:uppercase;' +
-      'color:#ff6a5e;text-shadow:0 0 22px rgba(255,40,30,.6);white-space:nowrap;opacity:0;transition:opacity .3s ease}' +
+      'color:#ff6a5e;text-shadow:0 0 22px rgba(255,40,30,.6);opacity:0;transition:opacity .3s ease;' +
+      'background:rgba(10,2,2,.88);border:1px solid rgba(255,75,75,.4);border-radius:2px;' +
+      'padding:.55rem 1rem;max-width:92vw;text-align:center}' +
     '#larmmedd.syns{opacity:1}' +
     '#larmhint{position:fixed;left:50%;top:3.4rem;transform:translateX(-50%);z-index:139;pointer-events:none;' +
       'font-family:var(--mono,monospace);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:#eae6dc;' +
@@ -84,6 +87,7 @@
       'html.larm #glob3d.boostlyser{animation:none}' +
       '#larmflash.blink{animation:none;background:rgba(255,30,20,.18)}' +
       '#larmflash.lugn{animation:none}' +
+      '#larmflash.boss{animation:none;background:rgba(255,30,20,.2)}' +
       '#larmhud .lh-varning{animation:none}' +
       'html.larm .nav,html.larmslut .nav{transition:none}' +
     '}';
@@ -418,10 +422,32 @@
       dron = { g: g, stopp: function () { try { o1.stop(); o2.stop(); lfo.stop(); } catch (e) {} } };
     }
     function dronStopp() {
+      dronBoss(false);
       if (!ctx || !dron) return;
       var d = dron; dron = null;
       d.g.gain.linearRampToValueAtTime(0.0008, nu() + 0.6);
       setTimeout(d.stopp, 700);
+    }
+    var bossExtra = null;
+    function dronBoss(pa) {                            // striden: surret växer och pulserar
+      if (!ctx) return;
+      if (dron) dron.g.gain.linearRampToValueAtTime(pa ? 0.095 : 0.055, nu() + 0.6);
+      if (pa && !bossExtra && dron) {
+        var g = ctx.createGain(); g.gain.value = 0.0008;
+        g.gain.linearRampToValueAtTime(0.05, nu() + 0.8);
+        var f = ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 300;
+        var o = ctx.createOscillator(); o.type = 'sawtooth'; o.frequency.value = 82.4;
+        var lfo = ctx.createOscillator(); lfo.frequency.value = 3.4;
+        var lg = ctx.createGain(); lg.gain.value = 0.035;
+        lfo.connect(lg); lg.connect(g.gain);
+        o.connect(f); f.connect(g); g.connect(master);
+        o.start(); lfo.start();
+        bossExtra = { g: g, stopp: function () { try { o.stop(); lfo.stop(); } catch (e) {} } };
+      } else if (!pa && bossExtra) {
+        var b = bossExtra; bossExtra = null;
+        b.g.gain.linearRampToValueAtTime(0.0008, nu() + 0.7);
+        setTimeout(b.stopp, 800);
+      }
     }
     function tyst(pa) {
       tystat = pa;
@@ -430,6 +456,7 @@
     function stangAv() {
       dronStopp();
       jetLjud = null;                                  // dör med kontexten
+      bossExtra = null;
       if (ctx && master) master.gain.linearRampToValueAtTime(0.0008, nu() + 0.5);
       var gml = ctx;
       ctx = null; master = null; dron = null;
@@ -438,7 +465,7 @@
     return { start: start, siren: siren, muller: muller, dunk: dunk, klank: klank,
              hopp: hopp, vind: vind, boing: boing, stomp: stomp, aj: aj, skott: skott,
              robotvak: robotvak, fanfar: fanfar, plocka: plocka, jetStart: jetStart, jetStopp: jetStopp,
-             dronStart: dronStart, dronStopp: dronStopp, tyst: tyst,
+             dronStart: dronStart, dronStopp: dronStopp, dronBoss: dronBoss, tyst: tyst,
              arTyst: function () { return tystat; }, stangAv: stangAv };
   })();
 
@@ -637,18 +664,21 @@
     }
     if (nod.matches(RAMSEL) || nod.matches(BOXSEL)) {
       r = nod.getBoundingClientRect();
-      var studs = nod.matches('.kobj') || !!(nod.closest && nod.closest('.soc'));
+      var akbar = nod.matches('.nbplan, .kobj--raket');   // gratisskjuts uppåt!
+      var studs = !akbar && (nod.matches('.kobj') || !!(nod.closest && nod.closest('.soc')));
       if (nod.tagName === 'IMG') {
         var tr = bildTrim(nod);
         if (tr) {
           ka = lutKant(r.left + r.width * tr.l, r.top + r.height * tr.t,
                        r.width * (tr.r - tr.l), r.height * (tr.b - tr.t), rad, false);
           laggPlatta(ka.x, ka.y, ka.w, r.height * (tr.b - tr.t), sy, studs, ka.lut);
+          if (akbar && plattformar.length) plattformar[plattformar.length - 1].akEl = nod;
           return;
         }
       }
       ka = lutKant(r.left, r.top, r.width, r.height, rad, false);
       laggPlatta(ka.x, ka.y, ka.w, r.height, sy, studs, ka.lut);
+      if (akbar && plattformar.length) plattformar[plattformar.length - 1].akEl = nod;
       if (nod.matches('.vram')) {                      // playknappens cirkel: trappsteg i rutan
         var spela = nod.querySelector('.vspela');
         if (spela) {
@@ -674,9 +704,79 @@
     varldB = window.innerWidth;
     varldH = docEl.scrollHeight;
     markY = varldH - 4;
+    if (sp && sp.rider) stigAv(-200);                  // ommätning mitt i en flygtur
+    akdon.forEach(function (a) { a.el.style.visibility = ''; });
     plattformar = [];
     fallna.forEach(function (f) { samlaPlattor(f.el, sy, (f.rot || 0) * Math.PI / 180); });
+    akdon = [];
+    for (var ai = 0; ai < plattformar.length; ai++) {
+      var pa2 = plattformar[ai];
+      if (!pa2.akEl) continue;
+      var rr = pa2.akEl.getBoundingClientRect();
+      pa2.ak = akdon.length;
+      akdon.push({ el: pa2.akEl, x: pa2.x + pa2.w / 2, y: pa2.y,
+                   hemX: pa2.x + pa2.w / 2, hemY: pa2.y, w: pa2.w,
+                   dLeft: rr.left - pa2.x, dTop: rr.top + sy - pa2.y,
+                   drawW: rr.width, drawH: rr.height,
+                   fas: 'vilar', vy: 0, t: 0, cool: 0,
+                   raket: pa2.akEl.classList.contains('kobj--raket') });
+    }
     matBoostZoner(sy);
+  }
+
+  /* ————— åkdonen: pappersflygplanet och raketen ger skjuts uppåt ————— */
+  var akdon = [];
+  function montera(a) {
+    sp.rider = a;
+    sp.mark = false;
+    a.fas = 'upp'; a.t = 0; a.vy = -60;
+    a.el.style.visibility = 'hidden';
+    ljud.vind(false);
+    if (a.raket) ljud.jetStart();
+    medd(a.raket ? 'Raketskjuts!' : 'Pappersflygtur!', 1.6);
+  }
+  function stigAv(fart) {
+    var a = sp && sp.rider;
+    if (!a) return;
+    sp.rider = null;
+    sp.vy = fart != null ? fart : -300;
+    sp.mark = false;
+    a.fas = 'hem'; a.t = 0;
+    if (a.raket) ljud.jetStopp();
+    ljud.hopp();
+  }
+  function uppdateraAkdon(dt) {
+    for (var i = 0; i < akdon.length; i++) {
+      var a = akdon[i];
+      if (a.cool > 0) a.cool -= dt;
+      if (a.fas === 'vilar') continue;
+      a.t += dt;
+      if (a.fas === 'upp') {                           // stiger med svaj
+        a.vy = Math.max(-430, a.vy - 900 * dt);
+        a.y += a.vy * dt;
+        a.x = a.hemX + Math.sin(a.t * 2.4) * (a.raket ? 10 : 32);
+        if (a.raket) {
+          partiklar.push({ x: a.x - 8 + Math.random() * 16, y: a.y + a.drawH * 0.6,
+                           vx: (Math.random() - 0.5) * 60, vy: 210 + Math.random() * 140,
+                           t: 0, liv: 0.3, farg: Math.random() < 0.5 ? '#ff8c3a' : '#ffd166', st: 3, g: 0 });
+        }
+        if (a.y < 130) a.t = Math.max(a.t, 2.3);       // nära sidans topp: dags att vända
+        if (a.t > 2.3) { a.fas = 'ner'; a.vy = 40; }
+      } else if (a.fas === 'ner') {                    // tippar — och släpper av dig
+        a.vy = Math.min(360, a.vy + 1400 * dt);
+        a.y += a.vy * dt;
+        if (a.t > 3.0 && sp && sp.rider === a) stigAv(-420);
+        else if (a.t > 3.0 && (!sp || sp.rider !== a)) { a.fas = 'hem'; a.t = 0; }
+      } else {                                         // hem: glider tillbaka till sin plats
+        a.x += (a.hemX - a.x) * Math.min(1, dt * 3.5);
+        a.y += (a.hemY - a.y) * Math.min(1, dt * 3.5);
+        if (Math.abs(a.x - a.hemX) < 4 && Math.abs(a.y - a.hemY) < 4) {
+          a.fas = 'vilar'; a.x = a.hemX; a.y = a.hemY; a.cool = 1.5;
+          a.el.style.visibility = '';
+        }
+      }
+      if (sp && sp.rider === a) { sp.x = a.x; sp.y = a.y - 2; sp.vy = a.vy; }
+    }
   }
 
   /* ————— uppvindarna: appgrafiken bär en uppåt när man åker förbi ————— */
@@ -723,7 +823,7 @@
       return;
     }
     if (n === 'upp' && !tang.upp) {
-      if (jet && jet.tagen && sp && !sp.mark && !sp.tumla) jetTand = true;
+      if (jet && jet.tagen && sp && !sp.mark && !sp.tumla && !sp.rider) jetTand = true;
       else hoppBuf = 0.14;
     }
     tang[n] = true;
@@ -743,6 +843,7 @@
 
   /* ————— spelaren: pixel-Jonas med tyngdlag, hopp och jetpack ————— */
   var SK = 3, SPW = JONAS.width * SK, SPH = JONAS.height * SK;   // ritstorlek
+  var startTips = { visa: false, alfa: 0, t: 0 };     // tangenterna som visas vid starten
   var G = 2100, MAXFALL = 1400, SPRING = 300, HOPPV = 920;
   var sp = null;          // { x, y (fötterna), vx, vy, dir, mark, hj, invuln, stegT, steg, coyote, tumla, resa }
   var spawnX = 0, scenEl = null;
@@ -763,7 +864,9 @@
     spawnX = klamm(borjX, 40, varldB - 40);
     sp = { x: spawnX, y: borjY, vx: 0, vy: 0, dir: 1, mark: !franFigur, hj: 3,
            invuln: 1.2, stegT: 0, steg: 0, coyote: 0,
-           tumla: franFigur ? 1 : 0, rotT: 0, resa: 0 };
+           tumla: franFigur ? 1 : 0, rotT: 0, resa: 0, rider: null };
+    startTips.visa = !franFigur && finPekare;
+    startTips.alfa = 0; startTips.t = 0;
     scenEl = fig ? fig.closest('.pixelscen') : null;    // figuren lämnar sin lilla värld …
     if (scenEl) scenEl.classList.add('figurborta');     // … i just detta ögonblick
     if (!franFigur) poff(sp.x, sp.y - SPH / 2, '#ffd166', 16);
@@ -771,6 +874,11 @@
 
   function uppdateraSpelare(dt) {
     if (!sp) return;
+    if (sp.rider) {                                   // ombord: åkdonet styr färden
+      if (sp.invuln > 0) sp.invuln -= dt;
+      if (hoppBuf > 0) { hoppBuf = 0; stigAv(-HOPPV * 0.8); }
+      return;
+    }
     var varMark = sp.mark;                             // stod han förra bilden?
     if (sp.invuln > 0) sp.invuln -= dt;
     if (sp.resa > 0) sp.resa -= dt;
@@ -859,10 +967,15 @@
       for (var i = 0; i < plattformar.length; i++) {
         var p = plattformar[i];
         if (sp.x + 12 < p.x || sp.x - 12 > p.x + p.w) continue;
+        var ak2 = p.ak !== undefined ? akdon[p.ak] : null;
+        if (ak2 && ak2.fas !== 'vilar') continue;      // åkdonet är ute och flyger
         var py = ytaY(p, sp.x);                        // lutande kant: ytan vid spelarens x
         if (fotY0 <= py + (p.lut ? 9 : 1) &&           // (nedför lutning: limma mot ytan)
             sp.y >= py - (varMark && p.lut ? 8 : 0)) {
-          if (p.studs) {                               // studsmatta! upp i det blå
+          if (ak2 && ak2.cool <= 0) {                  // kliv ombord: skjuts uppåt!
+            sp.y = py;
+            montera(ak2);
+          } else if (p.studs) {                        // studsmatta! upp i det blå
             sp.y = py; sp.vy = -1250;
             ljud.boing();
             poff(sp.x, sp.y, '#ffd166', 10);
@@ -877,7 +990,13 @@
       sp.tumla = 0; sp.rotT = 0; sp.resa = 0.65;
       poff(sp.x, sp.y - SPH / 2, '#ffd166', 16);
       ljud.dunk(0, 0.8);
+      if (finPekare) { startTips.visa = true; startTips.t = 0; }   // visa tangenterna
     }
+    if (startTips.visa) {                               // …tills man börjat röra sig
+      startTips.t += dt;
+      if (tang.v || tang.h || tang.upp || sp.rider || startTips.t > 9) startTips.visa = false;
+    }
+    startTips.alfa += ((startTips.visa && sp.resa <= 0 ? 1 : 0) - startTips.alfa) * Math.min(1, dt * 5);
     if (sp.mark) jetTand = false;                       // på marken: nytt hopp krävs först
     if (jet && jet.tagen && sp.mark && jet.fuel < 1) {  // på fast mark laddar tanken snabbt
       jet.fuel = Math.min(1, jet.fuel + dt / 1.8);
@@ -906,6 +1025,7 @@
 
   function skada(rikt) {
     if (!sp || sp.invuln > 0 || spel.segrat) return;
+    if (sp.rider) stigAv(-260);                        // träffad mitt i flygturen
     sp.hj--;
     uppdateraHjartan();
     ljud.aj();
@@ -1204,7 +1324,7 @@
           return;
         }
         if (t === 'upp' && !tang.upp) {
-          if (jet && jet.tagen && sp && !sp.mark && !sp.tumla) jetTand = true;
+          if (jet && jet.tagen && sp && !sp.mark && !sp.tumla && !sp.rider) jetTand = true;
           else hoppBuf = 0.14;
         }
         tang[t] = true;
@@ -1276,6 +1396,20 @@
     canvas.style.height = '100%';
   }
 
+  function ritaTangent(x, y, dir) {                     // piltangent med triangel
+    ritk.fillStyle = '#161614';
+    ritk.fillRect(x, y, 24, 24);
+    ritk.strokeStyle = '#9aa3ae';
+    ritk.lineWidth = 2;
+    ritk.strokeRect(x, y, 24, 24);
+    ritk.fillStyle = '#ffd166';
+    ritk.beginPath();
+    if (dir < 0) { ritk.moveTo(x + 16, y + 6); ritk.lineTo(x + 16, y + 18); ritk.lineTo(x + 7, y + 12); }
+    else { ritk.moveTo(x + 8, y + 6); ritk.lineTo(x + 8, y + 18); ritk.lineTo(x + 17, y + 12); }
+    ritk.closePath();
+    ritk.fill();
+  }
+
   function ritaSprite(bild, cx, fotY, skala, dir, rot, sqX, sqY) {
     var w = bild.width * skala, h = bild.height * skala;
     ritk.save();
@@ -1306,6 +1440,23 @@
       ritk.strokeRect(pl.x + 1, ply + 1, pl.w - 2, pl.h - 2);
       ritk.fillStyle = '#ffd166';
       for (var rx = 6; rx < pl.w - 14; rx += 24) ritk.fillRect(pl.x + rx, ply + 3, 12, pl.h - 6);
+    }
+
+    /* åkdonen på flygtur (vilande ligger kvar som vanliga element) */
+    for (var av = 0; av < akdon.length; av++) {
+      var ad = akdon[av];
+      if (ad.fas === 'vilar') continue;
+      var acx = ad.x - ad.w / 2 + ad.dLeft + ad.drawW / 2;
+      var acy = ad.y + ad.dTop - sy + ad.drawH / 2;
+      var tilt = ad.raket ? (ad.fas === 'ner' ? 0.25 : 0)
+                          : (ad.fas === 'upp' ? -0.16 : (ad.fas === 'ner' ? 0.45 : 0));
+      ritk.save();
+      ritk.globalAlpha = ad.fas === 'hem' ? 0.75 : 1;
+      ritk.translate(acx, acy);
+      ritk.rotate(tilt);
+      try { ritk.drawImage(ad.el, -ad.drawW / 2, -ad.drawH / 2, ad.drawW, ad.drawH); } catch (e) {}
+      ritk.restore();
+      ritk.globalAlpha = 1;
     }
 
     /* uppvindarnas glöd i respektive appfärg */
@@ -1407,6 +1558,22 @@
         ritaSprite(bild, sp.x, sp.y - sy, SK, sp.dir, sp.tumla ? sp.rotT * 9 : 0,
                    niger ? 1.22 : 1, niger ? 0.68 : 1);
       }
+      if (startTips.alfa > 0.01) {                     // starttangenterna runt figuren
+        ritk.globalAlpha = startTips.alfa;
+        var gung = Math.sin(spel.t * 3) * 3;
+        ritaTangent(sp.x - 68, sp.y - 42 - sy + gung, -1);
+        ritaTangent(sp.x + 44, sp.y - 42 - sy + gung, 1);
+        var tbx = sp.x - 30, tby = sp.y - SPH - 36 - sy + gung;
+        ritk.fillStyle = '#161614';
+        ritk.fillRect(tbx, tby, 60, 16);
+        ritk.strokeStyle = '#9aa3ae';
+        ritk.lineWidth = 2;
+        ritk.strokeRect(tbx, tby, 60, 16);
+        ritk.strokeStyle = '#ffd166';
+        ritk.lineWidth = 1.5;
+        ritk.strokeRect(tbx + 12, tby + 6, 36, 4);
+        ritk.globalAlpha = 1;
+      }
       if (jet && jet.tagen && jet.fuel < 0.995) {      // bränslemätaren över huvudet
         var fx = sp.x - 15, fy = sp.y - SPH - 13 - sy;
         ritk.fillStyle = 'rgba(12,12,13,.75)';
@@ -1428,7 +1595,7 @@
 
   /* ————— huvudloopen ————— */
   var spel = { igang: false, t: 0, segrat: false };
-  var rafId = 0, senast = 0;
+  var rafId = 0, senast = 0, bossLage = false;
 
   function tick(ts) {
     rafId = 0;
@@ -1439,11 +1606,21 @@
 
     if (sp) {
       uppdateraSpelare(dt);
+      uppdateraAkdon(dt);
       uppdateraRobot(dt);
       uppdateraSkott(dt);
       uppdateraPi(dt);
       kollaRobotTraff();
       uppdateraPartiklar(dt);
+
+      /* bosszonen: dramatiskt blink och intensivare muller däruppe */
+      var bossNara = !!(robo && robo.dod <= 0 && !spel.segrat &&
+                        sp.tumla === 0 && sp.y < robo.y + 1050);
+      if (bossNara !== bossLage) {
+        bossLage = bossNara;
+        if (flash) flash.classList.toggle('boss', bossNara);
+        ljud.dronBoss(bossNara);
+      }
 
       /* kameran följer Jonas mjukt — sidans egen scroll är spelets kamera */
       var malY = klamm(sp.y - window.innerHeight * 0.58, 0, Math.max(0, varldH - window.innerHeight));
@@ -1584,6 +1761,9 @@
     if (scenEl) { scenEl.classList.remove('figurborta'); scenEl = null; }
     boostZoner.forEach(function (z) { z.el.classList.remove('boostlyser'); });
     boostZoner = [];
+    akdon.forEach(function (a) { a.el.style.visibility = ''; });
+    akdon = [];
+    bossLage = false;
     sp = null; robo = null; skotten = []; partiklar = []; pi = null; jet = null;
     knapp.textContent = segrade
       ? 'Roboten är besegrad. Men klicka ändå inte här igen.'
@@ -1603,6 +1783,8 @@
                                  stampad: robo.stampad, skottT: robo.skottT, stagger: robo.stagger },
                  jet: jet && { x: jet.x, y: jet.y, tagen: jet.tagen, fuel: jet.fuel },
                  pi: pi && { x: pi.x, y: pi.y, faller: pi.faller, klar: pi.klar },
+                 akdon: akdon.map(function (a) { return { x: a.x, y: a.y, fas: a.fas, raket: a.raket }; }),
+                 rider: !!(sp && sp.rider),
                  skott: skotten.length,
                  plattformar: plattformar.length, markY: markY };
       },
