@@ -76,9 +76,9 @@
     '#larmseger .ls-text a{color:#57d98a;text-decoration:none;border-bottom:1px solid rgba(87,217,138,.5)}' +
     '#larmseger .ls-text a:hover{border-color:#57d98a;text-shadow:0 0 22px rgba(87,217,138,.5)}' +
     '#larmseger .ls-knappar{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:1.8rem}' +
-    '#larmseger button{background:transparent;border:1px solid rgba(87,217,138,.5);color:#57d98a;cursor:pointer;' +
-      'font-family:var(--mono,monospace);font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;padding:.7rem 1.1rem}' +
-    '#larmseger button:hover{background:rgba(87,217,138,.12);border-color:#57d98a}' +
+    '#larmseger button,#larmseger .ls-knappar a{display:inline-block;background:transparent;border:1px solid rgba(87,217,138,.5);color:#57d98a;cursor:pointer;' +
+      'text-decoration:none;font-family:var(--mono,monospace);font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;padding:.7rem 1.1rem}' +
+    '#larmseger button:hover,#larmseger .ls-knappar a:hover{background:rgba(87,217,138,.12);border-color:#57d98a}' +
     '@media (prefers-reduced-motion:reduce){' +
       'html.larm main{animation:none}' +
       'html.larm #glob3d.boostlyser{animation:none}' +
@@ -464,12 +464,12 @@
     lov.forEach(function (el) {
       var r = el.getBoundingClientRect();
       if (r.width < 2 || r.height < 2) return;         // gömda element rasar inte
-      fallna.push({ el: el,
-                    transition0: el.style.transition, transform0: el.style.transform,
-                    will0: el.style.willChange });
       var dy = 40 + Math.random() * 110;
       var dx = (Math.random() * 2 - 1) * 36;
       var rot = (Math.random() * 2 - 1) * 9;
+      fallna.push({ el: el, rot: rot,
+                    transition0: el.style.transition, transform0: el.style.transform,
+                    will0: el.style.willChange });
       var drj = Math.random() * 0.55;
       var dur = 0.7 + Math.random() * 0.35;
       el.style.willChange = 'transform';
@@ -512,10 +512,30 @@
   var RAMSEL = '.fico,.vram,.tstavla';                // synliga ramar/plattor
   var LINJESEL = 'input,textarea,.pixelscen';         // bara understrykningen syns
 
-  function laggPlatta(l, t, w, h, sy, studs) {
+  function laggPlatta(l, t, w, h, sy, studs, lut) {     // t gäller vid vänstra kanten
     var x0 = Math.max(0, l), x1 = Math.min(varldB, l + w);
     if (x1 - x0 < 10 || h < 2 || h > 900) return;
-    plattformar.push({ x: x0, y: t + sy, w: x1 - x0, h: h, studs: !!studs });
+    plattformar.push({ x: x0, y: t + sy + (x0 - l) * (lut || 0),
+                       w: x1 - x0, h: h, studs: !!studs, lut: lut || 0 });
+  }
+  function ytaY(p, x) {                                 // plattformens ovansida vid x
+    return p.lut ? p.y + (klamm(x, p.x, p.x + p.w) - p.x) * p.lut : p.y;
+  }
+  /* AABB:n för ett roterat block är större än blocket självt — räkna fram
+     den faktiska (lutande) kantlinjen: ovansidan för text/lådor, undersidan
+     för formulärfältens streck. Lutningen är alltid tan(elementets vinkel). */
+  function lutKant(l, t, W, H, rad, botten) {
+    var s = Math.sin(rad), c = Math.cos(rad);
+    if (Math.abs(s) < 0.008) return { x: l, y: botten ? t + H - 3 : t, w: W };
+    var nam = c * c - s * s;
+    var w0 = (W * c - H * Math.abs(s)) / nam;
+    var h0 = (H * c - W * Math.abs(s)) / nam;
+    if (w0 < 8 || h0 < 0) return { x: l, y: botten ? t + H - 3 : t, w: W };
+    var cx = l + W / 2, cy = t + H / 2;
+    var teck = botten ? 1 : -1;
+    return { x: cx - w0 / 2 * c - teck * h0 / 2 * s,
+             y: cy - w0 / 2 * s + teck * h0 / 2 * c - (botten ? 3 : 0),
+             w: w0 * c, lut: s / c };
   }
   /* frilagda bilder: krympa lådan till det synliga innehållet (alfakanalen) */
   var trimCache = {};
@@ -545,7 +565,7 @@
     trimCache[src] = ut;
     return ut;
   }
-  function samlaPlattor(nod, sy) {
+  function samlaPlattor(nod, sy, rad) {
     if (nod.nodeType === 3) {                          // textnod: ord för ord
       var txt = nod.nodeValue;
       if (!txt || !txt.trim()) return;
@@ -557,7 +577,8 @@
         var rs = rng.getClientRects();
         for (var i = 0; i < rs.length; i++) {
           if (rs[i].height > 240) continue;            // roterad jättelång rad: skev låda
-          laggPlatta(rs[i].left, rs[i].top, rs[i].width, rs[i].height, sy);
+          var ko = lutKant(rs[i].left, rs[i].top, rs[i].width, rs[i].height, rad, false);
+          laggPlatta(ko.x, ko.y, ko.w, rs[i].height, sy, false, ko.lut);
         }
       }
       return;
@@ -565,10 +586,11 @@
     if (nod.nodeType !== 1 || !nod.matches) return;
     var cs = getComputedStyle(nod);                    // osynligt ger inga kollisionsytor
     if (cs.visibility === 'hidden' || cs.display === 'none' || parseFloat(cs.opacity) < 0.1) return;
-    var r;
-    if (nod.matches(LINJESEL)) {                       // fältens/scenens hårlinje
+    var r, ka;
+    if (nod.matches(LINJESEL)) {                       // fältens/scenens hårlinje: undersidan
       r = nod.getBoundingClientRect();
-      laggPlatta(r.left, r.bottom - 3, r.width, 3, sy);
+      ka = lutKant(r.left, r.top, r.width, r.height, rad, true);
+      laggPlatta(ka.x, ka.y, ka.w, 3, sy, false, ka.lut);
       return;
     }
     if (nod.matches(RAMSEL) || nod.matches(BOXSEL)) {
@@ -577,19 +599,22 @@
       if (nod.tagName === 'IMG') {
         var tr = bildTrim(nod);
         if (tr) {
-          laggPlatta(r.left + r.width * tr.l, r.top + r.height * tr.t,
-                     r.width * (tr.r - tr.l), r.height * (tr.b - tr.t), sy, studs);
+          ka = lutKant(r.left + r.width * tr.l, r.top + r.height * tr.t,
+                       r.width * (tr.r - tr.l), r.height * (tr.b - tr.t), rad, false);
+          laggPlatta(ka.x, ka.y, ka.w, r.height * (tr.b - tr.t), sy, studs, ka.lut);
           return;
         }
       }
-      laggPlatta(r.left, r.top, r.width, r.height, sy, studs);
+      ka = lutKant(r.left, r.top, r.width, r.height, rad, false);
+      laggPlatta(ka.x, ka.y, ka.w, r.height, sy, studs, ka.lut);
       return;
     }
     if (nod.matches('.kursram')) {                     // ramen + de svävande objekten runt den
       r = nod.getBoundingClientRect();
-      laggPlatta(r.left, r.top, r.width, r.height, sy);
+      ka = lutKant(r.left, r.top, r.width, r.height, rad, false);
+      laggPlatta(ka.x, ka.y, ka.w, r.height, sy, false, ka.lut);
     }
-    for (var b = nod.firstChild; b; b = b.nextSibling) samlaPlattor(b, sy);
+    for (var b = nod.firstChild; b; b = b.nextSibling) samlaPlattor(b, sy, rad);
   }
   function matPlattformar() {
     var sy = window.scrollY || window.pageYOffset;
@@ -597,7 +622,7 @@
     varldH = docEl.scrollHeight;
     markY = varldH - 4;
     plattformar = [];
-    fallna.forEach(function (f) { samlaPlattor(f.el, sy); });
+    fallna.forEach(function (f) { samlaPlattor(f.el, sy, (f.rot || 0) * Math.PI / 180); });
     matBoostZoner(sy);
   }
 
@@ -689,6 +714,7 @@
 
   function uppdateraSpelare(dt) {
     if (!sp) return;
+    var varMark = sp.mark;                             // stod han förra bilden?
     if (sp.invuln > 0) sp.invuln -= dt;
     if (sp.resa > 0) sp.resa -= dt;
     if (hoppBuf > 0) hoppBuf -= dt;
@@ -773,13 +799,15 @@
       for (var i = 0; i < plattformar.length; i++) {
         var p = plattformar[i];
         if (sp.x + 12 < p.x || sp.x - 12 > p.x + p.w) continue;
-        if (fotY0 <= p.y + 1 && sp.y >= p.y) {
+        var py = ytaY(p, sp.x);                        // lutande kant: ytan vid spelarens x
+        if (fotY0 <= py + (p.lut ? 9 : 1) &&           // (nedför lutning: limma mot ytan)
+            sp.y >= py - (varMark && p.lut ? 8 : 0)) {
           if (p.studs) {                               // studsmatta! upp i det blå
-            sp.y = p.y; sp.vy = -1250;
+            sp.y = py; sp.vy = -1250;
             ljud.boing();
             poff(sp.x, sp.y, '#ffd166', 10);
           } else {
-            sp.y = p.y; sp.vy = 0; sp.mark = true;
+            sp.y = py; sp.vy = 0; sp.mark = true;
           }
           break;
         }
@@ -875,8 +903,12 @@
       s = sok();
     }
     if (jet && jet.tagen) return;                       // balkarna byggs, packen är redan din
-    jet = s.bast ? { x: klamm(s.bast.x + s.bast.w / 2, 60, varldB - 60), y: s.bast.y, tagen: false, fuel: 1 }
-                 : { x: varldB / 2, y: markY - 200, tagen: false, fuel: 1 };
+    if (s.bast) {
+      var jx = klamm(s.bast.x + s.bast.w / 2, 60, varldB - 60);
+      jet = { x: jx, y: ytaY(s.bast, jx), tagen: false, fuel: 1 };
+    } else {
+      jet = { x: varldB / 2, y: markY - 200, tagen: false, fuel: 1 };
+    }
   }
 
   function initRobot() {
@@ -890,7 +922,7 @@
       plat = { x: varldB * 0.2, y: 420, w: varldB * 0.6, h: 20 };
       plattformar.push(plat);
     }
-    robo = { x: plat.x + plat.w * 0.62, y: plat.y, dir: -1, plat: plat, gick: false,
+    robo = { x: plat.x + plat.w * 0.62, y: ytaY(plat, plat.x + plat.w * 0.62), dir: -1, plat: plat, gick: false,
              vaknat: false, stampad: false, dod: 0, rot: 0,
              stegT: 0, steg: 0, skottT: 2.2, stagger: 0, segerVisad: false };
     skotten = [];
@@ -902,8 +934,9 @@
      (aldrig ovanför sidans topp, och alltid med luft ner till robothuvudet) */
   function initPi() {
     var plat = robo.plat;
-    var piY = Math.min(Math.max(plat.y - 310, 80), plat.y - ROH - 26);
-    pi = { x: klamm(plat.x + plat.w * 0.35, 60, varldB - 60), y: piY,
+    var piX = klamm(plat.x + plat.w * 0.35, 60, varldB - 60);
+    var basY = ytaY(plat, piX);
+    pi = { x: piX, y: Math.min(Math.max(basY - 310, 80), basY - ROH - 26),
            vy: 0, faller: false, klar: false };
   }
 
@@ -922,7 +955,7 @@
       medd('3,14159 … mitt i prick!', 3);
       robo.dod = 0.001;
       konfetti(robo.x, robo.y - ROH / 2);
-    } else if (robo && pi.y >= robo.plat.y) {           // missade: krossas — en ny hissas ner
+    } else if (robo && pi.y >= ytaY(robo.plat, pi.x)) { // missade: krossas — en ny hissas ner
       pi.klar = true;
       poff(pi.x, robo.plat.y, '#ffd166', 20);
       ljud.klank(0, 300); ljud.dunk(0, 0.9);
@@ -941,6 +974,7 @@
     }
     robo.stegT += dt;
     if (robo.stegT > 0.16) { robo.stegT = 0; robo.steg = 1 - robo.steg; }
+    robo.y = ytaY(robo.plat, robo.x);                   // följ plattformens lutning
     if (robo.stagger > 0) { robo.stagger -= dt; return; }
 
     var dxSp = sp.x - robo.x, dySp = (sp.y - SPH / 2) - (robo.y - ROH / 2);
@@ -1157,13 +1191,10 @@
         '<p class="ls-text">Puh, roboten är besegrad och sidan är räddad! Men AI hotar tyvärr mer än ' +
         'bara minnesmästares hemsidor. Gå till <a href="https://www.pauseai.se" target="_blank" ' +
         'rel="noopener">www.pauseai.se</a> för att hjälpa till att rädda mänskligheten en gång för alla!</p>' +
-        '<div class="ls-knappar"><button type="button" id="ls-laga">Läk sidan</button>' +
-        '<button type="button" id="ls-vidare">Hoppa vidare</button></div>';
+        '<div class="ls-knappar"><a id="ls-lank" href="https://www.pauseai.se" target="_blank" rel="noopener">Läs mer om AI</a>' +
+        '<button type="button" id="ls-laga">Fixa hemsidan</button></div>';
       document.body.appendChild(segerEl);
       segerEl.querySelector('#ls-laga').addEventListener('click', function () { avsluta(); });
-      segerEl.querySelector('#ls-vidare').addEventListener('click', function () {
-        if (segerEl) { segerEl.remove(); segerEl = null; }
-      });
       try { segerEl.querySelector('#ls-laga').focus({ preventScroll: true }); } catch (e) {}
     }, 900);
   }
@@ -1507,14 +1538,14 @@
                  plattformar: plattformar.length, markY: markY };
       },
       plattor: function () {
-        return plattformar.map(function (p) { return { x: p.x, y: p.y, w: p.w, s: !!p.studs }; });
+        return plattformar.map(function (p) { return { x: p.x, y: p.y, w: p.w, s: !!p.studs, lut: p.lut || 0 }; });
       },
       zoner: function () {
         return boostZoner.map(function (z) { return { x: z.x, y: z.y, w: z.w, h: z.h, glob: z.glob, inne: z.inne }; });
       },
       flytta: function (x, y) { if (sp) { sp.x = x; sp.y = y; sp.vx = 0; sp.vy = 0; kamY = Math.max(0, y - innerHeight * 0.58); } },
-      tillRobot: function () {
-        if (sp && robo) { sp.x = robo.x; sp.y = robo.y - ROH - 120; sp.vx = 0; sp.vy = 0; kamY = Math.max(0, sp.y - innerHeight * 0.58); }
+      tillRobot: function () {                          // rakt in i huvudbandet, fallande
+        if (sp && robo) { sp.x = robo.x; sp.y = robo.y - ROH + 10; sp.vx = 0; sp.vy = 60; kamY = Math.max(0, sp.y - innerHeight * 0.58); }
       }
     };
   }
