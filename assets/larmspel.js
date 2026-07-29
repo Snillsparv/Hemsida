@@ -72,7 +72,7 @@
     '#larmtouch button:active{background:rgba(255,60,50,.35)}' +
     '#larmseger{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:150;text-align:center;' +
       'background:rgba(12,12,13,.94);border:1px solid rgba(87,217,138,.5);box-shadow:0 0 80px rgba(87,217,138,.18);' +
-      'padding:clamp(1.6rem,5vw,3rem) clamp(1.4rem,6vw,3.4rem);max-width:min(92vw,34rem)}' +
+      'padding:clamp(1.6rem,5vw,3rem) clamp(1.4rem,6vw,3.4rem);width:min(92vw,36rem)}' +
     '#larmseger .ls-rubrik{font-family:var(--mono,monospace);font-size:clamp(.8rem,3vw,1.1rem);letter-spacing:.34em;' +
       'text-transform:uppercase;color:#57d98a;text-shadow:0 0 26px rgba(87,217,138,.5)}' +
     '#larmseger .ls-text{margin-top:1.1rem;color:#eae6dc;font-family:var(--sans,sans-serif);font-size:clamp(.95rem,2.6vw,1.15rem);line-height:1.6}' +
