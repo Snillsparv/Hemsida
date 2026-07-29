@@ -791,7 +791,10 @@
       if (r.width < 40 || r.height < 40) return;
       var proj = el.closest('.proj');
       var acc = proj && proj.getAttribute('data-accent');
-      boostZoner.push({ el: el, x: r.left - 20, y: r.top + sy, w: r.width + 40, h: r.height,
+      /* zonen börjar en bit under överkanten: grafikens topp ska vara en
+         trygg landningsyta, inte en evighetsgunga som aldrig släpper ner en */
+      boostZoner.push({ el: el, x: r.left - 20, y: r.top + sy + 44, w: r.width + 40,
+                        h: Math.max(40, r.height - 44),
                         farg: ACCFARG[acc] || '#5fb2ff', rgb: ACCRGB[acc] || ACCRGB.bla,
                         glob: el.id === 'glob3d', inne: false, sist: 0 });
     });
@@ -998,8 +1001,11 @@
     }
     startTips.alfa += ((startTips.visa && sp.resa <= 0 ? 1 : 0) - startTips.alfa) * Math.min(1, dt * 5);
     if (sp.mark) jetTand = false;                       // på marken: nytt hopp krävs först
-    if (jet && jet.tagen && sp.mark && jet.fuel < 1) {  // på fast mark laddar tanken snabbt
-      jet.fuel = Math.min(1, jet.fuel + dt / 1.8);
+    if (jet && jet.tagen && jet.fuel < 1) {
+      if (sp.mark) jet.fuel = Math.min(1, jet.fuel + dt / 1.8);   // på fast mark: snabbt
+      else if (!(tang.jet || (jetTand && tang.upp))) {            // i luften: sakta — så att
+        jet.fuel = Math.min(1, jet.fuel + dt / 7);                // man aldrig blir helt fast
+      }
     }
 
     /* jetpacken plockas upp */
