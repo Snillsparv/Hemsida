@@ -73,6 +73,8 @@
     '#larmseger .ls-rubrik{font-family:var(--mono,monospace);font-size:clamp(.8rem,3vw,1.1rem);letter-spacing:.34em;' +
       'text-transform:uppercase;color:#57d98a;text-shadow:0 0 26px rgba(87,217,138,.5)}' +
     '#larmseger .ls-text{margin-top:1.1rem;color:#eae6dc;font-family:var(--sans,sans-serif);font-size:clamp(.95rem,2.6vw,1.15rem);line-height:1.6}' +
+    '#larmseger .ls-text a{color:#57d98a;text-decoration:none;border-bottom:1px solid rgba(87,217,138,.5)}' +
+    '#larmseger .ls-text a:hover{border-color:#57d98a;text-shadow:0 0 22px rgba(87,217,138,.5)}' +
     '#larmseger .ls-knappar{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:1.8rem}' +
     '#larmseger button{background:transparent;border:1px solid rgba(87,217,138,.5);color:#57d98a;cursor:pointer;' +
       'font-family:var(--mono,monospace);font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;padding:.7rem 1.1rem}' +
@@ -659,7 +661,7 @@
 
   /* ————— spelaren: pixel-Jonas med tyngdlag, hopp och jetpack ————— */
   var SK = 3, SPW = JONAS.width * SK, SPH = JONAS.height * SK;   // ritstorlek
-  var G = 2100, MAXFALL = 1400, SPRING = 300, HOPPV = 820;
+  var G = 2100, MAXFALL = 1400, SPRING = 300, HOPPV = 920;
   var sp = null;          // { x, y (fötterna), vx, vy, dir, mark, hj, invuln, stegT, steg, coyote, tumla, resa }
   var spawnX = 0, scenEl = null;
 
@@ -834,34 +836,47 @@
 
   /* ————— roboten som vaktar däruppe ————— */
   var RSK = 6, ROW = ROBOT.width * RSK, ROH = ROBOT.height * RSK;
-  var robo = null, skotten = [], pi = null;
+  var robo = null, skotten = [], pi = null, piOm = 0;
 
   function placeraJetpack() {
-    if (jet && jet.tagen) return;
     /* jetpacken måste gå att nå med bara ben: sök upp alla plattformar som
        är hoppbara från marken (studsmattor når högre) och lägg den på den
-       nåbara plattform som ligger närmast målhöjden en bit upp på sidan */
-    var HOJD = 168, STUDS = 360, HORIS = 235;
-    var malY = varldH * 0.72, bast = null, bd = 1e9;
-    var mark = new Array(plattformar.length);
-    var ko = [{ x: 0, y: markY, w: varldB, studs: false }];
-    while (ko.length) {
-      var a = ko.pop();
-      for (var i = 0; i < plattformar.length; i++) {
-        if (mark[i]) continue;
-        var b = plattformar[i];
-        var gap = Math.max(0, Math.max(b.x - (a.x + a.w), a.x - (b.x + b.w)));
-        if (gap > HORIS || b.y < a.y - (a.studs ? STUDS : HOJD) - 1) continue;
-        mark[i] = true;
-        ko.push(b);
-        if (b.w >= 90) {
-          var d = Math.abs(b.y - malY);
-          if (d < bd) { bd = d; bast = b; }
+       nåbara plattform som ligger närmast målhöjden en bra bit upp — där
+       hoppvägen tar slut byggs varningsrandiga hjälpbalkar som bro */
+    var HOJD = 195, STUDS = 360, HORIS = 235;
+    var malY = varldH * 0.62;
+    function sok() {
+      var mark = new Array(plattformar.length);
+      var ko = [{ x: 0, y: markY, w: varldB, studs: false }];
+      var bast = null, bd = 1e9, topp = null;
+      while (ko.length) {
+        var a = ko.pop();
+        for (var i = 0; i < plattformar.length; i++) {
+          if (mark[i]) continue;
+          var b = plattformar[i];
+          var gap = Math.max(0, Math.max(b.x - (a.x + a.w), a.x - (b.x + b.w)));
+          if (gap > HORIS || b.y < a.y - (a.studs ? STUDS : HOJD) - 1) continue;
+          mark[i] = true;
+          ko.push(b);
+          if (!topp || b.y < topp.y) topp = b;
+          if (b.w >= 90) {
+            var d = Math.abs(b.y - malY);
+            if (d < bd) { bd = d; bast = b; }
+          }
         }
       }
+      return { bast: bast, topp: topp };
     }
-    jet = bast ? { x: klamm(bast.x + bast.w / 2, 60, varldB - 60), y: bast.y, tagen: false, fuel: 1 }
-               : { x: varldB / 2, y: markY - 200, tagen: false, fuel: 1 };
+    var s = sok(), varv = 0;
+    while (s.topp && s.topp.y > malY + 60 && varv < 18) {
+      var bx = klamm(s.topp.x + s.topp.w / 2 + (varv % 2 ? -130 : 130), 70, varldB - 70);
+      plattformar.push({ x: bx - 55, y: s.topp.y - 160, w: 110, h: 12, hjalp: true });
+      varv++;
+      s = sok();
+    }
+    if (jet && jet.tagen) return;                       // balkarna byggs, packen är redan din
+    jet = s.bast ? { x: klamm(s.bast.x + s.bast.w / 2, 60, varldB - 60), y: s.bast.y, tagen: false, fuel: 1 }
+                 : { x: varldB / 2, y: markY - 200, tagen: false, fuel: 1 };
   }
 
   function initRobot() {
@@ -875,17 +890,28 @@
       plat = { x: varldB * 0.2, y: 420, w: varldB * 0.6, h: 20 };
       plattformar.push(plat);
     }
-    robo = { x: plat.x + plat.w * 0.62, y: plat.y, dir: -1, hp: 3, plat: plat, gick: false,
-             vaknat: false, dod: 0, rot: 0, stegT: 0, steg: 0, skottT: 2.2, stagger: 0, segerVisad: false };
+    robo = { x: plat.x + plat.w * 0.62, y: plat.y, dir: -1, plat: plat, gick: false,
+             vaknat: false, stampad: false, dod: 0, rot: 0,
+             stegT: 0, steg: 0, skottT: 2.2, stagger: 0, segerVisad: false };
     skotten = [];
-    /* π-symbolen hänger i en vajer ovanför — lura roboten att skjuta ner den!
-       (aldrig ovanför sidans topp, och alltid med luft ner till robothuvudet) */
+    piOm = 0;
+    initPi();
+  }
+
+  /* π-symbolen hänger i en vajer ovanför — lura roboten att skjuta ner den!
+     (aldrig ovanför sidans topp, och alltid med luft ner till robothuvudet) */
+  function initPi() {
+    var plat = robo.plat;
     var piY = Math.min(Math.max(plat.y - 310, 80), plat.y - ROH - 26);
     pi = { x: klamm(plat.x + plat.w * 0.35, 60, varldB - 60), y: piY,
            vy: 0, faller: false, klar: false };
   }
 
   function uppdateraPi(dt) {
+    if (piOm > 0 && robo && robo.dod <= 0) {            // en ny π hissas ner
+      piOm -= dt;
+      if (piOm <= 0) initPi();
+    }
     if (!pi || !pi.faller || pi.klar) return;
     pi.vy += G * dt;
     pi.y += pi.vy * dt;
@@ -894,13 +920,14 @@
       poff(pi.x, pi.y, '#ffd166', 26);
       ljud.dunk(0, 1.6); ljud.klank(0.05, 140);
       medd('3,14159 … mitt i prick!', 3);
-      robo.hp = 0;
       robo.dod = 0.001;
       konfetti(robo.x, robo.y - ROH / 2);
-    } else if (robo && pi.y >= robo.plat.y) {           // missade: krossas mot plattformen
+    } else if (robo && pi.y >= robo.plat.y) {           // missade: krossas — en ny hissas ner
       pi.klar = true;
       poff(pi.x, robo.plat.y, '#ffd166', 20);
       ljud.klank(0, 300); ljud.dunk(0, 0.9);
+      medd('π i kras! En ny hissas ner …', 2.6);
+      piOm = 3.5;
     }
   }
 
@@ -976,18 +1003,14 @@
     var overlX = Math.abs(sp.x - robo.x) < (ROW / 2 + 10);
     if (!overlX) return;
     var huvudTopp = robo.y - ROH, huvudBotten = robo.y - ROH * 0.72;
-    if (sp.vy > 0 && sp.y > huvudTopp && sp.y < huvudBotten + 26) {   // stampat på huvudet!
-      robo.hp--;
+    if (sp.vy > 0 && sp.y > huvudTopp && sp.y < huvudBotten + 26) {   // stamp: pansaret håller
       sp.vy = -620; sp.mark = false;
-      ljud.stomp();
-      poff(robo.x, huvudTopp, '#ffb347', 14);
-      if (robo.hp <= 0) {
-        robo.dod = 0.001;
-        ljud.klank(0, 160); ljud.dunk(0.15, 1.5);
-        konfetti(robo.x, robo.y - ROH / 2);
-      } else {
-        robo.stagger = 0.85;
-        medd(robo.hp === 2 ? 'Två kvar!' : 'En kvar!', 1.4);
+      ljud.klank(0, 640);
+      poff(robo.x, huvudTopp, '#9aa3ae', 8);
+      robo.stagger = 0.5;
+      if (!robo.stampad) {
+        robo.stampad = true;
+        medd('Pansaret är för tjockt! Det måste finnas ett annat sätt …', 3.4);
       }
       return;
     }
@@ -1131,7 +1154,9 @@
       segerEl.setAttribute('aria-labelledby', 'ls-rubrik');
       segerEl.innerHTML =
         '<p class="ls-rubrik" id="ls-rubrik">Hotet neutraliserat</p>' +
-        '<p class="ls-text">Du besegrade roboten — sidan är räddad!<br>Snyggt jobbat.</p>' +
+        '<p class="ls-text">Puh, roboten är besegrad och sidan är räddad! Men AI hotar tyvärr mer än ' +
+        'bara minnesmästares hemsidor. Gå till <a href="https://www.pauseai.se" target="_blank" ' +
+        'rel="noopener">www.pauseai.se</a> för att hjälpa till att rädda mänskligheten en gång för alla!</p>' +
         '<div class="ls-knappar"><button type="button" id="ls-laga">Läk sidan</button>' +
         '<button type="button" id="ls-vidare">Hoppa vidare</button></div>';
       document.body.appendChild(segerEl);
@@ -1171,6 +1196,21 @@
     ritk.setTransform(dpr, 0, 0, dpr, 0, 0);
     ritk.clearRect(0, 0, window.innerWidth, window.innerHeight);
     var sy = kamY;
+
+    /* hjälpbalkarna: varningsrandiga broar där hoppvägen behövde hjälp */
+    for (var hb = 0; hb < plattformar.length; hb++) {
+      var pl = plattformar[hb];
+      if (!pl.hjalp) continue;
+      var ply = pl.y - sy;
+      if (ply < -30 || ply > window.innerHeight + 30) continue;
+      ritk.fillStyle = '#2a2e35';
+      ritk.fillRect(pl.x, ply, pl.w, pl.h);
+      ritk.strokeStyle = '#4d545e';
+      ritk.lineWidth = 2;
+      ritk.strokeRect(pl.x + 1, ply + 1, pl.w - 2, pl.h - 2);
+      ritk.fillStyle = '#ffd166';
+      for (var rx = 6; rx < pl.w - 14; rx += 24) ritk.fillRect(pl.x + rx, ply + 3, 12, pl.h - 6);
+    }
 
     /* uppvindarnas glöd i respektive appfärg */
     for (var zg = 0; zg < boostZoner.length; zg++) {
@@ -1221,12 +1261,6 @@
         ritk.globalAlpha = robo.dod > 0 ? Math.max(0, 1 - Math.max(0, robo.dod - 0.55) / 0.5) : 1;
         ritaSprite(rb, robo.x, robo.y - sy, RSK, robo.dir, robo.rot);
         ritk.globalAlpha = 1;
-        if (robo.dod <= 0) {
-          for (var hpI = 0; hpI < 3; hpI++) {
-            ritk.fillStyle = hpI < robo.hp ? '#ff4b4b' : 'rgba(255,75,75,.18)';
-            ritk.fillRect(robo.x - 21 + hpI * 15, robo.y - ROH - 18 - sy, 11, 8);
-          }
-        }
       }
     }
 
@@ -1465,8 +1499,8 @@
       status: function () {
         return { igang: spel.igang, segrat: spel.segrat,
                  sp: sp && { x: sp.x, y: sp.y, vy: sp.vy, hj: sp.hj, mark: sp.mark, tumla: sp.tumla, resa: sp.resa },
-                 robo: robo && { x: robo.x, y: robo.y, hp: robo.hp, vaknat: robo.vaknat, dod: robo.dod,
-                                 skottT: robo.skottT, stagger: robo.stagger },
+                 robo: robo && { x: robo.x, y: robo.y, vaknat: robo.vaknat, dod: robo.dod,
+                                 stampad: robo.stampad, skottT: robo.skottT, stagger: robo.stagger },
                  jet: jet && { x: jet.x, y: jet.y, tagen: jet.tagen, fuel: jet.fuel },
                  pi: pi && { x: pi.x, y: pi.y, faller: pi.faller, klar: pi.klar },
                  skott: skotten.length,
