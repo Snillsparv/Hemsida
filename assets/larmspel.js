@@ -649,6 +649,17 @@
       }
       ka = lutKant(r.left, r.top, r.width, r.height, rad, false);
       laggPlatta(ka.x, ka.y, ka.w, r.height, sy, studs, ka.lut);
+      if (nod.matches('.vram')) {                      // playknappens cirkel: trappsteg i rutan
+        var spela = nod.querySelector('.vspela');
+        if (spela) {
+          var rc = spela.getBoundingClientRect();
+          if (rc.width > 20) {
+            var kc = lutKant(rc.left + rc.width * 0.14, rc.top + rc.height * 0.1,
+                             rc.width * 0.72, rc.height * 0.8, rad, false);
+            laggPlatta(kc.x, kc.y, kc.w, rc.height * 0.8, sy, false, kc.lut);
+          }
+        }
+      }
       return;
     }
     if (nod.matches('.kursram')) {                     // ramen + de svävande objekten runt den
