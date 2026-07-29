@@ -804,7 +804,7 @@
       plat = { x: varldB * 0.2, y: 420, w: varldB * 0.6, h: 20 };
       plattformar.push(plat);
     }
-    robo = { x: plat.x + plat.w * 0.62, y: plat.y, dir: -1, hp: 3, plat: plat, gick: false,
+    robo = { x: plat.x + plat.w * 0.62, y: plat.y, dir: -1, hp: 3, plat: plat, gick: false, tips: 0,
              vaknat: false, dod: 0, rot: 0, stegT: 0, steg: 0, skottT: 2.2, stagger: 0, segerVisad: false };
     skotten = [];
   }
@@ -819,12 +819,17 @@
     }
     robo.stegT += dt;
     if (robo.stegT > 0.16) { robo.stegT = 0; robo.steg = 1 - robo.steg; }
+    if (robo.tips > 0) {                                // strax efter uppvaknandet: knepet
+      robo.tips -= dt;
+      if (robo.tips <= 0) medd('Hoppa på robotens huvud — tre gånger!', 3.4);
+    }
     if (robo.stagger > 0) { robo.stagger -= dt; return; }
 
     var dxSp = sp.x - robo.x, dySp = (sp.y - SPH / 2) - (robo.y - ROH / 2);
     if (!robo.vaknat) {
       if (sp.y < robo.y + 1000) {                       // inkräktaren är nära!
         robo.vaknat = true;
+        robo.tips = 2.6;
         ljud.robotvak();
         medd('⚠ Inkräktare upptäckt ⚠', 2.4);
       } else {                                          // lugn vaktpatrull
