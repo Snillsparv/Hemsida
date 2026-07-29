@@ -428,6 +428,21 @@
   @keyframes pirull{to{transform:translateX(-50%)}}
   @media (prefers-reduced-motion:reduce){ .pispar{animation:none} }
 
+  /* ————— knappen man absolut inte ska klicka på (larmspel.js tar vid) ————— */
+  #intelarm{
+    display:inline-block;margin-top:2.8rem;padding:.6rem 1.05rem;
+    background:#240b0b;color:#e04747;border:1px solid #571616;border-radius:3px;
+    font-family:var(--mono);font-size:calc(.56rem * var(--mini));letter-spacing:.18em;text-transform:uppercase;
+    cursor:pointer;opacity:.4;
+    transition:opacity .45s ease,box-shadow .45s ease,border-color .45s ease;
+  }
+  #intelarm:hover,#intelarm:focus-visible{
+    opacity:1;border-color:#a32222;box-shadow:0 0 26px rgba(224,71,71,.35);
+    animation:intelarmskalv .28s linear infinite;
+  }
+  @keyframes intelarmskalv{0%,100%{transform:translateX(0)}25%{transform:translateX(-1px)}75%{transform:translateX(1px)}}
+  @media (prefers-reduced-motion:reduce){ #intelarm:hover,#intelarm:focus-visible{animation:none} }
+
   /* ————— mellanrum (mörkret mellan tankarna) ————— */
   .paus{height:clamp(7rem,22vh,15rem)}
   .paus--stor{height:clamp(9rem,30vh,20rem)}
@@ -777,12 +792,14 @@
     <div class="pispar"><span>141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117067982148086513282306647093844609550582231725359408128481117450284102701938521105559644622948954930381964428810975665933446128475648233786783165271201909145648566923460348610454326648213393607260249141273</span><span>141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117067982148086513282306647093844609550582231725359408128481117450284102701938521105559644622948954930381964428810975665933446128475648233786783165271201909145648566923460348610454326648213393607260249141273</span></div>
   </div>
   <p>© 2026 Jonas von Essen</p>
+  <button id="intelarm" type="button">Klicka inte här. Vad du än gör, klicka inte här.</button>
 </footer>
 
 <script defer src="assets/glob3d.js"></script>
 <script defer src="assets/tabspel.js"></script>
 <script defer src="assets/hpur.js"></script>
 <script defer src="assets/pixeljonas.js"></script>
+<script defer src="assets/larmspel.js"></script>
 <script>
 (function(){
   'use strict';

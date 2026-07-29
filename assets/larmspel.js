@@ -1,0 +1,1116 @@
+/* larmspel — knappen man inte ska klicka på ("Klicka inte här. Vad du än
+   gör, klicka inte här.") utlöser larmet: sidan blinkar rött, olycksbådande
+   maskinljud mullrar (helt syntetiserade i Web Audio — inga ljudfiler),
+   och allt på sidan rasar ner lite snett och blir plattformar i ett spel.
+   Man styr pixel-Jonas därnere: spring, hoppa och skjut spindeltråd för
+   att svinga och klättra hela vägen upp — där uppe vaktar en AI-robot
+   som ska besegras med tre hopp på huvudet. "Läk sidan" efteråt låter
+   allting sväva tillbaka på plats. Inga beroenden. */
+(function () {
+  'use strict';
+  var knapp = document.getElementById('intelarm');
+  if (!knapp || !window.HTMLCanvasElement || !window.requestAnimationFrame) return;
+  var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var docEl = document.documentElement;
+
+  /* ————— stilar för larmläget, spelets överlägg och touch-kontrollerna ————— */
+  var stil = document.createElement('style');
+  stil.id = 'larmstil';
+  stil.textContent =
+    'html.larm{scroll-behavior:auto;cursor:crosshair;user-select:none;-webkit-user-select:none}' +
+    'html.larm,html.larm body{overscroll-behavior:none}' +
+    'html.larm main *,html.larm footer *{animation-play-state:paused !important}' +
+    'html.larm [data-line]{opacity:1 !important}' +
+    'html.larm .aft{opacity:1 !important}' +
+    'html.larm .globpromo,html.larm .kobj,html.larm .soc a,html.larm .nbplan{opacity:1 !important}' +
+    'html.larm #hejgast{display:none}' +
+    'html.larm .nav{transform:translateY(130vh) rotate(-8deg);transition:transform 1.3s cubic-bezier(.5,.02,.9,.55) .15s;pointer-events:none}' +
+    'html.larmslut .nav{transition:transform 1.1s cubic-bezier(.16,1,.3,1)}' +
+    'html.larm main{animation:larmskalv .18s linear 9}' +
+    '@keyframes larmskalv{0%,100%{transform:translate(0,0)}25%{transform:translate(-6px,3px)}50%{transform:translate(5px,-4px)}75%{transform:translate(-4px,-3px)}}' +
+    '#larmflash{position:fixed;inset:0;z-index:120;pointer-events:none;opacity:0;transition:opacity .6s ease}' +
+    '#larmflash.blink{opacity:1;background:rgba(255,30,20,.26);animation:larmblink .5s steps(2,end) infinite}' +
+    '#larmflash.lugn{opacity:1;background:radial-gradient(ellipse at 50% 50%,transparent 52%,rgba(255,30,20,.17) 100%);animation:larmpuls 2.6s ease-in-out infinite}' +
+    '#larmflash.aj{background:rgba(255,30,20,.34)}' +
+    '@keyframes larmblink{0%{box-shadow:inset 0 0 18vmax rgba(255,0,0,.55);background:rgba(255,30,20,.32)}50%{box-shadow:inset 0 0 6vmax rgba(255,0,0,.18);background:rgba(255,30,20,.07)}}' +
+    '@keyframes larmpuls{0%,100%{opacity:.72}50%{opacity:1}}' +
+    '#larmcanvas{position:fixed;inset:0;z-index:130;display:block;touch-action:none}' +
+    '#larmhud{position:fixed;left:0;right:0;top:0;z-index:140;display:flex;gap:.7rem 1.2rem;align-items:center;flex-wrap:wrap;' +
+      'padding:.7rem clamp(.8rem,3vw,1.8rem);font-family:var(--mono,monospace);font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;' +
+      'color:#ff8d80;background:linear-gradient(to bottom,rgba(24,2,2,.92),rgba(24,2,2,0))}' +
+    '#larmhud .lh-varning{animation:larmpuls 1.1s steps(2,end) infinite}' +
+    '#larmhud .lh-liv{color:#ff4b4b;font-size:.9rem;letter-spacing:.28em}' +
+    '#larmhud .lh-liv .tom{opacity:.22}' +
+    '#larmhud .lh-mellis{flex:1}' +
+    '#larmhud button{background:rgba(24,2,2,.55);border:1px solid rgba(255,75,75,.4);color:#ff8d80;cursor:pointer;' +
+      'font:inherit;letter-spacing:inherit;text-transform:inherit;padding:.45rem .7rem;border-radius:2px}' +
+    '#larmhud button:hover{border-color:#ff4b4b;color:#fff}' +
+    '#larmmedd{position:fixed;left:50%;top:22%;transform:translateX(-50%);z-index:140;pointer-events:none;' +
+      'font-family:var(--mono,monospace);font-size:clamp(.75rem,2.6vw,1.05rem);letter-spacing:.3em;text-transform:uppercase;' +
+      'color:#ff6a5e;text-shadow:0 0 22px rgba(255,40,30,.6);white-space:nowrap;opacity:0;transition:opacity .3s ease}' +
+    '#larmmedd.syns{opacity:1}' +
+    '#larmhint{position:fixed;left:50%;top:3.4rem;transform:translateX(-50%);z-index:139;pointer-events:none;' +
+      'font-family:var(--mono,monospace);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:#eae6dc;' +
+      'background:rgba(12,12,13,.72);border:1px solid rgba(255,75,75,.35);padding:.55rem .9rem;white-space:nowrap;' +
+      'opacity:0;transition:opacity .7s ease}' +
+    '#larmhint.syns{opacity:1}' +
+    '@media (pointer:coarse){#larmhint{display:none}}' +
+    '#larmtouch{position:fixed;left:0;right:0;bottom:0;z-index:145;display:none;justify-content:space-between;' +
+      'align-items:flex-end;padding:0 4vw calc(3vw + env(safe-area-inset-bottom,0px));pointer-events:none}' +
+    '@media (pointer:coarse){#larmtouch{display:flex}}' +
+    '#larmtouch .lt-grupp{display:flex;gap:3.5vw}' +
+    '#larmtouch button{pointer-events:auto;touch-action:none;width:clamp(56px,15vw,84px);height:clamp(56px,15vw,84px);' +
+      'border-radius:50%;border:1px solid rgba(255,120,110,.55);background:rgba(24,2,2,.45);color:#ffb3ab;' +
+      'font-size:clamp(1.3rem,5vw,1.8rem);display:grid;place-items:center;-webkit-user-select:none;user-select:none}' +
+    '#larmtouch button:active{background:rgba(255,60,50,.35)}' +
+    '#larmseger{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:150;text-align:center;' +
+      'background:rgba(12,12,13,.94);border:1px solid rgba(87,217,138,.5);box-shadow:0 0 80px rgba(87,217,138,.18);' +
+      'padding:clamp(1.6rem,5vw,3rem) clamp(1.4rem,6vw,3.4rem);max-width:min(92vw,34rem)}' +
+    '#larmseger .ls-rubrik{font-family:var(--mono,monospace);font-size:clamp(.8rem,3vw,1.1rem);letter-spacing:.34em;' +
+      'text-transform:uppercase;color:#57d98a;text-shadow:0 0 26px rgba(87,217,138,.5)}' +
+    '#larmseger .ls-text{margin-top:1.1rem;color:#eae6dc;font-family:var(--sans,sans-serif);font-size:clamp(.95rem,2.6vw,1.15rem);line-height:1.6}' +
+    '#larmseger .ls-knappar{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:1.8rem}' +
+    '#larmseger button{background:transparent;border:1px solid rgba(87,217,138,.5);color:#57d98a;cursor:pointer;' +
+      'font-family:var(--mono,monospace);font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;padding:.7rem 1.1rem}' +
+    '#larmseger button:hover{background:rgba(87,217,138,.12);border-color:#57d98a}' +
+    '@media (prefers-reduced-motion:reduce){' +
+      'html.larm main{animation:none}' +
+      '#larmflash.blink{animation:none;background:rgba(255,30,20,.18)}' +
+      '#larmhud .lh-varning{animation:none}' +
+    '}';
+  document.head.appendChild(stil);
+
+  /* ————— spriterna: samma pixel-Jonas och AI-robot som i pixeljonas.js ————— */
+  var JONAS = {
+    width: 14, height: 20,
+    palette: {"H":"#7a4a24","S":"#f6c99f","E":"#22242e","M":"#803024","R":"#e23b4e","P":"#3a4468","K":"#8a5a2b","G":"#45ff70","g":"#b9ffc9","D":"#9aa3ae"},
+    frames: {
+      idle: [
+        '..............','..............','....H.HH.H....','....HHHHHH....','...HHHHHHHH...',
+        '...HHHHHHHH...','...HHSSSSSS...','...HSSESSES...','.....SSMMMS...','......SSSS....',
+        '....RRRRRR....','...RRRRRRRR...','...SRRRRRRS...','...SRRRRRRS...','...SPPPPPPS...',
+        '....PPPPPP....','....PP..PP....','....PP..PP....','....PP..PP....','....KKK.KKK...',
+      ],
+      run1: [
+        '..............','..............','.....H.HH.H...','.....HHHHHH...','....HHHHHHHH..',
+        '....HHHHHHHH..','....HHSSSSSS..','....HSSESSES..','......SSMMMS..','.......SSSS...',
+        '....RRRRRR....','...RRRRRRRR...','..SSRRRRRRSS..','....RRRRRR....','....PPPPPP....',
+        '...PPP..PPP...','..KKP....PP...','.........PP...','.........PP...','.........KKK..',
+      ],
+      run2: [
+        '..............','..............','.....H.HH.H...','.....HHHHHH...','....HHHHHHHH..',
+        '....HHHHHHHH..','....HHSSSSSS..','....HSSESSES..','......SSMMMS..','.......SSSS...',
+        '....RRRRRR....','...RRRRRRRR...','...SRRRRRRS...','....RRRRRR....','....PPPPPP....',
+        '....PPP.PPP...','....PP...KKK..','....PP........','....PP........','....KKK.......',
+      ],
+      jump: [
+        '..............','..............','..............','....H.HH.H....','....HHHHHH....',
+        '...HHHHHHHH...','...HHHHHHHH...','...HHSSSSSS...','...HSSESSES...','..S..SSMMMS.S.',
+        '..R...SSSS..R.','..RRRRRRRRRR..','....RRRRRR....','....RRRRRR....','....PPPPPP....',
+        '...PPP..PPP...','..KKK....KKK..','..............','..............','..............',
+      ],
+      vinka1: [
+        '...........SS.','...........S..','....H.HH.H.S..','....HHHHHH.S..','...HHHHHHHHS..',
+        '...HHHHHHHHR..','...HHSSSSSSR..','...HSSESSESR..','.....SSMMMSR..','......SSSS.R..',
+        '....RRRRRRRR..','...RRRRRRRR...','...SRRRRRR....','...SRRRRRR....','...SPPPPPP....',
+        '....PPPPPP....','....PP..PP....','....PP..PP....','....PP..PP....','....KKK.KKK...',
+      ],
+      vinka2: [
+        '..............','..............','....H.HH.H....','....HHHHHH....','...HHHHHHHH.SS',
+        '...HHHHHHHH.S.','...HHSSSSSSR..','...HSSESSESR..','.....SSMMMSR..','......SSSS.R..',
+        '....RRRRRRRR..','...RRRRRRRR...','...SRRRRRR....','...SRRRRRR....','...SPPPPPP....',
+        '....PPPPPP....','....PP..PP....','....PP..PP....','....PP..PP....','....KKK.KKK...',
+      ],
+      svardupp: [
+        '...........g..','...........G..','....H.HH.H.G..','....HHHHHH.G..','...HHHHHHHHG..',
+        '...HHHHHHHHD..','...HHSSSSSSD..','...HSSESSESS..','.....SSMMMSR..','......SSSS.R..',
+        '....RRRRRRRR..','...RRRRRRRR...','...SRRRRRR....','...SRRRRRR....','...SPPPPPP....',
+        '....PPPPPP....','....PP..PP....','....PP..PP....','....PP..PP....','....KKK.KKK...',
+      ],
+    }
+  };
+  var ROBOT = {
+    width: 14, height: 20,
+    palette: {"L":"#9aa3ae","D":"#4d545e","E":"#ff4b4b","A":"#6ec1ff","G":"#2a2e35"},
+    frames: {
+      sta: [
+        '.......A......','.......D......','....DDDDDD....','...DLLLLLLD...','...DLEEEELD...',
+        '...DLLLLLLD...','....DDDDDD....','......DD......','..DDDDDDDDDD..','..DDLLLLLLDD..',
+        '..DDLLAALLDD..','..DDLLAALLDD..','..DDLLLLLLDD..','...DLLLLLLD...','....DDDDDD....',
+        '....DD..DD....','....DD..DD....','....DD..DD....','....DD..DD....','...DDD..DDD...',
+      ],
+      ga1: [
+        '.......A......','.......D......','....DDDDDD....','...DLLLLLLD...','...DLEEEELD...',
+        '...DLLLLLLD...','....DDDDDD....','......DD......','..DDDDDDDDDD..','..DDLLLLLLDD..',
+        '..DDLLAALLDD..','..DDLLAALLDD..','..DDLLLLLLDD..','...DLLLLLLD...','....DDDDDD....',
+        '...DD....DD...','...DD....DD...','..DD......DD..','..DD......DD..','.DDD......DDD.',
+      ],
+      ga2: [
+        '.......A......','.......D......','....DDDDDD....','...DLLLLLLD...','...DLEEEELD...',
+        '...DLLLLLLD...','....DDDDDD....','......DD......','..DDDDDDDDDD..','..DDLLLLLLDD..',
+        '..DDLLAALLDD..','..DDLLAALLDD..','..DDLLLLLLDD..','...DLLLLLLD...','....DDDDDD....',
+        '....DD..DD....','....DD..DD....','....DD..DD....','....DD..DD....','...DDD..DDD...',
+      ],
+      trasig: [
+        '......A.......','.......D......','....DDDDDD....','...DLLLLLLD...','...DLGGGGLD...',
+        '...DLLGLLLD...','....DDDDDD....','......DD......','..DDDDDDDDDD..','..DDLGLLLLDD..',
+        '..DDLLGGLLDD..','..DDLLGGLLDD..','..DDLGLLGLDD..','...DLLLLLLD...','....DDDDDD....',
+        '....DD..DD....','....DD..DD....','....DD..DD....','....DD..DD....','...DDD..DDD...',
+      ],
+    }
+  };
+
+  /* varje frame förritas på en liten canvas som sedan skalas upp pixligt */
+  function gorFrames(sprite) {
+    var ut = {};
+    for (var namn in sprite.frames) {
+      var c = document.createElement('canvas');
+      c.width = sprite.width; c.height = sprite.height;
+      var k = c.getContext('2d');
+      var f = sprite.frames[namn];
+      if (k) {
+        for (var y = 0; y < f.length; y++) {
+          for (var x = 0; x < f[y].length; x++) {
+            var farg = sprite.palette[f[y].charAt(x)];
+            if (farg) { k.fillStyle = farg; k.fillRect(x, y, 1, 1); }
+          }
+        }
+      }
+      ut[namn] = c;
+    }
+    return ut;
+  }
+  var jonasBilder = null, robotBilder = null;   // ritas först när spelet startar
+
+  function klamm(v, lo, hi) { return v < lo ? lo : (v > hi ? hi : v); }
+
+  /* ————— ljudet: allt syntetiseras i Web Audio när larmet utlöses ————— */
+  var ljud = (function () {
+    var ctx = null, master = null, dron = null, tystat = false;
+
+    function start() {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      if (!ctx) {
+        ctx = new AC();
+        master = ctx.createGain();
+        master.gain.value = tystat ? 0 : 0.5;
+        master.connect(ctx.destination);
+      }
+      if (ctx.state === 'suspended') ctx.resume();
+    }
+    function nu() { return ctx ? ctx.currentTime : 0; }
+    function brus(dur) {
+      var b = ctx.createBuffer(1, Math.max(1, Math.ceil(ctx.sampleRate * dur)), ctx.sampleRate);
+      var d = b.getChannelData(0);
+      for (var i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+      return b;
+    }
+    function ton(typ, f0, f1, t, dur, vol) {           // enkel glidande ton
+      var o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = typ;
+      o.frequency.setValueAtTime(Math.max(1, f0), t);
+      if (f1 && f1 !== f0) o.frequency.exponentialRampToValueAtTime(Math.max(1, f1), t + dur);
+      g.gain.setValueAtTime(vol, t);
+      g.gain.exponentialRampToValueAtTime(0.0008, t + dur);
+      o.connect(g); g.connect(master);
+      o.start(t); o.stop(t + dur + 0.05);
+    }
+
+    function siren(dur) {                              // tvåtonigt larmhorn
+      if (!ctx) return;
+      var t = nu();
+      [0, 4].forEach(function (detune) {
+        var o = ctx.createOscillator(), g = ctx.createGain(), f = ctx.createBiquadFilter();
+        o.type = 'sawtooth'; o.detune.value = detune;
+        f.type = 'lowpass'; f.frequency.value = 1500;
+        for (var i = 0; i * 0.42 < dur; i++) o.frequency.setValueAtTime(i % 2 ? 466 : 349, t + i * 0.42);
+        g.gain.setValueAtTime(0.0008, t);
+        g.gain.linearRampToValueAtTime(0.09, t + 0.06);
+        g.gain.setValueAtTime(0.09, t + Math.max(0.1, dur - 0.7));
+        g.gain.linearRampToValueAtTime(0.0008, t + dur);
+        o.connect(f); f.connect(g); g.connect(master);
+        o.start(t); o.stop(t + dur + 0.05);
+      });
+    }
+    function muller(dur) {                             // lågt mekaniskt muller
+      if (!ctx) return;
+      var t = nu();
+      var n = ctx.createBufferSource(); n.buffer = brus(dur); n.loop = false;
+      var f = ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 110;
+      var g = ctx.createGain();
+      g.gain.setValueAtTime(0.0008, t);
+      g.gain.linearRampToValueAtTime(0.5, t + 0.25);
+      g.gain.setValueAtTime(0.5, t + Math.max(0.3, dur - 0.8));
+      g.gain.linearRampToValueAtTime(0.0008, t + dur);
+      n.connect(f); f.connect(g); g.connect(master);
+      n.start(t);
+    }
+    function dunk(nar, tyngd) {                        // tung duns när något landar
+      if (!ctx) return;
+      var t = nu() + (nar || 0), v = tyngd || 1;
+      ton('sine', 110 + Math.random() * 50, 34, t, 0.26, 0.4 * v);
+      var n = ctx.createBufferSource(); n.buffer = brus(0.09);
+      var f = ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 420;
+      var g = ctx.createGain();
+      g.gain.setValueAtTime(0.26 * v, t);
+      g.gain.exponentialRampToValueAtTime(0.0008, t + 0.09);
+      n.connect(f); f.connect(g); g.connect(master);
+      n.start(t);
+    }
+    function klank(nar, bas) {                         // metalliskt skrammel
+      if (!ctx) return;
+      var t = nu() + (nar || 0);
+      var f0 = bas || 300 + Math.random() * 420;
+      [1, 2.76, 5.4].forEach(function (m, i) {
+        ton('square', f0 * m, f0 * m * 0.985, t, 0.3 - i * 0.07, 0.05 / (i + 1));
+      });
+      var n = ctx.createBufferSource(); n.buffer = brus(0.05);
+      var f = ctx.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 3200; f.Q.value = 1.2;
+      var g = ctx.createGain();
+      g.gain.setValueAtTime(0.1, t);
+      g.gain.exponentialRampToValueAtTime(0.0008, t + 0.06);
+      n.connect(f); f.connect(g); g.connect(master);
+      n.start(t);
+    }
+    function tjoff() {                                 // spindeltråden skjuts iväg
+      if (!ctx) return;
+      var t = nu();
+      var n = ctx.createBufferSource(); n.buffer = brus(0.12);
+      var f = ctx.createBiquadFilter(); f.type = 'highpass'; f.frequency.setValueAtTime(900, t);
+      f.frequency.exponentialRampToValueAtTime(4200, t + 0.11);
+      var g = ctx.createGain();
+      g.gain.setValueAtTime(0.14, t);
+      g.gain.exponentialRampToValueAtTime(0.0008, t + 0.12);
+      n.connect(f); f.connect(g); g.connect(master);
+      n.start(t);
+    }
+    function fast() { if (ctx) ton('square', 1900, 1500, nu(), 0.045, 0.05); }   // tråden fäster
+    function hopp() { if (ctx) ton('square', 150, 330, nu(), 0.09, 0.06); }
+    function stomp() { if (!ctx) return; ton('square', 520, 150, nu(), 0.13, 0.12); klank(0.02, 520); }
+    function aj() {                                    // Jonas blir träffad
+      if (!ctx) return;
+      var t = nu();
+      ton('sawtooth', 130, 60, t, 0.28, 0.16);
+      var n = ctx.createBufferSource(); n.buffer = brus(0.14);
+      var g = ctx.createGain();
+      g.gain.setValueAtTime(0.1, t);
+      g.gain.exponentialRampToValueAtTime(0.0008, t + 0.14);
+      n.connect(g); g.connect(master);
+      n.start(t);
+    }
+    function skott() { if (ctx) ton('sawtooth', 1500, 210, nu(), 0.2, 0.09); }   // robotens laser
+    function robotvak() {                              // roboten vaknar: stigande motorvarv
+      if (!ctx) return;
+      var t = nu();
+      var o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = 'sawtooth';
+      o.frequency.setValueAtTime(52, t);
+      o.frequency.exponentialRampToValueAtTime(240, t + 0.9);
+      g.gain.setValueAtTime(0.0008, t);
+      g.gain.linearRampToValueAtTime(0.12, t + 0.15);
+      g.gain.exponentialRampToValueAtTime(0.0008, t + 1.1);
+      o.connect(g); g.connect(master);
+      o.start(t); o.stop(t + 1.15);
+      ton('square', 1174, 1174, t + 0.35, 0.09, 0.05);
+      ton('square', 1174, 1174, t + 0.55, 0.09, 0.05);
+    }
+    function fanfar() {                                // segern!
+      if (!ctx) return;
+      var t = nu();
+      [523, 659, 784, 1047].forEach(function (f, i) { ton('square', f, f, t + i * 0.13, 0.14, 0.07); });
+      [523, 659, 784, 1047].forEach(function (f) { ton('square', f, f, t + 0.56, 0.85, 0.05); });
+    }
+    function dronStart() {                             // olycksbådande bakgrundssurr
+      if (!ctx || dron) return;
+      var g = ctx.createGain(); g.gain.value = 0.055;
+      var f = ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 170;
+      var o1 = ctx.createOscillator(); o1.type = 'sawtooth'; o1.frequency.value = 41.2;
+      var o2 = ctx.createOscillator(); o2.type = 'sawtooth'; o2.frequency.value = 41.8;
+      var lfo = ctx.createOscillator(); lfo.frequency.value = 0.13;
+      var lfoG = ctx.createGain(); lfoG.gain.value = 0.028;
+      lfo.connect(lfoG); lfoG.connect(g.gain);
+      o1.connect(f); o2.connect(f); f.connect(g); g.connect(master);
+      o1.start(); o2.start(); lfo.start();
+      dron = { g: g, stopp: function () { try { o1.stop(); o2.stop(); lfo.stop(); } catch (e) {} } };
+    }
+    function dronStopp() {
+      if (!ctx || !dron) return;
+      var d = dron; dron = null;
+      d.g.gain.linearRampToValueAtTime(0.0008, nu() + 0.6);
+      setTimeout(d.stopp, 700);
+    }
+    function tyst(pa) {
+      tystat = pa;
+      if (ctx && master) master.gain.linearRampToValueAtTime(pa ? 0 : 0.5, nu() + 0.15);
+    }
+    function stangAv() {
+      dronStopp();
+      if (ctx && master) master.gain.linearRampToValueAtTime(0.0008, nu() + 0.5);
+      var gml = ctx;
+      ctx = null; master = null; dron = null;
+      if (gml) setTimeout(function () { try { gml.close(); } catch (e) {} }, 800);
+    }
+    return { start: start, siren: siren, muller: muller, dunk: dunk, klank: klank,
+             tjoff: tjoff, fast: fast, hopp: hopp, stomp: stomp, aj: aj, skott: skott,
+             robotvak: robotvak, fanfar: fanfar, dronStart: dronStart, dronStopp: dronStopp, tyst: tyst,
+             arTyst: function () { return tystat; }, stangAv: stangAv };
+  })();
+
+  /* ————— raset: sidans synliga delar faller ner lite snett ————— */
+  var FALLSEL = [
+    '.scene--hero h1', '.scene--hero .tagline', '.scene--hero .merits', '.scene--hero .ctas',
+    '.label', '.proj h3', '.proj p.desc', '.proj .feat', '.proj p.meta', '.pvis',
+    '.kursram', '#kurs p.meta',
+    '.vplayer', '#videor p.meta', '.soc a', 'p.big',
+    '.nbplan', '#nbrev .falt', '#nbrev .knapp',
+    '#kontakt p.desc', '#kform .falt', '#kform .skicka', '.pixelscen',
+    'footer .rad', '.pistrom', 'footer p', '#intelarm'
+  ].join(',');
+  var fallna = [];        // { el, transition0, transform0, will0 }
+
+  function faller() {
+    var alla = [].slice.call(document.querySelectorAll(FALLSEL));
+    var lov = alla.filter(function (el) {              // bara "löv" — inget dubbelfall i fall
+      return !alla.some(function (b) { return b !== el && b.contains(el); });
+    });
+    fallna = [];
+    var maxDunsar = 9, dunsar = 0;
+    lov.forEach(function (el) {
+      var r = el.getBoundingClientRect();
+      if (r.width < 2 || r.height < 2) return;         // gömda element rasar inte
+      fallna.push({ el: el,
+                    transition0: el.style.transition, transform0: el.style.transform,
+                    will0: el.style.willChange });
+      var dy = 40 + Math.random() * 110;
+      var dx = (Math.random() * 2 - 1) * 36;
+      var rot = (Math.random() * 2 - 1) * 9;
+      var drj = Math.random() * 0.55;
+      var dur = 0.7 + Math.random() * 0.35;
+      el.style.willChange = 'transform';
+      if (reduced) {
+        el.style.transition = 'none';
+      } else {
+        el.style.transition = 'transform ' + dur.toFixed(2) + 's cubic-bezier(.42,.02,.9,.5) ' + drj.toFixed(2) + 's';
+      }
+      el.style.transform = 'translate(' + dx.toFixed(0) + 'px,' + dy.toFixed(0) + 'px) rotate(' + rot.toFixed(1) + 'deg)';
+      if (!reduced && dunsar < maxDunsar && r.width > 120 && Math.random() < 0.5) {
+        dunsar++;
+        ljud.dunk(drj + dur * 0.96, 0.5 + Math.min(1, r.width / 700));
+        if (Math.random() < 0.6) ljud.klank(drj + dur * 0.96 + 0.04);
+      }
+    });
+    if (!reduced) { ljud.dunk(1.5, 1.4); ljud.klank(1.55, 210); }   // sista stora dunsen
+  }
+
+  function res(el4) {                                  // allt svävar tillbaka på plats
+    fallna.forEach(function (f, i) {
+      f.el.style.transition = 'transform 1.05s cubic-bezier(.16,1,.3,1) ' + ((i % 7) * 0.05).toFixed(2) + 's';
+      f.el.style.transform = f.transform0 || '';
+    });
+    setTimeout(function () {
+      fallna.forEach(function (f) {
+        f.el.style.transition = f.transition0 || '';
+        f.el.style.transform = f.transform0 || '';
+        f.el.style.willChange = f.will0 || '';
+      });
+      fallna = [];
+      if (el4) el4();
+    }, 1500);
+  }
+
+  /* ————— plattformarna: de fallna elementens lådor + marken ————— */
+  var plattformar = [], varldB = 0, varldH = 0, markY = 0;
+
+  function matPlattformar() {
+    var sy = window.scrollY || window.pageYOffset;
+    varldB = window.innerWidth;
+    varldH = docEl.scrollHeight;
+    markY = varldH - 4;
+    plattformar = [];
+    fallna.forEach(function (f) {
+      var r = f.el.getBoundingClientRect();
+      if (r.width < 34 || r.height < 6) return;
+      plattformar.push({ x: r.left, y: r.top + sy, w: r.width, h: Math.max(10, r.height) });
+    });
+  }
+
+  /* ————— tangenter, pekare och touch-knappar ————— */
+  var tang = { v: false, h: false, upp: false, ner: false };
+  var hoppBuf = 0, tradTryck = false, pekMal = null;
+
+  function nyckel(e) {
+    var k = e.key;
+    if (k === 'ArrowLeft' || k === 'a' || k === 'A') return 'v';
+    if (k === 'ArrowRight' || k === 'd' || k === 'D') return 'h';
+    if (k === 'ArrowUp' || k === 'w' || k === 'W' || k === ' ' || k === 'Spacebar') return 'upp';
+    if (k === 'ArrowDown' || k === 's' || k === 'S') return 'ner';
+    if (k === 'x' || k === 'X') return 'trad';
+    if (k === 'Escape') return 'avbryt';
+    return null;
+  }
+  function tangNer(e) {
+    var n = nyckel(e);
+    if (!n) return;
+    e.preventDefault();
+    if (n === 'avbryt') { avsluta(); return; }
+    if (n === 'trad') { if (!e.repeat) tradTryck = true; return; }
+    if (n === 'upp' && !tang.upp) hoppBuf = 0.14;
+    tang[n] = true;
+  }
+  function tangUpp(e) {
+    var n = nyckel(e);
+    if (!n || n === 'avbryt' || n === 'trad') return;
+    e.preventDefault();
+    tang[n] = false;
+  }
+
+  /* ————— spelaren: pixel-Jonas med tyngdlag, hopp och spindeltråd ————— */
+  var SK = 3, SPW = JONAS.width * SK, SPH = JONAS.height * SK;   // ritstorlek
+  var G = 2100, MAXFALL = 1400, SPRING = 300, HOPPV = 820;
+  var sp = null;          // { x, y (fötterna), vx, vy, dir, mark, hj, invuln, dod, stegT, steg, coyote }
+  var trad = { fast: false, ax: 0, ay: 0, L: 0, miss: 0, missX: 0, missY: 0 };
+  var spawnX = 0;
+
+  function initSpelare() {
+    var r = knapp.getBoundingClientRect();
+    spawnX = klamm(r.left + r.width / 2, 40, varldB - 40);
+    sp = { x: spawnX, y: markY, vx: 0, vy: 0, dir: 1, mark: true, hj: 3,
+           invuln: 1.2, dod: 0, stegT: 0, steg: 0, coyote: 0 };
+    trad.fast = false; trad.miss = 0;
+    poff(sp.x, sp.y - SPH / 2, '#ffd166', 16);
+  }
+
+  function skjutTrad(riktX, riktY) {                    // sök bästa fästpunkt ovanför
+    var hx = sp.x, hy = sp.y - SPH * 0.6;
+    var d0 = Math.hypot(riktX, riktY) || 1;
+    riktX /= d0; riktY /= d0;
+    var bast = null, bastPo = -1e9;
+    for (var i = 0; i < plattformar.length; i++) {
+      var p = plattformar[i];
+      var ax = klamm(hx, p.x, p.x + p.w);
+      var over = hx >= p.x && hx <= p.x + p.w;
+      var ay = over ? p.y + p.h : p.y;                  // rakt ovanför: fäst i underkanten
+      if (ay > hy - 40) continue;                       // måste vara en bit ovanför
+      var dx = ax - hx, dy = ay - hy;
+      var d = Math.hypot(dx, dy);
+      if (d > 640 || d < 40) continue;
+      var rikt = (dx * riktX + dy * riktY) / d;         // hur väl siktet stämmer
+      var po = rikt * 260 + (hy - ay) * 0.6 - Math.abs(dx) * 0.25;
+      if (po > bastPo) { bastPo = po; bast = { x: ax, y: ay, d: d }; }
+    }
+    ljud.tjoff();
+    if (bast) {
+      trad.fast = true; trad.ax = bast.x; trad.ay = bast.y; trad.L = bast.d;
+      ljud.fast();
+    } else {                                            // tråden fäster inte: kort fizzle
+      trad.miss = 0.22;
+      trad.missX = hx + riktX * 190;
+      trad.missY = hy + riktY * 190;
+    }
+  }
+
+  function uppdateraSpelare(dt) {
+    if (!sp) return;
+    if (sp.invuln > 0) sp.invuln -= dt;
+    if (trad.miss > 0) trad.miss -= dt;
+    if (hoppBuf > 0) hoppBuf -= dt;
+
+    /* trådskott/-släpp (X, touch-knapp eller klick/tapp på skärmen) */
+    if (tradTryck) {
+      tradTryck = false;
+      if (trad.fast) { trad.fast = false; }
+      else if (pekMal) {
+        skjutTrad(pekMal.x - sp.x, pekMal.y - (sp.y - SPH * 0.6));
+      } else {
+        skjutTrad(sp.dir * 0.35, -0.94);
+      }
+    }
+    pekMal = null;
+
+    /* styrning */
+    var acc = sp.mark ? 2600 : 1500;
+    if (tang.v) { sp.vx -= acc * dt; sp.dir = -1; }
+    if (tang.h) { sp.vx += acc * dt; sp.dir = 1; }
+    if (!tang.v && !tang.h) {
+      var br = (sp.mark ? 2300 : 350) * dt;
+      if (sp.vx > br) sp.vx -= br; else if (sp.vx < -br) sp.vx += br; else sp.vx = 0;
+    }
+    sp.vx = klamm(sp.vx, -SPRING, SPRING);
+
+    /* hopp (med coyotetid) — hopp i tråden släpper den med extra skjuts */
+    if (sp.mark) sp.coyote = 0.09; else if (sp.coyote > 0) sp.coyote -= dt;
+    if (hoppBuf > 0) {
+      if (trad.fast) {
+        trad.fast = false;
+        sp.vy = Math.min(sp.vy, -560);
+        hoppBuf = 0; ljud.hopp();
+      } else if (sp.coyote > 0) {
+        sp.vy = -HOPPV; sp.mark = false; sp.coyote = 0;
+        hoppBuf = 0; ljud.hopp();
+      }
+    }
+
+    /* tyngdlag + integrering */
+    sp.vy = Math.min(MAXFALL, sp.vy + G * dt);
+    var fotY0 = sp.y;
+    sp.x += sp.vx * dt;
+    sp.y += sp.vy * dt;
+
+    /* spindeltråden: klättra/fira och håll repets längd (pendel) */
+    if (trad.fast) {
+      if (tang.upp) trad.L = Math.max(56, trad.L - 200 * dt);
+      if (tang.ner) trad.L = Math.min(660, trad.L + 260 * dt);
+      var hx = sp.x, hy = sp.y - SPH * 0.6;
+      var dx = hx - trad.ax, dy = hy - trad.ay;
+      var d = Math.hypot(dx, dy);
+      if (d > trad.L && d > 0.001) {
+        var nx = dx / d, ny = dy / d;
+        sp.x = trad.ax + nx * trad.L;
+        sp.y = trad.ay + ny * trad.L + SPH * 0.6;
+        var vr = sp.vx * nx + sp.vy * ny;               // ta bort fart bort från ankaret
+        if (vr > 0) { sp.vx -= vr * nx; sp.vy -= vr * ny; }
+        if (tang.h) sp.vx += 700 * dt;                  // extra svängkraft i repet
+        if (tang.v) sp.vx -= 700 * dt;
+      }
+    }
+
+    /* världens kanter */
+    sp.x = klamm(sp.x, SPW / 2, varldB - SPW / 2);
+    if (sp.y - SPH < 0) { sp.y = SPH; if (sp.vy < 0) sp.vy = 0; }
+
+    /* landa: marken + de fallna elementens ovansidor (enkelriktade) */
+    sp.mark = false;
+    if (sp.y >= markY) { sp.y = markY; sp.vy = 0; sp.mark = true; }
+    else if (sp.vy >= 0) {
+      for (var i = 0; i < plattformar.length; i++) {
+        var p = plattformar[i];
+        if (sp.x + 12 < p.x || sp.x - 12 > p.x + p.w) continue;
+        if (fotY0 <= p.y + 1 && sp.y >= p.y) {
+          sp.y = p.y; sp.vy = 0; sp.mark = true;
+          break;
+        }
+      }
+    }
+    if (sp.mark && trad.fast) trad.fast = false;        // landad: släpp tråden
+
+    /* springsteg för animationen */
+    if (sp.mark && Math.abs(sp.vx) > 20) {
+      sp.stegT += dt;
+      if (sp.stegT > 0.13) { sp.stegT = 0; sp.steg = 1 - sp.steg; }
+    } else sp.stegT = 0.12;
+  }
+
+  function skada(rikt) {
+    if (!sp || sp.invuln > 0 || spel.segrat) return;
+    sp.hj--;
+    uppdateraHjartan();
+    ljud.aj();
+    trad.fast = false;
+    poff(sp.x, sp.y - SPH / 2, '#ff4b4b', 12);
+    if (flash) { flash.classList.add('aj'); setTimeout(function () { if (flash) flash.classList.remove('aj'); }, 260); }
+    if (sp.hj <= 0) {
+      medd('Aj! Roboten vann den ronden …', 2.6);
+      sp.x = spawnX; sp.y = markY; sp.vx = 0; sp.vy = 0;
+      sp.hj = 3; sp.invuln = 2.2;
+      uppdateraHjartan();
+    } else {
+      sp.invuln = 1.6;
+      sp.vx = 340 * (rikt || (sp.dir * -1));
+      sp.vy = -360;
+    }
+  }
+
+  /* ————— roboten som vaktar däruppe ————— */
+  var RSK = 6, ROW = ROBOT.width * RSK, ROH = ROBOT.height * RSK;
+  var robo = null, skotten = [];
+
+  function initRobot() {
+    var plat = null;                                    // bred plattform högst upp
+    for (var i = 0; i < plattformar.length; i++) {
+      var p = plattformar[i];
+      if (p.w < 180) continue;
+      if (!plat || p.y < plat.y) plat = p;
+    }
+    if (!plat) plat = { x: varldB * 0.2, y: 420, w: varldB * 0.6, h: 20 };
+    robo = { x: plat.x + plat.w * 0.62, y: plat.y, dir: -1, hp: 3, plat: plat, gick: false,
+             vaknat: false, dod: 0, rot: 0, stegT: 0, steg: 0, skottT: 2.2, stagger: 0, segerVisad: false };
+    skotten = [];
+  }
+
+  function uppdateraRobot(dt) {
+    if (!robo || !sp) return;
+    if (robo.dod > 0) {                                 // besegrad: välter och slocknar
+      robo.dod += dt;
+      robo.rot = -Math.min(1, robo.dod / 0.8) * Math.PI / 2 * -robo.dir;
+      if (robo.dod > 1.4 && !robo.segerVisad) { robo.segerVisad = true; seger(); }
+      return;
+    }
+    robo.stegT += dt;
+    if (robo.stegT > 0.16) { robo.stegT = 0; robo.steg = 1 - robo.steg; }
+    if (robo.stagger > 0) { robo.stagger -= dt; return; }
+
+    var dxSp = sp.x - robo.x, dySp = (sp.y - SPH / 2) - (robo.y - ROH / 2);
+    if (!robo.vaknat) {
+      if (sp.y < robo.y + 1000) {                       // inkräktaren är nära!
+        robo.vaknat = true;
+        ljud.robotvak();
+        medd('⚠ Inkräktare upptäckt ⚠', 2.4);
+      } else {                                          // lugn vaktpatrull
+        robo.x += robo.dir * 46 * dt;
+        if (robo.x < robo.plat.x + ROW / 2) robo.dir = 1;
+        if (robo.x > robo.plat.x + robo.plat.w - ROW / 2) robo.dir = -1;
+        robo.gick = true;
+        return;
+      }
+    }
+    robo.dir = dxSp < 0 ? -1 : 1;                       // vänd mot Jonas
+    robo.gick = false;
+    if (Math.abs(dySp) < 260 && Math.abs(dxSp) > 60) {  // jaga på plattformen
+      var fore = robo.x;
+      robo.x += robo.dir * 105 * dt;
+      robo.x = klamm(robo.x, robo.plat.x + ROW / 2, robo.plat.x + robo.plat.w - ROW / 2);
+      robo.gick = robo.x !== fore;
+    }
+    robo.skottT -= dt;
+    if (robo.skottT <= 0 && Math.hypot(dxSp, dySp) < 860) {
+      robo.skottT = 1.8 + Math.random() * 1.2;
+      var mx = robo.x + robo.dir * 20, my = robo.y - ROH * 0.78;   // från ögonen
+      var vd = Math.hypot(sp.x - mx, sp.y - SPH / 2 - my) || 1;
+      skotten.push({ x: mx, y: my,
+                     vx: (sp.x - mx) / vd * 330, vy: (sp.y - SPH / 2 - my) / vd * 330, t: 0 });
+      ljud.skott();
+    }
+  }
+
+  function uppdateraSkott(dt) {
+    for (var i = skotten.length - 1; i >= 0; i--) {
+      var b = skotten[i];
+      b.t += dt;
+      b.x += b.vx * dt; b.y += b.vy * dt;
+      if (b.t > 3.5 || b.x < -40 || b.x > varldB + 40) { skotten.splice(i, 1); continue; }
+      if (sp && sp.invuln <= 0 &&
+          Math.abs(b.x - sp.x) < 18 && b.y > sp.y - SPH - 6 && b.y < sp.y + 6) {
+        skotten.splice(i, 1);
+        skada(b.vx > 0 ? 1 : -1);
+      }
+    }
+  }
+
+  function kollaRobotTraff() {
+    if (!robo || !sp || robo.dod > 0) return;
+    var overlX = Math.abs(sp.x - robo.x) < (ROW / 2 + 10);
+    if (!overlX) return;
+    var huvudTopp = robo.y - ROH, huvudBotten = robo.y - ROH * 0.72;
+    if (sp.vy > 0 && sp.y > huvudTopp && sp.y < huvudBotten + 26) {   // stampat på huvudet!
+      robo.hp--;
+      sp.vy = -620; sp.mark = false;
+      trad.fast = false;
+      ljud.stomp();
+      poff(robo.x, huvudTopp, '#ffb347', 14);
+      if (robo.hp <= 0) {
+        robo.dod = 0.001;
+        ljud.klank(0, 160); ljud.dunk(0.15, 1.5);
+        konfetti(robo.x, robo.y - ROH / 2);
+      } else {
+        robo.stagger = 0.85;
+        medd(robo.hp === 2 ? 'Två kvar!' : 'En kvar!', 1.4);
+      }
+      return;
+    }
+    if (robo.stagger <= 0 && sp.invuln <= 0 &&
+        sp.y > huvudBotten && sp.y - SPH < robo.y) {    // gick in i roboten
+      skada(sp.x < robo.x ? -1 : 1);
+    }
+  }
+
+  /* ————— partiklar: poff, gnistor och konfetti ————— */
+  var partiklar = [];
+  function poff(x, y, farg, antal) {
+    for (var i = 0; i < antal; i++) {
+      var v = 60 + Math.random() * 200, a = Math.random() * Math.PI * 2;
+      partiklar.push({ x: x, y: y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 60,
+                       t: 0, liv: 0.5 + Math.random() * 0.4, farg: farg, st: 2 + (Math.random() * 3 | 0), g: 400 });
+    }
+  }
+  function konfetti(x, y) {
+    var farger = ['#ffd166', '#57d98a', '#5fb2ff', '#b18cff', '#ff6b8a', '#eae6dc'];
+    for (var i = 0; i < 90; i++) {
+      var v = 120 + Math.random() * 380, a = -Math.PI / 2 + (Math.random() - 0.5) * 1.9;
+      partiklar.push({ x: x, y: y, vx: Math.cos(a) * v, vy: Math.sin(a) * v,
+                       t: 0, liv: 1.4 + Math.random() * 1.4,
+                       farg: farger[i % farger.length], st: 3 + (Math.random() * 3 | 0), g: 520 });
+    }
+  }
+  function uppdateraPartiklar(dt) {
+    for (var i = partiklar.length - 1; i >= 0; i--) {
+      var p = partiklar[i];
+      p.t += dt;
+      if (p.t >= p.liv) { partiklar.splice(i, 1); continue; }
+      p.vy += p.g * dt;
+      p.x += p.vx * dt; p.y += p.vy * dt;
+    }
+  }
+
+  /* ————— överläggen: blinket, HUD, meddelanden, touch och segerrutan ————— */
+  var flash = null, hud = null, hudLiv = null, hint = null, meddEl = null,
+      touch = null, segerEl = null, canvas = null, ritk = null, meddTimer = 0;
+
+  function byggOverlays() {
+    flash = document.createElement('div');
+    flash.id = 'larmflash';
+    flash.className = 'blink';
+    document.body.appendChild(flash);
+
+    canvas = document.createElement('canvas');
+    canvas.id = 'larmcanvas';
+    canvas.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(canvas);
+    ritk = canvas.getContext('2d');
+    passaCanvas();
+
+    hud = document.createElement('div');
+    hud.id = 'larmhud';
+    hud.innerHTML =
+      '<span class="lh-varning">⚠ Självdestruktion aktiverad</span>' +
+      '<span class="lh-liv" aria-label="Liv"></span>' +
+      '<span class="lh-mellis"></span>' +
+      '<button type="button" id="lh-ljud">Ljud av</button>' +
+      '<button type="button" id="lh-exit">✕ Avbryt larmet</button>';
+    document.body.appendChild(hud);
+    hudLiv = hud.querySelector('.lh-liv');
+    hud.querySelector('#lh-exit').addEventListener('click', function () { avsluta(); });
+    hud.querySelector('#lh-ljud').addEventListener('click', function () {
+      ljud.tyst(!ljud.arTyst());
+      this.textContent = ljud.arTyst() ? 'Ljud på' : 'Ljud av';
+    });
+
+    meddEl = document.createElement('div');
+    meddEl.id = 'larmmedd';
+    document.body.appendChild(meddEl);
+
+    hint = document.createElement('div');
+    hint.id = 'larmhint';
+    hint.textContent = '←→ spring · ↑ hoppa · X spindeltråd (håll ↑ i tråden = klättra) · Esc avslutar';
+    document.body.appendChild(hint);
+
+    touch = document.createElement('div');
+    touch.id = 'larmtouch';
+    touch.innerHTML =
+      '<div class="lt-grupp"><button type="button" data-t="v" aria-label="Vänster">◀</button>' +
+      '<button type="button" data-t="h" aria-label="Höger">▶</button></div>' +
+      '<div class="lt-grupp"><button type="button" data-t="trad" aria-label="Spindeltråd">🕸</button>' +
+      '<button type="button" data-t="upp" aria-label="Hoppa">▲</button></div>';
+    document.body.appendChild(touch);
+    [].forEach.call(touch.querySelectorAll('button'), function (b) {
+      var t = b.getAttribute('data-t');
+      function ner(e) {
+        e.preventDefault();
+        if (t === 'trad') { tradTryck = true; return; }
+        if (t === 'upp' && !tang.upp) hoppBuf = 0.14;
+        tang[t] = true;
+      }
+      function upp(e) { e.preventDefault(); if (t !== 'trad') tang[t] = false; }
+      b.addEventListener('pointerdown', ner);
+      b.addEventListener('pointerup', upp);
+      b.addEventListener('pointercancel', upp);
+      b.addEventListener('pointerleave', upp);
+      b.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+    });
+  }
+
+  function uppdateraHjartan() {
+    if (!hudLiv || !sp) return;
+    var ut = '';
+    for (var i = 0; i < 3; i++) ut += i < sp.hj ? '<span>♥</span>' : '<span class="tom">♥</span>';
+    hudLiv.innerHTML = ut;
+  }
+
+  function medd(txt, tid) {
+    if (!meddEl) return;
+    meddEl.textContent = txt;
+    meddEl.classList.add('syns');
+    clearTimeout(meddTimer);
+    meddTimer = setTimeout(function () { if (meddEl) meddEl.classList.remove('syns'); }, (tid || 2) * 1000);
+  }
+
+  function seger() {
+    spel.segrat = true;
+    ljud.dronStopp();                                   // surret tystnar: faran är över
+    if (flash) flash.classList.remove('lugn');
+    if (hud) hud.querySelector('.lh-varning').textContent = '✓ Hotet neutraliserat';
+    ljud.fanfar();
+    setTimeout(function () {
+      if (!spel.igang || segerEl) return;
+      segerEl = document.createElement('div');
+      segerEl.id = 'larmseger';
+      segerEl.setAttribute('role', 'dialog');
+      segerEl.innerHTML =
+        '<p class="ls-rubrik">Hotet neutraliserat</p>' +
+        '<p class="ls-text">Du besegrade roboten — sidan är räddad!<br>Snyggt jobbat.</p>' +
+        '<div class="ls-knappar"><button type="button" id="ls-laga">Läk sidan</button>' +
+        '<button type="button" id="ls-vidare">Hoppa vidare</button></div>';
+      document.body.appendChild(segerEl);
+      segerEl.querySelector('#ls-laga').addEventListener('click', function () { avsluta(); });
+      segerEl.querySelector('#ls-vidare').addEventListener('click', function () {
+        if (segerEl) { segerEl.remove(); segerEl = null; }
+      });
+    }, 900);
+  }
+
+  /* ————— kameran och ritandet ————— */
+  var kamY = 0, dpr = 1;
+
+  function passaCanvas() {
+    if (!canvas) return;
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    canvas.width = Math.round(window.innerWidth * dpr);
+    canvas.height = Math.round(window.innerHeight * dpr);
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+  }
+
+  function ritaSprite(bild, cx, fotY, skala, dir, rot) {
+    var w = bild.width * skala, h = bild.height * skala;
+    ritk.save();
+    ritk.translate(Math.round(cx), Math.round(fotY));
+    if (rot) ritk.rotate(rot);
+    ritk.scale(dir || 1, 1);
+    ritk.imageSmoothingEnabled = false;
+    ritk.drawImage(bild, -w / 2, -h, w, h);
+    ritk.restore();
+  }
+
+  function rita() {
+    if (!ritk) return;
+    ritk.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ritk.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    var sy = kamY;
+
+    /* spindeltråden */
+    if (sp && trad.fast) {
+      ritk.strokeStyle = 'rgba(234,230,220,.85)';
+      ritk.lineWidth = 2;
+      ritk.beginPath();
+      ritk.moveTo(sp.x, sp.y - SPH * 0.6 - sy);
+      ritk.lineTo(trad.ax, trad.ay - sy);
+      ritk.stroke();
+      ritk.fillStyle = 'rgba(234,230,220,.9)';         // liten fästpunkt
+      ritk.fillRect(trad.ax - 2, trad.ay - sy - 2, 4, 4);
+    } else if (sp && trad.miss > 0) {                  // fizzle: tråden nådde inte
+      ritk.strokeStyle = 'rgba(234,230,220,' + (trad.miss / 0.22 * 0.5).toFixed(2) + ')';
+      ritk.lineWidth = 1.5;
+      ritk.beginPath();
+      ritk.moveTo(sp.x, sp.y - SPH * 0.6 - sy);
+      ritk.lineTo(trad.missX, trad.missY - sy);
+      ritk.stroke();
+    }
+
+    /* robotens laserskott */
+    for (var i = 0; i < skotten.length; i++) {
+      var b = skotten[i];
+      ritk.fillStyle = 'rgba(255,75,75,.35)';
+      ritk.fillRect(b.x - 6, b.y - sy - 6, 12, 12);
+      ritk.fillStyle = '#ff4b4b';
+      ritk.fillRect(b.x - 3, b.y - sy - 3, 7, 7);
+    }
+
+    /* roboten + hp-rutor */
+    if (robo && robotBilder) {
+      var synligR = robo.y - sy > -ROH - 80 && robo.y - ROH - sy < window.innerHeight + 80;
+      if (synligR && !(robo.dod > 1.1)) {
+        var rb = (robo.dod > 0 || robo.stagger > 0) ? robotBilder.trasig
+               : (robo.gick ? (robo.steg ? robotBilder.ga1 : robotBilder.ga2) : robotBilder.sta);
+        ritk.globalAlpha = robo.dod > 0 ? Math.max(0, 1 - Math.max(0, robo.dod - 0.55) / 0.5) : 1;
+        ritaSprite(rb, robo.x, robo.y - sy, RSK, robo.dir, robo.rot);
+        ritk.globalAlpha = 1;
+        if (robo.dod <= 0) {
+          for (var hpI = 0; hpI < 3; hpI++) {
+            ritk.fillStyle = hpI < robo.hp ? '#ff4b4b' : 'rgba(255,75,75,.18)';
+            ritk.fillRect(robo.x - 21 + hpI * 15, robo.y - ROH - 18 - sy, 11, 8);
+          }
+        }
+      }
+    }
+
+    /* pixel-Jonas */
+    if (sp && jonasBilder) {
+      var blinkar = sp.invuln > 0 && Math.floor(sp.invuln * 12) % 2 === 0;
+      if (!blinkar) {
+        var bild;
+        if (spel.segrat && sp.mark && Math.abs(sp.vx) < 20) {
+          bild = Math.floor(spel.t * 3) % 2 ? jonasBilder.vinka1 : jonasBilder.vinka2;
+        } else if (!sp.mark) bild = jonasBilder.jump;
+        else if (Math.abs(sp.vx) > 20) bild = sp.steg ? jonasBilder.run2 : jonasBilder.run1;
+        else bild = jonasBilder.idle;
+        ritaSprite(bild, sp.x, sp.y - sy, SK, sp.dir, 0);
+      }
+    }
+
+    /* partiklar */
+    for (var pI = 0; pI < partiklar.length; pI++) {
+      var pa = partiklar[pI];
+      ritk.globalAlpha = Math.max(0, 1 - pa.t / pa.liv);
+      ritk.fillStyle = pa.farg;
+      ritk.fillRect(pa.x - pa.st / 2, pa.y - sy - pa.st / 2, pa.st, pa.st);
+    }
+    ritk.globalAlpha = 1;
+  }
+
+  /* ————— huvudloopen ————— */
+  var spel = { igang: false, t: 0, segrat: false };
+  var rafId = 0, senast = 0;
+
+  function tick(ts) {
+    rafId = 0;
+    if (!spel.igang) return;
+    var dt = senast ? Math.min(0.045, (ts - senast) / 1000) : 0.016;
+    senast = ts;
+    spel.t += dt;
+
+    if (sp) {
+      uppdateraSpelare(dt);
+      uppdateraRobot(dt);
+      uppdateraSkott(dt);
+      kollaRobotTraff();
+      uppdateraPartiklar(dt);
+
+      /* kameran följer Jonas mjukt — sidans egen scroll är spelets kamera */
+      var malY = klamm(sp.y - window.innerHeight * 0.58, 0, Math.max(0, varldH - window.innerHeight));
+      kamY += (malY - kamY) * Math.min(1, dt * 7);
+      window.scrollTo(0, Math.round(kamY));
+    }
+
+    rita();
+    rafId = requestAnimationFrame(tick);
+  }
+
+  /* ————— pekare på canvasen: skjut tråden mot där man pekar ————— */
+  function canvasPek(e) {
+    if (!spel.igang || !sp) return;
+    e.preventDefault();
+    pekMal = { x: e.clientX, y: e.clientY + kamY };
+    tradTryck = true;
+  }
+
+  function vidStorlek() {
+    if (!spel.igang) return;
+    passaCanvas();
+    matPlattformar();
+    if (robo && robo.dod <= 0) {                        // robotens plattform kan ha flyttat sig
+      var narmast = null, basta = 1e9;
+      for (var i = 0; i < plattformar.length; i++) {
+        var p = plattformar[i], d = Math.abs(p.y - robo.plat.y) + Math.abs(p.x - robo.plat.x);
+        if (p.w >= 180 && d < basta) { basta = d; narmast = p; }
+      }
+      if (narmast) {
+        robo.plat = narmast;
+        robo.x = klamm(robo.x, narmast.x + ROW / 2, narmast.x + narmast.w - ROW / 2);
+        robo.y = narmast.y;
+      }
+    }
+    if (sp) sp.x = klamm(sp.x, SPW / 2, varldB - SPW / 2);
+  }
+
+  /* ————— start och avslut ————— */
+  var startTimers = [];
+
+  function start() {
+    if (spel.igang) return;
+    spel.igang = true;
+    spel.segrat = false;
+    spel.t = 0;
+    senast = 0;
+    partiklar = [];
+    if (!jonasBilder) { jonasBilder = gorFrames(JONAS); robotBilder = gorFrames(ROBOT); }
+
+    ljud.start();
+    if (!reduced) { ljud.siren(3.6); ljud.muller(2.6); }
+    else ljud.siren(1.6);
+
+    docEl.classList.add('larm');
+    knapp.blur();
+    byggOverlays();
+    faller();
+
+    kamY = window.scrollY || window.pageYOffset;
+
+    startTimers.push(setTimeout(function () {           // blinket lugnar sig till vinjett
+      if (flash) { flash.classList.remove('blink'); flash.classList.add('lugn'); }
+    }, reduced ? 400 : 3100));
+
+    startTimers.push(setTimeout(function () {           // raset är klart: spelet börjar
+      if (!spel.igang) return;
+      matPlattformar();
+      initSpelare();
+      initRobot();
+      uppdateraHjartan();
+      ljud.dronStart();
+      medd('Åh nej. Vad har du gjort?!', 2.8);
+      if (hint) hint.classList.add('syns');
+      startTimers.push(setTimeout(function () { if (hint) hint.classList.remove('syns'); }, 9000));
+
+      window.addEventListener('keydown', tangNer);
+      window.addEventListener('keyup', tangUpp);
+      canvas.addEventListener('pointerdown', canvasPek);
+      window.addEventListener('resize', vidStorlek);
+
+      rafId = requestAnimationFrame(tick);
+    }, reduced ? 150 : 1750));
+  }
+
+  function avsluta() {
+    if (!spel.igang) return;
+    var segrade = spel.segrat;
+    spel.igang = false;
+    startTimers.forEach(clearTimeout); startTimers = [];
+    if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
+    window.removeEventListener('keydown', tangNer);
+    window.removeEventListener('keyup', tangUpp);
+    window.removeEventListener('resize', vidStorlek);
+    tang.v = tang.h = tang.upp = tang.ner = false;
+    ljud.stangAv();
+
+    [canvas, hud, hint, meddEl, touch, segerEl].forEach(function (el) { if (el) el.remove(); });
+    canvas = null; ritk = null; hud = null; hudLiv = null; hint = null;
+    meddEl = null; touch = null; segerEl = null;
+    if (flash) {
+      var f = flash; flash = null;
+      f.classList.remove('blink'); f.classList.remove('lugn');   // opacity → 0 (transition)
+      setTimeout(function () { f.remove(); }, 700);
+    }
+
+    docEl.classList.add('larmslut');                    // navigationen glider tillbaka mjukt
+    docEl.classList.remove('larm');
+    knapp.disabled = true;                              // inte förrän allt läkt klart
+    res(function () {
+      docEl.classList.remove('larmslut');
+      knapp.disabled = false;
+      try { window.dispatchEvent(new Event('scroll')); } catch (e) {}   // väck teleprompterljuset
+    });
+
+    sp = null; robo = null; skotten = []; partiklar = [];
+    knapp.textContent = segrade
+      ? 'Roboten är besegrad. Men klicka ändå inte här igen.'
+      : 'Okej. Du klickade. Gör det inte igen.';
+  }
+
+  knapp.addEventListener('click', function () { start(); });
+
+  /* testkrok: öppna sidan med ?larmtest för att kunna styra spelet utifrån
+     (samma mönster som ?redigera och ?textprov) */
+  if (/[?&]larmtest/.test(location.search)) {
+    window.__larmtest = {
+      status: function () {
+        return { igang: spel.igang, segrat: spel.segrat,
+                 sp: sp && { x: sp.x, y: sp.y, hj: sp.hj, mark: sp.mark },
+                 robo: robo && { x: robo.x, y: robo.y, hp: robo.hp, vaknat: robo.vaknat, dod: robo.dod },
+                 plattformar: plattformar.length, markY: markY };
+      },
+      flytta: function (x, y) { if (sp) { sp.x = x; sp.y = y; sp.vx = 0; sp.vy = 0; kamY = Math.max(0, y - innerHeight * 0.58); } },
+      tillRobot: function () {
+        if (sp && robo) { sp.x = robo.x; sp.y = robo.y - ROH - 120; sp.vx = 0; sp.vy = 0; kamY = Math.max(0, sp.y - innerHeight * 0.58); }
+      }
+    };
+  }
+})();

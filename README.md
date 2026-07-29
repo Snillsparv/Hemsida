@@ -55,6 +55,8 @@ forslag/              – de tre designförslagen (en självständig HTML-fil pe
 assets/
   fonts.css, fonts/   – självhostade typsnitt (Space Grotesk, JetBrains Mono, Fraunces)
   globe.js            – lättvikts-jordglob i ren canvas (ortografisk projektion, ~7 KB)
+  larmspel.js         – påskägget: "Klicka inte här"-knappen längst ner utlöser larm +
+                        plattformsspel (pixel-Jonas med spindeltråd, robotboss högst upp)
   globe-data.json     – landpunkter + konturer, genererade från Geography-repots world-borders.json
   img/                – bilder (poser från Geography-repot, foton från HP-repot; *-md = nedskalade)
 ```
