@@ -5,7 +5,8 @@
    hund som kommer på besök,
    gör någon enstaka gång en volt, besegrar efter en minuts tittande en
    AI-robot med sitt gröna lasersvärd — och den som klickar på honom får
-   mata honom med chokladkakor. Helt ritad i kod. */
+   mata honom med chokladkakor. Klockan 13:37 blir det solglasögon och
+   leet-dans. Helt ritad i kod. */
 (function () {
   'use strict';
   var scen = document.querySelector('.pixelscen');
@@ -391,6 +392,72 @@
         '....PP..PP....',
         '....KKK.KKK...',
       ],
+      glas: [
+        '..............',
+        '..............',
+        '....H.HH.H....',
+        '....HHHHHH....',
+        '...HHHHHHHH...',
+        '...HHHHHHHH...',
+        '...HHSSSSSS...',
+        '...HEEEEEEES..',
+        '.....SSMMMSR..',
+        '......SSSS.R..',
+        '....RRRRRRRR..',
+        '...RRRRRRRR...',
+        '...SRRRRRR....',
+        '...SRRRRRR....',
+        '...SPPPPPP....',
+        '....PPPPPP....',
+        '....PP..PP....',
+        '....PP..PP....',
+        '....PP..PP....',
+        '....KKK.KKK...',
+      ],
+      dans1: [
+        '..S...........',
+        '..S...........',
+        '..R.H.HH.H....',
+        '..R.HHHHHH....',
+        '..RHHHHHHHH...',
+        '..RHHHHHHHH...',
+        '...HHSSSSSS...',
+        '...HEEEEEEE...',
+        '.....SSMMMS...',
+        '......SSSS....',
+        '....RRRRRR....',
+        '...RRRRRRRR...',
+        '....RRRRRRRS..',
+        '....RRRRRR....',
+        '....PPPPPP....',
+        '....PPPPPP....',
+        '...PP....PP...',
+        '...PP....PP...',
+        '...PP....PP...',
+        '..KKK....KKK..',
+      ],
+      dans2: [
+        '...........S..',
+        '...........S..',
+        '....H.HH.H.R..',
+        '....HHHHHH.R..',
+        '...HHHHHHHHR..',
+        '...HHHHHHHHR..',
+        '...HHSSSSSS...',
+        '...HEEEEEEE...',
+        '.....SSMMMS...',
+        '......SSSS....',
+        '....RRRRRR....',
+        '...RRRRRRRR...',
+        '..SRRRRRRR....',
+        '....RRRRRR....',
+        '....PPPPPP....',
+        '....PPPPPP....',
+        '.....PPPP.....',
+        '.....PPPP.....',
+        '.....PPPP.....',
+        '....KKKKKK....',
+      ],
     }
   };
 
@@ -744,6 +811,7 @@
 
   function visaDrom() {
     bubbla.classList.add('drom');
+    bubbla.classList.remove('leet');
     bubbla.classList.toggle('hog', dromTyp === 'far');
     bubbla.textContent = '';
     if (dromTyp === 'far') {                            // räkna får!
@@ -860,11 +928,15 @@
   nyRitare(hjartaCv, HJARTA)('hjarta');
   var chokX = 0, chokY = 0, hjartaT = -1;
 
+  /* leet-dansen: klockan 13:37 åker solglasögonen på (?leet för att provdansa) */
+  var leetKoll = 0, leetGjord = false, leetBubbla = false;
+  var leetTest = /[?&]leet\b/.test(location.search);
+
   cv.style.pointerEvents = 'auto';
   cv.style.cursor = 'pointer';
   cv.addEventListener('pointerdown', function () {
     if (lage === 'fanga' || lage === 'ata' || lage === 'strid' ||
-        lage === 'klappa' || voltT >= 0) return;
+        lage === 'klappa' || lage === 'leet' || voltT >= 0) return;
     bubbla.classList.remove('syns');              // ev. rabbel/dröm avbryts
     lage = 'fanga'; lageT = 0; lageSlut = 6;      // nödutgång
     hoppT = 0;                                    // hoppar till av klicket!
@@ -888,6 +960,23 @@
     var dt = senast ? Math.min(0.05, (ts - senast) / 1000) : 0.016;
     senast = ts;
     var hoppY = 0;
+
+    leetKoll += dt;                                    // är klockan 13:37?
+    if (leetKoll > 1) {
+      leetKoll = 0;
+      var nu = new Date();
+      var arLeet = (nu.getHours() === 13 && nu.getMinutes() === 37) ||
+                   (leetTest && aktivT > 1.5);
+      if (arLeet && !leetGjord && hoppT < 0 && voltT < 0 &&
+          (lage === 'spring' || lage === 'sta' || lage === 'vinka' ||
+           lage === 'rabbla' || lage === 'sov')) {
+        leetGjord = true; leetTest = false; leetBubbla = false;
+        bubbla.classList.remove('syns');               // ev. rabbel/dröm avbryts
+        lage = 'leet'; lageT = 0; lageSlut = 13.37;    // såklart
+        stegT = 0; steg = 0;
+      }
+      if (!arLeet) leetGjord = false;
+    }
 
     if (voltT >= 0) {                                  // volt: högre luftfärd + helsnurr
       voltT += dt / 0.8;
@@ -952,6 +1041,7 @@
           rabbelKvar = 6 + Math.floor(Math.random() * 8);
           lageSlut = rabbelKvar * 0.22 + 1.4;
           bubbla.classList.remove('drom'); bubbla.classList.remove('hog');
+          bubbla.classList.remove('leet');
           bubbla.textContent = rabbelPos ? '…' : '3,';
           bubbla.classList.add('syns');
           placeraBubbla();
@@ -1017,6 +1107,23 @@
         stegT += dt;
         if (stegT > 0.24) { stegT = 0; steg = 1 - steg; }
         rita(steg ? 'ata2' : 'ata1');
+      } else if (lage === 'leet') {                     // 13:37 — dags att dansa
+        if (lageT < 0.55 || lageT > lageSlut - 0.5) {
+          rita('glas');                                 // solglasögonen på/av
+        } else {
+          if (!leetBubbla) {
+            leetBubbla = true;
+            bubbla.classList.remove('drom'); bubbla.classList.remove('hog');
+            bubbla.classList.add('leet');
+            bubbla.textContent = 'LEET';
+            bubbla.classList.add('syns');
+            placeraBubbla();
+          }
+          stegT += dt;
+          if (stegT > 0.27) { stegT = 0; steg = 1 - steg; }
+          rita(steg ? 'dans2' : 'dans1');
+          hoppY = Math.round(3 * Math.abs(Math.sin(lageT * 6)));
+        }
       } else {                                          // står stilla, tittar och blinkar
         blinkOm -= dt;
         if (blinkOm <= 0) { blinkOm = 1.2 + Math.random() * 2.4; blinkT = 0.13; }
@@ -1047,6 +1154,11 @@
         else if (lage === 'ata') {                      // tack för kakan! ett hjärta
           hjartaT = 0;
           lage = 'sta'; lageT = 0; lageSlut = 0.9 + Math.random() * 0.8;
+          blinkOm = 0.5; blinkT = 0;
+        }
+        else if (lage === 'leet') {                     // dansen är över
+          bubbla.classList.remove('syns'); bubbla.classList.remove('leet');
+          lage = 'sta'; lageT = 0; lageSlut = 0.8;
           blinkOm = 0.5; blinkT = 0;
         }
         else if (lage === 'vinka' && Math.random() < 0.45) { // efter vinket: stå kvar en stund
