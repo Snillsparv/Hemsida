@@ -721,8 +721,10 @@
   var blinkOm = 1.5, blinkT = 0;     // blinkning i stillastående
   var synlig = false, rafId = 0, senast = 0;
 
-  /* pi-rabblet: han fortsätter där han slutade, decimal för decimal */
+  /* pi-rabblet: han fortsätter där han slutade, decimal för decimal.
+     Decimaltecknet följer sidans språk: 3,14 på svenska, 3.14 annars. */
   var RABBEL = '14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196';
+  var TREKOMMA = (document.documentElement.lang || 'sv').slice(0, 2) === 'sv' ? '3,' : '3.';
   var rabbelPos = 0, rabbelKvar = 0, senasteRabbel = 0;
   var bubbla = document.createElement('div');
   bubbla.className = 'pratbubbla';
@@ -1042,7 +1044,7 @@
           lageSlut = rabbelKvar * 0.22 + 1.4;
           bubbla.classList.remove('drom'); bubbla.classList.remove('hog');
           bubbla.classList.remove('leet');
-          bubbla.textContent = rabbelPos ? '…' : '3,';
+          bubbla.textContent = rabbelPos ? '…' : TREKOMMA;
           bubbla.classList.add('syns');
           placeraBubbla();
         } else {
