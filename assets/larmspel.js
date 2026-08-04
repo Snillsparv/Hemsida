@@ -1365,10 +1365,14 @@
   }
 
   function seger() {
+    /* segertexten följer sidans språk — på /en/ pekar den på engelska PauseAI-sidan */
+    var eng = (document.documentElement.lang || 'sv').slice(0, 2) !== 'sv';
+    var PAUSE = eng ? 'https://pauseai.com' : 'https://www.pauseai.se';
     spel.segrat = true;
     ljud.dronStopp();                                   // surret tystnar: faran är över
     if (flash) flash.classList.remove('lugn');
-    if (hud) hud.querySelector('.lh-varning').textContent = '✓ Hotet neutraliserat';
+    if (hud) hud.querySelector('.lh-varning').textContent =
+      eng ? '✓ Threat neutralized' : '✓ Hotet neutraliserat';
     ljud.fanfar();
     setTimeout(function () {
       if (!spel.igang || segerEl) return;
@@ -1377,13 +1381,19 @@
       segerEl.setAttribute('role', 'dialog');
       segerEl.setAttribute('aria-modal', 'true');
       segerEl.setAttribute('aria-labelledby', 'ls-rubrik');
-      segerEl.innerHTML =
-        '<p class="ls-rubrik" id="ls-rubrik">Hotet neutraliserat</p>' +
-        '<p class="ls-text">Puh, roboten är besegrad och sidan är räddad! Men AI hotar tyvärr mer än ' +
-        'bara minnesmästares hemsidor. Gå till <a href="https://www.pauseai.se" target="_blank" ' +
-        'rel="noopener">www.pauseai.se</a> för att hjälpa till att rädda mänskligheten en gång för alla!</p>' +
-        '<div class="ls-knappar"><a id="ls-lank" href="https://www.pauseai.se" target="_blank" rel="noopener">Läs mer om AI</a>' +
-        '<button type="button" id="ls-laga">Fixa hemsidan</button></div>';
+      segerEl.innerHTML = eng
+        ? '<p class="ls-rubrik" id="ls-rubrik">Threat neutralized</p>' +
+          '<p class="ls-text">Phew — the robot is defeated and the site is saved! Sadly, AI threatens more than ' +
+          'just memory champions’ websites. Go to <a href="' + PAUSE + '" target="_blank" ' +
+          'rel="noopener">pauseai.com</a> to help save humanity once and for all!</p>' +
+          '<div class="ls-knappar"><a id="ls-lank" href="' + PAUSE + '" target="_blank" rel="noopener">Learn more about AI</a>' +
+          '<button type="button" id="ls-laga">Fix the website</button></div>'
+        : '<p class="ls-rubrik" id="ls-rubrik">Hotet neutraliserat</p>' +
+          '<p class="ls-text">Puh, roboten är besegrad och sidan är räddad! Men AI hotar tyvärr mer än ' +
+          'bara minnesmästares hemsidor. Gå till <a href="' + PAUSE + '" target="_blank" ' +
+          'rel="noopener">www.pauseai.se</a> för att hjälpa till att rädda mänskligheten en gång för alla!</p>' +
+          '<div class="ls-knappar"><a id="ls-lank" href="' + PAUSE + '" target="_blank" rel="noopener">Läs mer om AI</a>' +
+          '<button type="button" id="ls-laga">Fixa hemsidan</button></div>';
       document.body.appendChild(segerEl);
       segerEl.querySelector('#ls-laga').addEventListener('click', function () { avsluta(); });
       try { segerEl.querySelector('#ls-laga').focus({ preventScroll: true }); } catch (e) {}
