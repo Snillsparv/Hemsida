@@ -13,6 +13,48 @@
   var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var docEl = document.documentElement;
 
+  /* ————— språk: spelets texter följer sidans lang-attribut ————— */
+  var ENG = (docEl.lang || 'sv').slice(0, 2) !== 'sv';
+  var T = ENG ? {
+    varning: '⚠ Self-destruct activated',
+    ljudAv: 'Sound off', ljudPa: 'Sound on',
+    avbryt: '✕ Cancel the alarm',
+    liv: 'Lives',
+    hint: '←→ run · ↑ jump · Esc quits',
+    vanster: 'Left', hoger: 'Right', jetknapp: 'Jetpack', hoppa: 'Jump',
+    raket: 'Rocket ride!', plan: 'Paper plane ride!',
+    jetTangent: 'Jetpack! Press space again mid-air to fly',
+    jetPil: 'Jetpack! Press ▲ again mid-air to fly',
+    aj: 'Ouch! The robot won that round …',
+    prick: '3.14159 … bullseye!',
+    kras: 'π shattered! A new one is being lowered …',
+    inkraktare: '⚠ Intruder detected ⚠',
+    pansar: 'The armour is too thick! There must be another way …',
+    ahnej: 'Oh no. What have you done?!',
+    flyg: 'FLY:',
+    knappSeger: 'The robot is defeated. But still, don’t click here again.',
+    knappSlut: 'Okay. You clicked. Don’t do it again.'
+  } : {
+    varning: '⚠ Självdestruktion aktiverad',
+    ljudAv: 'Ljud av', ljudPa: 'Ljud på',
+    avbryt: '✕ Avbryt larmet',
+    liv: 'Liv',
+    hint: '←→ spring · ↑ hoppa · Esc avslutar',
+    vanster: 'Vänster', hoger: 'Höger', jetknapp: 'Jetpack', hoppa: 'Hoppa',
+    raket: 'Raketskjuts!', plan: 'Pappersflygtur!',
+    jetTangent: 'Jetpack! Tryck mellanslag igen i luften för att flyga',
+    jetPil: 'Jetpack! Tryck ▲ igen i luften för att flyga',
+    aj: 'Aj! Roboten vann den ronden …',
+    prick: '3,14159 … mitt i prick!',
+    kras: 'π i kras! En ny hissas ner …',
+    inkraktare: '⚠ Inkräktare upptäckt ⚠',
+    pansar: 'Pansaret är för tjockt! Det måste finnas ett annat sätt …',
+    ahnej: 'Åh nej. Vad har du gjort?!',
+    flyg: 'FLYG:',
+    knappSeger: 'Roboten är besegrad. Men klicka ändå inte här igen.',
+    knappSlut: 'Okej. Du klickade. Gör det inte igen.'
+  };
+
   /* ————— stilar för larmläget, spelets överlägg och touch-kontrollerna ————— */
   var stil = document.createElement('style');
   stil.id = 'larmstil';
@@ -733,7 +775,7 @@
     a.el.style.visibility = 'hidden';
     ljud.vind(false);
     if (a.raket) ljud.jetStart();
-    medd(a.raket ? 'Raketskjuts!' : 'Pappersflygtur!', 1.6);
+    medd(a.raket ? T.raket : T.plan, 1.6);
   }
   function stigAv(fart) {
     var a = sp && sp.rider;
@@ -1015,7 +1057,7 @@
       jet.fuel = 1;
       ljud.plocka();
       poff(jet.x, jet.y - 22, '#ffd166', 20);
-      medd(finPekare ? 'Jetpack! Tryck mellanslag igen i luften för att flyga' : 'Jetpack! Tryck ▲ igen i luften för att flyga', 3.2);
+      medd(finPekare ? T.jetTangent : T.jetPil, 3.2);
       if (touch) {
         var tb = touch.querySelector('button[data-t="trad"]');
         if (tb) tb.style.display = '';
@@ -1038,7 +1080,7 @@
     poff(sp.x, sp.y - SPH / 2, '#ff4b4b', 12);
     if (flash) { flash.classList.add('aj'); setTimeout(function () { if (flash) flash.classList.remove('aj'); }, 260); }
     if (sp.hj <= 0) {
-      medd('Aj! Roboten vann den ronden …', 2.6);
+      medd(T.aj, 2.6);
       sp.x = spawnX; sp.y = markY; sp.vx = 0; sp.vy = 0;
       sp.hj = 3; sp.invuln = 2.2;
       uppdateraHjartan();
@@ -1139,14 +1181,14 @@
       pi.klar = true;                                   // KLONK — rakt i plåten
       poff(pi.x, pi.y, '#ffd166', 26);
       ljud.dunk(0, 1.6); ljud.klank(0.05, 140);
-      medd('3,14159 … mitt i prick!', 3);
+      medd(T.prick, 3);
       robo.dod = 0.001;
       konfetti(robo.x, robo.y - ROH / 2);
     } else if (robo && pi.y >= ytaY(robo.plat, pi.x)) { // missade: krossas — en ny hissas ner
       pi.klar = true;
       poff(pi.x, robo.plat.y, '#ffd166', 20);
       ljud.klank(0, 300); ljud.dunk(0, 0.9);
-      medd('π i kras! En ny hissas ner …', 2.6);
+      medd(T.kras, 2.6);
       piOm = 3.5;
     }
   }
@@ -1169,7 +1211,7 @@
       if (sp.y < robo.y + 1000) {                       // inkräktaren är nära!
         robo.vaknat = true;
         ljud.robotvak();
-        medd('⚠ Inkräktare upptäckt ⚠', 2.4);
+        medd(T.inkraktare, 2.4);
       } else {                                          // lugn vaktpatrull
         robo.x += robo.dir * 46 * dt;
         if (robo.x < robo.plat.x + ROW / 2) robo.dir = 1;
@@ -1231,7 +1273,7 @@
       robo.stagger = 0.5;
       if (!robo.stampad) {
         robo.stampad = true;
-        medd('Pansaret är för tjockt! Det måste finnas ett annat sätt …', 3.4);
+        medd(T.pansar, 3.4);
       }
       return;
     }
@@ -1289,17 +1331,17 @@
     hud = document.createElement('div');
     hud.id = 'larmhud';
     hud.innerHTML =
-      '<span class="lh-varning">⚠ Självdestruktion aktiverad</span>' +
-      '<span class="lh-liv" aria-label="Liv"></span>' +
+      '<span class="lh-varning">' + T.varning + '</span>' +
+      '<span class="lh-liv" aria-label="' + T.liv + '"></span>' +
       '<span class="lh-mellis"></span>' +
-      '<button type="button" id="lh-ljud">Ljud av</button>' +
-      '<button type="button" id="lh-exit">✕ Avbryt larmet</button>';
+      '<button type="button" id="lh-ljud">' + T.ljudAv + '</button>' +
+      '<button type="button" id="lh-exit">' + T.avbryt + '</button>';
     document.body.appendChild(hud);
     hudLiv = hud.querySelector('.lh-liv');
     hud.querySelector('#lh-exit').addEventListener('click', function () { avsluta(); });
     hud.querySelector('#lh-ljud').addEventListener('click', function () {
       ljud.tyst(!ljud.arTyst());
-      this.textContent = ljud.arTyst() ? 'Ljud på' : 'Ljud av';
+      this.textContent = ljud.arTyst() ? T.ljudPa : T.ljudAv;
     });
 
     meddEl = document.createElement('div');
@@ -1310,16 +1352,16 @@
 
     hint = document.createElement('div');
     hint.id = 'larmhint';
-    hint.textContent = '←→ spring · ↑ hoppa · Esc avslutar';
+    hint.textContent = T.hint;
     document.body.appendChild(hint);
 
     touch = document.createElement('div');
     touch.id = 'larmtouch';
     touch.innerHTML =
-      '<div class="lt-grupp"><button type="button" data-t="v" aria-label="Vänster">◀</button>' +
-      '<button type="button" data-t="h" aria-label="Höger">▶</button></div>' +
-      '<div class="lt-grupp"><button type="button" data-t="trad" aria-label="Jetpack" style="display:none">🚀</button>' +
-      '<button type="button" data-t="upp" aria-label="Hoppa">▲</button></div>';
+      '<div class="lt-grupp"><button type="button" data-t="v" aria-label="' + T.vanster + '">◀</button>' +
+      '<button type="button" data-t="h" aria-label="' + T.hoger + '">▶</button></div>' +
+      '<div class="lt-grupp"><button type="button" data-t="trad" aria-label="' + T.jetknapp + '" style="display:none">🚀</button>' +
+      '<button type="button" data-t="upp" aria-label="' + T.hoppa + '">▲</button></div>';
     document.body.appendChild(touch);
     [].forEach.call(touch.querySelectorAll('button'), function (b) {
       var t = b.getAttribute('data-t');
@@ -1549,7 +1591,7 @@
         ritk.font = '700 12px "JetBrains Mono",monospace';
         ritk.textAlign = 'center';
         ritk.textBaseline = 'middle';
-        ritk.fillText('FLYG:', skx, sky - 65);
+        ritk.fillText(T.flyg, skx, sky - 65);
         ritk.strokeStyle = '#ffd166';
         ritk.lineWidth = 1.5;
         ritk.strokeRect(skx - 27, sky - 55, 54, 10);   // mellanslagstangenten
@@ -1732,7 +1774,7 @@
       placeraJetpack();
       uppdateraHjartan();
       ljud.dronStart();
-      medd('Åh nej. Vad har du gjort?!', 2.8);
+      medd(T.ahnej, 2.8);
       if (hint) hint.classList.add('syns');
       startTimers.push(setTimeout(function () { if (hint) hint.classList.remove('syns'); }, 9000));
 
@@ -1781,9 +1823,7 @@
     akdon = [];
     bossLage = false;
     sp = null; robo = null; skotten = []; partiklar = []; pi = null; jet = null;
-    knapp.textContent = segrade
-      ? 'Roboten är besegrad. Men klicka ändå inte här igen.'
-      : 'Okej. Du klickade. Gör det inte igen.';
+    knapp.textContent = segrade ? T.knappSeger : T.knappSlut;
   }
 
   knapp.addEventListener('click', function () { start(); });

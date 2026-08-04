@@ -1028,31 +1028,6 @@
     o.addEventListener('pointercancel', slapp);
   });
 
-  /* ————— hej-gästen: strax efter att meriterna tonat fram lutar sig
-     Jonas in från kanten och blir kvar — tills man scrollar förbi honom.
-     En gång per besök, eller varje gång med ?hej i adressen. */
-  (function(){
-    var direkt = /[?&]hej(&|=|$)/.test(location.search);
-    if (reduced || /[?&]redigera/.test(location.search)) return;
-    try { if (!direkt && sessionStorage.getItem('jve-hej')) return; } catch(e){}
-    function visa(){
-      if (document.hidden) { setTimeout(visa, 4000); return; }
-      try { sessionStorage.setItem('jve-hej','1'); } catch(e){}
-      var b = document.createElement('img');
-      b.id = 'hejgast'; b.alt = ''; b.setAttribute('aria-hidden','true');
-      b.decoding = 'async'; b.src = 'assets/img/hej.webp';
-      b.style.top = ((window.scrollY || window.pageYOffset) + innerHeight / 2) + 'px';
-      b.addEventListener('error', function(){ b.remove(); });
-      document.body.appendChild(b);
-      function igang(){ requestAnimationFrame(function(){ b.classList.add('visas'); }); }
-      if (b.complete && b.naturalWidth) igang(); else b.addEventListener('load', igang);
-    }
-    (function vanta(){
-      if (!laddarKlar) { setTimeout(vanta, 400); return; }
-      setTimeout(visa, direkt ? 700 : 1200);
-    })();
-  })();
-
   /* ————— ankarvakt: laddas bilder eller byggs moduler om medan sidan
      glider mot ett ankare hamnar målet fel — knäpp rätt när scrollen
      stannat. Avbryts om besökaren tar över med hjul eller finger. ————— */
