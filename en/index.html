@@ -31,8 +31,7 @@
     "https://www.tiktok.com/@jonasvonessen",
     "https://www.youtube.com/@BlueberryClubSparven",
     "https://jonasgeografi.se",
-    "https://hpakuten.se",
-    "https://kurs.jonasvonessen.se"
+    "https://hpakuten.se"
   ]
 }
 </script>
@@ -539,7 +538,6 @@
   <nav aria-label="Site navigation">
     <ul>
       <li><a href="#byggt" data-nav="byggt">memoryOS</a></li>
-      <li><a href="#kurs" data-nav="kurs">Course</a></li>
       <li><a href="#videor" data-nav="videor">Videos</a></li>
       <li><a href="#kontakt" data-nav="kontakt">Contact</a></li>
       <li><a href="/" lang="sv" hreflang="sv" aria-label="På svenska"><svg class="flagga" viewBox="0 0 16 10" aria-hidden="true" focusable="false"><rect width="16" height="10" fill="#006AA7"/><rect x="5" width="2" height="10" fill="#FECC02"/><rect y="4" width="16" height="2" fill="#FECC02"/></svg></a></li>
@@ -576,27 +574,6 @@
         <a class="knapp" href="https://memoryos.com" target="_blank" rel="noopener">Try memoryOS</a>
       </div>
       <p class="meta aft">memoryos.com · iOS &amp; Android</p>
-    </div>
-  </section>
-
-  <div class="paus paus--stor"></div>
-
-  <!-- ———— KURS ———— -->
-  <section id="kurs" class="wrap" aria-labelledby="kurs-rubrik">
-    <div class="scene scene--low" data-scene style="min-height:auto">
-      <h2 class="label" id="kurs-rubrik" data-line style="margin-bottom:clamp(3rem,8vh,5rem)">Course</h2>
-      <div class="kursram" data-line data-min=".45">
-        <img class="kobj kobj--hjarna" src="/assets/img/a-hjarna.webp" alt="" aria-hidden="true" loading="lazy">
-        <img class="kobj kobj--bulb" src="/assets/img/a-bulb.webp" alt="" aria-hidden="true" loading="lazy">
-        <img class="kobj kobj--star" src="/assets/img/a-star.webp" alt="" aria-hidden="true" loading="lazy">
-        <img class="kobj kobj--raket" src="/assets/img/a-raket.webp" alt="" aria-hidden="true" loading="lazy">
-        <img class="kobj kobj--examen" src="/assets/img/a-examen.webp" alt="" aria-hidden="true" loading="lazy">
-        <p class="big">Get a super&nbsp;memory!</p>
-        <p class="desc" style="max-width:40ch;margin-top:1.6rem;line-height:1.75;font-size:clamp(.95rem,.85rem + .5vw,1.1rem)">
-          Possibly the world’s most comprehensive online course in memory techniques — taught in Swedish. Learn every method Jonas uses, entirely at your own pace. (The only thing on this page that costs money, but it’s absolutely worth it.)</p>
-        <a class="knapp" href="https://kurs.jonasvonessen.se" target="_blank" rel="noopener">Check out the course</a>
-      </div>
-      <p class="meta aft">kurs.jonasvonessen.se</p>
     </div>
   </section>
 
@@ -667,41 +644,6 @@
 
   <div class="paus paus--stor"></div>
 
-  <!-- ———— NYHETSBREV ———— -->
-  <section id="nyhetsbrev" class="wrap" aria-labelledby="nyhetsbrev-rubrik">
-    <h2 class="label" id="nyhetsbrev-rubrik" data-line>Newsletter</h2>
-    <div class="scene scene--low" data-scene style="min-height:auto">
-      <img class="nbplan" src="/assets/img/pappersplan.webp" alt="" aria-hidden="true" loading="lazy" width="520" height="449">
-      <p class="big" data-line>Subscribe to an unusually memorable newsletter.</p>
-      <p class="meta aft">In Swedish — for now.</p>
-
-      <!-- NYHETSBREV: kopplat till Mailchimp-listan "Jonas von Essen - Nyhetsbrev".
-           JS använder JSONP-endpointen (post-json) så att besökaren stannar på sidan;
-           utan JS faller formuläret tillbaka på Mailchimps egen sida. -->
-      <form id="nbrev" class="nbrev" data-line data-min=".5" aria-label="Subscribe to the newsletter"
-            action="https://jonasvonessen.us3.list-manage.com/subscribe/post" method="post">
-        <input type="hidden" name="u" value="f3c6c9c6a1fa3f7def382e372">
-        <input type="hidden" name="id" value="cb5e0cbcc0">
-        <!-- TODO TAGG "NYASIDAN": Mailchimp taggar via numeriskt ID, inte namn.
-             Skapa taggen i Mailchimp (Audience -> Tags), välj den sedan i Forms -> Embedded forms
-             och kopiera siffran ur raden <input type="hidden" name="tags" value="SIFFRAN"> hit: -->
-        <input type="hidden" name="tags" value="">
-        <div class="falt">
-          <label for="nb-epost">Your email</label>
-          <input id="nb-epost" name="EMAIL" type="email" autocomplete="email" required>
-        </div>
-        <div class="nbhp" aria-hidden="true"><input type="text" name="b_f3c6c9c6a1fa3f7def382e372_cb5e0cbcc0" tabindex="-1" value="" autocomplete="off"></div>
-        <button class="knapp" type="submit">Subscribe</button>
-        <p class="nbfel" role="alert" hidden></p>
-      </form>
-      <div class="tack" role="status" aria-live="polite">
-        <p class="big" style="font-size:clamp(1.2rem,1rem + 1.2vw,1.6rem)">Thank you.</p>
-      </div>
-    </div>
-  </section>
-
-  <div class="paus paus--stor"></div>
-
   <!-- ———— BOKA FÖRELÄSNING / KONTAKT ———— -->
   <section id="kontakt" class="wrap" aria-labelledby="kontakt-rubrik">
     <div class="scene" data-scene style="min-height:auto;justify-items:center;text-align:center">
@@ -742,7 +684,6 @@
 <footer>
   <div class="rad" style="margin-bottom:1.2rem">
     <a href="https://memoryos.com" target="_blank" rel="noopener">memoryos.com</a>
-    <a href="https://kurs.jonasvonessen.se" target="_blank" rel="noopener">kurs.jonasvonessen.se</a>
   </div>
   <div class="pistrom" aria-hidden="true">
     <div class="pispar"><span>141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117067982148086513282306647093844609550582231725359408128481117450284102701938521105559644622948954930381964428810975665933446128475648233786783165271201909145648566923460348610454326648213393607260249141273</span><span>141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117067982148086513282306647093844609550582231725359408128481117450284102701938521105559644622948954930381964428810975665933446128475648233786783165271201909145648566923460348610454326648213393607260249141273</span></div>
