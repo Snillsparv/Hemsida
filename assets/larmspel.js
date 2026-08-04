@@ -1367,7 +1367,7 @@
   function seger() {
     /* segertexten följer sidans språk — på /en/ pekar den på engelska PauseAI-sidan */
     var eng = (document.documentElement.lang || 'sv').slice(0, 2) !== 'sv';
-    var PAUSE = eng ? 'https://pauseai.com' : 'https://www.pauseai.se';
+    var PAUSE = eng ? 'https://pauseai.info' : 'https://www.pauseai.se';
     spel.segrat = true;
     ljud.dronStopp();                                   // surret tystnar: faran är över
     if (flash) flash.classList.remove('lugn');
@@ -1385,7 +1385,7 @@
         ? '<p class="ls-rubrik" id="ls-rubrik">Threat neutralized</p>' +
           '<p class="ls-text">Phew — the robot is defeated and the site is saved! Sadly, AI threatens more than ' +
           'just memory champions’ websites. Go to <a href="' + PAUSE + '" target="_blank" ' +
-          'rel="noopener">pauseai.com</a> to help save humanity once and for all!</p>' +
+          'rel="noopener">pauseai.info</a> to help save humanity once and for all!</p>' +
           '<div class="ls-knappar"><a id="ls-lank" href="' + PAUSE + '" target="_blank" rel="noopener">Learn more about AI</a>' +
           '<button type="button" id="ls-laga">Fix the website</button></div>'
         : '<p class="ls-rubrik" id="ls-rubrik">Hotet neutraliserat</p>' +
