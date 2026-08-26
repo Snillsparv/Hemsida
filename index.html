@@ -775,6 +775,8 @@
           <label for="f-medd">Meddelande</label>
           <textarea id="f-medd" name="meddelande" rows="3" required></textarea>
         </div>
+        <!-- Formsprees honeypot: robotar som fyller i fältet kastas tyst på serversidan -->
+        <div class="nbhp" aria-hidden="true"><input type="text" name="_gotcha" tabindex="-1" value="" autocomplete="off"></div>
         <button class="knapp skicka" type="submit">Skicka</button>
         <p class="nbfel" role="alert" hidden></p>
       </form>
