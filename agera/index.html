@@ -243,14 +243,12 @@ Vänliga hälsningar
     <p class="nr">Börja här · tjugo sekunder</p>
     <h2 id="brevrubrik">Skriv upp dig på AI‑brevet</h2>
     <p>Det enskilt viktigaste första steget. När det är läge att agera tillsammans (frågor till partierna inför valet, namninsamlingar, nya videor) behöver jag kunna nå dig direkt, utan att en algoritm sitter emellan.</p>
-    <!-- AI-BREVET: samma Mailchimp-lista som huvudsidan, men egen tagg så att
-         AI-utskick kan skickas separat. Skapa taggen "AI-brevet" i Mailchimp
-         (Audience -> Tags), välj den under Forms -> Embedded forms och kopiera
-         siffran ur raden <input type="hidden" name="tags" value="SIFFRAN"> hit: -->
+    <!-- AI-BREVET: samma Mailchimp-lista som huvudsidan, men med taggen
+         "AI-brevet" (id 10807474) så att AI-utskick kan skickas separat. -->
     <form id="aibrev" class="brev" aria-label="Prenumerera på AI-brevet" action="https://jonasvonessen.us3.list-manage.com/subscribe/post" method="post">
       <input type="hidden" name="u" value="f3c6c9c6a1fa3f7def382e372">
       <input type="hidden" name="id" value="cb5e0cbcc0">
-      <input type="hidden" name="tags" value="">
+      <input type="hidden" name="tags" value="10807474">
       <div class="falt">
         <label for="brev-epost">Din e-post</label>
         <input id="brev-epost" name="EMAIL" type="email" autocomplete="email" required="">
