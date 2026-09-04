@@ -17,7 +17,7 @@
   const R = REEL, C = R.C, F = R.F, E = R.E, S = R.S, G = R.GRID, W = R.WEB, T = R.T.vandningen;
   const TAU = Math.PI * 2, DEG = Math.PI / 180;
   const lerp = R.lerp, clamp01 = R.clamp01;
-  const smooth = E.smooth, outExpo = E.outExpo;
+  const smooth = E.smooth, outExpo = E.outExpo, inOut = E.inOutCubic;   // inOut = storyboardets easeInOut (banor, paketets hopp)
   const L = g => g - T.sb;                                   // storyboardtid → lokal tid
   const fade = (s, t0, d) => clamp01((s - t0) / d);          // storyboardets fade(t,t0,d)
 
@@ -48,21 +48,26 @@
   // 4.2 · etiketten överst: storyboardets y 330 ligger rakt på rutnätets översta rad (y 340) – 270 ger luft, se rapporten
   const INTRO_Y = 270;
   // 4.2 · LÄMNA IN-rutan och linjen som stannar vid 60 %
-  const INBOX = { x: 540, y: 1180, side: 44, t0: L(81.6), out: L(83.6) };
+  // Rutan och linjen tonar ut 83.6; LÄMNA IN ligger kvar till 84.0 och släcks i samma andetag som INOM NÅGRA TIMMAR
+  const INBOX = { x: 540, y: 1180, side: 44, t0: L(81.6), out: L(83.6), textOut: L(84.0) };
   const INLINE = { x: 540.5, y0: 542, y1: 1158, frac: .6, t0: L(82.2), d: .8, out: L(83.6) };
   // 4.3 · ögat
   const EYE = { x: 540, y: 520, w: 220, h: 96, iris: 30, pupil: 12, upT: L(86.4), loT: L(86.9), arcD: .9, irisT: L(87.6), irisD: .6, pupT: L(88.2), pupD: .4, blinkT: L(90.4), blinkD: .22, pupOut: L(101.0), out: L(101.3), outD: .7 };
   // 4.4 · käglan
   const CONE = { t0: L(89.5), t1: L(101.5), inD: .6, outT: L(100.5), outD: 1, period: 3, swing: 32, half: 11, len: 1600, fill: .05, edge: .12, drift: 14 };
-  // 4.5 · tre ikoner. Storyboardet säger x 300/540/780 – etiketterna (11 tecken) ryms inte där, se rapporten.
-  const ICONS = { y: 1150, box: 140, xs: [240, 540, 840], labelY: 1265, spacing: .16, t0: L(93.4), step: 2.1, labelDelay: .5, lineDelay: .2, lineD: .7, fakeDelay: .5, fakeD: .4, outT: L(100.0), outD: 1.0, rise: 20 };
+  // 4.5 · tre ikoner. Storyboardet säger x 300/540/780 och .24em – etiketterna (11 tecken) ryms inte där, se rapporten.
+  // Spärrning .20em: FALSKT PROV/SNUBBELTRÅD mäter 273 px → 27 px luft mellan dem vid delningen 300 px (.24em gav 14 px).
+  const ICONS = { y: 1150, box: 140, xs: [240, 540, 840], labelY: 1265, spacing: .20, t0: L(93.4), step: 2.1, labelDelay: .5, lineDelay: .2, lineD: .7, fakeDelay: .5, fakeD: .4, outT: L(100.0), outD: 1.0, rise: 20 };
   const ICON_LABELS = ['FALSK LOGG', 'FALSKT PROV', 'SNUBBELTRÅD'];
   // 4.6 · sitt eget slut
   const DEATH = { fillT: L(106.0), fillD: 4.5, ringT: L(109.1), ringD: 1.4, dead: L(110.5) };
   const OFFER = { t0: L(106.2), d: 2.4, r0: 7, r1: 600, a0: .6, flareD: .35, flareAmp: .4 };
-  const PKG = { t0: L(105.6), splitT: L(108.9), inD: .3, outDelay: .4, outD: .5, side: 12, dot: 1.5 };
-  // 4.7 · muren
-  const FRAME = { x: 200.5, y: 300.5, w: 680, h: 860, L: 3080, t0: L(118.2), d: 1.4, alpha: .9 };
+  // Paketet ska läsas på mobil (storyboardet: 12×12 hair + 3 px prick – för svagt bredvid buden, se rapporten):
+  // 16×16 ink-ruta alfa .6, prick r 2.5 med liten ink-halo (.22, 3.5r), hoppen easeInOut så det syns i rörelse
+  const PKG = { t0: L(105.6), splitT: L(108.9), inD: .3, outDelay: .4, outD: .5, side: 16, boxA: .6, dot: 2.5, halo: HALO_A, haloR: HALO_R0 };
+  // 4.7 · muren. Underkanten får hörn vid dörrens x 495/585 (samma path som scen 5 ritar): Skia delar hårlinjer
+  // längre än 511 px på mitten och lämnar en dämpad söm-pixel – med samma segment blir gränsbilden pixelidentisk.
+  const FRAME = { x: 200.5, y: 300.5, w: 680, h: 860, L: 3080, t0: L(118.2), d: 1.4, alpha: .9, doorX0: 495, doorX1: 585 };
   const BOX_OUT = { t0: L(118.2), d: .9 };                             // de sista små boxarna löses upp i muren
 
   /* ------------------------------------------------------------ andningens fasschema (4.3) */
@@ -88,13 +93,15 @@
   const RELAX = { t0: BR.tc, d: BR.D };                                // väven andas ut: offset och halo tillbaka
 
   /* ------------------------------------------------------------ tabeller (init) */
-  // Agenterna: position (yOff 0), riktning bort från mitten, avstånd, fas, aktiv, rädd position (för käglan)
+  // Agenterna: position (yOff 0), riktning bort från mitten, avstånd, fas, aktiv, rädd position (för käglan).
+  // Bara de aktiva backar i 4.3 – de tolv ISOLERADE står stilla som frost (fx/fy = deras vanliga plats).
   const AG = [];
   for (let i = 0; i < N; i++) {
     const p = G.posOf(i, 0), x = p.x, y = p.y + Y_OFF0;
     const dx = x - HERO.x, dy = y - HERO.y, d = Math.hypot(dx, dy);
-    const ux = d ? dx / d : 0, uy = d ? dy / d : 0;
-    AG.push({ i, x: p.x, y: p.y, ux, uy, d, phi: R.phase(i), active: isFinite(W.wake[i]),
+    const active = isFinite(W.wake[i]);
+    const ux = d && active ? dx / d : 0, uy = d && active ? dy / d : 0;
+    AG.push({ i, x: p.x, y: p.y, ux, uy, d, phi: R.phase(i), active,
       fx: x + ux * FEAR_OFF, fy: y + uy * FEAR_OFF,
       flareT: OFFER.t0 + OFFER.d * (-Math.log2(1 - clamp01((d - OFFER.r0) / (OFFER.r1 - OFFER.r0))) / 10),
       talarT: i === 0 ? L(75.2) : Infinity, hide: null });
@@ -272,12 +279,13 @@
     ctx.restore();
   }
 
-  /** Paketet: 12×12 hårlinjeruta med 3 px ink-prick. */
+  /** Paketet: liten ink-halo, 16×16 ink-ruta (alfa .6) och prick r 2.5 – ritas i lager 7, ovanpå mottagarens TALAR-halo. */
   function drawPackage(ctx, x, y, alpha) {
     if (alpha <= 0) return;
+    R.halo(ctx, x, y, PKG.dot, { alpha: PKG.halo * alpha, scale: PKG.haloR });
     ctx.save();
-    ctx.globalAlpha *= alpha * HAIR_A; ctx.strokeStyle = C.hair; ctx.lineWidth = 1;
-    ctx.strokeRect(x - PKG.side / 2 + .5, y - PKG.side / 2 + .5, PKG.side, PKG.side);
+    ctx.globalAlpha *= alpha * PKG.boxA; ctx.strokeStyle = C.ink; ctx.lineWidth = 1;
+    ctx.strokeRect(Math.round(x - PKG.side / 2) + .5, Math.round(y - PKG.side / 2) + .5, PKG.side, PKG.side);
     ctx.globalAlpha = alpha * INK_A; ctx.fillStyle = C.ink;
     ctx.beginPath(); ctx.arc(x, y, PKG.dot, 0, TAU); ctx.fill();
     ctx.restore();
@@ -302,7 +310,7 @@
 
       /* ---------- text-alfa och masker (före prickpasset) ---------- */
       const introTx = R.textIn(s, L(80.6), L(84.0));
-      const lamnaTx = R.textIn(s, INBOX.t0, INBOX.out);
+      const lamnaTx = R.textIn(s, INBOX.t0, INBOX.textOut);                        // ut 84.0 med INOM NÅGRA TIMMAR
       const eyeOut = 1 - smooth(fade(s, EYE.out, EYE.outD));
       const eyeA = smooth(fade(s, EYE.upT, .9)) * eyeOut;
       const bedomTx = R.textIn(s, L(88.6), EYE.out);
@@ -320,7 +328,7 @@
       const dead = s >= DEATH.dead;
       for (let i = 0; i < N; i++) {
         const a = AG[i];
-        const x = a.x + a.ux * off, y = a.y + yOff + a.uy * off;
+        const x = a.x + a.ux * off, y = a.y + yOff + a.uy * off;                  // ux/uy = 0 för de isolerade → stilla
         AX[i] = x; AY[i] = y;
         const m = R.maskFactor(x, y, RECT_LIST);
         const hide = hideOf(a, s) * coneA;
@@ -509,23 +517,28 @@
         const p = outExpo(fade(s, OFFER.t0, OFFER.d));
         if (p > 0 && p < 1) R.arc(ctx, hx, hy, lerp(OFFER.r0, OFFER.r1, p), { color: C.accent, width: 1, alpha: OFFER.a0 * (1 - p) });
       }
-      // Beat 4.6 · paketet (och dess klon efter delningen) längs de gula kanterna
+      // Beat 4.6 · paketet (och dess klon efter delningen) längs de gula kanterna – hoppen easeInOut så det syns i rörelse
       for (const pk of PKGS) {
         if (s < pk.born || s >= pk.end + PKG.outD) continue;
         let x = AX[pk.start], y = AY[pk.start];
         for (const sg of pk.segs) {
           if (s < sg.t0) break;
-          const p = outExpo(fade(s, sg.t0, sg.dur));
+          const p = inOut(fade(s, sg.t0, sg.dur));
           x = lerp(AX[sg.from], AX[sg.to], p); y = lerp(AY[sg.from], AY[sg.to], p);
         }
         drawPackage(ctx, x, y, smooth(fade(s, pk.born, PKG.inD)) * (1 - smooth(fade(s, pk.end, PKG.outD))));
       }
-      // Beat 4.7 · muren: ram (200,300)–(880,1160), dash-teknik medurs från övre vänstra hörnet
+      // Beat 4.7 · muren: ram (200,300)–(880,1160), dash-teknik medurs från övre vänstra hörnet.
+      // Underkanten ritas som tre segment (880→585, dörren 585→495, 495→200) precis som scen 5 – samma perimeter 3080.
       {
         const p = outExpo(fade(s, FRAME.t0, FRAME.d));
         if (p > 0) {
+          const x1 = FRAME.x + FRAME.w, y1 = FRAME.y + FRAME.h;
           ctx.save(); ctx.strokeStyle = C.ink; ctx.lineWidth = 1; ctx.globalAlpha = FRAME.alpha; ctx.lineCap = 'butt';
-          R.strokeDash(ctx, FRAME.L, p, () => { ctx.beginPath(); ctx.rect(FRAME.x, FRAME.y, FRAME.w, FRAME.h); ctx.stroke(); });
+          R.strokeDash(ctx, FRAME.L, p, () => {
+            ctx.beginPath(); ctx.moveTo(FRAME.x, FRAME.y); ctx.lineTo(x1, FRAME.y); ctx.lineTo(x1, y1);
+            ctx.lineTo(FRAME.doorX1, y1); ctx.lineTo(FRAME.doorX0, y1); ctx.lineTo(FRAME.x, y1); ctx.closePath(); ctx.stroke();
+          });
           ctx.restore();
         }
       }

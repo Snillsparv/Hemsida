@@ -467,6 +467,17 @@ texten gäller koden; listan här är facit för nästa granskning. Tider är gl
   varje linje högst en gång); 0.4 s glid längs hyllan innan rektangeln tonas in; rektangel m på 540 ± 22k med
   k = floor(m/2)+1, k = 3 hoppas över (rakt under en paketikon); paketprickarna har textmask för etiketten.
 
+**Scen 4**
+- 4.2: INOM NÅGRA TIMMAR på y 270 (330 hade lagt texten rakt på rutnätets översta rad); LÄMNA IN tonar ut 84.0
+  tillsammans med den (rutan och linjen 83.6).
+- 4.4: pupillens drift är `x = 540 − 14·sin(…)` (minus – canvas-y pekar nedåt, annars tittar pupillen bort från ljuset).
+- 4.5: ikonrutorna på x 240/540/840 och etikettspärrning .20em (300/540/780 med .24em ryms inte: FALSKT PROV och
+  SNUBBELTRÅD är 11 tecken).
+- 4.6: paketet är 16×16 px ink alfa .6 med prick r 2.5 och ink-halo (.22, 3.5r), hoppen med easeInOut och ritat
+  ovanpå mottagarens TALAR-halo – storyboardets 12×12 hair-ruta gick inte att skilja från buden på en telefon.
+  Banan: hjälten → 68 → 78 → 88 → delas till 17 och 103. De tolv isolerade (i box) får ingen 12 px-offset i 4.3.
+- 4.7: ramens underkant ritas med brytpunkter vid dörrens x 495/585 (samma segment som scen 5 → pixelidentiskt klipp).
+
 **Scen 5**
 - Ljuskilen fylls med fyra lagrade trianglar (220/440/660/880 px, alfa ≈ .025 var) så ljuset avtar med avståndet
   från dörren; storyboardets enda triangel med längd 700 gav en hård, nästan vågrät underkant. Kantlinjerna är 700 px.
