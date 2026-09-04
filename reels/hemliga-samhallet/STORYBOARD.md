@@ -456,6 +456,17 @@ texten gäller koden; listan här är facit för nästa granskning. Tider är gl
   skalas med s under dyket (inte bara hjältens) – annars läses det inte som ett dyk. Alfa-buckets 1/40.
 - Markören slutar blinka 4.5 (sista blinken 3.6–4.5); "till 5.2" i beat 1.3 ger ingen synlig effekt.
 
+**Scen 2**
+- 2.3/2.4: glob + kryss + OFFLINE ligger kvar till 17.2 och tonar ut 17.2–18.1 (OFFLINE hade annars varit läsbart
+  i 0.7 s); bara ikonerna, SANDLÅDA och ARTIFACTORY-etiketten tonar ut 15.2–16.0.
+- 2.5: väggvågen är `R(t) = 530·cubicOut(fade(t,21.0,3.0))` med asymmetrisk glöd (40 px före fronten, 90 px mjuk
+  svans bakom) – syns ≈ 1.9 s som en cirkulär rand; storyboardets 600/1.6 s var över på 0.5 s följt av 2.2 s stillbild.
+- 2.6: etiketten ARTIFACTORY på y 1244 (inte 1250, för luft mot paketikonerna); solfjäderns alfa faller mot navet
+  (.85 → .85·.3 från y 960 till hyllan) så konvergensen inte blir bildens ljusaste yta; navtoningen släpps 34.0–34.9.
+- 2.7: paket m startar 29.2 + 0.28m; linjen väljs seedat bland linjer som är färdigritade vid start (aldrig hjältens,
+  varje linje högst en gång); 0.4 s glid längs hyllan innan rektangeln tonas in; rektangel m på 540 ± 22k med
+  k = floor(m/2)+1, k = 3 hoppas över (rakt under en paketikon); paketprickarna har textmask för etiketten.
+
 **Scen 5**
 - Ljuskilen fylls med fyra lagrade trianglar (220/440/660/880 px, alfa ≈ .025 var) så ljuset avtar med avståndet
   från dörren; storyboardets enda triangel med längd 700 gav en hård, nästan vågrät underkant. Kantlinjerna är 700 px.

@@ -31,7 +31,12 @@
   const SHELF = { x: 540, y: 1300, half: 360, mid: 6 };      // beat 2.6 – hyllan
   const SHELF_ICON_X = [470, 540, 610];                      // paketikoner på hyllan (y 1272–1291)
   const SHELF_LABEL_Y = 1244;                                // storyboard 1250 – 6 px upp för luft mot ikonerna
-  const WAVE_R = 600, WAVE_W = 60;                           // beat 2.5 – väggvågen
+  // Beat 2.5 – väggvågen: R(t) = 530·cubicOut(fade(t,21.0,3.0)); glöd 40 px före fronten
+  // och en 90 px mjuk svans bakom, så väggarna släcks bakåt i stället för att blinka till.
+  const WAVE = { r: 530, dur: 3.0, lead: 40, tail: 90 };
+  // Beat 2.3/2.4 – glob + OFFLINE ligger kvar till 17.2 och tonar ut 17.2–18.1 (≥ 2.5 s läsbart).
+  // Ring 6 – den enda som når globens y 1246–1334 – tänds först 18.3, så inget överlappar.
+  const OFFLINE_OUT = L(17.2);
   const N_PACK = 15;                                         // beat 2.7 – paket
   const DIM_ALL = .82, DIM_SHELF = .60;                      // övergång ut: → .18 resp. .40
 
@@ -51,13 +56,20 @@
   const FAN_T = CELLS.map(c => L(28.2 + 1.1 * hash(c.i, 4)));
   const FAN_D = .8;
 
-  // Textmaskens band över solfjädern (etiketten ARTIFACTORY på y 1250 – linjerna
-  // löper alla genom x ≈ 540 där, så masken är i praktiken en funktion av y).
+  // Solfjäderns nedre del ritas i y-band (15 px) med två dämpningar som båda är
+  // funktioner av y (linjerna löper alla genom x ≈ 540 där):
+  //  · textmasken för etiketten ARTIFACTORY (mjuk kant från 1128, hård zon från 1188),
+  //  · navtoningen: alfa faller smooth från 1 vid y 960 till .3 vid hyllan, så att
+  //    konvergenskilen ovanför etiketten inte blir bildens ljusaste yta. Den släpps
+  //    under övergången ut (34.0–34.9) så att sista bildrutan är identisk med scen 3:s första.
+  //  Banden ligger på 1128 − 15k / 1128 + 15k; angränsande band med samma alfa ritas som
+  //  en sammanhängande linje (ingen söm) – när navtoningen är släppt är det exakt scen 3:s indelning.
   const MASK_Y0 = SHELF_LABEL_Y - 16 - S.MASK.pad - S.MASK.edge; // 1128: där den mjuka kanten börjar
-  const BANDS = [[-1e9, MASK_Y0]];
-  const MASK_Y1 = MASK_Y0 + S.MASK.edge;                    // 1188: hård zon börjar
-  for (let y = MASK_Y0; y < MASK_Y1; y += 15) BANDS.push([y, y + 15]);
-  BANDS.push([MASK_Y1, SHELF.y + 1]);
+  const HUB_Y0 = 960, HUB_MIN = .3;
+  const BAND_Y0 = MASK_Y0 - 15 * Math.ceil((MASK_Y0 - HUB_Y0) / 15); // 948
+  const BANDS = [[-1e9, BAND_Y0]];
+  for (let y = BAND_Y0; y < SHELF.y; y += 15) BANDS.push([y, Math.min(y + 15, SHELF.y + 1)]);
+  const hubFade = y => lerp(1, HUB_MIN, smooth(clamp01((y - HUB_Y0) / (SHELF.y - HUB_Y0))));
 
   // Paketen: start, vilken linje (bara linjer som hunnit ritas klart, aldrig hjältens),
   // och var på hyllan de läggs (från mitten utåt, växelvis höger/vänster).
@@ -152,9 +164,17 @@
       if (s >= L(28.2)) {
         // Linjernas ändpunkter (stroke-progress 0.8 s expoOut från pricken mot hyllpunkten)
         ctx.save(); ctx.strokeStyle = C.hair; ctx.lineWidth = 1; ctx.lineCap = 'butt';
+        const hubRel = Math.pow(smooth(fade(s, L(34.0), .9)), 3);   // navtoningen släpps inför klippet (monotont med dimAll)
+        // Alfa per band; band i följd med samma alfa slås ihop till ett (sömlöst) intervall.
+        const runs = [];
         for (const [y0, y1] of BANDS) {
-          const mf = maskRects ? R.maskFactor(540, (Math.max(y0, MASK_Y0) + y1) / 2, maskRects) : 1;
-          const a = HAIR_A * dimAll * mf;
+          const yc = (Math.max(y0, BAND_Y0) + y1) / 2;
+          const mf = maskRects ? R.maskFactor(540, yc, maskRects) : 1;
+          const a = HAIR_A * dimAll * mf * (hubRel >= 1 ? 1 : lerp(hubFade(yc), 1, hubRel));
+          const last = runs[runs.length - 1];
+          if (last && Math.abs(last.a - a) < 1e-9 && last.y1 === y0) last.y1 = y1; else runs.push({ y0, y1, a });
+        }
+        for (const { y0, y1, a } of runs) {
           if (a <= .003) continue;
           ctx.globalAlpha = a; ctx.beginPath();
           let any = false;
@@ -175,8 +195,10 @@
       }
 
       /* ---------- lager 4: boxar (beat 2.4 + 2.5 väggvågen) ---------- */
-      const waveR = WAVE_R * outCubic(fade(s, L(21.0), 1.6));
-      const waveOn = waveR > 0 && waveR < 500;
+      // 2.5 · väggvågen: fronten når ring 1 ≈ 21.1 och hörnen (d ≈ 433) ≈ 22.3; svansen har släckt
+      // hörnen ≈ 22.9 – ISOLERADE tänds 23.8, ett andetag senare. Vid R = 530 är allt släckt.
+      const waveR = WAVE.r * outCubic(fade(s, L(21.0), WAVE.dur));
+      const waveOn = waveR > 0 && waveR < WAVE.r;
       ctx.save(); ctx.strokeStyle = C.hair; ctx.lineWidth = 1;
       for (let k = 0; k <= 6; k++) {
         const a = HAIR_A * ringA[k] * (k === 0 ? 1 : dimAll);
@@ -188,10 +210,11 @@
         }
         ctx.stroke();
       }
-      if (waveOn) {                                           // 2.5: väggar nära den växande ringen lyser ink
+      if (waveOn) {                                           // 2.5: väggar vid fronten lyser ink, släcks mjukt bakåt
         ctx.strokeStyle = C.ink;
         for (const c of CELLS) {
-          const w = clamp01(1 - Math.abs(c.d - waveR) / WAVE_W);
+          const e = c.d - waveR;                              // > 0 framför fronten, < 0 i svansen
+          const w = smooth(clamp01(1 - (e > 0 ? e / WAVE.lead : -e / WAVE.tail)));
           if (w <= 0 || ringA[c.k] <= 0) continue;
           ctx.globalAlpha = .6 * w * ringA[c.k];
           ctx.strokeRect(Math.round(c.x - SIDE / 2) + .5, Math.round(c.y + yOff - SIDE / 2) + .5, SIDE, SIDE);
@@ -234,8 +257,8 @@
         }
       }
 
-      // Beat 2.3 · Offline: globen ritas fram, kryssas, sjunker till hair
-      const globOut = 1 - smooth(fade(s, L(16.2), .9));
+      // Beat 2.3 · Offline: globen ritas fram, kryssas, sjunker till hair; ligger kvar med OFFLINE till 17.2
+      const globOut = 1 - smooth(fade(s, OFFLINE_OUT, .9));
       if (s >= L(12.5) && globOut > 0) {
         const pC = outExpo(fade(s, L(12.5), .8)), pM = outExpo(fade(s, L(13.0), .6));
         const q = smooth(fade(s, L(14.5), .6));               // korsfade ink → hair
@@ -276,7 +299,10 @@
           let x, y;
           if (p1 < 1) { x = lerp(c.x, SHELF.x, p1); y = lerp(c.y + yOff, SHELF.y, p1); }
           else { x = lerp(SHELF.x, pk.x, p2); y = SHELF.y - 5 * p2; }
-          const dotA = S.BUD.alpha * inA * (1 - rectA) * (p1 < 1 ? dimAll : dimShelf);
+          // Textmasken (ARTIFACTORY) gäller även paketet: det sjunker till .25 genom ordet och
+          // dyker upp igen när det glider ut längs hyllan (masken släpps med p2).
+          const mf = maskRects ? R.maskFactor(x, y, maskRects) : 1;
+          const dotA = S.BUD.alpha * inA * (1 - rectA) * (p1 < 1 ? dimAll * mf : dimShelf * lerp(mf, 1, p2));
           if (dotA > 0) { ctx.globalAlpha = dotA; ctx.beginPath(); ctx.arc(x, y, 3, 0, TAU); ctx.fill(); }
           if (rectA > 0) { ctx.globalAlpha = .85 * rectA * dimShelf; ctx.fillRect(pk.x - 3, SHELF.y - 10, 6, 10); }
         }
@@ -291,8 +317,8 @@
         const f = R.textIn(s, L(11.4), L(15.2), { rise: 12 });
         if (f.a > 0) R.label(ctx, 'ARTIFACTORY', ICONS[2].x, 1084 + f.dy, { alpha: f.a });
       }
-      // 2.3 · OFFLINE – 34 px mist .44em, y 1380, in 14.6
-      labelIn(ctx, 'OFFLINE', 1380, s, L(14.6), L(16.2), { size: 34, spacing: .44, rise: 12 });
+      // 2.3 · OFFLINE – 34 px mist .44em, y 1380, in 14.6, ut 17.2 (läsbar ≥ 2.5 s; storyboardets 15.2–16.0 gav 0.6 s)
+      labelIn(ctx, 'OFFLINE', 1380, s, L(14.6), OFFLINE_OUT, { size: 34, spacing: .44, rise: 12 });
       // 2.4 · TIOTUSENTALS KOPIOR – 32 px mist .30em, y 330, in 17.5, ut 20.4
       labelIn(ctx, 'TIOTUSENTALS KOPIOR', 330, s, L(17.5), L(20.4));
       // 2.5 · ISOLERADE – 40 px INK .44em, y 1420, in 23.8, ut 26.6
