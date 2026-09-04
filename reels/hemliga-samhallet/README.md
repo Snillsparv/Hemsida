@@ -53,6 +53,8 @@ VO:n annorlunda i inspelningen: justera där, rendera om.
 index.html      – spelaren (scrubber, VO-guide, säkra ytor)
 engine.js       – tidslinjen + rithjälpare (text, prickar, linjer, agentfältet …)
 icons.js        – delade streckikoner (terminal, nyckel, öga, dörr …)
+style.js        – storyboardets konventioner: prickarnas tillstånd, halo, boxar, räknare, ögat, textmask
+world.js        – delad data: 9×13-rutnätet, väven (vem vaknar när), solrosdisken
 timing.js       – scentider + VO-repliker (bara för guiden)
 scenes/NN-*.js  – en fil per scen; draw(ctx, s, t) ritar bildrutan vid lokal tid s
 STORYBOARD.md   – designdokumentet

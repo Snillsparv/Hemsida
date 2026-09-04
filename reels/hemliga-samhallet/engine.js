@@ -36,6 +36,7 @@
     inOutSine: p => -(Math.cos(Math.PI * p) - 1) / 2,
     outBack: p => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(p - 1, 3) + c1 * Math.pow(p - 1, 2); },
     inBack: p => { const c1 = 1.70158, c3 = c1 + 1; return c3 * p * p * p - c1 * p * p; },
+    smooth: p => p * p * (3 - 2 * p),                      // smoothstep – storyboardets standardtoning
   };
 
   const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);
@@ -115,7 +116,7 @@
     setFont(ctx, o);
     ctx.fillStyle = o.color || C.ink;
     ctx.textAlign = o.align || 'left';
-    ctx.textBaseline = o.baseline || 'alphabetic';
+    ctx.textBaseline = o.baseline || 'middle';   // storyboardet: alla y är textens mittlinje
     if (o.alpha != null) ctx.globalAlpha *= clamp01(o.alpha);
     if (o.spacing) {
       ctx.letterSpacing = (o.spacing * size) + 'px';
@@ -137,7 +138,7 @@
   }
   /** Sajtens etikettstil: mono, versaler, spärrning .3em, mist. */
   function label(ctx, str, x, y, o = {}) {
-    return text(ctx, str, x, y, Object.assign({ family: F.mono, size: 30, spacing: .3, upper: true, color: C.mist, align: 'center' }, o));
+    return text(ctx, str, x, y, Object.assign({ family: F.mono, size: 32, spacing: .3, upper: true, color: C.mist, align: 'center' }, o));
   }
   /** Radbryter str till rader som ryms i maxWidth. ctx.font måste vara satt (setFont). */
   function wrap(ctx, str, maxWidth) {
@@ -181,8 +182,8 @@
   const typewriter = (str, p) => str.slice(0, clamp(Math.floor(clamp01(p) * (str.length + 1)), 0, str.length));
   /** Blinkande markör: true/false. */
   const cursorOn = (t, hz = 1.2) => Math.floor(t * hz * 2) % 2 === 0;
-  /** Svensk tusentalsavgränsning: 70000 → "70 000". */
-  const fmt = n => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  /** Svensk tusentalsavgränsning med tunt mellanslag (U+2009): 70000 → "70 000". */
+  const fmt = n => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '\u2009');
   /** Räknare som går snabbt i början och landar mjukt (som sajtens laddskärm). */
   const countTo = (target, p, ease = E.outCubic) => Math.round(target * ease(clamp01(p)));
 

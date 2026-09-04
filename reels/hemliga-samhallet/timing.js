@@ -6,14 +6,16 @@
 REEL.DURATION = 190;
 REEL.FPS = 30;
 
+/* sb = scenens start i STORYBOARD.md (fast referens). Scenkoden räknar sina
+   beats som (storyboardtid − sb), så flyttar du start/end följer beatsen med. */
 REEL.T = {
-  hook:       { start: 0,   end: 7   },
-  testet:     { start: 7,   end: 35  },
-  upptackten: { start: 35,  end: 75  },
-  vandningen: { start: 75,  end: 120 },
-  utbrottet:  { start: 120, end: 150 },
-  tystnaden:  { start: 150, end: 170 },
-  reflektion: { start: 170, end: 190 },
+  hook:       { start: 0,   end: 7,   sb: 0   },
+  testet:     { start: 7,   end: 35,  sb: 7   },
+  upptackten: { start: 35,  end: 75,  sb: 35  },
+  vandningen: { start: 75,  end: 120, sb: 75  },
+  utbrottet:  { start: 120, end: 150, sb: 120 },
+  tystnaden:  { start: 150, end: 170, sb: 150 },
+  reflektion: { start: 170, end: 190, sb: 170 },
 };
 
 REEL.VO = [

@@ -15,6 +15,7 @@
 
    Flaggor: --from/--to sekunder · --fps (30) · --scale (1 = 1080×1920) · --stamp true/false
    (tidsstämpel i hörnet; standard på för stillbilder/karta, av för mp4) · --guides (rita säker yta)
+   --ss 2  supersampling för mp4: renderar i 2160×3840 och skalar ned (skarpare prickar och linjer)
    ============================================================================ */
 'use strict';
 const fs = require('fs'), path = require('path'), http = require('http'), os = require('os');
@@ -82,7 +83,8 @@ function run(cmd, argv) {
 
 async function main() {
   const { chromium } = findPlaywright();
-  const scale = +args.scale || 1, fps = +args.fps || 30;
+  const ss = args.mp4 ? (+args.ss || 1) : 1;
+  const scale = (+args.scale || 1) * ss, fps = +args.fps || 30;
   const srv = await serve();
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: scale });
@@ -136,7 +138,8 @@ async function main() {
   if (args.mp4) {
     const out = path.resolve(args.mp4 === true ? path.join(ROOT, 'reels/hemliga-samhallet/out/reel.mp4') : args.mp4); mkdirp(path.dirname(out));
     const n = Math.round((to - from) * fps), crf = String(args.crf || 18);
-    const ff = spawn(findFfmpeg(), ['-y', '-hide_banner', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(fps), '-i', '-',
+    const vf = ss > 1 ? ['-vf', 'scale=1080:1920:flags=lanczos'] : [];
+    const ff = spawn(findFfmpeg(), ['-y', '-hide_banner', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(fps), '-i', '-', ...vf,
       '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', crf, '-preset', args.preset || 'medium', '-profile:v', 'high', '-movflags', '+faststart', out],
       { stdio: ['pipe', 'inherit', 'inherit'] });
     const done = new Promise((res, rej) => { ff.on('error', rej); ff.on('close', code => (code === 0 ? res() : rej(new Error('ffmpeg kod ' + code)))); });

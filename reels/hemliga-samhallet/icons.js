@@ -1,6 +1,7 @@
 /* ============================================================================
    Delat ikonbibliotek – enkla streckikoner i sajtens stil (1 färg, runda ändar).
-   REEL.icon(ctx, namn, x, y, { size: 100, color, alpha, width: 3, rotate })
+   REEL.icon(ctx, namn, x, y, { size: 100, color, alpha, width: 3, rotate, progress })
+   progress 0..1 ritar fram ikonen med dash-tekniken (aldrig popp).
    Ikonen ritas centrerad kring (x,y) och fyller ungefär size×size px.
    Alla ikoner är ritade i en 100×100-ruta med origo i mitten (-50..50).
    ============================================================================ */
@@ -61,6 +62,7 @@
     shelf(ctx) { poly(ctx, [[-48, -46], [-48, 46]]); poly(ctx, [[48, -46], [48, 46]]); [-16, 16, 46].forEach(y => poly(ctx, [[-48, y], [48, y]])); rr(ctx, -34, -36, 20, 20, 2); rr(ctx, -6, -36, 20, 20, 2); rr(ctx, 14, -4, 20, 20, 2); },
     check(ctx) { poly(ctx, [[-32, 2], [-10, 24], [34, -22]]); },
     server(ctx) { [-40, -8, 24].forEach(y => { rr(ctx, -44, y, 88, 24, 4); circle(ctx, -32, y + 12, 3, true); poly(ctx, [[-16, y + 12], [30, y + 12]]); }); },
+    stack(ctx) { [-38, -14, 10].forEach(y => rr(ctx, -36, y, 72, 18, 2)); },
     chip(ctx) { rr(ctx, -30, -30, 60, 60, 4); rr(ctx, -14, -14, 28, 28, 0); for (let i = -20; i <= 20; i += 10) { poly(ctx, [[i, -30], [i, -46]]); poly(ctx, [[i, 30], [i, 46]]); poly(ctx, [[-30, i], [-46, i]]); poly(ctx, [[30, i], [46, i]]); } },
   };
 
@@ -76,6 +78,9 @@
     ctx.strokeStyle = o.color || C.ink; ctx.fillStyle = o.color || C.ink;
     ctx.lineWidth = (o.width || 3) * 100 / size;   // strecket hålls i px oavsett skalning
     ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    if (o.progress != null && o.progress < 1) {          // dash-tekniken: ikonen "ritas fram"
+      const L = 300; ctx.setLineDash([L, L]); ctx.lineDashOffset = L * (1 - R.clamp01(o.progress));
+    }
     fn(ctx);
     ctx.restore();
   };
