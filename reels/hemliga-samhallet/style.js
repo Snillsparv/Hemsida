@@ -17,7 +17,7 @@
     DOD:      { alpha: .50 },                                    // tom ring, 1 px stroke ink
     TYSTNAD:  { color: C.hair },
     ROD:      { halo: .20, haloR: 3, rScale: 1.3, period: 1.25 },
-    LUGN:     { alpha: .70, halo: .12, haloR: 3.5, T: 4, amp: .06 },
+    LUGN:     { alpha: .70, halo: .12, haloR: 3.5, T: 4, amp: .10 },   // disken: 1 200 små prickar behöver mer amplitud för att synas andas
     BOX:      { alpha: .85, inset: 14 },                         // sida = cell − 14
     HAIR:     { alpha: .85 },
     EDGE:     { rest: .55, lit: .9, litDur: .5, settle: .9 },    // gul kantlinje
@@ -54,14 +54,16 @@
   R.phase = i => TAU * R.hash(i, 2);
   R.jit = i => R.hash(i, 3);
   /** Andningsradie: r·(1 + amp·sin(2π t/T + φ_i)). */
-  R.breath = (r, t, i, T = S.AKTIV.T, amp = S.AKTIV.amp) => (T > 0 ? r * (1 + amp * Math.sin(TAU * t / T + R.phase(i))) : r);
+  R.breath = (r, t, i, T = S.AKTIV.T, amp = S.AKTIV.amp, phase) => (T > 0 ? r * (1 + amp * Math.sin(TAU * t / T + (phase == null ? R.phase(i) : phase))) : r);
+  /** Diskens andning (scen 5–7): koherent fas som en långsam våg utåt från mitten – disken andas som helhet, inte 1 200 slumpfaser. */
+  R.diskPhase = (x, y) => -TAU * .5 * Math.hypot(x - 540, y - 870) / 420;
 
   /**
    * Ritar en agent enligt storyboardets tillståndstabell. o:
    *   x, y, r, i (index, för fas), t (tid för andning)
    *   color (hex/'ink'/'accent'/'red', std ink), alpha (fyllning, std 1)
    *   halo (alfa, 0 = ingen), haloR (std 3.5), haloColor (std = color)
-   *   breath (period s, 0 = andas inte), amp (std .06)
+   *   breath (period s, 0 = andas inte), amp (std .06), phase (egen fas, std R.phase(i))
    *   ring (radie för hjältens ring, 0 = ingen), ringAlpha (std .35)
    *   dead (true → bara en tom ring: 1 px stroke ink, alpha .5)
    *   mask (extra multiplikator, t.ex. textmask)
@@ -70,7 +72,7 @@
     const m = o.mask == null ? 1 : o.mask;
     const alpha = (o.alpha == null ? 1 : o.alpha) * m;
     const col = colorOf(o.color);
-    const r = o.breath ? R.breath(o.r, o.t || 0, o.i || 0, o.breath, o.amp) : o.r;
+    const r = o.breath ? R.breath(o.r, o.t || 0, o.i || 0, o.breath, o.amp, o.phase) : o.r;
     if (o.dead) {
       ctx.save(); ctx.globalAlpha *= R.clamp01((o.deadAlpha == null ? S.DOD.alpha : o.deadAlpha) * m);
       ctx.strokeStyle = C.ink; ctx.lineWidth = 1;

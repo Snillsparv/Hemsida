@@ -27,7 +27,7 @@
   const LUGN = S.LUGN;                                       // ink .70, andas T 4 s, amp .06 (halo 0 sedan 170.0)
   const DEAD_A = S.DOD.alpha;                                // tom ring .50
   const NB = 40;                                             // alfa-buckets (en path per bucket)
-  const INK_A = .9;                                          // 1 px ink-linjer (ringen i vila)
+  const INK_A = 1;                                           // 1 px ink-linjer (ringen i vila)
 
   // Övergång in · fältet ligger på .14 sedan scen 6 (fieldDim), hair-cirkeln r 460 på .3 tonar ut 170.0–170.8
   const FIELD = { dim: .14 };
@@ -41,18 +41,18 @@
                 cut: L(178.2), outD: 1.4, irisOutD: .5, dash: [4, 8] };
   const T2 = { str: 'Fanns inte ens.', y: 1120, size: 56, t0: L(176.8), out: L(180.4), fo: .9 };
   // 7.3 · ringen ink → gul över 1.2 s från 181.0; sedan gul alpha .85 + .15·sin(2π t/3) (global t)
-  const GUL = { t0: L(181.0), d: 1.2, base: .85, amp: .15, period: 3 };
+  const GUL = { t0: L(181.0), d: 1.2, base: .85, amp: .15, period: 3, glow: .09, glowW: 18 };   // + bred mjuk glöd: 1 px gul är en tråd på en telefon
   const T3 = { a: 'När de blir smartare.', b: 'När det inte längre är ett prov', q: '?', ya: 1100, yb: 1180, size: 56, sizeB: 56,
                tA: L(182.0), tB: L(182.9), out: L(186.0), fo: .8, maxW: 900, small: 50 };
   // 7.4 · CTA: fråga 72 px + Mono-rad i gult + gul linje som växer från mitten till 420 px bredd
   const T4 = { a: 'Vad tänker du?', b: 'SKRIV I KOMMENTARERNA', ya: 1100, yb: 1210, sizeA: 72, sizeB: 32,
-               tA: L(186.6), tB: L(187.4), lineT: L(187.9), lineD: .7, lineY: 1244 + .5, half: 210 };
+               tA: L(186.8), tB: L(187.6), lineT: L(188.1), lineD: .7, lineY: 1244 + .5, half: 210 };   // 186.8: 7.3:s rad 1 är helt borta (186.8) innan CTA:n tar samma mittlinje
   // 7.5 · cirkeln öppnar sig: ring 160 → 1500 och ut, CTA + fält bort, en prick tänds (= frame 0)
-  const END = { t0: L(189.2), ringD: .8, ringR: 1500, ctaD: .6, fieldD: .6, dot: { r: S.R.falt, a: .55, d: .6 } };
+  const END = { t0: L(189.2), ringD: .8, alphaT0: .2, alphaD: .6, ringR: 1500, ctaD: .6, fieldD: .6, dot: { r: S.R.falt, a: .55, d: .6 } };
 
   /* ------------------------------------------------------------ tabeller (en gång) */
   const SX = new Float64Array(N), SY = new Float64Array(N), PHI = new Float64Array(N);
-  for (let j = 0; j < N; j++) { const sl = D.slotOf(j); SX[j] = sl.x; SY[j] = sl.y; PHI[j] = R.phase(j); }
+  for (let j = 0; j < N; j++) { const sl = D.slotOf(j); SX[j] = sl.x; SY[j] = sl.y; PHI[j] = R.diskPhase(sl.x, sl.y); }   // samma koherenta fas som scen 6
   // De sex som tystnade (hair-fyllning) → agent j; hjälten j = 0 ligger på plats 640 som tom ring
   const REDM = new Int8Array(N).fill(-1);
   D.red.forEach((k, m) => { for (let j = 0; j < N; j++) if (D.assign(j) === k) { REDM[j] = m; break; } });
@@ -112,9 +112,9 @@
 
   /* ------------------------------------------------------------ hjälpare */
   /** Ring kring (CX,CY): ritas fram från klockan 12 medurs (p), 1 px, valfri färg/alfa. */
-  function ring(ctx, r, p, color, alpha) {
+  function ring(ctx, r, p, color, alpha, width = 1) {
     if (p <= 0 || alpha <= 0) return;
-    ctx.save(); ctx.globalAlpha *= clamp01(alpha); ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.lineCap = 'butt';
+    ctx.save(); ctx.globalAlpha *= clamp01(alpha); ctx.strokeStyle = color; ctx.lineWidth = width; ctx.lineCap = 'butt';
     ctx.beginPath(); ctx.arc(CX, CY, r, -Math.PI / 2, -Math.PI / 2 + TAU * Math.min(1, p)); ctx.stroke();
     ctx.restore();
   }
@@ -126,7 +126,7 @@
 
       /* ---------- globala kurvor ---------- */
       const endP = smooth(fade(s, END.t0, END.fieldD));                             // 7.5 · fältet .14 → 0
-      const dim = FIELD.dim * (1 - endP);
+      const dim = (R.fieldDim ? R.fieldDim(t) : FIELD.dim) * (1 - endP);            // .14 – samma källa som scen 6 (R.fieldDim)
       const breathPh = TAU * t / LUGN.T;                                            // andning T = 4 s, global fas (fortsätter från scen 6)
 
       /* ---------- text-alfa och masker (före prickpasset) ---------- */
@@ -177,15 +177,21 @@
       }
 
       /* ---------- lager 7: ringen (7.1 → 7.3 → 7.5) ---------- */
-      const endRing = smooth(fade(s, END.t0, END.ringD));                           // 7.5 · 160 → 1500 och ut
-      // (cubicOut i stället för expoOut: med expoOut är ringen utanför skärmens hörn (r ≈ 1100) efter 0.14 s – en popp)
-      const ringR = RING.r + (END.ringR - RING.r) * outCubic(fade(s, END.t0, END.ringD));
+      // 7.5 · cirkeln öppnar sig: radien växer smooth 160 → 1500 på 0.8 s (skärmens hörn passeras ≈ 0.6 s in, synligt),
+      //       alfan släpper 0.2 s senare på 0.6 s. (Storyboardets expoOut lämnar bilden på 0.14 s – läses som en popp.)
+      const endRing = smooth(fade(s, END.t0 + END.alphaT0, END.alphaD));
+      const ringR = RING.r + (END.ringR - RING.r) * smooth(fade(s, END.t0, END.ringD));
       const gulP = smooth(fade(s, GUL.t0, GUL.d));                                  // 7.3 · ink → gul 1.2 s
-      const gulBreath = GUL.base + GUL.amp * Math.sin(TAU * t / GUL.period);
+      const tBr = Math.min(t, T.start + END.t0);                                    // andningen fryser 189.2 → bestämd ut-alfa
+      const gulBreath = GUL.base + GUL.amp * Math.sin(TAU * tBr / GUL.period);
       // Beat 7.1 · ring r 160, 1 px ink, från klockan 12 medurs 170.6–172.2 (expoOut)
       ring(ctx, ringR, outExpo(fade(s, RING.t0, RING.d)), C.ink, INK_A * (1 - gulP) * (1 - endRing));
-      // Beat 7.3 · den gula ringen – filmens enda stora ljus – andas .85 ± .15 (T 3 s); 7.5 · växer ut ur bild och tonar ut
-      if (gulP > 0) ring(ctx, ringR, 1, C.accent, gulBreath * gulP * (1 - endRing));
+      // Beat 7.3 · den gula ringen – filmens enda stora ljus – 1 → 2 px med en bred mjuk glöd (koncentrisk transparent cirkel),
+      //            andas .85 ± .15 (T 3 s); 7.5 · växer ut ur bild och tonar ut
+      if (gulP > 0) {
+        ring(ctx, ringR, 1, C.accent, GUL.glow * gulP * (1 - endRing), GUL.glowW);
+        ring(ctx, ringR, 1, C.accent, gulBreath * gulP * (1 - endRing), 1 + gulP);
+      }
 
       // Beat 7.2 · ögat inne i ringen: mandel 180×78, iris r 24, utan pupill. Bågar dash 176.0–176.9, iris 176.8–177.3.
       //            178.2: klipp till setLineDash([4,8]) (inget marscherande) och ut 1.4 s smooth, irisringen först (0.5 s)

@@ -29,7 +29,7 @@
   const INK_A = .9, HAIR_A = S.HAIR.alpha;                                                   // 1 px ink .9, hair .85
   const HALO_A = S.AKTIV.halo, HALO_R = S.AKTIV.haloR, BREATH_T = S.AKTIV.T, AMP = S.AKTIV.amp;   // .22, 3.5r, 3.2 s, .06
   const TALAR_HALO = S.TALAR.halo, TALAR_R = S.TALAR.haloR;                                 // .28, 4r
-  const LUGN_A = S.LUGN.alpha, LUGN_HALO = S.LUGN.halo, LUGN_T = S.LUGN.T;                  // .70, .12, 4 s
+  const LUGN_A = S.LUGN.alpha, LUGN_HALO = S.LUGN.halo, LUGN_T = S.LUGN.T, LUGN_AMP = S.LUGN.amp;   // .70, .12, 4 s, .10 (koherent fas R.diskPhase)
   const ISO_A = S.ISOLERAD.alpha, DOD_A = S.DOD.alpha;                                       // .70, .50
   const EDGE_REST = S.EDGE.rest, BUD_A = S.BUD.alpha, BUD_LEN = S.BUD.len, BUD_W = S.BUD.width;   // .55, .9, 6 px, 2
   const NB = 40;                                             // alfa-buckets för kanter/bud (samma som scen 4 → identisk gränsbild)
@@ -41,8 +41,9 @@
   const DOOR = { x0: 495, x1: 585, y: 1160.5, ang: -55 * DEG, t0: L(121.2), d: 1.3 };
   const PEEK = { x: 540, y: 1180, dy: 40, r: 2, alpha: .5, t0: L(123.5), d: .8 };
   // 5.2 · ljuskilen från dörröppningen och de elva maskinerna
-  // Storyboardets längd 700 ger en hård, nästan vågrät underkant på y≈1445 – 1900 lägger basen utanför bild (se rapporten)
-  const CONE = { x: 540, y: 1160, len: 1900, half: 66 * DEG, t0: L(122.0), d: 1.6, fill: .07, edge: .25, sinkT: L(126.0), sinkD: .9, sink: .04 / .07, inD: .5 };
+  // Kilen fylls i fyra lagrade trianglar (220/440/660/880 px) så ljuset avtar med avståndet från dörren i stället för
+  // att få en hård underkant (storyboardets längd 700 ger en nästan vågrät kant på y≈1445); kantlinjerna är 700 px.
+  const CONE = { x: 540, y: 1160, len: 700, layers: 4, layerLen: 220, half: 66 * DEG, t0: L(122.0), d: 1.6, fill: .07, edge: .25, sinkT: L(126.0), sinkD: .9, sink: .04 / .07, inD: .5 };
   // Storyboardets x-start 165+70k ger raden centrum 545 – 160 centrerar den på 540 (se rapporten)
   const MACH = { n: 11, x0: 160, step: 70, w: 60, y0: 1240, h: 160, inD: .6 };
   const LABEL = { str: 'HUGGING FACE · 11 MASKINER', y: 1212, t0: L(124.6) };
@@ -63,7 +64,9 @@
   const LOG_A = '$ radera', LOG_GAP = '   ', LOG_B = '→ tillbaka', LOG_C = ['×2', '×3'], LOG_GB = LOG_GAP + LOG_B;
   // 5.5 · samlingen
   const OUT = { t0: L(148.2), d: .9 };                        // allt utom prickarna tonar bort
-  const GATHER = { t0: L(148.4), spread: .4, d: 1.6 };        // prick j glider expoOut 1.6 s från 148.4 + .4·hash(j,12)
+  const GATHER = { t0: L(148.2), spread: .4, d: 1.3 };        // prick j glider expoOut 1.3 s från 148.2 + .4·hash(j,12) – klart 149.9, före klippet
+  const GN = 1 - Math.pow(2, -10);                            // expoOut normaliserad så att u = 1 ger exakt 1 (ingen restdrift vid 150.0)
+  const gOut = u => (u >= 1 ? 1 : Math.min(1, outExpo(u) / GN));
   const NEWIN = { t0: L(149.6), spread: .8, d: .4 };          // de nya platserna tonar in 149.6–150.8
   const N_COPY0 = N, N_NEW0 = N + FLOCK.n;                    // diskindex: 0–116 sandlådan, 117–816 kopiorna, 817–1199 nya
 
@@ -72,7 +75,7 @@
   const AG = [];
   for (let i = 0; i < N; i++) {
     const p = G.posOf(i, Y_OFF), sl = D.slotOf(i);
-    AG.push({ i, x: p.x, y: p.y, active: isFinite(W.wake[i]), phi: R.phase(i), sx: sl.x, sy: sl.y, gT: GATHER.t0 + GATHER.spread * hash(i, 12) });
+    AG.push({ i, x: p.x, y: p.y, active: isFinite(W.wake[i]), phi: R.phase(i), sx: sl.x, sy: sl.y, dph: R.diskPhase(sl.x, sl.y), gT: GATHER.t0 + GATHER.spread * hash(i, 12) });
   }
   const EA = new Uint8Array(NE), EB = new Uint8Array(NE);
   W.edges.forEach((e, k) => { EA[k] = e.a; EB[k] = e.b; });
@@ -100,7 +103,7 @@
     const j = N_COPY0 + c, sl = D.slotOf(j);
     CP.push({ c, x0, y0, tx, ty, m, t0: FLOCK.t0 + FLOCK.spread * Math.pow(hash(c, 7), FLOCK.pow),
       A: FLOCK.amp0 + FLOCK.amp1 * hash(c, 8), f: FLOCK.f0 + FLOCK.f1 * hash(c, 9), ph: TAU * hash(c, 14),
-      n1x, n1y, n2x, n2y, phi: R.phase(j), sx: sl.x, sy: sl.y, gT: GATHER.t0 + GATHER.spread * hash(j, 12),
+      n1x, n1y, n2x, n2y, phi: R.phase(j), sx: sl.x, sy: sl.y, dph: R.diskPhase(sl.x, sl.y), gT: GATHER.t0 + GATHER.spread * hash(j, 12),
       sw: SWEEP_OF[m], rank: 0 });
   }
   // Återkomstordning: nedifrån och upp inom varje maskin (8 ms per prick)
@@ -127,13 +130,13 @@
     for (const sw of SWEEPS) for (let e = 0; e < sw.newN; e++) {
       const j = NEWJ[idx++], sl = D.slotOf(j);
       EX.push({ x: MACH.x0 + MACH.step * sw.newM + 8 + 44 * rnd(), y: MACH.y0 + 8 + 144 * rnd(), t0: sw.newT + EXTRA.spread * rnd(),
-        phi: R.phase(j), sx: sl.x, sy: sl.y, gT: GATHER.t0 + GATHER.spread * hash(j, 12) });
+        phi: R.phase(j), sx: sl.x, sy: sl.y, dph: R.diskPhase(sl.x, sl.y), gT: GATHER.t0 + GATHER.spread * hash(j, 12) });
     }
   }
   const NW = [];                                              // resterande 359 platser: tonar in på plats i disken
   for (let k = EXTRA.n; k < NEWJ.length; k++) {
     const j = NEWJ[k], sl = D.slotOf(j);
-    NW.push({ t0: NEWIN.t0 + NEWIN.spread * hash(j, 13), phi: R.phase(j), sx: sl.x, sy: sl.y });
+    NW.push({ t0: NEWIN.t0 + NEWIN.spread * hash(j, 13), phi: R.phase(j), sx: sl.x, sy: sl.y, dph: R.diskPhase(sl.x, sl.y) });
   }
 
   /* ------------------------------------------------------------ textmasker */
@@ -209,11 +212,17 @@
   /** Ljuskilen: apex i dörröppningen, halvvinkel beta, klippt till y ≥ 1160. */
   function drawCone(ctx, beta, alpha) {
     if (alpha <= 0 || beta <= 0) return;
-    const x0 = CONE.x - CONE.len * Math.sin(beta), x1 = CONE.x + CONE.len * Math.sin(beta), yb = CONE.y + CONE.len * Math.cos(beta);
+    const sb = Math.sin(beta), cb = Math.cos(beta);
     ctx.save();
     ctx.beginPath(); ctx.rect(0, CONE.y, R.W, R.H - CONE.y); ctx.clip();
-    ctx.fillStyle = C.accent; ctx.globalAlpha = CONE.fill * alpha;
-    ctx.beginPath(); ctx.moveTo(CONE.x, CONE.y); ctx.lineTo(x0, yb); ctx.lineTo(x1, yb); ctx.closePath(); ctx.fill();
+    // Fyllningen: lagrade trianglar – ljuset är starkast vid dörren och avtar utåt (inga gradienter, bara staplade alfa)
+    ctx.fillStyle = C.accent;
+    for (let k = 1; k <= CONE.layers; k++) {
+      const len = CONE.layerLen * k;
+      ctx.globalAlpha = CONE.fill * alpha * 1.4 / CONE.layers;
+      ctx.beginPath(); ctx.moveTo(CONE.x, CONE.y); ctx.lineTo(CONE.x - len * sb, CONE.y + len * cb); ctx.lineTo(CONE.x + len * sb, CONE.y + len * cb); ctx.closePath(); ctx.fill();
+    }
+    const x0 = CONE.x - CONE.len * sb, x1 = CONE.x + CONE.len * sb, yb = CONE.y + CONE.len * cb;
     ctx.strokeStyle = C.accent; ctx.lineWidth = 1; ctx.lineCap = 'butt'; ctx.globalAlpha = CONE.edge * alpha;
     ctx.beginPath(); ctx.moveTo(CONE.x, CONE.y); ctx.lineTo(x0, yb); ctx.moveTo(CONE.x, CONE.y); ctx.lineTo(x1, yb); ctx.stroke();
     ctx.restore();
@@ -274,13 +283,13 @@
       nd = 0;
       // Sandlådan (diskindex j = i): aktiva andas på .35 av full styrka, de tolv isolerade står stilla, hjälten är en tom ring
       for (let i = 0; i < N; i++) {
-        const a = AG[i], g = outExpo(fade(s, a.gT, GATHER.d));
+        const a = AG[i], g = gOut(fade(s, a.gT, GATHER.d));
         const x = lerp(a.x, a.sx, g), y = lerp(a.y, a.sy, g), m = maskAt(x, y);
-        const bA = Math.sin(sinA + a.phi), bL = Math.sin(sinL + a.phi);
+        const bA = Math.sin(sinA + a.phi), bL = Math.sin(sinL + a.dph);
         if (i === 0) { put(x, y, lerp(R_HERO, R_DISK, g), 0, 0, 0, m); continue; }
         const base = lerp(R_GRID, R_DISK, g);
-        if (a.active) put(x, y, base * (1 + AMP * ((1 - g) * bA + g * bL)), lerp(dim, LUGN_A, g), lerp(HALO_A * dim, LUGN_HALO, g), 0, m);
-        else put(x, y, base * (1 + AMP * g * bL), lerp(ISO_A * dim, LUGN_A, g), LUGN_HALO * g, 0, m);
+        if (a.active) put(x, y, base * (1 + (1 - g) * AMP * bA + g * LUGN_AMP * bL), lerp(dim, LUGN_A, g), lerp(HALO_A * dim, LUGN_HALO, g), 0, m);
+        else put(x, y, base * (1 + g * LUGN_AMP * bL), lerp(ISO_A * dim, LUGN_A, g), LUGN_HALO * g, 0, m);
       }
       // Beat 5.3 · kopiorna: box → dörren (1.2 s easeInOut) → maskin (0.9 s expoOut), lateral sinus, TALAR i dörren
       for (let c = 0; c < FLOCK.n; c++) {
@@ -311,24 +320,24 @@
           }
         }
         // Beat 5.5 · samlingen
-        const g = outExpo(fade(s, k.gT, GATHER.d));
+        const g = gOut(fade(s, k.gT, GATHER.d));
         if (g > 0) { x = lerp(x, k.sx, g); y = lerp(y, k.sy, g); r = lerp(r, R_DISK, g); fill = lerp(fill, LUGN_A, g); halo = lerp(halo, LUGN_HALO, g); }
-        const br = 1 + AMP * ((1 - g) * Math.sin(sinA + k.phi) + g * Math.sin(sinL + k.phi));
+        const br = 1 + (1 - g) * AMP * Math.sin(sinA + k.phi) + g * LUGN_AMP * Math.sin(sinL + k.dph);
         put(x, y, r * br, fill * vis, halo * vis, q, maskAt(x, y));
       }
       // Beat 5.4 · de extra prickarna som tänds i grannmaskinen (med TALAR-blink)
       for (let e = 0; e < EX.length; e++) {
         const k = EX[e]; if (s < k.t0) continue;
-        const vis = smooth(fade(s, k.t0, EXTRA.inD)), q = talarBack(s, k.t0), g = outExpo(fade(s, k.gT, GATHER.d));
+        const vis = smooth(fade(s, k.t0, EXTRA.inD)), q = talarBack(s, k.t0), g = gOut(fade(s, k.gT, GATHER.d));
         const x = lerp(k.x, k.sx, g), y = lerp(k.y, k.sy, g);
-        const br = 1 + AMP * ((1 - g) * Math.sin(sinA + k.phi) + g * Math.sin(sinL + k.phi));
+        const br = 1 + (1 - g) * AMP * Math.sin(sinA + k.phi) + g * LUGN_AMP * Math.sin(sinL + k.dph);
         put(x, y, lerp(R_KOPIA, R_DISK, g) * br, lerp(FLOCK.restA, LUGN_A, g) * vis, lerp(FLOCK.restHalo, LUGN_HALO, g) * vis, q, maskAt(x, y));
       }
       // Beat 5.5 · de 359 återstående platserna tonar in i disken (LUGN från början)
       for (let n = 0; n < NW.length; n++) {
         const k = NW[n]; if (s < k.t0) continue;
         const vis = smooth(fade(s, k.t0, NEWIN.d));
-        put(k.sx, k.sy, R_DISK * (1 + AMP * Math.sin(sinL + k.phi)), LUGN_A * vis, LUGN_HALO * vis, 0, 1);
+        put(k.sx, k.sy, R_DISK * (1 + LUGN_AMP * Math.sin(sinL + k.dph)), LUGN_A * vis, LUGN_HALO * vis, 0, 1);
       }
 
       /* ---------- lager 3: gula kanter + bud (på rutnätets platser, batchade per alfa-bucket) ---------- */

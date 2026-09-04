@@ -115,7 +115,7 @@ async function main() {
     const out = args.out || path.join(ROOT, 'reels/hemliga-samhallet/out/stills'); mkdirp(out);
     const times = String(args.stills).split(',').map(Number).filter(n => !isNaN(n));
     for (const t of times) {
-      const f = path.join(out, `${t.toFixed(1).padStart(6, '0')}s.png`);
+      const f = path.join(out, `${t.toFixed(3).padStart(8, '0')}s.png`);   // t.ex. 0074.967s.png
       fs.writeFileSync(f, await snap(t));
       console.log('still', fmtT(t), '→', f);
     }

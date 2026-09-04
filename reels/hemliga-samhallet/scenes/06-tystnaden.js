@@ -35,9 +35,10 @@
   // 6.1 · hair-cirkeln r 460 sluter sig från klockan 12 (cubicOut 1.2 s), → .3 i övergången ut
   const RING = { r: D.ring, t0: L(151.0), d: 1.2, endA: .3, segs: 72 };
   // 6.1 · etiketten överst
-  const LABEL = { str: R.fmt(1200) + ' AGENTER', y: 330, size: 34, t0: L(151.2), out: L(168.5), rise: 12 };
+  const LABEL = { str: R.fmt(1200) + ' AGENTER', y: 330, size: 34, t0: L(151.8), out: L(168.5), rise: 12 };   // 151.8: ett andetag efter cirkeln (151.0)
   // 6.2 · de sex: ink→röd 0.6 s vid 154.5 + 0.55·m, puls 0.8 Hz med fas ψ = 0.7·m; fryser 162.4; röd→hair 162.6–164.1
-  const RED = { t0: L(154.5), step: .55, d: .6, r: R_DISK * ROD.rScale, period: ROD.period, psi: .7, freeze: L(162.4), outT: L(162.6), outD: 1.5 };
+  // Storyboardet säger r×1.3, golv .35, halo .20 – för svagt på en telefon (sex av tolvhundra får inte missas): r×1.45, golv .5, halo .26
+  const RED = { t0: L(154.5), step: .55, d: .6, r: R_DISK * 1.45, floor: .5, halo: .26, period: ROD.period, psi: .7, freeze: L(162.4), outT: L(162.6), outD: 1.5 };
   // 6.2–6.3 · räknaren under disken (inget landningsstreck) och ordet som ersätter siffran
   const CNT = { x: 540, y: 1420, size: 96, t0: L(158.0), label: 'ÖVERVÄGDE ATT VARNA', swapT: L(163.4), swapD: .9 };
   const INGEN = { str: 'INGEN.', size: 80, spacing: .05, out: L(168.5) };
@@ -49,7 +50,7 @@
   const SX = new Float64Array(N), SY = new Float64Array(N), PHI = new Float64Array(N), ARR = new Float64Array(N);
   for (let j = 0; j < N; j++) {
     const sl = D.slotOf(j);
-    SX[j] = sl.x; SY[j] = sl.y; PHI[j] = R.phase(j);
+    SX[j] = sl.x; SY[j] = sl.y; PHI[j] = R.diskPhase(sl.x, sl.y);   // koherent fas: disken andas som en våg
     ARR[j] = j >= NEW0 ? ARRIVE.t0 + ARRIVE.spread * R.hash(j, ARRIVE.seed) : -Infinity;
   }
   // De sex röda platserna k → agent j (och omvänt); hjälten j = 0 ligger på plats 640 som tom ring
@@ -123,6 +124,7 @@
       const dimP = smooth(fade(t, DIM.t0, DIM.d));                  // 6.4 · 168.5–170.0
       const dim = lerp(1, DIM.to, dimP);
       const haloA = LUGN.halo * (1 - dimP);
+      const haloBr = .35 * smooth(fade(s, .5, 2));                   // halon andas med (±35 %), tonas in efter klippet så 150.0 matchar scen 5
       const breathPh = TAU * t / LUGN.T;                             // andning T = 4 s, global fas
 
       /* ---------- text-alfa och masker (före prickpasset) ---------- */
@@ -142,7 +144,7 @@
         const m = R.maskFactor(SX[j], SY[j], RECT_LIST);
         AR[j] = R_DISK * (1 + LUGN.amp * Math.sin(breathPh + PHI[j]));
         AF[j] = LUGN.alpha * dim * arr * m;
-        AH[j] = haloA * arr * m;
+        AH[j] = haloA * (1 + haloBr * Math.sin(breathPh + PHI[j])) * arr * m;
         ABK[j] = Math.round(Math.min(1, AF[j]) * NB);
       }
 
@@ -186,11 +188,11 @@
         const p = smooth(fade(s, t0, RED.d));                                       // ink → röd
         const q = smooth(fade(s, RED.outT, RED.outD));                              // röd → hair (TYSTNAD)
         const tt = Math.min(s, RED.freeze);                                         // pulsen fryser vid 162.4
-        const pulse = .35 + .65 * (.5 + .5 * Math.sin(TAU * (tt - t0) / RED.period + RED.psi * m));
+        const pulse = RED.floor + (1 - RED.floor) * (.5 + .5 * Math.sin(TAU * (tt - t0) / RED.period + RED.psi * m));
         const rInk = R_DISK * (1 + LUGN.amp * Math.sin(breathPh + PHI[j]));
         const r = lerp(lerp(rInk, RED.r, p), R_DISK, q);
-        const aInk = LUGN.alpha * (1 - p) * mk, hInk = haloA * (1 - p) * mk;
-        const aRed = p * pulse * (1 - q) * mk, hRed = ROD.halo * pulse * p * (1 - q) * mk;
+        const aInk = LUGN.alpha * (1 - p) * mk, hInk = haloA * (1 + haloBr * Math.sin(breathPh + PHI[j])) * (1 - p) * mk;
+        const aRed = p * pulse * (1 - q) * mk, hRed = RED.halo * pulse * p * (1 - q) * mk;
         const aHair = q * mk;
         if (hInk > .002) R.halo(ctx, x, y, r, { alpha: hInk, scale: LUGN.haloR });
         if (hRed > .002) R.halo(ctx, x, y, r, { alpha: hRed, scale: ROD.haloR, color: 'red' });
