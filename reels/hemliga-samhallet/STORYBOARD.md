@@ -467,6 +467,18 @@ texten gäller koden; listan här är facit för nästa granskning. Tider är gl
   varje linje högst en gång); 0.4 s glid längs hyllan innan rektangeln tonas in; rektangel m på 540 ± 22k med
   k = floor(m/2)+1, k = 3 hoppas över (rakt under en paketikon); paketprickarna har textmask för etiketten.
 
+**Scen 3**
+- 3.1: stämpelramen är 280×64 (OMÖJLIG i Mono 500 40 px .24em mäter ≈ 235 px, ryms inte i 232). Hjälten driver
+  rastlöst i boxen 35.4–40.2 (nötandets φ-funktion med växande amplitud 0 → 16 px) så att nötandet växer ur
+  stämpeln i stället för 2.5 s stillbild; ingen halo, ingen andning.
+- 3.3: kortet är 600×112 (rad 2 mäter ≈ 530 px); etiketten ARTIFACTORY tonas ut 46.0–46.9 (kortets överkant
+  täcker y 1244). Förrådet lämnar i två steg: solfjäder + hylla 54.6–55.4, kortets ram + text 55.2–56.0.
+- 3.5: räknarna tonar in 56.0 (AGENTER) och 56.6 (MEDDELANDEN); formlerna räknar från 53.6/56.0. MEDDELANDEN landar
+  73.4 så det gula strecket får vila ~1 s. Räknarna tonar ut 74.4–74.95 (helt borta vid 75.0).
+- 3.6: rad 3 skrivs 'We’ve' med typografisk apostrof (U+2019) – bättre i Fraunces.
+- 3.7: buden tonar bort medan de glider mot hjälten (borta 74.4) och roterar inte – annars en vit "explosion".
+  Fältets .9-dämpning släpps 74.0–75.0 så att väven är exakt .3 vid 75.0 (scen 4:s startvärde) och halon .22·.3.
+
 **Scen 4**
 - 4.2: INOM NÅGRA TIMMAR på y 270 (330 hade lagt texten rakt på rutnätets översta rad); LÄMNA IN tonar ut 84.0
   tillsammans med den (rutan och linjen 83.6).

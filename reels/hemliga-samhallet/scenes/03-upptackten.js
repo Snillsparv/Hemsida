@@ -15,8 +15,16 @@
 
    Övergång in (35.0) matchar scen 2:s sista bildruta (PSNR ≈ 69 dB): rutnät
    .18, hjälten lysande, hyllgruppen .40, etiketten ARTIFACTORY .18 på y 1244.
-   Övergång ut (75.0): väven .3, hjälten AKTIV på (540,700), räknare och bud
-   borta – scen 4 tar över med TALAR-blinken vid 75.2.
+   Övergång ut (75.0): scen 3:s sista bildruta (74.967) ritar exakt det scen 4
+   ritar vid 75.0 – väven på .3 (även de tolv boxarna/prickarna som aldrig
+   vaknade: fältets .9-dämpning släpps till 1 under 74.0–75.0 så att .85·.3 och
+   .70·.3 stämmer), halo .22·.3 på de aktiva, hjälten AKTIV på (540,700),
+   räknare (ute senast 74.95) och bud (tonade under gliden) borta. Scen 4 tar
+   över med TALAR-blinken vid 75.2.
+
+   Ingen bildruta får vara en ren stillbild: hjälten driver rastlöst inne i
+   boxen med nötandets φ-funktion redan före 40.0 (amplitud 0→2→4→16 px),
+   utan halo och utan andning – ISOLERAD-reglerna bryts inte.
    ============================================================================ */
 (function () {
   'use strict';
@@ -40,8 +48,9 @@
   for (let m = 0; m < SHELF.packets; m++) { let k = Math.floor(m / 2) + 1; if (k >= 3) k++; PACK_X.push(SHELF.cx + (m % 2 ? -1 : 1) * 22 * k); }
   // Övergång in: rutnätet .18. Lyfts .18→.35 (50.5–52.0) och vidare till .9 under kaskaden (56–66) – "väven i full styrka".
   const FIELD = { in: .18, lift0: L(50.5), lift1: L(52.0), lift: .35, full0: L(56.0), full1: L(66.0), full: .9 };
-  // Förrådet (hylla, solfjäder, kort) tonar bort inför kaskaden och räknaren MEDDELANDEN.
-  const FORRAD = { out0: L(55.0), out1: L(56.0) };
+  // Förrådet tonar bort inför kaskaden och räknaren MEDDELANDEN – i två steg så att inget syns genom kortets
+  // text: solfjäder + de fems ink-linjer + hylla först (54.6–55.4), kortets ram + text därefter (55.2–56.0).
+  const FORRAD = { fan0: L(54.6), fan1: L(55.4), card0: L(55.2), card1: L(56.0) };
   const FIVE = [17, 44, 61, 88, 103];                  // de första som svarar (deras hårlinje lyser ink .7)
 
   // Beat 3.1 · stämpeln
@@ -51,6 +60,11 @@
   const RUB = { t0: L(40.0), t1: L(44.6), amp: 16, f1: 1.2, f2: .18, ky: 1.37, glow: .3, glowA: .9,
     pullDur: .4, pullY: 718, lineT0: L(44.8), lineDur: .8, lineA: .9,
     cntIn: L(40.6), cntOut: L(45.2), cntOutDur: .8, cntY: 1170, label: 'FÖRSÖK' };
+  // Beat 3.1 · rastlösheten: hjälten driver inne i boxen med samma φ som nötandet (τ < 0 – φ vänder vid τ = −3.33,
+  // dvs. 36.67, så driften stannar av sig själv just när stämpeln landar). Amplitud 0→2 px före stämpeln
+  // (35.4–36.6), 2→4 px när landningsringen är slut (37.6–39.0), 4→16 px in i nötandet (39.4–40.2 – första
+  // väggträffen är 40.2). Ingen halo, ingen andning; bildrutan 35.0 är oförändrad (amplitud 0).
+  const REST = { a0: L(35.4), a1: L(36.6), ampA: 2, b0: L(37.6), b1: L(39.0), ampB: 4, c0: L(39.4), c1: L(40.2) };
   // Beat 3.3 · lappen
   const GAP = { t0: L(45.6), dur: .6, w: 40 };
   const CARD = { t0: L(46.4), fi: .9, rise: 22, riseDur: 1.1, cx: 540, cy: 1300, w: 600, h: 112, breathT: 3,
@@ -60,9 +74,13 @@
   const JOIN = { dur: .9 };                            // box löses upp / halo tänds / hjälten glider hem
   const EDGE = { lit: S.EDGE.lit, rest: S.EDGE.rest, litDur: S.EDGE.litDur, settle: S.EDGE.settle };
   // Beat 3.5 · räknarna
-  const CNT_A = { cx: 540, cy: 360, t0: L(53.6), dur: 16.4, target: 1200, tIn: L(53.8), land: L(70.0), label: 'AGENTER' };
-  const CNT_M = { cx: 540, cy: 1440, t0: L(56.0), dur: 18, target: 70000, tIn: L(56.0), land: L(74.0), label: 'MEDDELANDEN' };
-  const CNT = { landDur: .7, out0: L(74.4), out1: L(75.0), dim: .4, dim0: L(58.0), dim1: L(58.9) };
+  // Formlerna räknar från 53.6 resp. 56.0 (storyboardet), men blocken tonas in först 56.0 (AGENTER) och 56.6
+  // (MEDDELANDEN) – ett andetag emellan, och inte medan kortet och solfjädern är kvar i bild.
+  // MEDDELANDEN landar 73.4 (dur 17.4, storyboardet säger 74.0) så att det gula strecket får vila ~1 s innan
+  // blocken tonar ut 74.4–74.95 – scen 4 ritar inga räknare, så de måste vara helt borta i bildrutan 74.967.
+  const CNT_A = { cx: 540, cy: 360, t0: L(53.6), dur: 16.4, target: 1200, tIn: L(56.0), land: L(70.0), label: 'AGENTER' };
+  const CNT_M = { cx: 540, cy: 1440, t0: L(56.0), dur: 17.4, target: 70000, tIn: L(56.6), land: L(73.4), label: 'MEDDELANDEN' };
+  const CNT = { landDur: .7, out0: L(74.4), out1: L(74.95), dim: .4, dim0: L(58.0), dim1: L(58.9) };
   // Beat 3.6 · citatet
   const QUOTE = {
     mask0: L(58.0), maskDur: .5, maskOut0: L(65.6), maskOut1: L(66.5), out0: L(65.2), out1: L(66.0),
@@ -74,7 +92,10 @@
   };
   // Beat 3.7 · nätet lever + övergång ut
   const BUD = { t0: L(66.0), spread: 1.5, fi: .6, alpha: S.BUD.alpha, half: S.BUD.len / 2, width: S.BUD.width };
-  const EXIT = { t0: L(74.0), dur: 1.0, web: .3, glide: 1.2, vanish: .85 };
+  // Övergång ut: väven → .3 (74.0–75.0), buden glider mot hjälten (expoOut 1.2 s) men tonas i takt med gliden
+  // (a·(1 − smooth(gp/vanish)): ≈ .5 vid 74.1, ≈ .1 vid 74.2, 0 från 74.4) och behåller sin egen kantriktning –
+  // annars bildar 282 streck en vit stjärna kring hjälten, och 282 svaga streck staplade på hjälten blir ett dis.
+  const EXIT = { t0: L(74.0), dur: 1.0, web: .3, glide: 1.2, vanish: .9 };
 
   // Textmasker (rekt = textens box + 40 px, 60 px mjuk kant). a sätts per bildruta.
   const RECT_FORSOK = R.textRect(540, RUB.cntY, 260, 60, 0);
@@ -158,14 +179,21 @@
   let hx = HERO.x, hy = HERO.y;                        // hjältens position (räknas om varje bildruta)
 
   /* ------------------------------------------------------------ hjälten */
-  /** Beat 3.2: nötandet, sedan dras pricken till underkanten (44.6) och hem igen när boxen löses upp (53.6). */
+  /** Rastlöshetens amplitud (px): 0 → 2 → 4 → 16 i tre mjuka steg, = 16 från 40.2 (nötandets fulla utslag). */
+  function restAmp(s) {
+    return REST.ampA * smooth(seg(s, REST.a0, REST.a1))
+      + (REST.ampB - REST.ampA) * smooth(seg(s, REST.b0, REST.b1))
+      + (RUB.amp - REST.ampB) * smooth(seg(s, REST.c0, REST.c1));
+  }
+  /** Beat 3.1–3.2: rastlös drift, nötandet, sedan dras pricken till underkanten (44.6) och hem igen när boxen löses upp (53.6). */
   function heroPos(s) {
     hx = HERO.x; hy = HERO.y;
-    if (s <= RUB.t0) return;
-    const tau = Math.min(s, RUB.t1) - RUB.t0;
+    const amp = restAmp(s);
+    if (amp <= 0) return;
+    const tau = Math.min(s, RUB.t1) - RUB.t0;                          // negativ före 40.0 – samma φ-kurva
     const phi = TAU * (RUB.f1 * tau + RUB.f2 * tau * tau);
-    hx = HERO.x + RUB.amp * Math.sin(phi);
-    hy = HERO.y + RUB.amp * Math.sin(RUB.ky * phi);
+    hx = HERO.x + amp * Math.sin(phi);
+    hy = HERO.y + amp * Math.sin(RUB.ky * phi);
     const q = outExpo(seg(s, RUB.t1, RUB.t1 + RUB.pullDur));
     hx = lerp(hx, HERO.x, q); hy = lerp(hy, RUB.pullY, q);
     const q2 = outExpo(seg(s, WK[0], WK[0] + JOIN.dur));
@@ -267,11 +295,13 @@
     draw(ctx, s, t) {
       /* ---- skalärer för bildrutan ---- */
       // fältets dämpning (isolerade boxar/prickar/solfjäder): .18 → .35 → .9
+      const exitP = seg(s, EXIT.t0, EXIT.t0 + EXIT.dur);
+      const ex = lerp(1, EXIT.web, smooth(exitP));                                    // övergång ut: väven → .3
       let dimIso = lerp(FIELD.in, FIELD.lift, smooth(seg(s, FIELD.lift0, FIELD.lift1)));
       dimIso = lerp(dimIso, FIELD.full, smooth(seg(s, FIELD.full0, FIELD.full1)));
-      const ex = lerp(1, EXIT.web, smooth(seg(s, EXIT.t0, EXIT.t0 + EXIT.dur)));     // övergång ut: väven → .3
-      const forradA = 1 - smooth(seg(s, FORRAD.out0, FORRAD.out1));
-      const exitP = seg(s, EXIT.t0, EXIT.t0 + EXIT.dur);
+      dimIso = lerp(dimIso, 1, smooth(exitP));   // vid 75.0 bär ex ensam dämpningen (.85·.3 / .70·.3 = scen 4)
+      const fanA = 1 - smooth(seg(s, FORRAD.fan0, FORRAD.fan1));                     // solfjäder, ink-linjer, hylla
+      const cardA = 1 - smooth(seg(s, FORRAD.card0, FORRAD.card1));                  // kortets ram + text
       const edgePulse = (EDGE.lit - EDGE.rest) * Math.sin(Math.PI * exitP);
       const tExit = t - (s - EXIT.t0);                                                // global tid när s = 74.0
       // Beat 3.1 · stämpeln
@@ -329,13 +359,11 @@
           let bx, by;
           if (s < EXIT.t0) { const p = R.budP(t, e, k); bx = X[lo] + dx * p; by = Y[lo] + dy * p; }
           else {
+            // gliden: från läget vid 74.0 mot hjälten, strecket behåller kantens riktning och tonar med gp
             const p = R.budP(tExit, e, k), gp = outExpo(seg(s, EXIT.t0, EXIT.t0 + EXIT.glide));
             const sx = X[lo] + dx * p, sy = Y[lo] + dy * p;
             bx = lerp(sx, hx, gp); by = lerp(sy, hy, gp);
-            const gx = hx - sx, gy = hy - sy, gd = Math.hypot(gx, gy) || 1;
-            ux = lerp(ux, gx / gd, gp); uy = lerp(uy, gy / gd, gp);
-            const un = Math.hypot(ux, uy) || 1; ux /= un; uy /= un;
-            a *= 1 - smooth(seg(gp, EXIT.vanish, 1));                                  // försvinner in i hjälten
+            a *= 1 - smooth(seg(gp, 0, EXIT.vanish));                                   // svaga på väg in, borta 74.4
           }
           BX[j] = bx; BY[j] = by; BUX[j] = ux; BUY[j] = uy;
           BK_BUD[j] = bucket(a * R.maskFactor(bx, by, RECTS));
@@ -346,21 +374,21 @@
       ctx.lineWidth = 1; ctx.lineCap = 'butt';
 
       /* ---- lager 2 · solfjädern (hair, i y-band med mjuk mask) + hjältens linje i ink .9 + de första fems i ink .7 ---- */
-      if (forradA > 0) {
+      if (fanA > 0) {
         // Beat 3.2 · hjältens solfjäderlinje ritas om i ink .9 (stroke-progress 44.8–45.6), följer pricken
         const lp = outExpo(seg(s, RUB.lineT0, RUB.lineT0 + RUB.lineDur));
         const hex = lerp(hx, SHELF.cx, lp), hey = lerp(hy, SHELF.y, lp);
         for (let b = 0; b < BANDS.length; b++) {
           const y0 = BANDS[b][0], y1 = BANDS[b][1];
           const mf = R.maskFactor(540, (Math.max(y0, BAND_Y0) + y1) / 2, RECTS_FAN);
-          const a = A_HAIR * dimIso * forradA * mf;
+          const a = A_HAIR * dimIso * fanA * mf;
           if (a <= .003) continue;
           ctx.globalAlpha = a; ctx.strokeStyle = C.hair; ctx.beginPath();
           let any = false;
           for (let i = 0; i < N; i++) if (segInBand(ctx, X[i], Y[i], SHELF.cx, SHELF.y, y0, y1)) any = true;
           if (any) ctx.stroke();
           if (lp > 0) {
-            ctx.globalAlpha = RUB.lineA * forradA * mf; ctx.strokeStyle = C.ink; ctx.beginPath();
+            ctx.globalAlpha = RUB.lineA * fanA * mf; ctx.strokeStyle = C.ink; ctx.beginPath();
             if (segInBand(ctx, hx, hy, hex, hey, y0, y1)) ctx.stroke();
           }
         }
@@ -369,7 +397,7 @@
         for (let k = 0; k < FIVE.length; k++) {
           const i = FIVE[k], lit = smooth(seg(s, WK[i], WK[i] + .5));
           if (lit <= 0) continue;
-          ctx.globalAlpha = .7 * lit * MK[i] * forradA;
+          ctx.globalAlpha = .7 * lit * MK[i] * fanA;
           ctx.beginPath(); ctx.moveTo(X[i], Y[i]); ctx.lineTo(SHELF.cx, SHELF.y); ctx.stroke();
         }
       }
@@ -394,6 +422,7 @@
       heroBox(ctx, 1 - qH, GAP.w * outExpo(seg(s, GAP.t0, GAP.t0 + GAP.dur)));
 
       /* ---- lager 5 · halo-sprites (ink .22 när vaken, gul .28 under TALAR) ---- */
+      ctx.globalAlpha = 1;   // R.halo multiplicerar in aktuell globalAlpha – batch() lämnar den på sista boxbuckets alfa
       for (let i = 1; i < N; i++) {
         if (Q[i] <= 0) continue;
         R.halo(ctx, X[i], Y[i], RR[i], { alpha: A_HALO * Q[i] * MK[i] });
@@ -420,8 +449,8 @@
       });
 
       /* ---- lager 7 · skärmobjekt: förrådet, kortet, stämpeln, landningsringen ---- */
-      drawShelf(ctx, SHELF.dim * forradA);
-      drawCard(ctx, s, t, forradA);
+      drawShelf(ctx, SHELF.dim * fanA);
+      drawCard(ctx, s, t, cardA);
       drawStamp(ctx, s, stampA);
       const rp = seg(s, STAMP.ringT, STAMP.ringT + STAMP.ringDur);
       if (rp > 0 && rp < 1) {
