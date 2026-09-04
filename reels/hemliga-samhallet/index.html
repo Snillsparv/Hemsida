@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="sv"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Det hemliga samhället · reel-animation</title>
+<link rel="stylesheet" href="../../assets/fonts.css">
+<style>
+  :root{--bg:#0c0c0d;--ink:#eae6dc;--mist:#b7b1a4;--hair:#3f3d37;--accent:#ffd166;--mono:'JetBrains Mono',ui-monospace,monospace;--serif:'Fraunces',Georgia,serif;--sans:'Space Grotesk',system-ui,sans-serif}
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:#050506;color:var(--ink);font-family:var(--sans);display:flex;flex-direction:column;align-items:center;overflow:hidden}
+  .stage{flex:1 1 auto;display:flex;align-items:center;justify-content:center;width:100%;min-height:0;padding:14px 14px 6px}
+  canvas{display:block;background:var(--bg);box-shadow:0 0 0 1px var(--hair)}
+  .vo{width:min(100%,60rem);padding:.4rem 1.2rem .6rem;font-family:var(--serif);font-size:1.05rem;line-height:1.5;text-align:center;color:var(--ink);min-height:4.6rem}
+  .vo .next{display:block;color:var(--mist);opacity:.55;font-size:.9rem;margin-top:.25rem}
+  .vo .tid{font-family:var(--mono);font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:.2rem}
+  .bar{width:100%;border-top:1px solid var(--hair);background:#0c0c0d;padding:.7rem 1rem .9rem;display:grid;gap:.55rem;font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;color:var(--mist)}
+  .rad{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+  button{background:transparent;color:var(--ink);border:1px solid var(--hair);font:inherit;letter-spacing:.18em;text-transform:uppercase;padding:.45rem .8rem;cursor:pointer}
+  button:hover,button.on{color:var(--accent);border-color:var(--accent)}
+  button.chip{border:none;padding:.35rem .5rem;color:var(--mist)}
+  button.chip.on{color:var(--accent)}
+  .tid{font-variant-numeric:tabular-nums;color:var(--ink);min-width:9.5rem}
+  input[type=range]{width:100%;accent-color:var(--accent);height:1.2rem;margin:0}
+  .hint{opacity:.55;font-size:.62rem;letter-spacing:.14em}
+  body.render{background:var(--bg);display:block;overflow:visible}
+  body.render .stage{position:fixed;left:0;top:0;width:1080px;height:1920px;padding:0;display:block}
+  body.render canvas{width:1080px;height:1920px;box-shadow:none}
+  body.render .bar,body.render .vo{display:none}
+</style>
+</head><body>
+<div class="stage"><canvas id="c" width="1080" height="1920" aria-label="Animation"></canvas></div>
+<div class="vo" id="vo" hidden></div>
+<div class="bar" id="bar">
+  <div class="rad">
+    <button id="play" title="mellanslag">▶ spela</button>
+    <span class="tid" id="tid">0:00.0 / 3:10</span>
+    <span id="chips"></span>
+  </div>
+  <input type="range" id="scrub" min="0" max="190" step="0.0333" value="0" aria-label="Tidslinje">
+  <div class="rad">
+    <button id="voBtn" class="chip" title="v">VO-guide</button>
+    <button id="guideBtn" class="chip" title="g">säker yta</button>
+    <button id="loopBtn" class="chip" title="l">loopa scenen</button>
+    <span class="hint">mellanslag spela · ←/→ ±1 s (skift ±5) · , . bildruta · 1–7 scen · v guide · g ytor · l loop · ?t=12 startar vid 12 s</span>
+  </div>
+</div>
+
+<script src="engine.js"></script>
+<script src="timing.js"></script>
+<script src="icons.js"></script>
+<script src="scenes/01-hook.js"></script>
+<script src="scenes/02-testet.js"></script>
+<script src="scenes/03-upptackten.js"></script>
+<script src="scenes/04-vandningen.js"></script>
+<script src="scenes/05-utbrottet.js"></script>
+<script src="scenes/06-tystnaden.js"></script>
+<script src="scenes/07-reflektion.js"></script>
+<script>
+(function () {
+  const q = new URLSearchParams(location.search);
+  const renderMode = q.has('render');
+  const canvas = document.getElementById('c');
+  const startT = Math.max(0, +q.get('t') || 0);
+
+  if (renderMode) {
+    document.body.classList.add('render');
+    REEL.mount(canvas, { dpr: 1 });
+    window.__reel = {
+      duration: REEL.DURATION, fps: REEL.FPS, fontsReady: false,
+      scenes: REEL.scenes.map(s => ({ id: s.id, name: s.name, start: s.start, end: s.end })),
+      seek: (t, o) => REEL.seek(t, o),
+      errors: REEL.errors,
+    };
+    REEL.ready.then(() => { REEL.seek(startT, { stamp: q.has('stamp'), guides: q.has('guides') }); window.__reel.fontsReady = true; });
+    return;
+  }
+
+  REEL.mount(canvas, { dpr: Math.min(2, window.devicePixelRatio || 1) });
+  const stage = document.querySelector('.stage'), bar = document.getElementById('bar'), vo = document.getElementById('vo');
+  const tid = document.getElementById('tid'), scrub = document.getElementById('scrub'), playBtn = document.getElementById('play');
+  const chips = document.getElementById('chips');
+  scrub.max = REEL.DURATION;
+
+  function fit() {
+    const availH = stage.clientHeight - 20, availW = stage.clientWidth - 28;
+    const h = Math.min(availH, availW * 16 / 9), w = h * 9 / 16;
+    canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+  }
+  window.addEventListener('resize', fit);
+
+  const fmtT = t => { const s = Math.floor(t); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}.${Math.floor((t - s) * 10)}`; };
+  const total = fmtT(REEL.DURATION).slice(0, -2);
+
+  REEL.scenes.forEach((sc, i) => {
+    const b = document.createElement('button'); b.className = 'chip'; b.textContent = `${i + 1} ${sc.name}`;
+    b.title = `${fmtT(sc.start)} – ${fmtT(sc.end)}`; b.dataset.id = sc.id;
+    b.addEventListener('click', () => REEL.seek(sc.start));
+    chips.appendChild(b);
+  });
+
+  function updVO(t) {
+    if (vo.hidden) return;
+    let cur = null, next = null;
+    for (const c of REEL.VO) { if (c.t <= t) cur = c; else { next = c; break; } }
+    vo.innerHTML = (cur ? `<span class="tid">VO ${fmtT(cur.t)}</span>${cur.text}` : '') + (next ? `<span class="next">${fmtT(next.t)} → ${next.text}</span>` : '');
+  }
+  REEL.on('time', t => {
+    tid.textContent = `${fmtT(t)} / ${total}`;
+    scrub.value = t;
+    const sc = REEL.sceneAt(t);
+    chips.querySelectorAll('.chip').forEach(b => b.classList.toggle('on', !!sc && b.dataset.id === sc.id));
+    updVO(t);
+  });
+  REEL.on('play', () => { playBtn.textContent = '❚❚ paus'; });
+  REEL.on('pause', () => { playBtn.textContent = '▶ spela'; });
+
+  playBtn.addEventListener('click', () => REEL.toggle());
+  scrub.addEventListener('input', () => REEL.seek(+scrub.value));
+  const voBtn = document.getElementById('voBtn'), guideBtn = document.getElementById('guideBtn'), loopBtn = document.getElementById('loopBtn');
+  function toggleVO() { vo.hidden = !vo.hidden; voBtn.classList.toggle('on', !vo.hidden); fit(); updVO(REEL.time); }
+  function toggleGuides() { REEL.flags.guides = !REEL.flags.guides; guideBtn.classList.toggle('on', REEL.flags.guides); REEL.render(REEL.time); }
+  function toggleLoop() { REEL.loop = REEL.loop ? null : REEL.sceneAt(REEL.time); loopBtn.classList.toggle('on', !!REEL.loop); loopBtn.textContent = REEL.loop ? `loopar ${REEL.loop.name}` : 'loopa scenen'; }
+  voBtn.addEventListener('click', toggleVO); guideBtn.addEventListener('click', toggleGuides); loopBtn.addEventListener('click', toggleLoop);
+
+  window.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' && e.key !== ' ') return;
+    const step = 1 / REEL.FPS, big = e.shiftKey ? 5 : 1;
+    const n = parseInt(e.key, 10);
+    if (e.key === ' ') { e.preventDefault(); REEL.toggle(); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); REEL.seek(REEL.time + big); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); REEL.seek(REEL.time - big); }
+    else if (e.key === '.') REEL.seek(REEL.time + step);
+    else if (e.key === ',') REEL.seek(REEL.time - step);
+    else if (e.key === 'Home') REEL.seek(0);
+    else if (e.key === 'End') REEL.seek(REEL.DURATION);
+    else if (e.key === 'v') toggleVO();
+    else if (e.key === 'g') toggleGuides();
+    else if (e.key === 'l') toggleLoop();
+    else if (n >= 1 && n <= REEL.scenes.length) REEL.seek(REEL.scenes[n - 1].start);
+  });
+
+  fit();
+  REEL.ready.then(() => {
+    if (q.has('vo')) toggleVO();
+    if (q.has('guides')) toggleGuides();
+    REEL.seek(startT);
+    if (q.has('autoplay')) REEL.play();
+  });
+})();
+</script>
+</body></html>
