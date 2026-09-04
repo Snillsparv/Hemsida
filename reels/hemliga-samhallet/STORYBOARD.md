@@ -434,3 +434,43 @@ Solrosdisk (definieras här, används i 6–7): centrum (540,870), plats k: `r_k
 - Inga popp: allt ritas fram eller tonas; ingen ny sak oftare än en per 0.6 s.
 - Ingen per-frame-slump, inget tillstånd mellan frames, ingen fysik – allt är tabeller från init och ren `f(t)`.
 - Inte dubbla VO:n i text; endast nyckelord, siffror, citat och det manuset uttryckligen anger.
+
+---
+
+## 4. Avvikelser vid bygget (gäller före texten ovan)
+
+Scenerna byggdes beat för beat mot detta dokument, granskades i bild och rättades. Där bilden krävde annat än
+texten gäller koden; listan här är facit för nästa granskning. Tider är globala sekunder.
+
+**Gemensamt**
+- Diskens andning (scen 5–7) har koherent fas `R.diskPhase(x, y) = −2π·0.5·r/420` (en långsam våg utåt från mitten)
+  och amplitud .10 i stället för .06 – med 1 200 slumpfaser på r 4 syntes ingen andning alls på en telefon.
+  Halon i scen 6 andas med (±35 %), intonad efter klippet. Rutnätets AKTIV-andning (.06, slumpfas) är oförändrad.
+- Stillbilder från renderaren namnges med tre decimaler (`0074.967s.png`); `tools/reel-diff.sh` mäter PSNR
+  mellan två bildrutor. Klippen mellan scenerna är verifierade till ≥ 45 dB (= samma nivå som vanlig rörelse).
+
+**Scen 1**
+- Boxen i 32-cellen är 22 px (scenens egna siffror gäller före regeln "cell − 14"), och landar på 46 px i dyket.
+- Hjälten (prick + box) undantas från textmasken – den enda ljuspunkten ska inte dämpas av sin egen mening.
+- Dykets expoOut normaliseras så att u = 1 exakt vid 7.0 (r 7 / box 46 / ring 13 utan restdrift). Alla boxar
+  skalas med s under dyket (inte bara hjältens) – annars läses det inte som ett dyk. Alfa-buckets 1/40.
+- Markören slutar blinka 4.5 (sista blinken 3.6–4.5); "till 5.2" i beat 1.3 ger ingen synlig effekt.
+
+**Scen 5**
+- Ljuskilen fylls med fyra lagrade trianglar (220/440/660/880 px, alfa ≈ .025 var) så ljuset avtar med avståndet
+  från dörren; storyboardets enda triangel med längd 700 gav en hård, nästan vågrät underkant. Kantlinjerna är 700 px.
+- Maskinraden börjar på x 160 (inte 165) så den centreras på 540. Kopiorna lämnar de 104 levande aktiva
+  (hjälten är död – ingen kopia lämnar en tom ring).
+- Samlingen (5.5): glid 148.2 + 0.4·hash → 1.3 s, normaliserad expoOut – klar 149.9, före klippet.
+
+**Scen 6**
+- Etiketten `1 200 AGENTER` in 151.8 (ett andetag efter cirkeln 151.0), inte 151.2.
+- De sex röda: r × 1.45, pulsens golv .5 (inte .35), röd halo .26 – "svagt rött" försvann på en telefon.
+
+**Scen 7**
+- Ink-ringen ritas med alfa 1. Den gula ringen är 1 → 2 px med en bred mjuk glöd (18 px, alfa .09) – 1 px gul
+  blir en tråd på en telefon. Andningen fryser 189.2 så ut-alfan är bestämd.
+- 7.5: radien växer smooth 160 → 1500 på 0.8 s (skärmens hörn passeras ≈ 0.6 s in, synligt) och alfan släpper
+  0.2 s senare på 0.6 s. Storyboardets expoOut lämnar bilden på 0.14 s och läses som en popp.
+- CTA: rad 1 in 186.8, rad 2 in 187.6, linjen 188.1–188.8 – 7.3:s rad 1 är helt borta innan CTA:n tar samma mittlinje.
+- Fältets dämpning .14 läses från `R.fieldDim(t)` som scen 6 definierar (en sanningskälla).

@@ -36,9 +36,11 @@ node tools/reel-render.cjs --mp4 out/scen3.mp4 --from 35 --to 75           # en 
 node tools/reel-render.cjs --stills 3,20.5,60 --out out/stills --scale 0.5 # stillbilder
 node tools/reel-render.cjs --sheet out/karta.png --every 2                 # kontaktkarta
 node tools/reel-render.cjs --list                                          # scenlista
+tools/reel-diff.sh a.png b.png                                             # PSNR mellan två bildrutor (klippkontroll)
 ```
 
-MP4:n är H.264 (yuv420p, 30 fps) och laddas upp direkt i Instagram. Ljudet
+MP4:n är H.264 (yuv420p, 30 fps) och laddas upp direkt i Instagram. `--ss 2` renderar i dubbel
+upplösning och skalar ned (skarpare prickar och 1 px-linjer; tar ~4× längre). Ljudet
 (VO + ev. musik) läggs på i klippprogrammet. Mappen `out/` är git-ignorerad.
 
 ## Ändra tider
