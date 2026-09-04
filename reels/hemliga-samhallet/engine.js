@@ -243,7 +243,7 @@
     const p = o.progress == null ? 1 : clamp01(o.progress);
     if (p <= 0) return;
     const ex = lerp(x1, x2, p), ey = lerp(y1, y2, p), ang = Math.atan2(y2 - y1, x2 - x1), h = o.head || 14;
-    line(ctx, x1, y1, ex, ey, o);
+    line(ctx, x1, y1, ex, ey, Object.assign({}, o, { progress: 1 }));
     ctx.save();
     if (o.alpha != null) ctx.globalAlpha *= clamp01(o.alpha);
     ctx.strokeStyle = o.color || C.hair; ctx.lineWidth = o.width || 1; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
