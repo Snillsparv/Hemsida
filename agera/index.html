@@ -4,10 +4,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <script>document.documentElement.classList.add('js')</script>
 <title>Vad kan jag göra? · Jonas von Essen</title>
-<meta name="description" content="Konkreta saker du kan göra åt AI-utvecklingen: ställ frågan i valstugan, mejla en politiker, skriv under uppropet, prata med tre personer och gå med i rörelsen.">
+<meta name="description" content="Konkreta saker du kan göra åt AI-utvecklingen: ställ frågan i valstugan, mejla en politiker eller en chefredaktör, skriv under uppropet, prata med tre personer och gå med i rörelsen.">
 <link rel="canonical" href="https://www.jonasvonessen.se/agera/">
 <meta property="og:title" content="Vad kan jag göra?">
-<meta property="og:description" content="Oro blir handling: sex konkreta steg för dig som är orolig över AI-utvecklingen.">
+<meta property="og:description" content="Oro blir handling: konkreta steg för dig som är orolig över AI-utvecklingen.">
 <meta property="og:url" content="https://www.jonasvonessen.se/agera/">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://www.jonasvonessen.se/assets/img/agera-delning.png">
@@ -196,9 +196,9 @@ Frågan avgör hur jag röstar den 13 september.
 
 Vänliga hälsningar
 [Ditt namn]</div>
-    <button class="knapp" id="kopiera" type="button">Kopiera mejlet</button>
+    <button class="knapp" type="button" data-kopiera="mall">Kopiera mejlet</button>
     <p style="margin-top:2rem">Eller klicka på ett parti så öppnas mejlet färdigskrivet i ditt mejlprogram. Lägg till ditt namn och tryck skicka:</p>
-    <div class="partier" id="partier">
+    <div class="partier" id="partier" data-mall="mall" data-amne="Vad är er plan för AI?">
       <a data-adress="info@centerpartiet.se">Centerpartiet</a>
       <a data-adress="info@kristdemokraterna.se">Kristdemokraterna</a>
       <a data-adress="info@liberalerna.se">Liberalerna</a>
@@ -212,28 +212,53 @@ Vänliga hälsningar
   </section>
 
   <section class="steg" data-reveal="">
-    <p class="nr">Steg 03 · trettio sekunder</p>
+    <p class="nr">Steg 03</p>
+    <h2>Mejla en chefredaktör</h2>
+    <p>Tidningarna sätter dagordningen, men de största AI-riskerna får nästan ingen plats i bevakningen. Chefredaktörerna bestämmer vad som hamnar på förstasidan, och de läser vad läsarna skriver. Här är ett mejl att utgå ifrån. Skriv gärna om det med egna ord:</p>
+    <div class="mall" id="mallmedia">Hej!
+
+Jag är läsare och allt mer orolig över hur snabbt AI-utvecklingen går. Cheferna för de ledande AI-bolagen varnar själva för att vi kan förlora kontrollen, och Nobelpristagare som Geoffrey Hinton kräver ett stopp för utvecklingen av superintelligens. Ändå är de stora riskerna nästan helt frånvarande i er bevakning.
+
+Ni sätter dagordningen. Det ni skriver om blir frågor som politikerna måste svara på. Jag vill be er att ta AI-riskerna på samma allvar som klimatet och säkerhetsläget: granska bolagens löften, fråga partierna vad deras plan är och ge era läsare en chans att förstå vad som står på spel.
+
+Vänliga hälsningar
+[Ditt namn]</div>
+    <button class="knapp" type="button" data-kopiera="mallmedia">Kopiera mejlet</button>
+    <p style="margin-top:2rem">Eller klicka på en tidning så öppnas mejlet till chefredaktören färdigskrivet:</p>
+    <div class="partier" id="medier" data-mall="mallmedia" data-amne="Varför skriver ni så lite om AI-riskerna?">
+      <a data-adress="peter.wolodarski@dn.se">Dagens Nyheter · Peter Wolodarski</a>
+      <a data-adress="lisa.irenius@svd.se">Svenska Dagbladet · Lisa Irenius</a>
+      <a data-adress="lotta.folcker@aftonbladet.se">Aftonbladet · Lotta Folcker</a>
+      <a data-adress="klas.granstrom@expressen.se">Expressen · Klas Granström</a>
+      <a data-adress="christofer.ahlqvist@gp.se">Göteborgs-Posten · Christofer Ahlqvist</a>
+      <a data-adress="jonas.kanje@sydsvenskan.se">Sydsvenskan · Jonas Kanje</a>
+    </div>
+    <p class="meta" style="margin-top:1.4rem">Namnen är chefredaktörerna i september 2026. Tidningarna använder mönstret fornamn.efternamn@tidningen.se, så din lokaltidning går att nå på samma sätt, och lokala redaktioner lyssnar extra på sina egna läsare.</p>
+  </section>
+
+  <section class="steg" data-reveal="">
+    <p class="nr">Steg 04 · trettio sekunder</p>
     <h2>Skriv under uppropet</h2>
     <p>Uppropet mot superintelligens kräver ett stopp för utvecklingen av AI som är smartare än människan, tills forskarna är överens om att det kan göras säkert och allmänheten fått säga sitt. Bland undertecknarna finns Nobelpristagare och AI‑pionjärer som Geoffrey Hinton och Yoshua Bengio. Varje ny underskrift ökar trycket:</p>
     <a class="knapp" href="https://superintelligence-statement.org/" target="_blank" rel="noopener">Skriv under →</a>
   </section>
 
   <section class="steg" data-reveal="">
-    <p class="nr">Steg 04</p>
+    <p class="nr">Steg 05</p>
     <h2>Prata med tre personer</h2>
     <p>Politik rör sig när tillräckligt många pratar om en fråga. Berätta för tre personer du känner vad som händer och varför det spelar roll. Dela videon vidare. Varje person som förstår läget gör frågan lite svårare att ignorera.</p>
     <a class="knapp" href="https://www.instagram.com/reel/DcQUAZEh_YD/" target="_blank" rel="noopener">Se och dela videon →</a>
   </section>
 
   <section class="steg" data-reveal="">
-    <p class="nr">Steg 05 · du behöver inte göra det ensam</p>
+    <p class="nr">Steg 06 · du behöver inte göra det ensam</p>
     <h2>Gå med i rörelsen</h2>
     <p>Den största organisationen för att bromsa AI-utvecklingen heter PauseAI. I Sverige finns grenen PauseAI Sverige där många av de som bryr sig mest om de här frågorna är med. Gå med du också, och läs mer på deras hemsida:</p>
     <a class="knapp" href="https://pauseai.se" target="_blank" rel="noopener">pauseai.se →</a>
   </section>
 
   <section class="steg" data-reveal="">
-    <p class="nr">Steg 06 · för dig som vill mer</p>
+    <p class="nr">Steg 07 · för dig som vill mer</p>
     <h2>Lär dig mer</h2>
     <p>Är du ung eller funderar på att byta bana: AI‑säkerhetsfältet behöver fler människor. 80,000 Hours guidar till karriärvägar som gör skillnad, och BlueDot har gratis introduktionskurser om AI-säkerhet. Vill du följa utvecklingen på djupet är Zvi Mowshowitz blogg <em>Don't Worry About the Vase</em> den bästa löpande genomgången av allt som händer inom AI.</p>
     <a class="knapp" href="https://80000hours.org" target="_blank" rel="noopener">80000hours.org →</a>
@@ -290,14 +315,15 @@ Vänliga hälsningar
   } else {
     el.forEach(function(e){ e.classList.add('syns'); });
   }
-  var partier = document.getElementById('partier');
-  if (partier) {
-    var amne = encodeURIComponent('Vad är er plan för AI?');
-    var kropp = encodeURIComponent(document.getElementById('mall').innerText);
-    [].forEach.call(partier.querySelectorAll('a[data-adress]'), function(a){
+  [].forEach.call(document.querySelectorAll('.partier[data-mall]'), function(lista){
+    var mall = document.getElementById(lista.getAttribute('data-mall'));
+    if (!mall) return;
+    var amne = encodeURIComponent(lista.getAttribute('data-amne') || '');
+    var kropp = encodeURIComponent(mall.innerText);
+    [].forEach.call(lista.querySelectorAll('a[data-adress]'), function(a){
       a.href = 'mailto:' + a.getAttribute('data-adress') + '?subject=' + amne + '&body=' + kropp;
     });
-  }
+  });
 
   var dlg = document.getElementById('brevdialog');
   if (dlg && dlg.showModal) {
@@ -369,7 +395,7 @@ Vänliga hälsningar
         if (e.getAttribute('class') === '') e.removeAttribute('class');
       });
       var dg = doc.querySelector('#brevdialog'); if (dg) dg.removeAttribute('open');
-      [].forEach.call(doc.querySelectorAll('#partier a[data-adress]'), function(e){ e.removeAttribute('href'); });
+      [].forEach.call(doc.querySelectorAll('.partier a[data-adress]'), function(e){ e.removeAttribute('href'); });
       [].forEach.call(doc.querySelectorAll('script[src*="list-manage"]'), function(e){ e.remove(); });
       var falt = doc.querySelector('#aibrev .falt'); if (falt) falt.removeAttribute('style');
       var knp = doc.querySelector('#aibrev button'); if (knp) knp.removeAttribute('style');
@@ -394,19 +420,22 @@ Vänliga hälsningar
     });
   }
 
-  var btn = document.getElementById('kopiera');
-  if (btn) btn.addEventListener('click', function(){
-    var text = document.getElementById('mall').innerText;
-    function klar(){ btn.textContent = 'Kopierat!'; setTimeout(function(){ btn.textContent = 'Kopiera mejlet'; }, 2200); }
-    function reserv(){
-      var ta = document.createElement('textarea');
-      ta.value = text; document.body.appendChild(ta); ta.select();
-      try { document.execCommand('copy'); klar(); } catch(e) {}
-      document.body.removeChild(ta);
-    }
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).then(klar, reserv);
-    } else { reserv(); }
+  [].forEach.call(document.querySelectorAll('button[data-kopiera]'), function(btn){
+    btn.addEventListener('click', function(){
+      var mall = document.getElementById(btn.getAttribute('data-kopiera'));
+      if (!mall) return;
+      var text = mall.innerText;
+      function klar(){ btn.textContent = 'Kopierat!'; setTimeout(function(){ btn.textContent = 'Kopiera mejlet'; }, 2200); }
+      function reserv(){
+        var ta = document.createElement('textarea');
+        ta.value = text; document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); klar(); } catch(e) {}
+        document.body.removeChild(ta);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(klar, reserv);
+      } else { reserv(); }
+    });
   });
 })();
 </script>
