@@ -286,7 +286,7 @@ Vänliga hälsningar
     <button class="dstang" type="button" aria-label="Stäng">&#10005;</button>
     <p class="nr">Börja här · tjugo sekunder</p>
     <h2 id="brevrubrik">Skriv upp dig på AI‑brevet</h2>
-    <p>Det enskilt viktigaste första steget. När det är läge att agera tillsammans (frågor till partierna inför valet, namninsamlingar, nya videor) behöver jag kunna nå dig direkt, utan att en algoritm sitter emellan.</p>
+    <p>Utvecklingen går fort och det kan vara svårt att hänga med i allt som händer. I AI-brevet försöker jag då och då sammanfatta den senaste tidens händelser så att du kan hålla dig uppdaterad utan så stor ansträngning.</p>
     <!-- AI-BREVET: samma Mailchimp-lista som huvudsidan, men med taggen
          "AI-brevet" (id 10807474) så att AI-utskick kan skickas separat. -->
     <form id="aibrev" class="brev" aria-label="Prenumerera på AI-brevet" action="https://jonasvonessen.us3.list-manage.com/subscribe/post" method="post">
@@ -300,7 +300,7 @@ Vänliga hälsningar
       <div class="brevhp" aria-hidden="true"><input type="text" name="b_f3c6c9c6a1fa3f7def382e372_cb5e0cbcc0" tabindex="-1" value="" autocomplete="off"></div>
       <button class="knapp knapp--fylld" type="submit">Prenumerera</button>
       <p class="brevtack" role="status" aria-live="polite">Tack. Vi hörs.</p>
-      <p class="meta brevmeta" role="status" aria-live="polite">Bara AI‑frågor, inga utskick i onödan, avsluta när du vill.</p>
+      <p class="meta brevmeta" role="status" aria-live="polite">Bara AI‑frågor. Avsluta när du vill.</p>
     </form>
   </div>
 </dialog>
@@ -409,7 +409,7 @@ Vänliga hälsningar
       var knp = doc.querySelector('#aibrev button'); if (knp) knp.removeAttribute('style');
       var tack = doc.querySelector('#aibrev .brevtack'); if (tack) tack.removeAttribute('style');
       var bm = doc.querySelector('#aibrev .brevmeta');
-      if (bm) bm.textContent = 'Bara AI\u2011fr\u00e5gor, inga utskick i on\u00f6dan, avsluta n\u00e4r du vill.';
+      if (bm) bm.textContent = 'Bara AI\u2011fr\u00e5gor. Avsluta n\u00e4r du vill.';
       return '<!doctype html>\n' + doc.outerHTML;
     }
     document.getElementById('rladda').addEventListener('click', function(){
