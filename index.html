@@ -517,6 +517,7 @@
     .meta{letter-spacing:.22em;font-size:calc(.6rem * var(--mini))}
   }
 </style>
+<script defer src="/assets/statistik.js"></script>
 </head>
 <body>
 
@@ -1221,6 +1222,7 @@
     window.nbrevSvar = function(resp){
       clearTimeout(nbTimer);
       if (resp && resp.result === 'success') {
+        if (window.statistik) window.statistik.handelse('brev_anmald', { lista: 'nyhetsbrev' });
         nbrev.classList.add('klar');
       } else {
         var d = document.createElement('div');

@@ -153,6 +153,7 @@
   }
 </style>
 <noscript><style>#brevdialog{display:block;position:static;margin:3rem auto}</style></noscript>
+<script defer src="/assets/statistik.js"></script>
 </head>
 <body>
 <!-- REDIGERA TEXTEN VISUELLT: öppna sidan med ?redigera på slutet
@@ -246,8 +247,9 @@ Vänliga hälsningar
   <section class="steg" data-reveal="">
     <p class="nr">Steg 05</p>
     <h2>Prata med tre personer</h2>
-    <p>Politik rör sig när tillräckligt många pratar om en fråga. Berätta för tre personer du känner vad som händer och varför det spelar roll. Dela videon vidare. Varje person som förstår läget gör frågan lite svårare att ignorera.</p>
+    <p>Politik rör sig när tillräckligt många pratar om en fråga. Berätta för tre personer du känner vad som händer och varför det spelar roll. Dela <a href="https://www.instagram.com/reel/DcQUAZEh_YD/" target="_blank" rel="noopener">videon</a> vidare. Varje person som förstår läget gör frågan lite svårare att ignorera. Videon finns också i en <a href="https://www.youtube.com/watch?v=JtA6SFAgfA8" target="_blank" rel="noopener">engelsk version på YouTube</a> om du vill dela den med någon som inte pratar svenska.</p>
     <a class="knapp" href="https://www.instagram.com/reel/DcQUAZEh_YD/" target="_blank" rel="noopener">Se och dela videon →</a>
+    <a class="knapp" href="https://www.youtube.com/watch?v=JtA6SFAgfA8" target="_blank" rel="noopener">Engelsk version →</a>
   </section>
 
   <section class="steg" data-reveal="">
@@ -268,14 +270,14 @@ Vänliga hälsningar
   <section class="steg" data-reveal="">
     <p class="nr">Steg 08 · för dig som vill mer</p>
     <h2>Lär dig mer</h2>
-    <p>Är du ung eller funderar på att byta bana: AI‑säkerhetsfältet behöver fler människor. 80,000 Hours guidar till karriärvägar som gör skillnad, och BlueDot har gratis introduktionskurser om AI-säkerhet. Vill du följa utvecklingen på djupet är Zvi Mowshowitz blogg <em>Don't Worry About the Vase</em> den bästa löpande genomgången av allt som händer inom AI.</p>
+    <p>Är du ung eller funderar på att byta bana: AI‑säkerhetsfältet behöver fler människor. 80,000 Hours guidar till karriärvägar som gör skillnad, och BlueDot har gratis introduktionskurser om AI-säkerhet. Vill du följa utvecklingen på djupet är Zvi Mowshowitz blogg <em>Don't Worry About the Vase</em> den bästa löpande genomgången av allt som händer inom AI (om än väldigt djupgående).</p>
     <a class="knapp" href="https://80000hours.org" target="_blank" rel="noopener">80000hours.org →</a>
     <a class="knapp" href="https://bluedot.org" target="_blank" rel="noopener">bluedot.org →</a>
     <a class="knapp" href="https://thezvi.substack.com" target="_blank" rel="noopener">Zvis blogg →</a>
   </section>
 
   <div class="slut" data-reveal="">
-    <p class="s1">Än är det inte för sent.</p>
+    <p class="s1">Det är inte för sent.</p>
     <p class="s2">Men vi måste agera nu.</p>
   </div>
 
@@ -364,6 +366,7 @@ Vänliga hälsningar
       var ok = svar && svar.result === 'success';
       var fel = form.querySelector('.brevmeta');
       if (ok) {
+        if (window.statistik) window.statistik.handelse('brev_anmald', { lista: 'ai-brevet' });
         form.querySelector('.falt').style.display = 'none';
         form.querySelector('button').style.display = 'none';
         form.querySelector('.brevtack').style.display = 'block';
