@@ -1407,9 +1407,10 @@
   }
 
   function seger() {
-    /* segertexten följer sidans språk — på /en/ pekar den på engelska PauseAI-sidan */
+    /* segertexten följer sidans språk: på svenska pekar den på /agera/,
+       på /en/ på engelska PauseAI-sidan eftersom agerasidan bara finns på svenska */
     var eng = (document.documentElement.lang || 'sv').slice(0, 2) !== 'sv';
-    var PAUSE = eng ? 'https://pauseai.info' : 'https://www.pauseai.se';
+    var PAUSE = 'https://pauseai.info';
     spel.segrat = true;
     ljud.dronStopp();                                   // surret tystnar: faran är över
     if (flash) flash.classList.remove('lugn');
@@ -1432,9 +1433,9 @@
           '<button type="button" id="ls-laga">Fix the website</button></div>'
         : '<p class="ls-rubrik" id="ls-rubrik">Hotet neutraliserat</p>' +
           '<p class="ls-text">Puh, roboten är besegrad och sidan är räddad! Men AI hotar tyvärr mer än ' +
-          'bara minnesmästares hemsidor. Gå till <a href="' + PAUSE + '" target="_blank" ' +
-          'rel="noopener">www.pauseai.se</a> för att hjälpa till att rädda mänskligheten en gång för alla!</p>' +
-          '<div class="ls-knappar"><a id="ls-lank" href="' + PAUSE + '" target="_blank" rel="noopener">Läs mer om AI</a>' +
+          'bara minnesmästares hemsidor. Gå till <a href="/agera/">jonasvonessen.se/agera</a> ' +
+          'för att hjälpa till att rädda mänskligheten en gång för alla!</p>' +
+          '<div class="ls-knappar"><a id="ls-lank" href="/agera/">Vad kan jag göra?</a>' +
           '<button type="button" id="ls-laga">Fixa hemsidan</button></div>';
       document.body.appendChild(segerEl);
       segerEl.querySelector('#ls-laga').addEventListener('click', function () { avsluta(); });
@@ -1853,6 +1854,9 @@
       flytta: function (x, y) { if (sp) { sp.x = x; sp.y = y; sp.vx = 0; sp.vy = 0; kamY = Math.max(0, y - innerHeight * 0.58); } },
       tillRobot: function () {                          // rakt in i huvudbandet, fallande
         if (sp && robo) { sp.x = robo.x; sp.y = robo.y - ROH + 10; sp.vx = 0; sp.vy = 60; kamY = Math.max(0, sp.y - innerHeight * 0.58); }
+      },
+      slappPi: function () {                            // kapa vajern: π faller på roboten
+        if (pi && !pi.faller && !pi.klar) pi.faller = true;
       }
     };
   }
