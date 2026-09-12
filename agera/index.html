@@ -218,13 +218,13 @@ Vänliga hälsningar
   <section class="steg" data-reveal="">
     <p class="nr">Steg 03 · med egna ord</p>
     <h2>Mejla en chefredaktör</h2>
-    <p>Tidningarna sätter dagordningen, och chefredaktörerna läser sina läsarmejl själva. Men de känner igen en färdig mall på en sekund, och då hjälper den inte. Skriv därför med egna ord. Tre meningar räcker. Ta gärna med:</p>
+    <p>Tidningarna sätter dagordningen, och chefredaktörerna läser sina läsarmejl själva. Här är det dock viktigare att du uttrycker din egen åsikt så att de inte bara får samma mejl i hundra kopior. Skriv därför med egna ord. Några meningar räcker. Ta gärna med:</p>
     <ul class="punkter">
       <li>Att du är läsare, och vad som gör just dig orolig. Gärna något konkret du har läst eller sett.</li>
       <li>Vad du vill se mer av: de allvarligaste riskerna, frågan om internationella avtal, eller att tidningen ställer AI-frågan till partierna.</li>
-      <li>Något du har uppskattat i deras bevakning, om det finns. Tacksamhet öppnar, anklagelser stänger.</li>
+      <li>Något du har uppskattat i deras bevakning, om det finns. Det är också viktigt att uppmuntra alla goda exempel vi kan hitta.</li>
     </ul>
-    <p style="margin-top:2rem">Klicka på en tidning så öppnas ett tomt mejl till chefredaktören, med hälsningen ifylld:</p>
+    <p style="margin-top:2rem">Klicka på en tidning så öppnas ett tomt mejl till chefredaktören:</p>
     <div class="partier" id="medier">
       <a data-adress="peter.wolodarski@dn.se" data-namn="Peter">Dagens Nyheter · Peter Wolodarski</a>
       <a data-adress="lisa.irenius@svd.se" data-namn="Lisa">Svenska Dagbladet · Lisa Irenius</a>
@@ -409,7 +409,12 @@ Vänliga hälsningar
       });
       var dg = doc.querySelector('#brevdialog'); if (dg) dg.removeAttribute('open');
       [].forEach.call(doc.querySelectorAll('.partier a[data-adress]'), function(e){ e.removeAttribute('href'); });
-      [].forEach.call(doc.querySelectorAll('script[src*="list-manage"]'), function(e){ e.remove(); });
+      [].forEach.call(doc.querySelectorAll('script[src*="list-manage"], script[src*="posthog"]'), function(e){ e.remove(); });
+      /* sådant som webbläsartillägg (mörkt läge, markeringsverktyg m.m.) stoppar in vid körning */
+      [].forEach.call(doc.querySelectorAll('[id^="dark-mode-"], [id^="highlighter--"], link[href*="fonts.googleapis.com"]'), function(e){ e.remove(); });
+      [].forEach.call(doc.children, function(e){ if (e.tagName !== 'HEAD' && e.tagName !== 'BODY') e.remove(); });
+      doc.classList.remove('js'); if (!doc.getAttribute('class')) doc.removeAttribute('class');
+      if (b && !b.getAttribute('class')) b.removeAttribute('class');
       var falt = doc.querySelector('#aibrev .falt'); if (falt) falt.removeAttribute('style');
       var knp = doc.querySelector('#aibrev button'); if (knp) knp.removeAttribute('style');
       var tack = doc.querySelector('#aibrev .brevtack'); if (tack) tack.removeAttribute('style');
