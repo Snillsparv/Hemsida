@@ -82,6 +82,28 @@
   .nav a:hover .flagga{opacity:1}
   @media (max-width:560px){ .nav{font-size:calc(.55rem * var(--mini));letter-spacing:.18em} .nav .brand{display:none} .nav ul{width:100%;justify-content:center} }
 
+  /* ————— agerapuffen: vid första besöket pekar en liten ruta på Agera i menyn ————— */
+  #agerapuff{
+    position:fixed;top:0;left:0;z-index:45;              /* flyttas till menylänken av JS */
+    max-width:min(17rem,calc(100vw - 1.5rem));
+    background:var(--bg);color:var(--ink);border:1px solid var(--accent);
+    font-family:var(--mono);font-size:calc(.62rem * var(--mini));letter-spacing:.06em;line-height:1.7;
+    opacity:0;transform:translateY(-8px);transition:opacity .5s ease,transform .5s ease;
+    pointer-events:none;
+  }
+  #agerapuff.visas{opacity:1;transform:none;pointer-events:auto}
+  #agerapuff::before{                                    /* pilen upp mot menyn */
+    content:'';position:absolute;top:-7px;left:var(--pil,50%);width:12px;height:12px;margin-left:-6px;
+    background:var(--bg);border-left:1px solid var(--accent);border-top:1px solid var(--accent);transform:rotate(45deg);
+  }
+  #agerapuff a{display:block;padding:.8rem 2.1rem .8rem 1rem;text-decoration:none;color:var(--ink)}
+  #agerapuff a:hover{color:var(--ink)}
+  #agerapuff a b{color:var(--accent);font-weight:500;white-space:nowrap}
+  #agerapuff button{position:absolute;top:.3rem;right:.35rem;background:none;border:0;color:var(--nav);font:inherit;font-size:.9rem;line-height:1;padding:.35rem;cursor:pointer}
+  #agerapuff button:hover{color:var(--ink)}
+  @media (prefers-reduced-motion:no-preference){ #agerapuff.visas{animation:puffGung 2.2s ease-in-out .8s 3} }
+  @keyframes puffGung{0%,100%{transform:none}50%{transform:translateY(5px)}}
+
   /* ————— grundscener ————— */
   main{display:block;overflow-x:clip}
   .wrap{max-width:52rem;margin-inline:auto;padding-inline:clamp(1.25rem,5vw,2.5rem)}
@@ -1167,6 +1189,60 @@
     (function vanta(){
       if (!laddarKlar) { setTimeout(vanta, 400); return; }
       setTimeout(visa, direkt ? 700 : 1200);
+    })();
+  })();
+
+  /* ————— agerapuffen: första gången någon besöker sidan pekar en liten
+     ruta på Agera i menyn, eftersom länken annars är lätt att missa.
+     En gång per webbläsare, eller varje gång med ?puff i adressen. ————— */
+  (function(){
+    var direkt = /[?&]puff(&|=|$)/.test(location.search);
+    if (/[?&]redigera/.test(location.search)) return;
+    var NYCKEL = 'jve-agerapuff';
+    try { if (!direkt && localStorage.getItem(NYCKEL)) return; } catch(e){}
+    var lank = document.querySelector('.nav a[href="/agera/"]');
+    if (!lank) return;
+    var puff = null, tidur = 0;
+    function placera(){
+      if (!puff) return;
+      var r = lank.getBoundingClientRect();
+      if (!r.width) { puff.classList.remove('visas'); return; }
+      var mitt = r.left + r.width / 2, w = puff.offsetWidth, marg = 10;
+      var left = Math.min(Math.max(marg, mitt - w / 2), innerWidth - w - marg);
+      puff.style.left = left + 'px';
+      puff.style.top = (r.bottom + 14) + 'px';
+      puff.style.setProperty('--pil', (mitt - left) + 'px');
+    }
+    function stang(){
+      if (!puff) return;
+      clearTimeout(tidur);
+      removeEventListener('resize', placera); removeEventListener('scroll', skrollvakt);
+      puff.classList.remove('visas');
+      var p = puff; puff = null;
+      setTimeout(function(){ p.remove(); }, 600);
+    }
+    function skrollvakt(){ if ((window.scrollY || window.pageYOffset) > innerHeight * 1.5) stang(); }
+    function visa(){
+      if (document.hidden) { setTimeout(visa, 3000); return; }
+      try { localStorage.setItem(NYCKEL, '1'); } catch(e){}
+      puff = document.createElement('div');
+      puff.id = 'agerapuff';
+      puff.setAttribute('role', 'note');
+      puff.innerHTML = '<a href="/agera/">Intresserad av hur du kan påverka AI‑utvecklingen? <b>Klicka här!</b></a>' +
+                       '<button type="button" aria-label="Stäng">&#10005;</button>';
+      document.body.appendChild(puff);
+      placera();
+      requestAnimationFrame(function(){ placera(); if (puff) puff.classList.add('visas'); });
+      puff.querySelector('button').addEventListener('click', stang);
+      puff.querySelector('a').addEventListener('click', function(){ if (window.statistik) window.statistik.handelse('agerapuff_klick'); });
+      if (window.statistik) window.statistik.handelse('agerapuff_visad');
+      addEventListener('resize', placera);
+      addEventListener('scroll', skrollvakt, { passive: true });
+      tidur = setTimeout(stang, 30000);
+    }
+    (function vanta(){
+      if (!laddarKlar) { setTimeout(vanta, 400); return; }
+      setTimeout(visa, direkt ? 600 : 2600);
     })();
   })();
 
