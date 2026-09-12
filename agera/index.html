@@ -110,6 +110,9 @@
   }
   .brev input[type=email]:focus{border-bottom-color:var(--accent)}
   .brevhp{position:absolute;left:-5000px}
+  .punkter{margin:0 0 1.15rem;padding-left:1.2rem;line-height:1.7}
+  .punkter li{margin-bottom:.6rem;padding-left:.2rem}
+  .punkter li::marker{color:var(--accent)}
   .brevmeta{margin-top:1.1rem}
   .brevtack{display:none;font-family:var(--serif);font-size:1.25rem}
   .partier{display:flex;flex-wrap:wrap;gap:.75rem 1.5rem;margin:1.4rem 0 .4rem}
@@ -186,7 +189,7 @@
   <section class="steg" data-reveal="">
     <p class="nr">Steg 02</p>
     <h2>Mejla en politiker</h2>
-    <p>Riksdagsledamöter och kandidater läser sin mejl, och mängden mejl i en fråga påverkar hur viktig den känns. Här är ett färdigt mejl att utgå ifrån. Gör det gärna personligt:</p>
+    <p>Riksdagsledamöter och kandidater läser sin mejl, och mängden mejl i en fråga påverkar hur viktig den känns. Här är ett färdigt mejl att utgå ifrån. Skriv gärna om det med egna ord, det väger tyngre:</p>
     <div class="mall" id="mall">Hej!
 
 Jag är väljare och allt mer orolig över hur snabbt AI-utvecklingen går. Cheferna för de ledande AI-bolagen varnar nu själva för att vi riskerar att förlora kontrollen, och över tusen av deras anställda har skrivit under ett upprop om att takten behöver regleras internationellt.
@@ -213,28 +216,24 @@ Vänliga hälsningar
   </section>
 
   <section class="steg" data-reveal="">
-    <p class="nr">Steg 03</p>
+    <p class="nr">Steg 03 · med egna ord</p>
     <h2>Mejla en chefredaktör</h2>
-    <p>Tidningarna sätter dagordningen, men de största AI-riskerna får nästan ingen plats i bevakningen. Chefredaktörerna bestämmer vad som hamnar på förstasidan, och de läser vad läsarna skriver. Här är ett mejl att utgå ifrån. Skriv gärna om det med egna ord:</p>
-    <div class="mall" id="mallmedia">Hej!
-
-Jag är läsare och allt mer orolig över hur snabbt AI-utvecklingen går. Cheferna för de ledande AI-bolagen varnar själva för att vi kan förlora kontrollen, och Nobelpristagare som Geoffrey Hinton kräver ett stopp för utvecklingen av superintelligens. Ändå är de stora riskerna nästan helt frånvarande i er bevakning.
-
-Ni sätter dagordningen. Det ni skriver om blir frågor som politikerna måste svara på. Jag vill be er att ta AI-riskerna på samma allvar som klimatet och säkerhetsläget: granska bolagens löften, fråga partierna vad deras plan är och ge era läsare en chans att förstå vad som står på spel.
-
-Vänliga hälsningar
-[Ditt namn]</div>
-    <button class="knapp" type="button" data-kopiera="mallmedia">Kopiera mejlet</button>
-    <p style="margin-top:2rem">Eller klicka på en tidning så öppnas mejlet till chefredaktören färdigskrivet:</p>
-    <div class="partier" id="medier" data-mall="mallmedia" data-amne="Varför skriver ni så lite om AI-riskerna?">
-      <a data-adress="peter.wolodarski@dn.se">Dagens Nyheter · Peter Wolodarski</a>
-      <a data-adress="lisa.irenius@svd.se">Svenska Dagbladet · Lisa Irenius</a>
-      <a data-adress="lotta.folcker@aftonbladet.se">Aftonbladet · Lotta Folcker</a>
-      <a data-adress="klas.granstrom@expressen.se">Expressen · Klas Granström</a>
-      <a data-adress="christofer.ahlqvist@gp.se">Göteborgs-Posten · Christofer Ahlqvist</a>
-      <a data-adress="jonas.kanje@sydsvenskan.se">Sydsvenskan · Jonas Kanje</a>
+    <p>Tidningarna sätter dagordningen, och chefredaktörerna läser sina läsarmejl själva. Men de känner igen en färdig mall på en sekund, och då hjälper den inte. Skriv därför med egna ord. Tre meningar räcker. Ta gärna med:</p>
+    <ul class="punkter">
+      <li>Att du är läsare, och vad som gör just dig orolig. Gärna något konkret du har läst eller sett.</li>
+      <li>Vad du vill se mer av: de allvarligaste riskerna, frågan om internationella avtal, eller att tidningen ställer AI-frågan till partierna.</li>
+      <li>Något du har uppskattat i deras bevakning, om det finns. Tacksamhet öppnar, anklagelser stänger.</li>
+    </ul>
+    <p style="margin-top:2rem">Klicka på en tidning så öppnas ett tomt mejl till chefredaktören, med hälsningen ifylld:</p>
+    <div class="partier" id="medier">
+      <a data-adress="peter.wolodarski@dn.se" data-namn="Peter">Dagens Nyheter · Peter Wolodarski</a>
+      <a data-adress="lisa.irenius@svd.se" data-namn="Lisa">Svenska Dagbladet · Lisa Irenius</a>
+      <a data-adress="lotta.folcker@aftonbladet.se" data-namn="Lotta">Aftonbladet · Lotta Folcker</a>
+      <a data-adress="klas.granstrom@expressen.se" data-namn="Klas">Expressen · Klas Granström</a>
+      <a data-adress="christofer.ahlqvist@gp.se" data-namn="Christofer">Göteborgs-Posten · Christofer Ahlqvist</a>
+      <a data-adress="jonas.kanje@sydsvenskan.se" data-namn="Jonas">Sydsvenskan · Jonas Kanje</a>
     </div>
-    <p class="meta" style="margin-top:1.4rem">Namnen är chefredaktörerna i september 2026. Tidningarna använder mönstret fornamn.efternamn@tidningen.se, så din lokaltidning går att nå på samma sätt, och lokala redaktioner lyssnar extra på sina egna läsare.</p>
+    <p class="meta" style="margin-top:1.4rem">Namnen är chefredaktörerna i september 2026. Tidningarna använder mönstret fornamn.efternamn@tidningen.se, så din lokaltidning går att nå på samma sätt, och lokala redaktioner lyssnar extra på sina egna läsare. Fick du svar? <a href="/#kontakt">Skicka det gärna vidare till mig.</a></p>
   </section>
 
   <section class="steg" data-reveal="">
@@ -325,13 +324,16 @@ Vänliga hälsningar
   } else {
     el.forEach(function(e){ e.classList.add('syns'); });
   }
-  [].forEach.call(document.querySelectorAll('.partier[data-mall]'), function(lista){
-    var mall = document.getElementById(lista.getAttribute('data-mall'));
-    if (!mall) return;
-    var amne = encodeURIComponent(lista.getAttribute('data-amne') || '');
-    var kropp = encodeURIComponent(mall.innerText);
+  /* listor med data-mall får hela mejlet ifyllt; övriga bara en hälsning */
+  [].forEach.call(document.querySelectorAll('.partier'), function(lista){
+    var mall = document.getElementById(lista.getAttribute('data-mall') || '');
+    var amne = lista.getAttribute('data-amne') || '';
     [].forEach.call(lista.querySelectorAll('a[data-adress]'), function(a){
-      a.href = 'mailto:' + a.getAttribute('data-adress') + '?subject=' + amne + '&body=' + kropp;
+      var namn = a.getAttribute('data-namn');
+      var kropp = mall ? mall.innerText : (namn ? 'Hej ' + namn + ',\n\n' : 'Hej!\n\n');
+      a.href = 'mailto:' + a.getAttribute('data-adress') + '?' +
+               (amne ? 'subject=' + encodeURIComponent(amne) + '&' : '') +
+               'body=' + encodeURIComponent(kropp);
     });
   });
 
