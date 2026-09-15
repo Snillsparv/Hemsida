@@ -20,7 +20,8 @@
   (function () {
     var p = location.pathname.toLowerCase();
     var mal = null;
-    if (p.indexOf('/blogg') === 0) mal = '/#nyhetsbrev';
+    if (p.indexOf('/aggera') === 0 || p.indexOf('/agera') === 0) mal = '/agera/';   /* felstavningar i statistiken */
+    else if (p.indexOf('/blogg') === 0 || p.indexOf('/post/') === 0) mal = '/#nyhetsbrev';  /* gamla Wix-inlägg */
     else if (p.indexOf('/forelas') === 0) mal = '/#kontakt';
     else if (p.indexOf('/kontakt') === 0) mal = '/#kontakt';
     else if (p.indexOf('/superminne') === 0 || p.indexOf('/minnestips') === 0) mal = '/#kurs';
