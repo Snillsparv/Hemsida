@@ -138,16 +138,6 @@
   dialog[open]{animation:dfade .22s ease}
   @keyframes dfade{from{opacity:0;transform:translateY(10px)}}
   @media (prefers-reduced-motion: reduce){dialog[open]{animation:none}}
-  body.redigerar [contenteditable]:hover{outline:1px dashed var(--hair);outline-offset:6px}
-  body.redigerar [contenteditable]:focus{outline:1px dashed var(--accent);outline-offset:6px}
-  #redigeringsverktyg{
-    position:fixed;left:0;right:0;bottom:0;z-index:50;
-    background:rgba(18,18,19,.97);border-top:1px solid var(--hair);
-    padding:.9rem 1.2rem;display:flex;gap:1rem;align-items:center;justify-content:center;flex-wrap:wrap;
-    font-family:var(--mono);font-size:calc(.62rem * var(--mini));letter-spacing:.14em;color:var(--mist);
-  }
-  #redigeringsverktyg .knapp{margin:0}
-  body.redigerar{padding-bottom:6rem}
   html.js [data-reveal]{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s ease}
   html.js [data-reveal].syns{opacity:1;transform:none}
   @media (prefers-reduced-motion: reduce){
@@ -159,10 +149,6 @@
 <script defer src="/assets/statistik.js"></script>
 </head>
 <body>
-<!-- REDIGERA TEXTEN VISUELLT: öppna sidan med ?redigera på slutet
-     (t.ex. jonasvonessen.se/agera/?redigera), klicka i texten och skriv.
-     Knapparna längst ner laddar ner den färdiga filen eller kopierar den
-     och öppnar GitHubs redigerare. Besökare ser aldrig det här läget. -->
 
 <a class="topp" href="/">Jonas von Essen</a>
 
@@ -353,60 +339,8 @@ Vänliga hälsningar
     s.src = form.action.replace('/post','/post-json') + '?' + q.join('&') + '&c=' + cb;
     document.body.appendChild(s);
   });
-  /* ---------- redigeringsläge (?redigera) ---------- */
-  if (new URLSearchParams(location.search).has('redigera')) {
-    document.body.classList.add('redigerar');
-    ['.topp','.hero','main','footer','#brevdialog .dinre'].forEach(function(sel){
-      var e = document.querySelector(sel);
-      if (e) e.contentEditable = 'true';
-    });
-    el.forEach(function(e){ e.classList.add('syns'); });
-
-    var tb = document.createElement('div');
-    tb.id = 'redigeringsverktyg';
-    tb.innerHTML = '<span>Redigeringsläge: klicka i texten och ändra direkt.</span>' +
-      '<button class="knapp knapp--fylld" type="button" id="rladda">Ladda ner ny fil</button>' +
-      '<button class="knapp" type="button" id="rgithub">Kopiera &amp; öppna GitHub</button>';
-    document.body.appendChild(tb);
-
-    function serialisera(){
-      var doc = document.documentElement.cloneNode(true);
-      var t = doc.querySelector('#redigeringsverktyg'); if (t) t.remove();
-      var b = doc.querySelector('body'); if (b) b.classList.remove('redigerar');
-      [].forEach.call(doc.querySelectorAll('[contenteditable]'), function(e){ e.removeAttribute('contenteditable'); });
-      [].forEach.call(doc.querySelectorAll('.syns'), function(e){
-        e.classList.remove('syns');
-        if (e.getAttribute('class') === '') e.removeAttribute('class');
-      });
-      var dg = doc.querySelector('#brevdialog'); if (dg) dg.removeAttribute('open');
-      [].forEach.call(doc.querySelectorAll('.partier a[data-adress]'), function(e){ e.removeAttribute('href'); });
-      [].forEach.call(doc.querySelectorAll('script[src*="list-manage"], script[src*="posthog"]'), function(e){ e.remove(); });
-      /* sådant som webbläsartillägg (mörkt läge, markeringsverktyg m.m.) stoppar in vid körning */
-      [].forEach.call(doc.querySelectorAll('[id^="dark-mode-"], [id^="highlighter--"], link[href*="fonts.googleapis.com"]'), function(e){ e.remove(); });
-      [].forEach.call(doc.children, function(e){ if (e.tagName !== 'HEAD' && e.tagName !== 'BODY') e.remove(); });
-      doc.classList.remove('js'); if (!doc.getAttribute('class')) doc.removeAttribute('class');
-      if (b && !b.getAttribute('class')) b.removeAttribute('class');
-      var falt = doc.querySelector('#aibrev .falt'); if (falt) falt.removeAttribute('style');
-      var knp = doc.querySelector('#aibrev button'); if (knp) knp.removeAttribute('style');
-      var tack = doc.querySelector('#aibrev .brevtack'); if (tack) tack.removeAttribute('style');
-      var bm = doc.querySelector('#aibrev .brevmeta');
-      if (bm) bm.textContent = 'Bara AI\u2011fr\u00e5gor. Avsluta n\u00e4r du vill.';
-      return '<!doctype html>\n' + doc.outerHTML;
-    }
-    document.getElementById('rladda').addEventListener('click', function(){
-      var blob = new Blob([serialisera()], {type:'text/html'});
-      var a = document.createElement('a');
-      a.href = URL.createObjectURL(blob); a.download = 'index.html';
-      document.body.appendChild(a); a.click();
-      setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 800);
-    });
-    document.getElementById('rgithub').addEventListener('click', function(){
-      var text = serialisera();
-      function oppna(){ window.open('https://github.com/Snillsparv/Hemsida/edit/claude/jonasvonessen-website-redesign-gop094/agera/index.html','_blank'); }
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(oppna, oppna);
-      } else { oppna(); }
-    });
+  if (/[?&]redigera(=|&|$)/.test(location.search)) {
+    var rs = document.createElement('script'); rs.src = '/assets/redigera.js'; document.body.appendChild(rs);
   }
 
   [].forEach.call(document.querySelectorAll('button[data-kopiera]'), function(btn){
