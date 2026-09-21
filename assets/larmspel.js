@@ -1829,8 +1829,7 @@
 
   knapp.addEventListener('click', function () { start(); });
 
-  /* testkrok: öppna sidan med ?larmtest för att kunna styra spelet utifrån
-     (samma mönster som ?redigera och ?textprov) */
+  /* testkrok: ?larmtest exponerar spelets tillstånd så att det går att testa automatiskt */
   if (/[?&]larmtest/.test(location.search)) {
     window.__larmtest = {
       status: function () {
