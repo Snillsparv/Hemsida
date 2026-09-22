@@ -67,7 +67,7 @@
   });
   document.getElementById('rgithub').addEventListener('click', function () {
     var text = serialisera();
-    function oppna() { window.open('https://github.com/Snillsparv/Hemsida/edit/claude/jonasvonessen-website-redesign-gop094/' + fil, '_blank'); }
+    function oppna() { window.open('https://github.com/Snillsparv/Hemsida/blob/HEAD/' + fil, '_blank'); }
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(text).then(oppna, oppna);
     } else { oppna(); }

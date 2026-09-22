@@ -11,6 +11,8 @@
   stil.textContent =
     'html.redig [data-line]{opacity:1 !important}' +
     'html.redig .aft{opacity:1 !important}' +
+    'html.redig .globpromo,html.redig .kobj,html.redig .soc a{opacity:1 !important;transform:none !important}' +
+    'html.redig .nbplan{opacity:1 !important}' +
     'html.redig .tack{display:block;outline:1px dotted var(--hair);outline-offset:8px}' +
     'html.redig body{padding-bottom:5.5rem}' +
     '[data-redig]{outline:1px dashed rgba(255,209,102,.3);outline-offset:3px}' +
