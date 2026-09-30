@@ -1407,10 +1407,8 @@
   }
 
   function seger() {
-    /* segertexten följer sidans språk: på svenska pekar den på /agera/,
-       på /en/ på engelska PauseAI-sidan eftersom agerasidan bara finns på svenska */
+    /* segertexten följer sidans språk: /agera/ på svenska, /act/ på engelska */
     var eng = (document.documentElement.lang || 'sv').slice(0, 2) !== 'sv';
-    var PAUSE = 'https://pauseai.info';
     spel.segrat = true;
     ljud.dronStopp();                                   // surret tystnar: faran är över
     if (flash) flash.classList.remove('lugn');
@@ -1426,10 +1424,10 @@
       segerEl.setAttribute('aria-labelledby', 'ls-rubrik');
       segerEl.innerHTML = eng
         ? '<p class="ls-rubrik" id="ls-rubrik">Threat neutralized</p>' +
-          '<p class="ls-text">Phew — the robot is defeated and the site is saved! Sadly, AI threatens more than ' +
-          'just memory champions’ websites. Go to <a href="' + PAUSE + '" target="_blank" ' +
-          'rel="noopener">pauseai.info</a> to help save humanity once and for all!</p>' +
-          '<div class="ls-knappar"><a id="ls-lank" href="' + PAUSE + '" target="_blank" rel="noopener">Learn more about AI</a>' +
+          '<p class="ls-text">Phew, the robot is defeated and the site is saved! Sadly, AI threatens more than ' +
+          'just memory champions’ websites. Go to <a href="/act/">jonasvonessen.se/act</a> ' +
+          'to help save humanity once and for all!</p>' +
+          '<div class="ls-knappar"><a id="ls-lank" href="/act/">What can I do?</a>' +
           '<button type="button" id="ls-laga">Fix the website</button></div>'
         : '<p class="ls-rubrik" id="ls-rubrik">Hotet neutraliserat</p>' +
           '<p class="ls-text">Puh, roboten är besegrad och sidan är räddad! Men AI hotar tyvärr mer än ' +
