@@ -15,7 +15,7 @@ const laddar = document.getElementById('laddar');
 const duk = document.getElementById('duk');
 let renderer;
 try {
-  renderer = new T.WebGLRenderer({ canvas: duk, antialias: false, powerPreference: 'high-performance' });
+  renderer = new T.WebGLRenderer({ canvas: duk, antialias: false, powerPreference: 'default' });
   if (!renderer.getContext()) throw new Error('ingen kontext');
 } catch (e) {
   rot.classList.add('ingen-webgl');
@@ -27,6 +27,9 @@ renderer.toneMapping = T.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.0;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = T.PCFShadowMap;
+renderer.shadowMap.autoUpdate = false;          // skuggan ritas bara om när något som kastar skugga rör sig
+renderer.shadowMap.needsUpdate = true;
+renderer.transmissionResolutionScale = LAG ? 0.5 : 0.75;
 const ANISO = Math.min(8, renderer.capabilities.getMaxAnisotropy());
 
 const scen = new T.Scene();
@@ -36,6 +39,12 @@ const kam = new T.PerspectiveCamera(30, innerWidth / innerHeight, 0.1, 220);
 const pmrem = new T.PMREMGenerator(renderer);
 scen.environment = pmrem.fromScene(new T.RoomEnvironment(), 0.04).texture;
 scen.environmentIntensity = 0.14;
+duk.addEventListener('webglcontextrestored', () => {      // miljökartan försvinner med en tappad kontext
+  const g = new T.PMREMGenerator(renderer);
+  const env = g.fromScene(new T.RoomEnvironment(), 0.04).texture;
+  scen.environment = env; glasMat.envMap = env; glasMat.needsUpdate = true;
+  g.dispose(); renderer.shadowMap.needsUpdate = true;
+});
 
 /* ————— små verktyg ————— */
 function slump(fro) {
@@ -128,9 +137,9 @@ function stadTextur() {
   g.fillStyle = himmel; g.fillRect(0, 0, W, H);
   const r = slump(2026);
   const lager = [
-    { farg: '#1a1d2f', fonster: '#232742', topp: [0.34, 0.58], bredd: [40, 110], n: 46, tand: 0.09, fs: [5, 7] },
-    { farg: '#11141f', fonster: '#181c2c', topp: [0.42, 0.7], bredd: [70, 150], n: 30, tand: 0.15, fs: [6, 9] },
-    { farg: '#0a0c14', fonster: '#10131e', topp: [0.55, 0.82], bredd: [100, 200], n: 20, tand: 0.2, fs: [8, 11] },
+    { farg: '#1a1d2f', fonster: '#232742', topp: [0.34, 0.58], bredd: [40, 110], n: 46, tand: 0.055, fs: [5, 7] },
+    { farg: '#11141f', fonster: '#181c2c', topp: [0.42, 0.7], bredd: [70, 150], n: 30, tand: 0.09, fs: [6, 9] },
+    { farg: '#0a0c14', fonster: '#10131e', topp: [0.55, 0.82], bredd: [100, 200], n: 20, tand: 0.12, fs: [8, 11] },
   ];
   const ljus = ['#ffd08a', '#ffd08a', '#ffc070', '#ffe2b0', '#a9c4ff', '#ff9fbf'];
   for (const L of lager) {
@@ -146,7 +155,7 @@ function stadTextur() {
         for (let xx = x + 6; xx < x + w - fs; xx += fs * 1.8) {
           const tand = r() < L.tand;
           g.fillStyle = tand ? ljus[(r() * ljus.length) | 0] : L.fonster;
-          g.globalAlpha = tand ? 0.75 + r() * 0.25 : 0.8;
+          g.globalAlpha = tand ? 0.75 + r() * 0.25 : 0.4;
           g.fillRect(xx, yy, fs, fs * 1.3);
         }
       }
@@ -174,7 +183,7 @@ function skivTextur(kant = true) {
   const [c, g] = yta(128, 128);
   const gr = g.createRadialGradient(64, 64, 0, 64, 64, 62);
   if (kant) {
-    gr.addColorStop(0, 'rgba(255,255,255,0.5)'); gr.addColorStop(0.75, 'rgba(255,255,255,0.58)');
+    gr.addColorStop(0, 'rgba(255,255,255,0.78)'); gr.addColorStop(0.75, 'rgba(255,255,255,0.84)');
     gr.addColorStop(0.92, 'rgba(255,255,255,0.95)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
   } else {
     gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(0.35, 'rgba(255,255,255,0.45)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
@@ -236,6 +245,7 @@ function kodSkarm() {
   const W = 1024, H = 640;
   const [c, g] = yta(W, H);
   const t = textur(c);
+  t.generateMipmaps = false; t.minFilter = T.LinearFilter;
   const r = slump(314);
   const farger = ['#f2a65a', '#f6d36f', '#ef7a94', '#8cc4ff', '#93d69a', '#c5a8ff', '#e8e2d4'];
   const rader = [];
@@ -253,8 +263,8 @@ function kodSkarm() {
     g.fillStyle = '#121521'; g.fillRect(0, 0, W, 46);
     g.fillStyle = '#242a3b'; g.fillRect(14, 8, 196, 38);
     g.font = `500 19px ${MONO}`; g.textBaseline = 'middle';
-    g.fillStyle = '#e8e2d4'; g.fillText('superminne.js', 30, 28);
-    g.fillStyle = '#596079'; g.fillText('pi.js', 238, 28);
+    g.fillStyle = '#e8e2d4'; g.fillText('geografi.js', 30, 28);
+    g.fillStyle = '#596079'; g.fillText('hpakuten.js', 238, 28);
     g.fillStyle = '#ef7a94'; g.beginPath(); g.arc(W - 70, 27, 7, 0, 6.283); g.fill();
     g.fillStyle = '#f6d36f'; g.beginPath(); g.arc(W - 48, 27, 7, 0, 6.283); g.fill();
     g.fillStyle = '#93d69a'; g.beginPath(); g.arc(W - 26, 27, 7, 0, 6.283); g.fill();
@@ -290,6 +300,11 @@ function tvSkarm(bilder) {
   const W = 512, H = 384;
   const [c, g] = yta(W, H);
   const t = textur(c);
+  t.generateMipmaps = false; t.minFilter = T.LinearFilter;
+  const [brusC, brusG] = yta(256, 192);
+  const bd = brusG.createImageData(256, 192);
+  for (let i = 0; i < bd.data.length; i += 4) { const v = Math.random() * 255; bd.data[i] = bd.data[i + 1] = bd.data[i + 2] = v; bd.data[i + 3] = 255; }
+  brusG.putImageData(bd, 0, 0);
   let index = 0, byt = 4, brus = 0, forraBrus = -1;
   function rita(brusNiva) {
     const b = bilder[index % bilder.length];
@@ -300,9 +315,9 @@ function tvSkarm(bilder) {
       g.fillStyle = 'rgba(255,190,120,0.10)'; g.fillRect(0, 0, W, H);
     }
     if (brusNiva > 0) {
-      const id = g.getImageData(0, 0, W, H), d = id.data;
-      for (let i = 0; i < d.length; i += 4) { const v = Math.random() * 255; d[i] = d[i] * (1 - brusNiva) + v * brusNiva; d[i + 1] = d[i + 1] * (1 - brusNiva) + v * brusNiva; d[i + 2] = d[i + 2] * (1 - brusNiva) + v * brusNiva; }
-      g.putImageData(id, 0, 0);
+      g.globalAlpha = brusNiva;
+      g.drawImage(brusC, (Math.random() * 40) | 0, (Math.random() * 30) | 0, 216, 162, 0, 0, W, H);
+      g.globalAlpha = 1;
     }
     g.fillStyle = 'rgba(0,0,0,0.18)';
     for (let y = 0; y < H; y += 4) g.fillRect(0, y, W, 2);
@@ -318,7 +333,7 @@ function tvSkarm(bilder) {
     t,
     steg(dt) {
       byt -= dt;
-      if (byt <= 0) { brus = 0.35; index++; byt = 4.5; }
+      if (byt <= 0) { brus = reducerad ? 0 : 0.35; index++; byt = 4.5; }
       if (brus > 0) { brus = Math.max(0, brus - dt); rita(Math.min(1, brus * 3)); forraBrus = brus; }
       else if (forraBrus !== 0) { forraBrus = 0; rita(0); }
     }
@@ -421,18 +436,20 @@ function zTextur() {
 }
 
 /* ————— vänta in typsnitten innan något ritas med dem ————— */
+const bilderLaddas = Promise.all(['/assets/img/foto-siffervagg-md.webp', '/assets/img/jonas_pkm-md.webp', '/assets/img/foto-scen-md.webp'].map(laddaBild));
 await Promise.race([
   Promise.all(['700 64px Caveat', '500 20px "JetBrains Mono"', '600 20px "JetBrains Mono"'].map(f => document.fonts.load(f))),
   new Promise(r => setTimeout(r, 2500)),
 ]);
-const bilder = await Promise.all(['/assets/img/foto-scen-md.webp', '/assets/img/foto-siffervagg-md.webp', '/assets/img/foto-mentalist-md.webp'].map(laddaBild));
+const bilder = await Promise.race([bilderLaddas, new Promise(r => setTimeout(() => r([]), 3000))]);
 
 /* ————— rummet ————— */
 const BORD_Y = 0;
 const tra = traTextur();
-const bord = nat(lada(21, 0.8, 7.8, 0.12, 3),
-  new T.MeshPhysicalMaterial({ map: tra, roughness: 0.42, clearcoat: 0.35, clearcoatRoughness: 0.28 }),
-  { x: 0.3, y: -0.4, z: -0.4, kasta: false });
+const bord = nat(lada(21, 0.8, 11.6, 0.12, 3),
+  LAG ? std('#ffffff', { map: tra, roughness: 0.42 })
+      : new T.MeshPhysicalMaterial({ map: tra, roughness: 0.42, clearcoat: 0.35, clearcoatRoughness: 0.28 }),
+  { x: 0.3, y: -0.4, z: 1.5, kasta: false });
 scen.add(bord);
 
 const vagg = nat(new T.BoxGeometry(34, 3.2, 0.4), std('#16151b', { roughness: 0.95 }), { x: 0, y: -0.2, z: -4.8, kasta: false });
@@ -445,7 +462,7 @@ for (const x of [-2.75, 5.0, -9.6, 10.4]) scen.add(nat(new T.BoxGeometry(0.3, 18
 
 const stad = new T.Mesh(new T.PlaneGeometry(130, 32.5),
   new T.MeshBasicMaterial({ map: stadTextur(), toneMapped: true }));
-stad.material.color.setScalar(1.55);
+stad.material.color.setScalar(1.3);
 stad.position.set(0.5, 4.2, -42);
 scen.add(stad);
 
@@ -459,14 +476,14 @@ const bokeh = [];
     const s = new T.Sprite(sm);
     const z = -9 - r() * 16;
     s.position.set(-15 + r() * 32, 2.6 + r() * 7.5, z);
-    s.scale.setScalar(0.3 + r() * 0.8);
-    s.userData = { fas: r() * 6.28, fart: 0.3 + r() * 0.7, bas: 0.16 + r() * 0.26, x0: s.position.x };
+    s.scale.setScalar(0.14 + r() * 0.34);
+    s.userData = { fas: r() * 6.28, fart: 0.3 + r() * 0.7, bas: 0.3 + r() * 0.35, x0: s.position.x };
     scen.add(s); bokeh.push(s);
   }
 }
 
 /* lampan: en stor lysande glob som hänger i överkant, som på referensbilden */
-const LAMPA = new T.Vector3(2.3, 5.75, -2.1);
+const LAMPA = new T.Vector3(1.0, 5.9, -2.2);
 const lampMat = new T.MeshStandardMaterial({ color: '#fff4e2', emissive: '#ffd59a', emissiveIntensity: 0, roughness: 0.4 });
 const lampa = grupp({ x: LAMPA.x, y: LAMPA.y, z: LAMPA.z });
 lampa.add(nat(new T.SphereGeometry(1.2, 48, 32), lampMat, { kasta: false, ta: false }));
@@ -487,8 +504,8 @@ scen.add(spot, spot.target);
 const lampFyll = new T.PointLight('#ffd7a8', 0, 0, 2);
 lampFyll.position.copy(LAMPA);
 scen.add(lampFyll);
-const fonsterljus = new T.DirectionalLight('#8ea3ff', 0.35);
-fonsterljus.position.set(-3, 3.5, -16);
+const fonsterljus = new T.DirectionalLight('#8ea3ff', 0.9);
+fonsterljus.position.set(-2, 1.2, -16);
 scen.add(fonsterljus);
 scen.add(new T.HemisphereLight('#2c3656', '#2b1b10', 0.16));
 const LAMP_SPOT = 140, LAMP_FYLL = 10, LAMP_GLOB = 1.5;
@@ -539,21 +556,21 @@ const laptop = grupp({ x: -3.7, y: 0, z: -1.9, ry: 0.3 });
   lock.add(nat(new T.PlaneGeometry(3.14, 1.98), new T.MeshStandardMaterial({ color: '#000000', emissive: '#ffffff', emissiveMap: kod.t, emissiveIntensity: 1.25, roughness: 0.3 }), { y: 1.15, z: 0.093, kasta: false }));
   lock.add(nat(new T.PlaneGeometry(0.78, 0.78), std('#ffffff', { map: lappTextur('#f6dc6a', ['Klicka på', 'sakerna :)'], 50, -0.04), roughness: 0.85, side: T.DoubleSide }), { x: -1.24, y: 1.86, z: 0.12, rz: 0.11 }));
   laptop.add(lock);
-  const skarmljus = new T.PointLight('#9fc0ff', 1.2, 4, 2);
+  const skarmljus = new T.PointLight('#b8ccff', 0.45, 3, 2);
   skarmljus.position.set(0, 1.0, -0.3);
-  laptop.add(skarmljus);
+  if (!LAG) laptop.add(skarmljus);
   skugga(laptop, 4.4, 3.2, 0, 0, 0.7)
 }
 scen.add(laptop);
 sak('appar', laptop, { etikett: 'Gratisappar', under: 'Saker jag byggt', panel: 'appar', yta: new T.BoxGeometry(3.6, 2.6, 2.6), ytaPos: new T.Vector3(0, 1.2, -0.2) });
 
+const glasMat = new T.MeshPhysicalMaterial({ color: '#ffffff', transmission: 1, roughness: 0.05, thickness: 0.3, ior: 1.45, metalness: 0, side: T.FrontSide, attenuationColor: '#e8fff8', attenuationDistance: 3, specularIntensity: 1, envMap: scen.environment, envMapIntensity: 0.6 });
 // glasburken med lysande minnen → kurs
 const burk = grupp({ x: 0.55, y: 0, z: -0.55 });
 const minnen = [], rymlingar = [];
 {
   const profil = [[0, 0], [0.62, 0], [0.73, 0.06], [0.76, 0.22], [0.76, 1.7], [0.71, 1.84], [0.63, 1.9], [0.63, 2.06], [0.67, 2.09], [0.67, 2.16], [0.61, 2.16]].map(([x, y]) => new T.Vector2(x, y));
-  const glas = new T.MeshPhysicalMaterial({ color: '#ffffff', transmission: 1, roughness: 0.05, thickness: 0.22, ior: 1.45, metalness: 0, side: T.DoubleSide, attenuationColor: '#e8fff8', attenuationDistance: 3, specularIntensity: 1 });
-  const kropp = nat(new T.LatheGeometry(profil, 64), glas, { kasta: false });
+  const kropp = nat(new T.LatheGeometry(profil, 64), glasMat, { kasta: false });
   burk.add(kropp);
   burk.add(nat(new T.CylinderGeometry(0.77, 0.77, 0.52, 48, 1, true, -0.62, 1.24), std('#ffffff', { map: etikettTextur(), roughness: 0.9, side: T.DoubleSide }), { y: 0.95, kasta: false }));
   const r = slump(11);
@@ -632,13 +649,13 @@ const jonasDelar = {};
   skugga(jonas, 1.1, 1.1, 0, 0.02, 0.7)
 }
 scen.add(jonas);
-sak('om', jonas, { etikett: 'Jonas', under: 'Klicka och säg hej', panel: 'om', yta: new T.CylinderGeometry(0.55, 0.55, 2.6, 12), ytaPos: new T.Vector3(0, 1.25, 0) });
+sak('om', jonas, { etikett: 'Om Jonas', under: 'Världsmästare i att komma ihåg', panel: 'om', yta: new T.CylinderGeometry(0.55, 0.55, 2.6, 12), ytaPos: new T.Vector3(0, 1.25, 0) });
 
 // roboten → agera
 const robot = grupp({ x: 2.85, y: 0, z: -0.35, ry: -0.35 });
 const robotDelar = {};
 {
-  const plat = std('#cdd1d8', { roughness: 0.42, metalness: 0.25 });
+  const plat = std('#cbcfd6', { roughness: 0.58, metalness: 0.08 });
   const mork = std('#2a2e38', { roughness: 0.5 });
   for (const sx of [-1, 1]) {
     robot.add(nat(new T.CylinderGeometry(0.12, 0.14, 0.32, 16), std('#8d929c', { metalness: 0.4, roughness: 0.4 }), { x: sx * 0.32, y: 0.16 }));
@@ -706,7 +723,7 @@ const tvGrupp = grupp({ x: 5.15, y: 0, z: -2.45, ry: -0.42 });
   }
   const tvLjus = new T.PointLight('#c8d4ff', 1.4, 3.5, 2);
   tvLjus.position.set(-0.2, 1.0, 1.0);
-  tvGrupp.add(tvLjus);
+  if (!LAG) tvGrupp.add(tvLjus);
   skugga(tvGrupp, 2.6, 2.0, 0, 0, 0.6)
 }
 scen.add(tvGrupp);
@@ -725,7 +742,7 @@ const planKropp = new T.Group();
   skugga(plan, 1.9, 2.1, 0, 0, 0.45)
 }
 scen.add(plan);
-sak('nyhetsbrev', plan, { etikett: 'Nyhetsbrev', under: 'Ett ovanligt minnesvärt', panel: 'nyhetsbrev', yta: new T.BoxGeometry(1.8, 0.8, 2.0), ytaPos: new T.Vector3(0, 0.3, 0) });
+sak('nyhetsbrev', plan, { etikett: 'Nyhetsbrev', under: 'Ett ovanligt minnesvärt nyhetsbrev', panel: 'nyhetsbrev', yta: new T.BoxGeometry(1.8, 0.8, 2.0), ytaPos: new T.Vector3(0, 0.3, 0) });
 
 // kuvertet → kontakt
 const kuvert = grupp({ x: 4.25, y: 0, z: 1.95, ry: -0.3 });
@@ -776,7 +793,7 @@ const anga = [];
 scen.add(mugg);
 
 // pennburken
-const pennor = grupp({ x: -5.85, y: 0, z: -2.75 });
+const pennor = grupp({ x: -6.5, y: 0, z: -2.95 });
 {
   pennor.add(nat(new T.CylinderGeometry(0.44, 0.4, 1.05, 32, 1, true), std('#24272f', { roughness: 0.5, side: T.DoubleSide }), { y: 0.525 }));
   pennor.add(nat(new T.CylinderGeometry(0.4, 0.4, 0.04, 32), std('#24272f'), { y: 0.02 }));
@@ -787,8 +804,8 @@ const pennor = grupp({ x: -5.85, y: 0, z: -2.75 });
     const p = grupp({ x: Math.cos(a) * rr, y: 0.08, z: Math.sin(a) * rr, rx: (r() - 0.5) * 0.45, rz: (r() - 0.5) * 0.45 });
     const l = 1.35 + r() * 0.35;
     p.add(nat(new T.CylinderGeometry(0.052, 0.052, l, 6), std(f, { roughness: 0.55 }), { y: l / 2 }));
-    p.add(nat(new T.ConeGeometry(0.052, 0.15, 6), std('#e7c79a'), { y: l + 0.075 }));
-    p.add(nat(new T.ConeGeometry(0.018, 0.05, 6), std('#2b2b30'), { y: l + 0.14 }));
+    p.add(nat(new T.ConeGeometry(0.052, 0.15, 6), std('#e7c79a'), { y: l + 0.075, kasta: false }));
+    p.add(nat(new T.ConeGeometry(0.018, 0.05, 6), std('#2b2b30'), { y: l + 0.14, kasta: false }));
     pennor.add(p);
   });
   skugga(pennor, 1.4, 1.4, 0, 0, 0.6)
@@ -833,18 +850,24 @@ sak('en', flagga, { etikett: 'In English', under: 'jonasvonessen.se/en', panel: 
 scen.add(nat(new T.PlaneGeometry(1.05, 1.05), std('#ffffff', { map: lappTextur('#f4a7c0', ['π = 3,14159', '26535 89793', '23846 26433…'], 34, 0.02), roughness: 0.85 }), { x: -1.55, y: 3.7, z: -4.66, rz: 0.06, kasta: false }));
 
 /* ————— efterbehandling: glöd, vinjett och lite filmkorn ————— */
-const rt = new T.WebGLRenderTarget(1, 1, { type: T.HalfFloatType, samples: LAG ? 0 : 4 });
+const rt = new T.WebGLRenderTarget(1, 1, { type: T.HalfFloatType, samples: (LAG || renderer.getPixelRatio() >= 1.5) ? 0 : 4 });
 const komp = new T.EffectComposer(renderer, rt);
 komp.addPass(new T.RenderPass(scen, kam));
 const glod = new T.UnrealBloomPass(new T.Vector2(512, 512), 0.5, 0.5, 0.9);
 komp.addPass(glod);
 const vinjett = new T.ShaderPass({
-  uniforms: { tDiffuse: { value: null }, tid: { value: 0 } },
+  uniforms: { tDiffuse: { value: null }, tid: { value: 0 }, fokusY: { value: 0.42 }, oskarpa: { value: LAG ? 0 : 1 } },
   vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
-  fragmentShader: `uniform sampler2D tDiffuse; uniform float tid; varying vec2 vUv;
+  fragmentShader: `uniform sampler2D tDiffuse; uniform float tid; uniform float fokusY; uniform float oskarpa; varying vec2 vUv;
     float brus(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
     void main(){
       vec4 c = texture2D(tDiffuse, vUv);
+      float o = oskarpa * smoothstep(0.2, 0.5, abs(vUv.y - fokusY));   // kort skärpedjup, som en miniatyr
+      if (o > 0.001) {
+        vec4 s = vec4(0.0);
+        for (int i = 0; i < 8; i++) { float a = float(i) * 0.7854; s += texture2D(tDiffuse, vUv + vec2(cos(a) * 0.62, sin(a)) * o * 0.006); }
+        c = mix(c, s / 8.0, o);
+      }
       vec2 d = vUv - 0.5; d.x *= 1.2;
       c.rgb *= mix(1.0, 0.42, smoothstep(0.38, 0.95, length(d)));
       c.rgb += (brus(vUv * 1000.0 + tid) - 0.5) * 0.016;
@@ -891,7 +914,7 @@ function uppdateraKamera(dt) {
   panorering += (panMal - panorering) * Math.min(1, dt * 6);
   const mal = new T.Vector3(VILA_MAL.x + panorering, malY, VILA_MAL.z);
   let d = avstand;
-  if (fokus) {
+  if (fokus && !reducerad) {
     mal.lerp(fokus, 0.6);
     d *= PORTRATT() ? 0.8 : 0.66;
     if (!PORTRATT() && innerWidth > 640) mal.x += d * 0.12;   // lämna plats åt panelen till höger
@@ -901,7 +924,7 @@ function uppdateraKamera(dt) {
   if (!reducerad) { pos.x += mus.x * 0.75; pos.y += mus.y * 0.4; }
   const k = intro.t < 2.6 ? T.MathUtils.smootherstep(intro.t / 2.6, 0, 1) : 1;
   if (k < 1) pos.add(new T.Vector3(0, 2.2, 7.5).multiplyScalar(1 - k));
-  const f = 1 - Math.exp(-dt * (k < 1 ? 20 : 3.2));
+  const f = reducerad ? 1 : 1 - Math.exp(-dt * (k < 1 ? 20 : 3.2));
   kamPos.lerp(pos, f); kamMal.lerp(mal, f);
   kam.position.copy(kamPos); kam.lookAt(kamMal);
 }
@@ -940,15 +963,21 @@ duk.addEventListener('pointermove', e => {
     lapp.style.left = e.clientX + 'px'; lapp.style.top = e.clientY + 'px';
     setHover(traff(e.clientX, e.clientY), 'mus');
   }
-  if (ned && e.pointerType !== 'mouse') {
+  if (ned && e.pointerId === ned.id && e.pointerType !== 'mouse') {
     const dx = e.clientX - ned.x;
     if (Math.abs(dx) > 6) ned.drog = true;
     panMal = T.MathUtils.clamp(ned.pan - dx / innerWidth * 7, -4.2, 4.6);
   }
 });
-duk.addEventListener('pointerdown', e => { ned = { x: e.clientX, y: e.clientY, pan: panMal, drog: false }; });
+duk.addEventListener('pointerdown', e => {
+  if (!e.isPrimary) { if (ned) ned.drog = true; return; }
+  ned = { id: e.pointerId, x: e.clientX, y: e.clientY, pan: panMal, drog: false };
+});
+duk.addEventListener('pointercancel', () => { ned = null; });
 duk.addEventListener('pointerup', e => {
-  const drog = ned && (ned.drog || Math.hypot(e.clientX - ned.x, e.clientY - ned.y) > 8);
+  if (e.pointerType === 'mouse' && e.button !== 0) { ned = null; return; }
+  if (!ned || e.pointerId !== ned.id) return;
+  const drog = ned.drog || Math.hypot(e.clientX - ned.x, e.clientY - ned.y) > 8;
   ned = null;
   if (drog) return;
   const id = traff(e.clientX, e.clientY);
@@ -973,15 +1002,16 @@ function klicka(id) {
   if (id === 'en') { location.href = '/en/'; return; }
   if (id === 'kort') { vandKort(); return; }
   if (id === 'om') vinka();
-  if (id === 'nyhetsbrev') planFlyg.t = 0.001;
+  if (id === 'nyhetsbrev' && !reducerad && planFlyg.t === 0) planFlyg.t = 0.001;
   oppna(id);
 }
 function oppna(id) {
   const s = saker.get(id);
   const mall = document.getElementById('t-' + s.panel);
-  if (!mall) return;
+  if (!mall || oppenId === id) return;
   if (!oppenId) senastFokus = document.activeElement;
   innehall.replaceChildren(mall.content.cloneNode(true));
+  panel.scrollTop = 0;
   panel.classList.add('oppen');
   oppenId = id;
   fokus = s.g.getWorldPosition(new T.Vector3()).add(new T.Vector3(0, 0.9, 0));
@@ -1001,14 +1031,20 @@ addEventListener('keydown', e => { if (e.key === 'Escape' && oppenId) stang(); }
 function kopplaNyhetsbrev(form) {
   form.addEventListener('submit', ev => {
     ev.preventDefault();
+    const knapp = form.querySelector('button[type=submit]'), svar = form.querySelector('.svar');
+    if (knapp.disabled || form.querySelector('input[name^="b_"]').value) return;
+    knapp.disabled = true; svar.textContent = 'Skickar …';
     const d = new FormData(form), q = [];
     d.forEach((v, k) => q.push(encodeURIComponent(k) + '=' + encodeURIComponent(v)));
-    const cb = 'mc' + Date.now(), s = document.createElement('script'), svar = form.querySelector('.svar');
+    const cb = 'mc' + Date.now(), s = document.createElement('script');
+    const klar = text => { clearTimeout(vakt); knapp.disabled = false; svar.textContent = text; s.remove(); window[cb] = () => {}; };
+    const vakt = setTimeout(() => klar('Det tog för lång tid. Försök igen om en stund.'), 10000);
     window[cb] = res => {
-      svar.textContent = res && res.result === 'success' ? 'Tack. Kolla din inkorg.' : 'Något gick fel. Kontrollera adressen och försök igen.';
-      s.remove(); delete window[cb];
+      if (res && res.result === 'success') return klar('Tack.');
+      const msg = new DOMParser().parseFromString((res && res.msg) || '', 'text/html').body.textContent.replace(/^\d+\s*-\s*/, '');
+      klar(/already subscribed/i.test(msg) ? 'Du prenumererar redan. Tack!' : (msg || 'Något gick fel. Kontrollera adressen och försök igen.'));
     };
-    s.onerror = () => { if (window[cb]) window[cb](null); };
+    s.onerror = () => klar('Något gick fel. Kontrollera adressen och försök igen.');
     s.src = form.action.replace('/post', '/post-json') + '?' + q.join('&') + '&c=' + cb;
     document.body.appendChild(s);
   });
@@ -1022,15 +1058,20 @@ function vandKort() { if (kortVand.t <= 0) { kortVand.t = 1; kortVand.vand = !ko
 const planFlyg = { t: 0 };
 
 /* ————— animationen ————— */
-let tid = 0, forra = performance.now(), forstaBild = true;
+let tid = 0, forra = performance.now(), forstaBild = true, senastRitad = 0, skuggBild = 0;
 const tmp = new T.Vector3();
 function bild(nu) {
+  const aktiv = hovrad || oppenId || vinkT > 0 || planFlyg.t > 0 || kortVand.t > 0 || intro.t < 3 ||
+    Math.abs(panMal - panorering) > 0.01 || Math.abs(mus.mx - mus.x) > 0.002 || Math.abs(mus.my - mus.y) > 0.002;
+  const grans = 1000 / (aktiv ? (LAG ? 40 : 60) : (LAG ? 24 : 30));
+  if (nu - senastRitad < grans - 2) return;
+  senastRitad = nu;
   const dt = Math.min(0.05, (nu - forra) / 1000); forra = nu;
   tid += dt; intro.t += dt;
 
   if (!direkt && intro.t < 2.2) {
     const t = intro.t;
-    const flimmer = t < 0.35 ? 0 : t < 1.2 ? (Math.sin(t * 38) > 0.2 ? 0.75 : 0.12) * Math.min(1, (t - 0.35) * 1.6) : Math.min(1, 0.6 + (t - 1.2) * 0.5);
+    const flimmer = t < 0.35 ? 0 : t < 0.55 ? 0.6 : t < 0.85 ? 0.12 : t < 1.05 ? 0.7 : t < 1.3 ? 0.3 : Math.min(1, 0.6 + (t - 1.3) * 0.45);  // högst tre ryck per sekund
     lampNiva = flimmer;
   } else lampNiva = 1;
   satLampa(lampNiva);
@@ -1082,7 +1123,8 @@ function bild(nu) {
   jonasDelar.ogon.forEach(o => { o.scale.y = blink; });
   if (vinkT > 0) {
     vinkT -= dt;
-    jonasDelar.hogerArm.rotation.z = -2.5 + Math.sin(tid * 14) * 0.35;
+    const m = 2.5 + Math.sin(tid * 14) * 0.35;
+    jonasDelar.hogerArm.rotation.z += (m - jonasDelar.hogerArm.rotation.z) * Math.min(1, dt * 14);
   } else jonasDelar.hogerArm.rotation.z += (0.14 - jonasDelar.hogerArm.rotation.z) * Math.min(1, dt * 8);
   if (bubblaT > 0) {
     bubblaT -= dt;
@@ -1156,10 +1198,14 @@ function bild(nu) {
     s.position.x = u.x0 + Math.sin(tid * 0.05 + u.fas) * 0.4;
   });
 
+  const rorelse = vinkT > 0 || planFlyg.t > 0 || kortVand.t > 0 ||
+    [...saker.values()].some(s => Math.abs(((s.id === hovrad || s.id === oppenId) ? 1 : 0) - s.lyft) > 0.002);
+  if (rorelse || ++skuggBild % 8 === 0) renderer.shadowMap.needsUpdate = true;
+
   uppdateraKamera(dt);
   vinjett.uniforms.tid.value = tid % 100;
   komp.render(dt);
 
-  if (forstaBild) { forstaBild = false; laddar.classList.add('borta'); }
+  if (forstaBild) { forstaBild = false; laddar.classList.add('borta'); window.__skrivbordKlart = true; }
 }
 renderer.setAnimationLoop(bild);

@@ -6,7 +6,9 @@
 <meta name="robots" content="noindex">
 <title>Skrivbordet · Jonas von Essen</title>
 <meta name="description" content="Jonas von Essens skrivbord en sen kväll. Klicka på sakerna.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 22 22' shape-rendering='crispEdges'%3E%3Crect width='22' height='22' rx='4' fill='%23ffd166'%2F%3E%3Crect x='8' y='3' width='1' height='1' fill='%237a4a24'%2F%3E%3Crect x='10' y='3' width='2' height='1' fill='%237a4a24'%2F%3E%3Crect x='13' y='3' width='1' height='1' fill='%237a4a24'%2F%3E%3Crect x='8' y='4' width='6' height='1' fill='%237a4a24'%2F%3E%3Crect x='7' y='5' width='8' height='1' fill='%237a4a24'%2F%3E%3Crect x='7' y='6' width='8' height='1' fill='%237a4a24'%2F%3E%3Crect x='7' y='7' width='2' height='1' fill='%237a4a24'%2F%3E%3Crect x='9' y='7' width='6' height='1' fill='%23f6c99f'%2F%3E%3Crect x='7' y='8' width='1' height='1' fill='%237a4a24'%2F%3E%3Crect x='8' y='8' width='2' height='1' fill='%23f6c99f'%2F%3E%3Crect x='10' y='8' width='1' height='1' fill='%2322242e'%2F%3E%3Crect x='11' y='8' width='2' height='1' fill='%23f6c99f'%2F%3E%3Crect x='13' y='8' width='1' height='1' fill='%2322242e'%2F%3E%3Crect x='14' y='8' width='1' height='1' fill='%23f6c99f'%2F%3E%3Crect x='9' y='9' width='2' height='1' fill='%23f6c99f'%2F%3E%3Crect x='11' y='9' width='3' height='1' fill='%23803024'%2F%3E%3Crect x='14' y='9' width='1' height='1' fill='%23f6c99f'%2F%3E%3Crect x='10' y='10' width='4' height='1' fill='%23f6c99f'%2F%3E%3Crect x='8' y='11' width='6' height='1' fill='%23e23b4e'%2F%3E%3Crect x='7' y='12' width='8' height='1' fill='%23e23b4e'%2F%3E%3Crect x='7' y='13' width='1' height='1' fill='%23f6c99f'%2F%3E%3Crect x='8' y='13' width='6' height='1' fill='%23e23b4e'%2F%3E%3Crect x='14' y='13' width='1' height='1' fill='%23f6c99f'%2F%3E%3Crect x='7' y='14' width='1' height='1' fill='%23f6c99f'%2F%3E%3Crect x='8' y='14' width='6' height='1' fill='%23e23b4e'%2F%3E%3Crect x='14' y='14' width='1' height='1' fill='%23f6c99f'%2F%3E%3Crect x='7' y='15' width='1' height='1' fill='%23f6c99f'%2F%3E%3Crect x='8' y='15' width='6' height='1' fill='%233a4468'%2F%3E%3Crect x='14' y='15' width='1' height='1' fill='%23f6c99f'%2F%3E%3Crect x='8' y='16' width='6' height='1' fill='%233a4468'%2F%3E%3Crect x='8' y='17' width='2' height='1' fill='%233a4468'%2F%3E%3Crect x='12' y='17' width='2' height='1' fill='%233a4468'%2F%3E%3Crect x='8' y='18' width='2' height='1' fill='%233a4468'%2F%3E%3Crect x='12' y='18' width='2' height='1' fill='%233a4468'%2F%3E%3Crect x='8' y='19' width='2' height='1' fill='%233a4468'%2F%3E%3Crect x='12' y='19' width='2' height='1' fill='%233a4468'%2F%3E%3Crect x='8' y='20' width='3' height='1' fill='%238a5a2b'%2F%3E%3Crect x='12' y='20' width='3' height='1' fill='%238a5a2b'%2F%3E%3C%2Fsvg%3E">
 <link rel="stylesheet" href="/assets/fonts.css">
+<link rel="modulepreload" href="three.js">
 <style>
   :root{
     --bg:#07080d;
@@ -26,18 +28,20 @@
   a{color:inherit}
   :focus-visible{outline:2px solid var(--accent);outline-offset:4px}
 
-  #duk{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:pan-y;cursor:default}
+  #duk{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:default}
   #duk.pekar{cursor:pointer}
 
   /* sidhuvud: samma tonläge som jonasvonessen.se */
-  .topp{position:fixed;inset:0 0 auto 0;z-index:10;display:flex;justify-content:space-between;align-items:baseline;gap:1rem;
+  .topp{position:fixed;inset:0 0 auto 0;z-index:35;display:flex;justify-content:space-between;align-items:baseline;gap:1rem;
     padding:calc(1.1rem + env(safe-area-inset-top,0px)) clamp(1.1rem,4vw,2.6rem) 2.4rem;
     font-family:var(--mono);font-size:.71rem;letter-spacing:.24em;text-transform:uppercase;
     background:linear-gradient(to bottom,rgba(7,8,13,.85),rgba(7,8,13,0));pointer-events:none}
   .topp a,.topp button{pointer-events:auto}
   .topp .namn{color:var(--ink);text-decoration:none;white-space:nowrap}
-  .topp ul{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:.4rem clamp(.9rem,2.4vw,1.8rem);list-style:none;margin:0;padding:0}
-  .topp button{background:none;border:0;padding:.2rem 0;font:inherit;letter-spacing:inherit;text-transform:inherit;color:var(--nav);cursor:pointer;border-bottom:1px solid transparent}
+  .topp ul{display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:.4rem clamp(.9rem,2.4vw,1.8rem);list-style:none;margin:0;padding:.35rem 1rem;
+    background:rgba(7,8,13,.72);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-radius:999px;pointer-events:auto}
+  .topp li:has(> .dold-fokus:not(:focus)){position:absolute}
+  .topp button{background:none;border:0;padding:.2rem 0;font:inherit;letter-spacing:inherit;text-transform:inherit;color:var(--ink);cursor:pointer;border-bottom:1px solid transparent}
   .topp button:hover,.topp button.lyst{color:var(--ink);border-bottom-color:var(--accent)}
   .flagga{display:inline-block;height:11px;width:auto;vertical-align:-1px;border-radius:2px;opacity:.8}
   @media (max-width:640px){
@@ -74,8 +78,9 @@
   #panel{position:fixed;top:0;right:0;bottom:0;z-index:30;width:min(27rem,100%);overflow-y:auto;
     padding:calc(4.6rem + env(safe-area-inset-top,0px)) clamp(1.4rem,3vw,2.2rem) 2.4rem;
     background:rgba(9,10,15,.9);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-left:1px solid var(--hair);
-    transform:translateX(102%);transition:transform .5s cubic-bezier(.2,.8,.2,1);visibility:hidden}
-  #panel.oppen{transform:none;visibility:visible}
+    transform:translateX(102%);transition:transform .5s cubic-bezier(.2,.8,.2,1),visibility 0s linear .5s;visibility:hidden}
+  #panel.oppen{transform:none;visibility:visible;transition-delay:0s}
+  @media (min-width:641px){ #panel{top:calc(3.6rem + env(safe-area-inset-top,0px));padding-top:3.4rem} #panel .stang{top:1rem} }
   @media (max-width:640px){
     #panel{top:auto;left:0;width:100%;max-height:62vh;border-left:0;border-top:1px solid var(--hair);transform:translateY(102%);
       padding:2.4rem 1.4rem calc(1.8rem + env(safe-area-inset-bottom,0px))}
@@ -125,7 +130,7 @@
 </head>
 <body>
 
-<canvas id="duk" aria-label="Ett skrivbord en sen kväll med en laptop, en glasburk med lysande minnen, en liten robot, en gammal tv, ett pappersplan, ett kuvert och en liten figur av Jonas. Sakerna går att klicka på; samma val finns i menyn."></canvas>
+<canvas id="duk" role="img" aria-label="Ett skrivbord en sen kväll med en laptop, en glasburk med lysande minnen, en liten robot, en gammal tv, ett pappersplan, ett kuvert, en kortlek, en brittisk flagga och en liten figur av Jonas. Sakerna går att klicka på, och menyn ovanför leder till samma innehåll."></canvas>
 
 <header class="topp">
   <a class="namn" href="/">Jonas von Essen</a>
@@ -138,6 +143,7 @@
       <li><button type="button" data-sak="agera">Agera</button></li>
       <li><button type="button" class="dold-fokus" data-sak="nyhetsbrev">Nyhetsbrev</button></li>
       <li><button type="button" class="dold-fokus" data-sak="om">Om Jonas</button></li>
+      <li><button type="button" class="dold-fokus" data-sak="kort">Vänd ett kort</button></li>
       <li><a href="/en/" lang="en" hreflang="en" aria-label="In English"><svg class="flagga" viewBox="0 0 60 30" aria-hidden="true" focusable="false"><rect width="60" height="30" fill="#012169"/><path d="M0,0 60,30 M60,0 0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 60,30 M60,0 0,30" stroke="#C8102E" stroke-width="3.6"/><path d="M30,0 V30 M0,15 H60" stroke="#fff" stroke-width="10"/><path d="M30,0 V30 M0,15 H60" stroke="#C8102E" stroke-width="6"/></svg></a></li>
     </ul>
   </nav>
@@ -163,7 +169,15 @@
 
 <div class="reserv" role="alert">
   <div>
-    <p>Skrivbordet behöver WebGL, och det verkar inte finnas i den här webbläsaren.</p>
+    <p>Skrivbordet behöver WebGL, och det verkar inte finnas i den här webbläsaren. Allt innehåll finns på startsidan:</p>
+    <ul class="lista" style="text-align:left;max-width:22rem;margin:0 auto 1.4rem">
+      <li><a href="/#byggt"><b>Gratisappar</b></a></li>
+      <li><a href="/#kurs"><b>Kurs</b></a></li>
+      <li><a href="/#videor"><b>Videor</b></a></li>
+      <li><a href="/#nyhetsbrev"><b>Nyhetsbrev</b></a></li>
+      <li><a href="/#kontakt"><b>Kontakt</b></a></li>
+      <li><a href="/agera/"><b>Agera</b></a></li>
+    </ul>
     <a class="knapp" href="/">Till jonasvonessen.se</a>
   </div>
 </div>
@@ -222,15 +236,15 @@
   <p class="etikett">Kuvertet · kontakt</p>
   <h2 id="panelrubrik">Säg hej!</h2>
   <p class="ingress">Vill du boka en föreläsning för ett oförglömligt event? Eller har du något du funderar på? Skriv en rad eller två.</p>
-  <a class="knapp" href="mailto:info@jonasvonessen.se">info@jonasvonessen.se</a>
-  <a class="knapp knapp--lank" href="/#kontakt">Kontaktformuläret →</a>
+  <a class="knapp" href="/#kontakt">Till kontaktformuläret</a>
+  <a class="knapp knapp--lank" href="mailto:info@jonasvonessen.se">info@jonasvonessen.se</a>
 </template>
 
 <template id="t-agera">
-  <p class="etikett">Roboten · AI</p>
+  <p class="etikett">Roboten · agera</p>
   <h2 id="panelrubrik">Vad kan jag göra?</h2>
   <p class="ingress">Är du orolig över AI-utvecklingen? Du är inte ensam. Tillsammans kan vi påverka och styra mot en ljusare framtid.</p>
-  <p>Jag har samlat några konkreta första steg: skriva till en politiker, skriva under uppropet, prata med tre personer och gå med i rörelsen.</p>
+  <p>Jag har samlat några konkreta första steg: mejla en politiker, skriv under uppropet, prata med tre personer och gå med i rörelsen.</p>
   <a class="knapp" href="/agera/">Till stegen</a>
 </template>
 
@@ -250,6 +264,15 @@
   </div>
 </template>
 
-<script type="module" src="scen.js"></script>
+<script type="module" src="scen.js" onerror="document.documentElement.classList.add('ingen-webgl')"></script>
+<script nomodule>document.documentElement.classList.add('ingen-webgl');</script>
+<script>
+  (function () {
+    function reserv() { if (!window.__skrivbordKlart) document.documentElement.classList.add('ingen-webgl'); }
+    addEventListener('error', reserv);
+    addEventListener('unhandledrejection', reserv);
+    setTimeout(reserv, 20000);
+  })();
+</script>
 </body>
 </html>
