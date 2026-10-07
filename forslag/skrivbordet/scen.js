@@ -7,6 +7,7 @@ import * as T from './three.js';
 const param = new URLSearchParams(location.search);
 const reducerad = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const direkt = reducerad || param.has('direkt');
+const UTSIKT = param.get('utsikt') === 'villa' ? 'villa' : 'stad';
 const grov = matchMedia('(pointer: coarse)').matches;
 const LAG = grov || Math.min(innerWidth, innerHeight) < 600;
 const rot = document.documentElement;
@@ -177,6 +178,145 @@ function stadTextur() {
     g.fillStyle = gr; g.beginPath(); g.arc(x, y, rad, 0, 6.283); g.fill();
   }
   return textur(c);
+}
+
+
+/* ————— villaområdet: tre lager på olika avstånd, så att parallaxen ger djup ————— */
+function villaLager(bredd, hojd, cy, oskarpa, rita, efter) {
+  const W = 2048, H = Math.round(hojd * W / bredd), s = W / bredd;
+  const [c, g] = yta(W, H);
+  const varld = () => g.setTransform(s, 0, 0, -s, W / 2, (cy + hojd / 2) * s);   // ritar i scenens enheter, y uppåt
+  varld(); rita(g);
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  if (oskarpa) oskarpt(c, oskarpa);
+  if (efter) { varld(); efter(g); g.setTransform(1, 0, 0, 1, 0, 0); }
+  return textur(c);
+}
+function bokehPrick(g, x, y, rad, [cr, cg, cb], a) {
+  const gr = g.createRadialGradient(x, y, 0, x, y, rad);
+  gr.addColorStop(0, `rgba(${cr},${cg},${cb},${a * 0.6})`);
+  gr.addColorStop(0.78, `rgba(${cr},${cg},${cb},${a * 0.7})`);
+  gr.addColorStop(0.93, `rgba(${cr},${cg},${cb},${a})`);
+  gr.addColorStop(1, `rgba(${cr},${cg},${cb},0)`);
+  g.fillStyle = gr; g.beginPath(); g.arc(x, y, rad, 0, 6.283); g.fill();
+}
+const VARM = ['#ffcc78', '#ffd99a', '#ffbf66', '#ffe3b0', '#ffcc78'];
+
+function villaHimmel() {
+  const r = slump(77);
+  return villaLager(120, 34, 6, 5, g => {
+    const sky = g.createLinearGradient(0, 23, 0, -11);
+    sky.addColorStop(0, '#03060e'); sky.addColorStop(0.5, '#08112a'); sky.addColorStop(0.7, '#15203f');
+    sky.addColorStop(0.78, '#2d2a42'); sky.addColorStop(0.84, '#3d2e38'); sky.addColorStop(1, '#1c1620');
+    g.fillStyle = sky; g.fillRect(-60, -11, 120, 34);
+    g.fillStyle = '#070a11'; g.beginPath(); g.moveTo(-60, -11);         // skogsbrynet
+    for (let x = -60; x <= 60; x += 0.3) {
+      const y = -2.4 + Math.sin(x * 0.07) * 1.0 + Math.sin(x * 0.29 + 1) * 0.35 + (r() - 0.5) * 0.45 + (r() < 0.08 ? 0.5 : 0);
+      g.lineTo(x, y);
+    }
+    g.lineTo(60, -11); g.closePath(); g.fill();
+    for (let i = 0; i < 46; i++) {                                    // avlägsna gårdar i brynet
+      g.fillStyle = VARM[(r() * VARM.length) | 0]; g.globalAlpha = 0.45 + r() * 0.45;
+      g.fillRect(-58 + r() * 116, -6.5 + r() * 3.4, 0.12 + r() * 0.12, 0.1 + r() * 0.08);
+    }
+    g.globalAlpha = 1;
+  }, g => {
+    for (let i = 0; i < 190; i++) {                                   // stjärnor
+      g.fillStyle = `rgba(235,240,255,${0.2 + r() * 0.65})`;
+      g.beginPath(); g.arc(-60 + r() * 120, 0.5 + r() * 22, 0.025 + r() * 0.05, 0, 6.283); g.fill();
+    }
+    const mx = 8, my = 2.2;                                           // månen, ovanför klockan
+    const glod = g.createRadialGradient(mx, my, 0.6, mx, my, 5.5);
+    glod.addColorStop(0, 'rgba(210,222,255,0.28)'); glod.addColorStop(1, 'rgba(210,222,255,0)');
+    g.fillStyle = glod; g.beginPath(); g.arc(mx, my, 5.5, 0, 6.283); g.fill();
+    const disk = g.createRadialGradient(mx - 0.25, my + 0.25, 0.1, mx, my, 0.95);
+    disk.addColorStop(0, '#fbf7ea'); disk.addColorStop(1, '#ddd6c2');
+    g.fillStyle = disk; g.beginPath(); g.arc(mx, my, 0.95, 0, 6.283); g.fill();
+    g.fillStyle = 'rgba(160,150,130,0.22)';
+    for (const [dx, dy, rr] of [[-0.3, 0.2, 0.22], [0.25, -0.15, 0.16], [0.1, 0.42, 0.11], [-0.1, -0.4, 0.13]]) { g.beginPath(); g.arc(mx + dx, my + dy, rr, 0, 6.283); g.fill(); }
+  });
+}
+
+function villaHus() {
+  const r = slump(314159);
+  const lampor = [];
+  const tex = villaLager(90, 16, -1, 4, g => {
+    for (let x = -45; x < 45; x += 1.2 + r() * 2.0) {                 // trädkronor bakom husen
+      g.fillStyle = r() < 0.5 ? '#0a100f' : '#0c1212';
+      if (r() < 0.35) {
+        const h = 2.6 + r() * 2.2, b = 1.0 + r() * 0.7, y0 = -1.3;
+        g.beginPath(); g.moveTo(x - b, y0); g.lineTo(x, y0 + h); g.lineTo(x + b, y0); g.closePath(); g.fill();
+      } else {
+        g.beginPath(); g.ellipse(x, 0 + r() * 1.5, 1.2 + r() * 1.1, 1.3 + r() * 1.0, 0, 0, 6.283); g.fill();
+      }
+    }
+    const hus = (x, bas, k, fasader, andelTand) => {                  // k skalar huset, bakre raden är mindre
+      const b = (3.4 + r() * 2.6) * k, h = (2.1 + r() * 1.2) * k, tak = (1.1 + r() * 1.0) * k, valm = r() < 0.3;
+      if (r() < 0.35) { g.fillStyle = '#1b1e26'; g.fillRect(x + b, bas, 1.9 * k, 1.5 * k); }   // garage
+      g.fillStyle = fasader[(r() * fasader.length) | 0]; g.fillRect(x, bas, b, h);
+      const takform = () => {
+        g.beginPath(); g.moveTo(x - 0.35 * k, bas + h);
+        if (valm) { g.lineTo(x + b * 0.3, bas + h + tak * 0.8); g.lineTo(x + b * 0.7, bas + h + tak * 0.8); } else g.lineTo(x + b / 2, bas + h + tak);
+        g.lineTo(x + b + 0.35 * k, bas + h);
+      };
+      g.fillStyle = '#151924'; takform(); g.closePath(); g.fill();
+      if (r() < 0.6) g.fillRect(x + b * 0.64, bas + h + tak * 0.3, 0.32 * k, tak * 0.72);   // skorsten
+      g.strokeStyle = 'rgba(120,135,175,0.55)'; g.lineWidth = 0.09 * k; takform(); g.stroke();   // månsken på takfoten
+      const rader = h > 2.75 * k ? 2 : 1, kol = b > 4.6 * k ? 3 : 2;
+      for (let ri = 0; ri < rader; ri++) for (let ki = 0; ki < kol; ki++) {
+        const fx = x + (ki + 0.5) * (b / kol) - 0.3 * k, fy = bas + (0.55 + ri * 1.25) * k;
+        const tand = r() < andelTand;
+        g.fillStyle = tand ? (r() < 0.12 ? '#9fb8ff' : VARM[(r() * VARM.length) | 0]) : '#252a3a';
+        g.globalAlpha = tand ? 0.95 : 0.55;
+        g.fillRect(fx, fy, 0.6 * k, 0.66 * k);
+        if (tand) { g.fillStyle = 'rgba(20,16,12,0.55)'; g.fillRect(fx + 0.28 * k, fy, 0.04 * k, 0.66 * k); g.fillRect(fx, fy + 0.31 * k, 0.6 * k, 0.04 * k); }
+        g.globalAlpha = 1;
+      }
+      if (!valm && r() < 0.5) {                                       // runt vindsfönster
+        g.fillStyle = r() < 0.5 ? VARM[(r() * VARM.length) | 0] : '#252a3a';
+        g.beginPath(); g.arc(x + b / 2, bas + h + tak * 0.38, 0.22 * k, 0, 6.283); g.fill();
+      }
+      const dx = x + b * (0.2 + r() * 0.15);                          // dörr och verandalampa
+      g.fillStyle = '#0e0f14'; g.fillRect(dx, bas, 0.55 * k, 1.05 * k);
+      if (r() < 0.75) lampor.push({ x: dx + 0.27 * k, y: bas + 1.25 * k, rad: (0.22 + r() * 0.12) * k, rgb: [255, 205, 140], a: 0.75 });
+      return b;
+    };
+    for (let x = -45 + r() * 2; x < 45;) x += hus(x, -1.75 + r() * 0.2, 0.62, ['#1d1a20', '#1a1d26', '#201c1c', '#1c2024'], 0.4) + 0.8 + r() * 1.8;
+    g.fillStyle = '#0a0d10';                                          // buskar framför bakre raden
+    for (let hx = -45; hx < 45; hx += 0.9 + r() * 1.0) { g.beginPath(); g.ellipse(hx, -1.8, 0.7 + r() * 0.5, 0.3 + r() * 0.18, 0, 0, 6.283); g.fill(); }
+    // främre raden: falurött, gult, vitt, blågrått och grönt, nedtonat av natten
+    for (let x = -45 + r() * 2; x < 45;) x += hus(x, -3.3 + r() * 0.3, 1, ['#3a2224', '#38321f', '#353843', '#272d3b', '#26302b'], 0.48) + (r() < 0.35 ? 1.9 : 0) + 1.3 + r() * 2.2;
+    g.fillStyle = '#090c10';                                          // häckar och staket längs tomterna
+    for (let hx = -45; hx < 45; hx += 1.1 + r() * 1.2) { g.beginPath(); g.ellipse(hx, -3.35, 0.9 + r() * 0.6, 0.32 + r() * 0.2, 0, 0, 6.283); g.fill(); }
+    for (let lx = -40 + r() * 6; lx < 45; lx += 11 + r() * 5) {       // gatlyktor
+      g.fillStyle = '#0b0d12'; g.fillRect(lx, -6, 0.12, 5.2);
+      lampor.push({ x: lx + 0.06, y: -0.75, rad: 0.45 + r() * 0.15, rgb: [255, 176, 90], a: 0.8 });
+    }
+  }, g => { for (const l of lampor) bokehPrick(g, l.x, l.y, l.rad, l.rgb, l.a); });
+  return tex;
+}
+
+function villaNara() {
+  const r = slump(2718);
+  return villaLager(62, 18, 1, 3, g => {
+    g.fillStyle = '#05080a';                                          // stor trädkrona till vänster
+    g.fillRect(-17.6, -8, 0.5, 9);
+    for (let i = 0; i < 26; i++) {
+      const a = r() * 6.283, d = r() * 3.4;
+      g.beginPath(); g.ellipse(-17.2 + Math.cos(a) * d * 1.2, 4.2 + Math.sin(a) * d * 0.9, 1.3 + r() * 1.3, 1.1 + r() * 1.1, 0, 0, 6.283); g.fill();
+    }
+    g.fillStyle = '#070a0b';                                          // häcktoppar precis ovanför fönsterbänken
+    for (let hx = -31; hx < 31; hx += 0.9 + r() * 0.9) { g.beginPath(); g.ellipse(hx, -1.5 + r() * 0.35, 0.8 + r() * 0.5, 0.75 + r() * 0.3, 0, 0, 6.283); g.fill(); }
+    g.fillStyle = '#0a0c11';                                          // gatlykta till höger
+    g.fillRect(12.4, -8, 0.22, 11.4);
+    g.fillRect(11.3, 3.25, 1.3, 0.14);
+    g.fillRect(11.05, 3.0, 0.55, 0.3);
+  }, g => {
+    const glod = g.createRadialGradient(11.32, 2.9, 0.1, 11.32, 2.9, 2.0);
+    glod.addColorStop(0, 'rgba(255,170,80,0.2)'); glod.addColorStop(1, 'rgba(255,170,80,0)');
+    g.fillStyle = glod; g.beginPath(); g.arc(11.32, 2.9, 2.0, 0, 6.283); g.fill();
+    bokehPrick(g, 11.32, 2.88, 0.42, [255, 178, 96], 0.75);
+  });
 }
 
 function skivTextur(kant = true) {
@@ -460,22 +600,37 @@ scen.add(fonsterbank);
 scen.add(nat(new T.BoxGeometry(34, 0.24, 0.32), karmMat, { x: 0, y: 1.62, z: -4.5 }));
 for (const x of [-2.75, 5.0, -9.6, 10.4]) scen.add(nat(new T.BoxGeometry(0.3, 18, 0.36), karmMat, { x, y: 10.6, z: -4.5 }));
 
-const stad = new T.Mesh(new T.PlaneGeometry(130, 32.5),
-  new T.MeshBasicMaterial({ map: stadTextur(), toneMapped: true }));
-stad.material.color.setScalar(1.3);
-stad.position.set(0.5, 4.2, -42);
-scen.add(stad);
+if (UTSIKT === 'villa') {
+  for (const [tex, w, h, y, z, ljus, genom] of [
+    [villaHimmel(), 120, 34, 6, -62, 1.15, false],
+    [villaHus(), 90, 16, -1, -34, 1.35, true],
+    [villaNara(), 62, 18, 1, -17, 1.3, true],
+  ]) {
+    const m = new T.Mesh(new T.PlaneGeometry(w, h), new T.MeshBasicMaterial({ map: tex, transparent: genom, depthWrite: !genom }));
+    m.material.color.setScalar(ljus);
+    m.position.set(0.5, y, z);
+    scen.add(m);
+  }
+} else {
+  const stad = new T.Mesh(new T.PlaneGeometry(130, 32.5),
+    new T.MeshBasicMaterial({ map: stadTextur(), toneMapped: true }));
+  stad.material.color.setScalar(1.3);
+  stad.position.set(0.5, 4.2, -42);
+  scen.add(stad);
+}
+document.querySelectorAll('[data-utsikt]').forEach(a => { if (a.dataset.utsikt === UTSIKT) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); });
 
 const SKIVA = skivTextur(true), PRICK = skivTextur(false);
 const bokeh = [];
 {
   const r = slump(99);
-  const farger = ['#ffd6a0', '#ffaacb', '#fff0e2', '#b4cdff', '#ffc478'];
-  for (let i = 0; i < 14; i++) {
+  const villa = UTSIKT === 'villa';
+  const farger = villa ? ['#ffcf8a', '#ffb35a', '#fff0dc', '#ffd9a0'] : ['#ffd6a0', '#ffaacb', '#fff0e2', '#b4cdff', '#ffc478'];
+  for (let i = 0; i < (villa ? 7 : 14); i++) {
     const sm = new T.SpriteMaterial({ map: SKIVA, color: farger[(r() * farger.length) | 0], transparent: true, depthWrite: false, blending: T.AdditiveBlending, opacity: 0.5 });
     const s = new T.Sprite(sm);
     const z = -9 - r() * 16;
-    s.position.set(-15 + r() * 32, 2.6 + r() * 7.5, z);
+    s.position.set(-15 + r() * 32, villa ? 0.4 + r() * 3.2 : 2.6 + r() * 7.5, z);
     s.scale.setScalar(0.14 + r() * 0.34);
     s.userData = { fas: r() * 6.28, fart: 0.3 + r() * 0.7, bas: 0.3 + r() * 0.35, x0: s.position.x };
     scen.add(s); bokeh.push(s);
@@ -504,7 +659,7 @@ scen.add(spot, spot.target);
 const lampFyll = new T.PointLight('#ffd7a8', 0, 0, 2);
 lampFyll.position.copy(LAMPA);
 scen.add(lampFyll);
-const fonsterljus = new T.DirectionalLight('#8ea3ff', 0.9);
+const fonsterljus = new T.DirectionalLight(UTSIKT === 'villa' ? '#a4b8ff' : '#8ea3ff', 0.9);
 fonsterljus.position.set(-2, 1.2, -16);
 scen.add(fonsterljus);
 scen.add(new T.HemisphereLight('#2c3656', '#2b1b10', 0.16));

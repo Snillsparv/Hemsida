@@ -58,7 +58,12 @@
   .fot .vink b{color:var(--accent);font-weight:500}
   .fot .klassisk{pointer-events:auto;font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mist);text-decoration:none;border-bottom:1px solid var(--hair);white-space:nowrap}
   .fot .klassisk:hover{color:var(--accent);border-bottom-color:var(--accent)}
-  @media (max-width:640px){ .fot{flex-direction:column;align-items:flex-start;gap:.8rem} }
+  .fot .hoger{display:flex;flex-direction:column;align-items:flex-end;gap:.7rem}
+  .fot .utsikt{pointer-events:auto;margin:0;font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mist)}
+  .fot .utsikt a{color:var(--mist);text-decoration:none;border-bottom:1px solid transparent}
+  .fot .utsikt a:hover{color:var(--ink)}
+  .fot .utsikt a[aria-current]{color:var(--accent);border-bottom-color:var(--accent)}
+  @media (max-width:640px){ .fot{flex-direction:column;align-items:flex-start;gap:.8rem} .fot .hoger{align-items:flex-start} }
 
   /* lappen som följer pekaren */
   #lapp{position:fixed;left:0;top:0;z-index:20;pointer-events:none;opacity:0;transform:translate(-50%,-140%);
@@ -154,7 +159,10 @@
     <p class="rad">Världsmästare i att komma ihåg.</p>
     <p class="vink" id="vink">Klicka på <b>sakerna</b> på skrivbordet</p>
   </div>
-  <a class="klassisk" href="/">Förslag · klassisk version →</a>
+  <div class="hoger">
+    <p class="utsikt">Utsikt: <a href="?direkt" data-utsikt="stad" aria-current="true">Stad</a> · <a href="?utsikt=villa&amp;direkt" data-utsikt="villa">Villor</a></p>
+    <a class="klassisk" href="/">Förslag · klassisk version →</a>
+  </div>
 </footer>
 
 <div id="lapp" aria-hidden="true"></div>
