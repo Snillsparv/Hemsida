@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Skrivbordet · Jonas von Essen</title>
+<meta name="description" content="Jonas von Essens skrivbord en sen kväll. Klicka på sakerna.">
+<link rel="stylesheet" href="/assets/fonts.css">
+<style>
+  :root{
+    --bg:#07080d;
+    --ink:#eae6dc;
+    --mist:#b7b1a4;
+    --nav:#a9a396;
+    --hair:#3f3d37;
+    --accent:#ffd166;
+    --sans:'Space Grotesk',system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+    --serif:'Fraunces',Georgia,serif;
+    --hand:'Caveat','Comic Sans MS',cursive;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);overflow:hidden}
+  body{font-family:var(--sans);-webkit-font-smoothing:antialiased;line-height:1.55}
+  a{color:inherit}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+
+  #duk{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:pan-y;cursor:default}
+  #duk.pekar{cursor:pointer}
+
+  /* sidhuvud: samma tonläge som jonasvonessen.se */
+  .topp{position:fixed;inset:0 0 auto 0;z-index:10;display:flex;justify-content:space-between;align-items:baseline;gap:1rem;
+    padding:calc(1.1rem + env(safe-area-inset-top,0px)) clamp(1.1rem,4vw,2.6rem) 2.4rem;
+    font-family:var(--mono);font-size:.71rem;letter-spacing:.24em;text-transform:uppercase;
+    background:linear-gradient(to bottom,rgba(7,8,13,.85),rgba(7,8,13,0));pointer-events:none}
+  .topp a,.topp button{pointer-events:auto}
+  .topp .namn{color:var(--ink);text-decoration:none;white-space:nowrap}
+  .topp ul{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:.4rem clamp(.9rem,2.4vw,1.8rem);list-style:none;margin:0;padding:0}
+  .topp button{background:none;border:0;padding:.2rem 0;font:inherit;letter-spacing:inherit;text-transform:inherit;color:var(--nav);cursor:pointer;border-bottom:1px solid transparent}
+  .topp button:hover,.topp button.lyst{color:var(--ink);border-bottom-color:var(--accent)}
+  .flagga{display:inline-block;height:11px;width:auto;vertical-align:-1px;border-radius:2px;opacity:.8}
+  @media (max-width:640px){
+    .topp{flex-direction:column;align-items:center;font-size:.6rem;letter-spacing:.16em;gap:.6rem}
+    .topp ul{justify-content:center}
+  }
+
+  /* nederkant: en mening och en vink om vad man kan göra */
+  .fot{position:fixed;inset:auto 0 0 0;z-index:10;display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;
+    padding:3rem clamp(1.1rem,4vw,2.6rem) calc(1.2rem + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(to top,rgba(7,8,13,.8),rgba(7,8,13,0));pointer-events:none}
+  .fot .rad{font-family:var(--serif);font-style:italic;font-size:clamp(1.05rem,.9rem + .7vw,1.45rem);margin:0 0 .35rem}
+  .fot .vink{font-family:var(--mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mist);margin:0}
+  .fot .vink b{color:var(--accent);font-weight:500}
+  .fot .klassisk{pointer-events:auto;font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mist);text-decoration:none;border-bottom:1px solid var(--hair);white-space:nowrap}
+  .fot .klassisk:hover{color:var(--accent);border-bottom-color:var(--accent)}
+  @media (max-width:640px){ .fot{flex-direction:column;align-items:flex-start;gap:.8rem} }
+
+  /* lappen som följer pekaren */
+  #lapp{position:fixed;left:0;top:0;z-index:20;pointer-events:none;opacity:0;transform:translate(-50%,-140%);
+    transition:opacity .18s ease;font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;
+    background:rgba(7,8,13,.88);color:var(--ink);border:1px solid var(--accent);padding:.45rem .7rem;white-space:nowrap}
+  #lapp.syns{opacity:1}
+  #lapp small{display:block;color:var(--mist);letter-spacing:.08em;text-transform:none;font-size:.66rem;margin-top:.15rem}
+
+  /* pratbubbla ovanför figuren */
+  #bubbla{position:fixed;left:0;top:0;z-index:15;pointer-events:none;opacity:0;transform:translate(-50%,-100%) scale(.9);transform-origin:50% 100%;
+    transition:opacity .25s ease,transform .25s ease;background:#f4efe4;color:#14130f;font-family:var(--hand);font-size:1.5rem;line-height:1.1;
+    padding:.45rem .85rem .55rem;border-radius:14px;white-space:nowrap}
+  #bubbla::after{content:'';position:absolute;left:50%;bottom:-8px;margin-left:-8px;border:8px solid transparent;border-bottom:0;border-top-color:#f4efe4}
+  #bubbla.syns{opacity:1;transform:translate(-50%,-100%) scale(1)}
+
+  /* panelen: glider in från höger, eller underifrån på mobil */
+  #panel{position:fixed;top:0;right:0;bottom:0;z-index:30;width:min(27rem,100%);overflow-y:auto;
+    padding:calc(4.6rem + env(safe-area-inset-top,0px)) clamp(1.4rem,3vw,2.2rem) 2.4rem;
+    background:rgba(9,10,15,.9);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-left:1px solid var(--hair);
+    transform:translateX(102%);transition:transform .5s cubic-bezier(.2,.8,.2,1);visibility:hidden}
+  #panel.oppen{transform:none;visibility:visible}
+  @media (max-width:640px){
+    #panel{top:auto;left:0;width:100%;max-height:62vh;border-left:0;border-top:1px solid var(--hair);transform:translateY(102%);
+      padding:2.4rem 1.4rem calc(1.8rem + env(safe-area-inset-bottom,0px))}
+  }
+  #panel .stang{position:absolute;top:calc(1rem + env(safe-area-inset-top,0px));right:1rem;background:none;border:1px solid var(--hair);color:var(--mist);
+    font-family:var(--mono);font-size:.9rem;width:2.4rem;height:2.4rem;cursor:pointer}
+  @media (max-width:640px){ #panel .stang{top:.7rem} }
+  #panel .stang:hover{color:var(--accent);border-color:var(--accent)}
+  .etikett{font-family:var(--mono);font-size:.66rem;letter-spacing:.32em;text-transform:uppercase;color:var(--mist);margin:0 0 .9rem}
+  #panel h2{font-weight:400;font-size:clamp(1.6rem,1.3rem + 1.2vw,2.1rem);letter-spacing:.02em;line-height:1.2;margin:0 0 1rem;text-wrap:balance}
+  #panel p{margin:0 0 1rem;color:var(--ink)}
+  #panel .ingress{font-family:var(--serif);font-size:1.1rem;line-height:1.55}
+  #panel .liten{color:var(--mist);font-size:.92rem}
+  .knapp{display:inline-block;margin:.4rem 1.2rem .4rem 0;padding:.7rem 1.1rem;background:var(--accent);color:#0c0c0d;text-decoration:none;
+    font-family:var(--mono);font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;border:0;cursor:pointer}
+  .knapp:hover{filter:brightness(1.07)}
+  .knapp--lank{background:none;color:var(--accent);padding:.7rem 0;border-bottom:1px solid transparent}
+  .knapp--lank:hover{border-bottom-color:var(--accent)}
+  .lista{list-style:none;margin:1.2rem 0 0;padding:0;display:grid;gap:.9rem}
+  .lista a{display:block;text-decoration:none;border:1px solid var(--hair);padding:.9rem 1rem}
+  .lista a:hover{border-color:var(--accent)}
+  .lista b{display:block;font-weight:500;color:var(--accent);margin-bottom:.2rem}
+  .lista span{color:var(--mist);font-size:.93rem}
+  .meriter{list-style:none;margin:1rem 0 1.4rem;padding:0}
+  .meriter li{padding:.55rem 0;border-bottom:1px solid var(--hair)}
+  .soc{display:flex;gap:1.4rem;font-family:var(--mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase}
+  .soc a{color:var(--mist);text-decoration:none;border-bottom:1px solid var(--hair)}
+  .soc a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+  .brev label{display:block;font-family:var(--mono);font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:var(--mist);margin:1.4rem 0 .4rem}
+  .brev input[type=email]{width:100%;background:transparent;border:0;border-bottom:1px solid var(--hair);color:var(--ink);font:inherit;font-size:1.05rem;padding:.5rem .1rem;border-radius:0}
+  .brev input[type=email]:focus{outline:none;border-bottom-color:var(--accent)}
+  .brev .knapp{margin-top:1.2rem}
+  .brevhp{position:absolute;left:-5000px}
+  .brev .svar{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;color:var(--mist);margin-top:.9rem}
+
+  /* laddning och reserv utan WebGL */
+  #laddar{position:fixed;inset:0;z-index:40;display:grid;place-items:center;background:var(--bg);transition:opacity .9s ease;
+    font-family:var(--mono);font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:var(--mist)}
+  #laddar.borta{opacity:0;pointer-events:none}
+  .reserv{display:none}
+  html.ingen-webgl .reserv{display:grid;position:fixed;inset:0;z-index:50;place-items:center;text-align:center;padding:2rem;background:var(--bg)}
+  html.ingen-webgl .reserv p{max-width:28rem;margin:0 auto 1.4rem;color:var(--mist)}
+  .dold-fokus:not(:focus){position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .dold{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  @media (prefers-reduced-motion: reduce){ #panel,#lapp,#bubbla,#laddar{transition:none} }
+</style>
+</head>
+<body>
+
+<canvas id="duk" aria-label="Ett skrivbord en sen kväll med en laptop, en glasburk med lysande minnen, en liten robot, en gammal tv, ett pappersplan, ett kuvert och en liten figur av Jonas. Sakerna går att klicka på; samma val finns i menyn."></canvas>
+
+<header class="topp">
+  <a class="namn" href="/">Jonas von Essen</a>
+  <nav aria-label="Sakerna på skrivbordet">
+    <ul>
+      <li><button type="button" data-sak="appar">Gratisappar</button></li>
+      <li><button type="button" data-sak="kurs">Kurs</button></li>
+      <li><button type="button" data-sak="videor">Videor</button></li>
+      <li><button type="button" data-sak="kontakt">Kontakt</button></li>
+      <li><button type="button" data-sak="agera">Agera</button></li>
+      <li><button type="button" class="dold-fokus" data-sak="nyhetsbrev">Nyhetsbrev</button></li>
+      <li><button type="button" class="dold-fokus" data-sak="om">Om Jonas</button></li>
+      <li><a href="/en/" lang="en" hreflang="en" aria-label="In English"><svg class="flagga" viewBox="0 0 60 30" aria-hidden="true" focusable="false"><rect width="60" height="30" fill="#012169"/><path d="M0,0 60,30 M60,0 0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 60,30 M60,0 0,30" stroke="#C8102E" stroke-width="3.6"/><path d="M30,0 V30 M0,15 H60" stroke="#fff" stroke-width="10"/><path d="M30,0 V30 M0,15 H60" stroke="#C8102E" stroke-width="6"/></svg></a></li>
+    </ul>
+  </nav>
+</header>
+
+<footer class="fot">
+  <div>
+    <p class="rad">Världsmästare i att komma ihåg.</p>
+    <p class="vink" id="vink">Klicka på <b>sakerna</b> på skrivbordet</p>
+  </div>
+  <a class="klassisk" href="/">Förslag · klassisk version →</a>
+</footer>
+
+<div id="lapp" aria-hidden="true"></div>
+<div id="bubbla" aria-hidden="true">Hej! Jag heter Jonas.</div>
+
+<aside id="panel" role="dialog" aria-modal="false" aria-labelledby="panelrubrik">
+  <button class="stang" type="button" aria-label="Stäng">&#10005;</button>
+  <div id="panelinnehall"></div>
+</aside>
+
+<div id="laddar" aria-hidden="true">Tänder lampan</div>
+
+<div class="reserv" role="alert">
+  <div>
+    <p>Skrivbordet behöver WebGL, och det verkar inte finnas i den här webbläsaren.</p>
+    <a class="knapp" href="/">Till jonasvonessen.se</a>
+  </div>
+</div>
+
+<!-- innehållet i panelerna -->
+<template id="t-appar">
+  <p class="etikett">På laptopen · gratisappar</p>
+  <h2 id="panelrubrik">Saker jag byggt</h2>
+  <p class="ingress">Tre gratisappar där minnesknepen gör jobbet.</p>
+  <ul class="lista">
+    <li><a href="https://jonasgeografi.se" target="_blank" rel="noopener"><b>jonasgeografi.se ↗</b><span>Hela världen i dina händer. Med färgglada minnestekniker lär du dig all världens geografi lättare och roligare än någonsin.</span></a></li>
+    <li><a href="https://hpakuten.se" target="_blank" rel="noopener"><b>hpakuten.se ↗</b><span>Din genväg till ett högre resultat på högskoleprovet. Gratis, från Sveriges kanske mest rutinerade HP-skrivare.</span></a></li>
+    <li><a href="https://www.gångertabellen.se" target="_blank" rel="noopener"><b>gångertabellen.se ↗</b><span>Bemästra äntligen multiplikationstabellen. Med rätt knep är det bara sex tal kvar att memorera.</span></a></li>
+  </ul>
+</template>
+
+<template id="t-kurs">
+  <p class="etikett">Burken med minnen · kurs</p>
+  <h2 id="panelrubrik">Skaffa ett superminne!</h2>
+  <p class="ingress">Kanske världens mest omfattande onlinekurs i minnesteknik. Lär dig alla metoder Jonas använder helt i din egen takt och skaffa ditt alldeles egna superminne.</p>
+  <p class="liten">(Det enda på den här sidan som kostar något, men det är det helt klart värt.)</p>
+  <a class="knapp" href="https://kurs.jonasvonessen.se" target="_blank" rel="noopener">Spana in kursen</a>
+</template>
+
+<template id="t-videor">
+  <p class="etikett">På tv:n · videor</p>
+  <h2 id="panelrubrik">Tro dina ögon!</h2>
+  <ul class="lista">
+    <li><a href="https://www.youtube.com/watch?v=VTyU4WqDDYw" target="_blank" rel="noopener"><b>Testa minnestekniker ↗</b><span>Jonas visar sina förbluffande konster</span></a></li>
+    <li><a href="https://www.youtube.com/watch?v=A-oHL2JyIjY" target="_blank" rel="noopener"><b>Miljonfrågan ↗</b><span>Postkodmiljonären</span></a></li>
+    <li><a href="https://www.youtube.com/watch?v=WZwQ-zKBBaA" target="_blank" rel="noopener"><b>500 namn i Talang ↗</b><span>TV4</span></a></li>
+  </ul>
+  <p class="liten" style="margin-top:1.4rem">Håll dig uppdaterad:</p>
+  <div class="soc">
+    <a href="https://www.instagram.com/jonasvonessen/" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://www.tiktok.com/@jonasvonessen" target="_blank" rel="noopener">TikTok</a>
+    <a href="https://www.youtube.com/@BlueberryClubSparven" target="_blank" rel="noopener">YouTube</a>
+  </div>
+</template>
+
+<template id="t-nyhetsbrev">
+  <p class="etikett">Pappersplanet · nyhetsbrev</p>
+  <h2 id="panelrubrik">Ett ovanligt minnesvärt nyhetsbrev</h2>
+  <form class="brev" id="nbrev" action="https://jonasvonessen.us3.list-manage.com/subscribe/post" method="post">
+    <input type="hidden" name="u" value="f3c6c9c6a1fa3f7def382e372">
+    <input type="hidden" name="id" value="cb5e0cbcc0">
+    <label for="nb-epost">Din e-post</label>
+    <input id="nb-epost" name="EMAIL" type="email" autocomplete="email" required>
+    <div class="brevhp" aria-hidden="true"><input type="text" name="b_f3c6c9c6a1fa3f7def382e372_cb5e0cbcc0" tabindex="-1" value="" autocomplete="off"></div>
+    <button class="knapp" type="submit">Prenumerera</button>
+    <p class="svar" role="status" aria-live="polite"></p>
+  </form>
+</template>
+
+<template id="t-kontakt">
+  <p class="etikett">Kuvertet · kontakt</p>
+  <h2 id="panelrubrik">Säg hej!</h2>
+  <p class="ingress">Vill du boka en föreläsning för ett oförglömligt event? Eller har du något du funderar på? Skriv en rad eller två.</p>
+  <a class="knapp" href="mailto:info@jonasvonessen.se">info@jonasvonessen.se</a>
+  <a class="knapp knapp--lank" href="/#kontakt">Kontaktformuläret →</a>
+</template>
+
+<template id="t-agera">
+  <p class="etikett">Roboten · AI</p>
+  <h2 id="panelrubrik">Vad kan jag göra?</h2>
+  <p class="ingress">Är du orolig över AI-utvecklingen? Du är inte ensam. Tillsammans kan vi påverka och styra mot en ljusare framtid.</p>
+  <p>Jag har samlat några konkreta första steg: skriva till en politiker, skriva under uppropet, prata med tre personer och gå med i rörelsen.</p>
+  <a class="knapp" href="/agera/">Till stegen</a>
+</template>
+
+<template id="t-om">
+  <p class="etikett">Figuren · om Jonas</p>
+  <h2 id="panelrubrik">Världsmästare i att komma ihåg.</h2>
+  <ul class="meriter">
+    <li>Tvåfaldig världsmästare i minne</li>
+    <li>Femfaldig svensk mästare i pubquiz</li>
+    <li>Vinnare SM i Poetry Slam 2026</li>
+    <li>Göteborgsmästare i ordvitsar</li>
+  </ul>
+  <div class="soc">
+    <a href="https://www.instagram.com/jonasvonessen/" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://www.tiktok.com/@jonasvonessen" target="_blank" rel="noopener">TikTok</a>
+    <a href="https://www.youtube.com/@BlueberryClubSparven" target="_blank" rel="noopener">YouTube</a>
+  </div>
+</template>
+
+<script type="module" src="scen.js"></script>
+</body>
+</html>
