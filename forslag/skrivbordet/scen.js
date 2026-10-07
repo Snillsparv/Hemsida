@@ -1195,8 +1195,9 @@ function kopplaNyhetsbrev(form) {
     const klar = text => { clearTimeout(vakt); knapp.disabled = false; svar.textContent = text; s.remove(); window[cb] = () => {}; };
     const vakt = setTimeout(() => klar('Det tog för lång tid. Försök igen om en stund.'), 10000);
     window[cb] = res => {
-      if (res && res.result === 'success') return klar('Tack.');
+      if (res && res.result === 'success') return klar(/confirm|almost|bekr|nästan/i.test(res.msg || '') ? 'Tack! Kolla din inkorg och klicka på länken i mejlet för att bekräfta.' : 'Tack.');
       const msg = new DOMParser().parseFromString((res && res.msg) || '', 'text/html').body.textContent.replace(/^\d+\s*-\s*/, '');
+      if (/captcha|robot/i.test(msg)) { clearTimeout(vakt); return HTMLFormElement.prototype.submit.call(form); }   // Mailchimps egen sida visar captchan
       klar(/already subscribed/i.test(msg) ? 'Du prenumererar redan. Tack!' : (msg || 'Något gick fel. Kontrollera adressen och försök igen.'));
     };
     s.onerror = () => klar('Något gick fel. Kontrollera adressen och försök igen.');

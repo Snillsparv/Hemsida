@@ -333,7 +333,11 @@ Vänliga hälsningar
         if (window.statistik) window.statistik.handelse('brev_anmald', { lista: 'ai-brevet' });
         form.querySelector('.falt').style.display = 'none';
         form.querySelector('button').style.display = 'none';
+        if (/confirm|almost|bekr|nästan/i.test(svar.msg || ''))   /* dubbel opt-in */
+          form.querySelector('.brevtack').textContent = 'Tack! Kolla din inkorg och klicka på länken i mejlet för att bekräfta.';
         form.querySelector('.brevtack').style.display = 'block';
+      } else if (svar && /captcha|robot/i.test(svar.msg || '')) {
+        HTMLFormElement.prototype.submit.call(form);   /* kräver Mailchimp captcha: deras egen sida tar över */
       } else if (fel) {
         fel.textContent = 'Något gick fel. Kontrollera adressen och försök igen.';
       }

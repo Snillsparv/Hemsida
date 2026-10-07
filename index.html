@@ -1271,12 +1271,17 @@
       clearTimeout(nbTimer);
       if (resp && resp.result === 'success') {
         if (window.statistik) window.statistik.handelse('brev_anmald', { lista: 'nyhetsbrev' });
+        /* dubbel opt-in: Mailchimp ber besökaren bekräfta via mejl */
+        if (/confirm|almost|bekr|nästan/i.test(resp.msg || ''))
+          document.querySelector('#nbrev ~ .tack p').textContent = 'Tack! Kolla din inkorg och klicka på länken i mejlet för att bekräfta.';
         nbrev.classList.add('klar');
       } else {
         var d = document.createElement('div');
         d.innerHTML = (resp && resp.msg) || '';
-        nbrevFel((d.textContent || '').replace(/^\d+\s*-\s*/, '') ||
-                 'Något gick fel — prova igen om en stund.');
+        var nbTxt = (d.textContent || '').replace(/^\d+\s*-\s*/, '');
+        /* kräver Mailchimp captcha: låt deras egen sida ta hand om anmälan */
+        if (/captcha|robot/i.test(nbTxt)) { HTMLFormElement.prototype.submit.call(nbrev); return; }
+        nbrevFel(nbTxt || 'Något gick fel. Prova igen om en stund.');
       }
     };
     nbrev.addEventListener('submit', function(ev){
@@ -1295,10 +1300,10 @@
                '&EMAIL=' + encodeURIComponent(document.getElementById('nb-epost').value);
       sc.onerror = function(){
         clearTimeout(nbTimer);
-        nbrevFel('Kunde inte n\u00e5 Mailchimp \u2014 prova igen om en stund.');
+        nbrevFel('Kunde inte n\u00e5 Mailchimp. Prova igen om en stund.');
       };
       nbTimer = setTimeout(function(){
-        nbrevFel('Det tog f\u00f6r l\u00e5ng tid \u2014 prova igen om en stund.');
+        nbrevFel('Det tog f\u00f6r l\u00e5ng tid. Prova igen om en stund.');
       }, 10000);
       document.head.appendChild(sc);
     });
