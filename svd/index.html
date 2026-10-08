@@ -31,6 +31,7 @@
     --ockra:#6b5000;
     --ockra-tunn:rgba(107,80,0,.38);
     --sans:'Space Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;
+    --brod:'Space Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;
     --mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;
     --serif:'Fraunces',Georgia,'Times New Roman',serif;
     --sida:clamp(1rem,4.5vw,2.25rem);
@@ -39,13 +40,13 @@
   html{-webkit-text-size-adjust:100%;text-size-adjust:100%;background:var(--natt)}
   body{
     margin:0;background:var(--natt);color:var(--blck);
-    font-family:var(--sans);font-weight:400;font-size:1.125rem;line-height:1.6;
+    font-family:var(--brod);font-weight:400;font-size:1.125rem;line-height:1.6;
     -webkit-font-smoothing:antialiased;overflow-wrap:break-word;
   }
   @media (min-width:40em){ body{font-size:1.25rem} }
   img{display:block;max-width:100%;height:auto}
   p{margin:0 0 1em}
-  h1,h2,h3{margin:0;font-weight:500;line-height:1.15;text-wrap:balance}
+  h1,h2,h3{margin:0;font-family:var(--sans);font-weight:500;line-height:1.15;text-wrap:balance}
   a{color:inherit;text-decoration-thickness:1.5px;text-underline-offset:.2em}
   a:hover{text-decoration-thickness:2.5px}
   ::selection{background:var(--gul);color:var(--svart)}
@@ -106,7 +107,7 @@
   @media (min-width:60em){
     .hero-grid{grid-template-columns:minmax(0,1fr) minmax(0,19rem);gap:3.5rem;align-items:start}
     .hero-bild{display:block;margin-top:2.75rem}
-    .hero-bild img{border:2px solid var(--svart)}
+    .hero-bild img{border:2px solid var(--svart);aspect-ratio:1/1;object-fit:cover;object-position:50% 100%}
   }
   h1{font-size:clamp(2.5rem,1.5rem + 4.2vw,3.75rem);line-height:1.04;letter-spacing:.01em;margin:0 0 .8rem}
   .ingress{font-family:var(--serif);font-size:1.1875rem;line-height:1.5;max-width:34rem;margin:0}
@@ -115,7 +116,7 @@
   .kupong{background:var(--vit);border:2px solid var(--svart);padding:1rem .875rem 1.15rem;max-width:36rem;margin-top:1.25rem}
   @media (min-width:40em){ .kupong{padding:1.5rem 1.6rem} }
   .erbjudande{margin:0 0 1rem;line-height:1.35}
-  .erbjudande strong{display:block;font-size:1.875rem;font-weight:700;line-height:1.1}
+  .erbjudande strong{display:block;font-family:var(--sans);font-size:1.875rem;font-weight:700;line-height:1.1}
   .steg{list-style:none;margin:0;padding:0}
   .steg>li{margin:0 0 1rem}
   .steg>li:last-child{margin-bottom:0}
@@ -157,7 +158,7 @@
   /* om Jonas: natt */
   .om-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:2rem;align-items:center}
   .om-bild{margin:0}
-  .om-bild img{width:100%;aspect-ratio:4/3;object-fit:cover;object-position:50% 18%}
+  .om-bild img{width:100%;aspect-ratio:4/3;object-fit:cover;object-position:50% 52%}
   .om-bild figcaption{margin:.9rem 0 0}
   .lasbar p:last-child{margin-bottom:0}
   @media (min-width:56em){
@@ -200,11 +201,12 @@
   .gava{display:grid;grid-template-columns:minmax(0,1fr);gap:2rem;align-items:center;padding:clamp(1.5rem,5vw,3rem);border:2px solid var(--svart);background:var(--papper-ljus)}
   .gava h2{margin-bottom:1rem}
   .gava .knapp{margin-top:.6rem}
-  .gava-bild{display:none;margin:0}
+  .gava-bild{margin:0;order:-1}
+  .gava-bild img{width:13rem;border:2px solid var(--svart)}
   @media (min-width:56em){
     .gava{grid-template-columns:minmax(0,1fr) minmax(0,17rem);column-gap:3.5rem}
-    .gava-bild{display:block}
-    .gava-bild img{border:2px solid var(--svart)}
+    .gava-bild{order:0}
+    .gava-bild img{width:100%}
   }
 
   /* frågor och svar */
@@ -289,7 +291,7 @@
         </div>
 
         <figure class="hero-bild">
-          <img src="/assets/img/foto-siffervagg-md.webp" srcset="/assets/img/foto-siffervagg-md.webp 580w, /assets/img/foto-siffervagg.webp 1160w" sizes="19rem" width="580" height="800" alt="Jonas von Essen ler framför en vägg täckt av handskrivna pi-decimaler" loading="lazy">
+          <img src="/assets/img/foto-knut-rod-md.webp" srcset="/assets/img/foto-knut-rod-md.webp 611w, /assets/img/foto-knut-rod.webp 1223w" sizes="19rem" width="611" height="800" alt="Jonas von Essen med ett snöre knutet i rosett runt pekfingret, mot röd bakgrund" loading="lazy">
         </figure>
       </div>
     </div>
@@ -299,7 +301,10 @@
   <section class="natt sektion" aria-labelledby="om-rubrik">
     <div class="wrap om-grid">
       <figure class="om-bild">
-        <img src="/assets/img/jonas_vm-md.webp" width="700" height="700" alt="Jonas von Essen med VM-pokalen, insvept i en svensk flagga" loading="lazy">
+        <picture>
+          <source media="(max-width:59.99em)" srcset="/assets/img/foto-knut-rod-md.webp 611w, /assets/img/foto-knut-rod.webp 1223w" sizes="100vw" width="611" height="800">
+          <img src="/assets/img/jonas_vm-md.webp" width="700" height="700" alt="Jonas von Essen" loading="lazy">
+        </picture>
       </figure>
       <div class="lasbar">
         <p class="etikett">Om Jonas</p>
@@ -399,7 +404,7 @@
             <a class="knapp knapp--ram knapp--bred" href="https://kurs.jonasvonessen.se/cart?add-to-cart=7185" data-presentkort="presentkort">Beställ ett presentkort</a>
           </div>
           <figure class="gava-bild">
-            <img src="/assets/img/jonas_knut-md.webp" width="700" height="700" alt="Jonas von Essen med ett snöre knutet i rosett runt pekfingret" loading="lazy">
+            <img src="/assets/img/present-hjarna-md.webp" srcset="/assets/img/present-hjarna-md.webp 640w, /assets/img/present-hjarna.webp 1200w" sizes="(min-width:56em) 17rem, 13rem" width="640" height="640" alt="En hand håller upp en röd hjärna med ett guldband knutet runt sig som ett presentsnöre" loading="lazy">
           </figure>
         </div>
       </div>
@@ -417,7 +422,7 @@
         <dl class="faq">
           <div>
             <dt>Vad kostar kursen?</dt>
-            <dd>Priset står på kurs.jonasvonessen.se. När du skriver in <span class="kodord">SVDACCENT</span> i kassan dras 10&nbsp;% av. Du betalar en gång och har kursen för alltid.</dd>
+            <dd>Kursen kostar 1&nbsp;100&nbsp;kr, men med rabattkoden <span class="kodord">SVDACCENT</span> betalar du bara 990&nbsp;kr. Du betalar en gång och har kursen för alltid.</dd>
           </div>
           <div>
             <dt>Var skriver jag in rabattkoden?</dt>
