@@ -1170,8 +1170,11 @@ const visare = {};
 scen.add(klocka);
 sak('klocka', klocka, { etikett: 'Klockan', under: () => dagMal ? 'Klicka så blir det natt' : 'Klicka så blir det dag', panel: null, yta: new T.BoxGeometry(2.1, 2.1, 0.5), ytaPos: new T.Vector3(0, 1.0, 0) });
 
-// lapp med pi på fönsterrutan
-scen.add(nat(new T.PlaneGeometry(1.05, 1.05), std('#ffffff', { map: lappTextur('#f4a7c0', ['π = 3,14159', '26535 89793', '23846 26433…'], 34, 0.02), roughness: 0.85 }), { x: -1.55, y: 3.7, z: -4.66, rz: 0.06, kasta: false }));
+// kom-ihåg-lappen på fönsterrutan → AI-podden
+const podd = grupp({ x: -1.55, y: 3.7, z: -4.66, rz: 0.06 });
+podd.add(nat(new T.PlaneGeometry(1.05, 1.05), std('#ffffff', { map: lappTextur('#f4a7c0', ['KOM IHÅG:', 'SPELA IN', 'AI-PODD!'], 46, 0.03), roughness: 0.85 }), { kasta: false }));
+scen.add(podd);
+sak('podd', podd, { etikett: 'AI-podden', under: 'AI med Jonas och Benjamin', panel: 'podd', yta: new T.BoxGeometry(1.15, 1.15, 0.2), ytaPos: new T.Vector3(0, 0, 0.05) });
 
 /* ————— natt och dag: klockan vrider på dygnet ————— */
 let dagMal = DAG_FRAN_START ? 1 : 0, dagNiva = dagMal;
