@@ -785,6 +785,7 @@ const dagsljus = new T.DirectionalLight('#fff4e6', 0);          // dagsljus frå
 dagsljus.position.set(3, 9, 12);
 scen.add(dagsljus);
 const LAMP_SPOT = 140, LAMP_FYLL = 10, LAMP_GLOB = 1.5;
+const LAMPA_VARM = new T.Color('#ffd59a'), LAMPA_DAG = new T.Color('#e6ebf0');
 let lampNiva = direkt ? 1 : 0;
 function satLampa(n) {
   spot.intensity = LAMP_SPOT * n; lampFyll.intensity = LAMP_FYLL * n; lampMat.emissiveIntensity = LAMP_GLOB * n;
@@ -882,7 +883,7 @@ let jordklot;
   const massing = std('#c9a24a', { metalness: 0.85, roughness: 0.3 });
   glob.add(nat(new T.CylinderGeometry(0.3, 0.36, 0.08, 40), tra, { y: 0.04 }));
   glob.add(nat(new T.CylinderGeometry(0.035, 0.05, 0.28, 16), tra, { y: 0.22 }));
-  const axel = grupp({ y: 0.82, rz: 0.41 });                      // jordaxelns lutning
+  const axel = grupp({ x: -0.2, y: 0.82, rz: 0.41 });             // jordaxelns lutning; bågens nedre ände vilar på pelaren
   jordklot = nat(new T.SphereGeometry(0.42, 48, 32), std('#ffffff', { map: globTextur(globBild), roughness: 0.5 }));
   jordklot.rotation.y = -1.2;                                     // Europa och Afrika mot kameran
   axel.add(jordklot);
@@ -892,6 +893,7 @@ let jordklot;
   skugga(glob, 1.3, 1.3, 0, 0, 0.5)
 }
 scen.add(glob);
+if (!globBild) globBildLaddas.then(b => { if (b) { const gammal = jordklot.material.map; jordklot.material.map = globTextur(b); jordklot.material.needsUpdate = true; gammal.dispose(); } });
 sak('geografi', glob, { etikett: 'Geografi', under: 'Hela världen i dina händer', panel: 'geografi', yta: new T.SphereGeometry(0.62, 12, 8), ytaPos: new T.Vector3(0, 0.75, 0) });
 
 // figuren av Jonas → om Jonas
@@ -959,7 +961,7 @@ const jonasDelar = {};
     oga.add(nat(new T.SphereGeometry(0.012, 8, 6), glans, { x: sx * 0.012 + 0.006, y: 0.016, z: 0.05, kasta: false }));
     huvud.add(oga); (jonasDelar.ogon ||= []).push(oga);
     huvud.add(nat(new T.CapsuleGeometry(0.017, 0.09, 4, 8), har, { x: sx * 0.15, y: 0.165, z: 0.375, rz: Math.PI / 2 - sx * 0.16, kasta: false }));   // vänliga ögonbryn, höjda inåt
-    huvud.add(nat(new T.SphereGeometry(0.06, 12, 8), new T.MeshStandardMaterial({ color: '#f29a8c', transparent: true, opacity: 0.45, roughness: 0.8 }), { x: sx * 0.25, y: -0.1, z: 0.32, s: [1, 0.6, 0.4], kasta: false }));   // rosiga kinder
+    huvud.add(nat(new T.SphereGeometry(0.06, 12, 8), new T.MeshStandardMaterial({ color: '#f29a8c', transparent: true, opacity: 0.55, roughness: 0.8 }), { x: sx * 0.22, y: -0.1, z: 0.30, s: [0.8, 0.6, 0.4], kasta: false }));   // rosiga kinder
   }
   huvud.add(nat(new T.SphereGeometry(0.055, 14, 10), std('#e8b28a'), { y: -0.05, z: 0.42, kasta: false }));
   {                                                                // brett leende som följer ansiktets rundning
@@ -1019,7 +1021,7 @@ const robotDelar = {};
   skugga(robot, 1.9, 1.6, 0, 0, 0.7)
 }
 scen.add(robot);
-sak('agera', robot, { etikett: 'Agera', under: 'Vad kan jag göra åt AI?', panel: 'agera', yta: new T.BoxGeometry(1.7, 2.6, 1.3), ytaPos: new T.Vector3(0, 1.2, 0) });
+sak('agera', robot, { etikett: 'Agera', under: 'Vad kan jag göra åt AI?', panel: 'agera', yta: new T.BoxGeometry(1.7, 2.2, 1.3), ytaPos: new T.Vector3(0, 1.08, 0) });
 
 const Z = zTextur();
 const zz = [0, 1, 2].map(i => {
@@ -1130,7 +1132,7 @@ const pennor = grupp({ x: -6.5, y: 0, z: -2.95 });
   pennor.add(nat(new T.CylinderGeometry(0.44, 0.4, 1.05, 48, 1, true), std('#ffffff', { map: flaggMonster(), roughness: 0.45 }), { y: 0.525 }));
   pennor.add(nat(new T.CylinderGeometry(0.43, 0.39, 1.04, 48, 1, true), std('#132a5c', { side: T.BackSide, roughness: 0.6 }), { y: 0.525, kasta: false }));
   pennor.add(nat(new T.TorusGeometry(0.435, 0.014, 8, 48), std('#f4f1ea', { roughness: 0.5 }), { y: 1.05, rx: Math.PI / 2, kasta: false }));
-  pennor.add(nat(new T.CylinderGeometry(0.4, 0.4, 0.04, 32), std('#132a5c'), { y: 0.02 }));
+  pennor.add(nat(new T.CylinderGeometry(0.4, 0.4, 0.04, 48), std('#132a5c'), { y: 0.02 }));
   const r = slump(21);
   const farger = ['#f2c14e', '#e8833a', '#d64545', '#3f8f8a', '#4466aa', '#f2c14e', '#93d69a'];
   farger.forEach((f, i) => {
@@ -1175,12 +1177,25 @@ scen.add(nat(new T.PlaneGeometry(1.05, 1.05), std('#ffffff', { map: lappTextur('
 let dagMal = DAG_FRAN_START ? 1 : 0, dagNiva = dagMal;
 const NATT = { fonster: new T.Color(UTSIKT === 'villa' ? '#a4b8ff' : '#8ea3ff'), himmel: new T.Color('#2c3656'), mark: new T.Color('#2b1b10'), bak: new T.Color('#06070c') };
 const DAG = { fonster: new T.Color('#fff1dc'), himmel: new T.Color('#d8e8ff'), mark: new T.Color('#7a5638'), bak: new T.Color('#9cc6ec') };
-function byggDag() { if (!utsikt.dag) { utsikt.dag = byggUtsikt(true); satDag(dagNiva); } }
+function byggDag() {
+  if (utsikt.dag) return;
+  utsikt.dag = byggUtsikt(true);
+  for (const m of utsikt.dag) renderer.initTexture(m.material.map);   // ladda upp nu, inte mitt i övertoningen
+  satDag(dagNiva);
+}
+function dagLage() {                                              // adressen, utsiktslänkarna och knappen följer valet
+  const knapp = document.querySelector('.topp button[data-sak=klocka]');
+  if (knapp) knapp.setAttribute('aria-pressed', String(!!dagMal));
+  const andra = u => { dagMal ? u.searchParams.set('dag', '') : u.searchParams.delete('dag'); return u.pathname + u.search.replace(/=(&|$)/g, '$1'); };
+  document.querySelectorAll('[data-utsikt]').forEach(a => { a.setAttribute('href', andra(new URL(a.href))); });
+  history.replaceState(null, '', andra(new URL(location.href)));
+}
 function vaxlaDag() {
   byggDag();
   dagMal = dagMal ? 0 : 1;
-  if (reducerad) dagNiva = dagMal;
+  if (reducerad) { dagNiva = dagMal; satDag(dagNiva); }
   if (hovrad === 'klocka') lapp.innerHTML = 'Klockan<small>' + saker.get('klocka').under() + '</small>';
+  dagLage();
 }
 
 /* ————— efterbehandling: glöd, vinjett och lite filmkorn ————— */
@@ -1193,17 +1208,19 @@ function satDag(n) {                                              // 0 = natt, 1
   fonsterljus.color.copy(NATT.fonster).lerp(DAG.fonster, n); fonsterljus.intensity = 0.9 - n * 0.35;               // fönsterljuset speglas i bordet; på dagen lyser himlen i stället
   himmelLjus.color.copy(NATT.himmel).lerp(DAG.himmel, n); himmelLjus.groundColor.copy(NATT.mark).lerp(DAG.mark, n);
   himmelLjus.intensity = 0.16 + n * 0.75;
-  dagsljus.intensity = n * 0.85;
-  scen.environmentIntensity = 0.14;                              // mer miljöljus ger ett vitt sken i den blanka bordsskivan
+  dagsljus.intensity = n * 1.3;
+  vagg.material.color.copy(VAGG_NATT).lerp(VAGG_DAG, n);          // väggen under fönstret får dagsljus
   renderer.toneMappingExposure = 1 - n * 0.08;
   scen.background.copy(NATT.bak).lerp(DAG.bak, n);
   glod.strength = 0.5 - n * 0.3;
-  for (const m of utsikt.natt) { m.material.opacity = 1 - n; m.visible = n < 1; }
+  // natten ligger kvar täckande under och dagen tonas in ovanpå, så att utsikten aldrig blir halvgenomskinlig
+  for (const m of utsikt.natt) { m.material.opacity = 1; m.visible = n < 1 || !utsikt.dag; }
   if (utsikt.dag) for (const m of utsikt.dag) { m.material.opacity = n; m.visible = n > 0; }
 }
+const VAGG_NATT = new T.Color('#16151b'), VAGG_DAG = new T.Color('#4a4640');
 satDag(dagNiva);
-if (DAG_FRAN_START) byggDag();                                     // annars ritas dagen i lugn och ro efter starten
-else if ('requestIdleCallback' in window) requestIdleCallback(() => setTimeout(byggDag, 4000), { timeout: 8000 });
+if (DAG_FRAN_START) { byggDag(); dagLage(); }                     // annars ritas dagen i lugn och ro efter starten
+else { const ledig = window.requestIdleCallback || (f => setTimeout(f, 1)); setTimeout(() => ledig(byggDag, { timeout: 3000 }), 4000); }
 const vinjett = new T.ShaderPass({
   uniforms: { tDiffuse: { value: null }, tid: { value: 0 }, fokusY: { value: 0.42 }, oskarpa: { value: LAG ? 0 : 1 } },
   vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
@@ -1265,6 +1282,7 @@ function uppdateraKamera(dt) {
   let d = avstand;
   if (fokus && !reducerad) {
     mal.lerp(fokus, 0.6);
+    mal.x = T.MathUtils.lerp(VILA_MAL.x + panorering, fokus.x, PORTRATT() ? 1 : 0.85);
     d *= PORTRATT() ? 0.8 : 0.66;
     if (!PORTRATT() && innerWidth > 640) mal.x += d * 0.12;   // lämna plats åt panelen till höger
     if (innerWidth <= 640) mal.y -= 1.1;                       // och åt panelen nedtill på mobil
@@ -1289,6 +1307,7 @@ const bubbla = document.getElementById('bubbla');
 let hovrad = null, pekareRord = false, nav = null;
 function setHover(id, fran) {
   if (hovrad === id && fran !== 'nav') return;
+  if (id === 'klocka') byggDag();
   hovrad = id;
   document.querySelectorAll('.topp button[data-sak]').forEach(b => b.classList.toggle('lyst', b.dataset.sak === id));
   if (id) {
@@ -1316,7 +1335,7 @@ duk.addEventListener('pointermove', e => {
   if (ned && e.pointerId === ned.id && e.pointerType !== 'mouse') {
     const dx = e.clientX - ned.x;
     if (Math.abs(dx) > 6) ned.drog = true;
-    panMal = T.MathUtils.clamp(ned.pan - dx / innerWidth * 7, -4.2, 4.6);
+    panMal = T.MathUtils.clamp(ned.pan - dx / innerWidth * 7, -5.0, 4.6);
   }
 });
 duk.addEventListener('pointerdown', e => {
@@ -1427,7 +1446,9 @@ function bild(nu) {
     dagNiva += Math.sign(dagMal - dagNiva) * Math.min(Math.abs(dagMal - dagNiva), dt / 1.4);
     satDag(dagNiva);
   }
-  satLampa(lampNiva * (1 - 0.88 * dagNiva));                      // på dagen är lampan nästan släckt
+  satLampa(lampNiva * (1 - 0.8 * dagNiva));                       // på dagen är lampan nästan släckt
+  lampMat.emissive.copy(LAMPA_VARM).lerp(LAMPA_DAG, dagNiva);
+  lampMat.emissiveIntensity = Math.max(lampMat.emissiveIntensity, 0.55 * dagNiva);   // och klotet ser ut som opalglas
 
   // svävar och lyft för sakerna man pekar på
   for (const s of saker.values()) {
@@ -1508,7 +1529,7 @@ function bild(nu) {
   visare.tim.rotation.z = -tim / 12 * Math.PI * 2;
 
   // jordgloben snurrar sakta, fortare när man pekar på den
-  if (!reducerad || saker.get('geografi').lyft > 0.01) jordklot.rotation.y += dt * (0.12 + saker.get('geografi').lyft * 1.4);
+  if (!reducerad) jordklot.rotation.y += dt * (0.12 + saker.get('geografi').lyft * 1.4);
 
   // ånga, damm och bokeh
   anga.forEach(s => {
