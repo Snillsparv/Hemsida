@@ -135,7 +135,7 @@
 </head>
 <body>
 
-<canvas id="duk" role="img" aria-label="Ett skrivbord en sen kväll med en laptop, en glasburk med lysande minnen, en liten robot, en gammal tv, ett pappersplan, ett kuvert, en kortlek, en brittisk flagga och en liten figur av Jonas. Sakerna går att klicka på, och menyn ovanför leder till samma innehåll."></canvas>
+<canvas id="duk" role="img" aria-label="Ett skrivbord en sen kväll med en laptop, en glasburk med lysande minnen, en liten robot, en gammal tv, ett pappersplan, ett kuvert, en kortlek, en mugg med pi, en jordglob, en pennburk med brittisk flagga, en klocka som växlar mellan natt och dag och en liten figur av Jonas. Sakerna går att klicka på, och menyn ovanför leder till samma innehåll."></canvas>
 
 <header class="topp">
   <a class="namn" href="/">Jonas von Essen</a>
@@ -149,6 +149,9 @@
       <li><button type="button" class="dold-fokus" data-sak="nyhetsbrev">Nyhetsbrev</button></li>
       <li><button type="button" class="dold-fokus" data-sak="om">Om Jonas</button></li>
       <li><button type="button" class="dold-fokus" data-sak="kort">Vänd ett kort</button></li>
+      <li><button type="button" class="dold-fokus" data-sak="geografi">Geografi</button></li>
+      <li><button type="button" class="dold-fokus" data-sak="piafton">Piafton</button></li>
+      <li><button type="button" class="dold-fokus" data-sak="klocka">Växla natt och dag</button></li>
       <li><a href="/en/" lang="en" hreflang="en" aria-label="In English"><svg class="flagga" viewBox="0 0 60 30" aria-hidden="true" focusable="false"><rect width="60" height="30" fill="#012169"/><path d="M0,0 60,30 M60,0 0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 60,30 M60,0 0,30" stroke="#C8102E" stroke-width="3.6"/><path d="M30,0 V30 M0,15 H60" stroke="#fff" stroke-width="10"/><path d="M30,0 V30 M0,15 H60" stroke="#C8102E" stroke-width="6"/></svg></a></li>
     </ul>
   </nav>
@@ -270,6 +273,22 @@
     <a href="https://www.tiktok.com/@jonasvonessen" target="_blank" rel="noopener">TikTok</a>
     <a href="https://www.youtube.com/@BlueberryClubSparven" target="_blank" rel="noopener">YouTube</a>
   </div>
+</template>
+
+<template id="t-geografi">
+  <p class="etikett">Jordgloben · geografi</p>
+  <h2 id="panelrubrik">Hela världen i dina händer</h2>
+  <p class="ingress">Med färgglada minnestekniker lär du dig all världens geografi lättare och roligare än någonsin.</p>
+  <p>Varje land på globen är ett handritat konstverk som hjälper dig att minnas var det ligger. Gratis, i webbläsaren.</p>
+  <a class="knapp" href="https://jonasgeografi.se" target="_blank" rel="noopener">Till jonasgeografi.se ↗</a>
+</template>
+
+<template id="t-piafton">
+  <p class="etikett">Muggen · piafton</p>
+  <h2 id="panelrubrik">Piafton</h2>
+  <p class="ingress">Den 13 mars, kvällen före pidagen, är det piafton.</p>
+  <p>På piafton.se finns allt du behöver för att fira: runda semlor, pajer och pannkakor, högläsning ur Pibeln, pisalmer och lite flams och trams. Du kan också träna ditt pi-minne och se hur länge det är kvar till nästa piafton.</p>
+  <a class="knapp" href="https://www.piafton.se" target="_blank" rel="noopener">Till piafton.se ↗</a>
 </template>
 
 <script type="module" src="scen.js" onerror="document.documentElement.classList.add('ingen-webgl')"></script>

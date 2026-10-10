@@ -1,13 +1,14 @@
 /* Skrivbordet: jonasvonessen.se som ett leksaksaktigt skrivbord en sen kväll.
    Allt modelleras här av enkla former (rundade lådor, svarvade profiler) och
    allt mönster ritas på canvas, så det finns inga modellfiler att ladda.
-   ?direkt hoppar över intron. */
+   ?direkt hoppar över intron, ?utsikt=villa byter utsikt och ?dag börjar på dagen. */
 import * as T from './three.js';
 
 const param = new URLSearchParams(location.search);
 const reducerad = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const direkt = reducerad || param.has('direkt');
 const UTSIKT = param.get('utsikt') === 'villa' ? 'villa' : 'stad';
+const DAG_FRAN_START = param.has('dag');
 const grov = matchMedia('(pointer: coarse)').matches;
 const LAG = grov || Math.min(innerWidth, innerHeight) < 600;
 const rot = document.documentElement;
@@ -130,14 +131,30 @@ function traTextur() {
   return textur(c);
 }
 
-function stadTextur() {
+function moln(g, r, antal, x0, x1, y0, y1, storlek) {      // mjuka stackmoln av överlappande ellipser
+  for (let i = 0; i < antal; i++) {
+    const cx = x0 + r() * (x1 - x0), cy = y0 + r() * (y1 - y0), b = storlek * (0.7 + r() * 0.9);
+    for (let j = 0; j < 7; j++) {
+      g.fillStyle = `rgba(255,255,255,${0.32 + r() * 0.3})`;
+      g.beginPath(); g.ellipse(cx + (r() - 0.5) * b * 2.2, cy + (r() - 0.5) * b * 0.35, b * (0.45 + r() * 0.5), b * (0.22 + r() * 0.22), 0, 0, 6.283); g.fill();
+    }
+  }
+}
+
+function stadTextur(dag = false) {
   const W = 2048, H = 512;
   const [c, g] = yta(W, H);
   const himmel = g.createLinearGradient(0, 0, 0, H);
-  himmel.addColorStop(0, '#04060d'); himmel.addColorStop(0.45, '#0b0e1d'); himmel.addColorStop(0.8, '#1d1630'); himmel.addColorStop(1, '#2a1d38');
+  if (dag) { himmel.addColorStop(0, '#4f8fd6'); himmel.addColorStop(0.45, '#86b8e8'); himmel.addColorStop(0.8, '#c3dbef'); himmel.addColorStop(1, '#e6eef2'); }
+  else { himmel.addColorStop(0, '#04060d'); himmel.addColorStop(0.45, '#0b0e1d'); himmel.addColorStop(0.8, '#1d1630'); himmel.addColorStop(1, '#2a1d38'); }
   g.fillStyle = himmel; g.fillRect(0, 0, W, H);
+  if (dag) moln(g, slump(404), 9, 0, W, H * 0.06, H * 0.36, 70);
   const r = slump(2026);
-  const lager = [
+  const lager = dag ? [
+    { farg: '#a9b6c6', fonster: '#8ea6c2', topp: [0.34, 0.58], bredd: [40, 110], n: 46, tand: 0.055, fs: [5, 7] },
+    { farg: '#8693a5', fonster: '#6f87a3', topp: [0.42, 0.7], bredd: [70, 150], n: 30, tand: 0.09, fs: [6, 9] },
+    { farg: '#5f6878', fonster: '#566c86', topp: [0.55, 0.82], bredd: [100, 200], n: 20, tand: 0.12, fs: [8, 11] },
+  ] : [
     { farg: '#1a1d2f', fonster: '#232742', topp: [0.34, 0.58], bredd: [40, 110], n: 46, tand: 0.055, fs: [5, 7] },
     { farg: '#11141f', fonster: '#181c2c', topp: [0.42, 0.7], bredd: [70, 150], n: 30, tand: 0.09, fs: [6, 9] },
     { farg: '#0a0c14', fonster: '#10131e', topp: [0.55, 0.82], bredd: [100, 200], n: 20, tand: 0.12, fs: [8, 11] },
@@ -154,9 +171,11 @@ function stadTextur() {
       const fs = L.fs[0] + r() * (L.fs[1] - L.fs[0]);
       for (let yy = top + 8; yy < H - 4; yy += fs * 2.1) {
         for (let xx = x + 6; xx < x + w - fs; xx += fs * 1.8) {
+          // samma slumpföljd natt och dag, så att husen står på samma ställen
           const tand = r() < L.tand;
-          g.fillStyle = tand ? ljus[(r() * ljus.length) | 0] : L.fonster;
-          g.globalAlpha = tand ? 0.75 + r() * 0.25 : 0.4;
+          const lampa = tand ? ljus[(r() * ljus.length) | 0] : null, styrka = tand ? 0.75 + r() * 0.25 : 0.4;
+          g.fillStyle = dag ? (tand ? '#dbe9f6' : L.fonster) : (lampa || L.fonster);
+          g.globalAlpha = dag ? (tand ? 0.7 : 0.6) : styrka;
           g.fillRect(xx, yy, fs, fs * 1.3);
         }
       }
@@ -164,6 +183,7 @@ function stadTextur() {
     }
   }
   oskarpt(c, 4);
+  if (dag) return textur(c);
   // bokeh: mjuka skivor med ljusare kant, som ur fokus genom en kameralins
   const farger = [[255, 214, 160], [255, 170, 200], [255, 240, 225], [180, 205, 255], [255, 196, 120]];
   for (let i = 0; i < 46; i++) {
@@ -202,25 +222,35 @@ function bokehPrick(g, x, y, rad, [cr, cg, cb], a) {
 }
 const VARM = ['#ffcc78', '#ffd99a', '#ffbf66', '#ffe3b0', '#ffcc78'];
 
-function villaHimmel() {
+function villaHimmel(dag = false) {
   const r = slump(77);
   return villaLager(120, 34, 6, 5, g => {
     const sky = g.createLinearGradient(0, 23, 0, -11);
-    sky.addColorStop(0, '#03060e'); sky.addColorStop(0.5, '#08112a'); sky.addColorStop(0.7, '#15203f');
-    sky.addColorStop(0.78, '#2d2a42'); sky.addColorStop(0.84, '#3d2e38'); sky.addColorStop(1, '#1c1620');
+    if (dag) {
+      sky.addColorStop(0, '#3f82d0'); sky.addColorStop(0.5, '#73aee6'); sky.addColorStop(0.72, '#a9cdee');
+      sky.addColorStop(0.84, '#d6e6f0'); sky.addColorStop(1, '#c9d9c2');
+    } else {
+      sky.addColorStop(0, '#03060e'); sky.addColorStop(0.5, '#08112a'); sky.addColorStop(0.7, '#15203f');
+      sky.addColorStop(0.78, '#2d2a42'); sky.addColorStop(0.84, '#3d2e38'); sky.addColorStop(1, '#1c1620');
+    }
     g.fillStyle = sky; g.fillRect(-60, -11, 120, 34);
-    g.fillStyle = '#070a11'; g.beginPath(); g.moveTo(-60, -11);         // skogsbrynet
+    if (dag) moln(g, slump(505), 14, -60, 60, 3, 17, 2.2);
+    g.fillStyle = dag ? '#4a6b45' : '#070a11'; g.beginPath(); g.moveTo(-60, -11);         // skogsbrynet
     for (let x = -60; x <= 60; x += 0.3) {
       const y = -2.4 + Math.sin(x * 0.07) * 1.0 + Math.sin(x * 0.29 + 1) * 0.35 + (r() - 0.5) * 0.45 + (r() < 0.08 ? 0.5 : 0);
       g.lineTo(x, y);
     }
     g.lineTo(60, -11); g.closePath(); g.fill();
-    for (let i = 0; i < 46; i++) {                                    // avlägsna gårdar i brynet
-      g.fillStyle = VARM[(r() * VARM.length) | 0]; g.globalAlpha = 0.45 + r() * 0.45;
+    const GARD = ['#9b3a32', '#e8e2d6', '#c9a557', '#9b3a32', '#e8e2d6'];
+    for (let i = 0; i < 46; i++) {                                    // avlägsna gårdar i brynet: ljus på natten, hus på dagen
+      const f = (r() * VARM.length) | 0;
+      g.fillStyle = dag ? GARD[f] : VARM[f]; g.globalAlpha = dag ? 0.85 : 0.45 + r() * 0.45;
+      if (dag) r();
       g.fillRect(-58 + r() * 116, -6.5 + r() * 3.4, 0.12 + r() * 0.12, 0.1 + r() * 0.08);
     }
     g.globalAlpha = 1;
   }, g => {
+    if (dag) return;
     for (let i = 0; i < 190; i++) {                                   // stjärnor
       g.fillStyle = `rgba(235,240,255,${0.2 + r() * 0.65})`;
       g.beginPath(); g.arc(-60 + r() * 120, 0.5 + r() * 22, 0.025 + r() * 0.05, 0, 6.283); g.fill();
@@ -237,14 +267,17 @@ function villaHimmel() {
   });
 }
 
-function villaHus() {
+function villaHus(dag = false) {
   const r = slump(314159);
   const lampor = [];
+  // färger: [natt, dag]
+  const F = (natt, d) => dag ? d : natt;
   const tex = villaLager(90, 16, -1, 4, g => {
     for (let x = -45; x < 45; x += 1.2 + r() * 2.0) {                 // trädkronor bakom husen
-      g.fillStyle = r() < 0.5 ? '#0a100f' : '#0c1212';
+      g.fillStyle = r() < 0.5 ? F('#0a100f', '#3f6b3b') : F('#0c1212', '#4f7d46');
       if (r() < 0.35) {
         const h = 2.6 + r() * 2.2, b = 1.0 + r() * 0.7, y0 = -1.3;
+        if (dag) g.fillStyle = '#2f5532';
         g.beginPath(); g.moveTo(x - b, y0); g.lineTo(x, y0 + h); g.lineTo(x + b, y0); g.closePath(); g.fill();
       } else {
         g.beginPath(); g.ellipse(x, 0 + r() * 1.5, 1.2 + r() * 1.1, 1.3 + r() * 1.0, 0, 0, 6.283); g.fill();
@@ -252,66 +285,77 @@ function villaHus() {
     }
     const hus = (x, bas, k, fasader, andelTand) => {                  // k skalar huset, bakre raden är mindre
       const b = (3.4 + r() * 2.6) * k, h = (2.1 + r() * 1.2) * k, tak = (1.1 + r() * 1.0) * k, valm = r() < 0.3;
-      if (r() < 0.35) { g.fillStyle = '#1b1e26'; g.fillRect(x + b, bas, 1.9 * k, 1.5 * k); }   // garage
+      if (r() < 0.35) { g.fillStyle = F('#1b1e26', '#8d8f94'); g.fillRect(x + b, bas, 1.9 * k, 1.5 * k); }   // garage
       g.fillStyle = fasader[(r() * fasader.length) | 0]; g.fillRect(x, bas, b, h);
       const takform = () => {
         g.beginPath(); g.moveTo(x - 0.35 * k, bas + h);
         if (valm) { g.lineTo(x + b * 0.3, bas + h + tak * 0.8); g.lineTo(x + b * 0.7, bas + h + tak * 0.8); } else g.lineTo(x + b / 2, bas + h + tak);
         g.lineTo(x + b + 0.35 * k, bas + h);
       };
-      g.fillStyle = '#151924'; takform(); g.closePath(); g.fill();
+      g.fillStyle = F('#151924', '#3b3c44'); takform(); g.closePath(); g.fill();
       if (r() < 0.6) g.fillRect(x + b * 0.64, bas + h + tak * 0.3, 0.32 * k, tak * 0.72);   // skorsten
-      g.strokeStyle = 'rgba(120,135,175,0.55)'; g.lineWidth = 0.09 * k; takform(); g.stroke();   // månsken på takfoten
+      g.strokeStyle = F('rgba(120,135,175,0.55)', 'rgba(255,255,255,0.4)'); g.lineWidth = 0.09 * k; takform(); g.stroke();   // månsken eller sol på takfoten
       const rader = h > 2.75 * k ? 2 : 1, kol = b > 4.6 * k ? 3 : 2;
       for (let ri = 0; ri < rader; ri++) for (let ki = 0; ki < kol; ki++) {
         const fx = x + (ki + 0.5) * (b / kol) - 0.3 * k, fy = bas + (0.55 + ri * 1.25) * k;
         const tand = r() < andelTand;
-        g.fillStyle = tand ? (r() < 0.12 ? '#9fb8ff' : VARM[(r() * VARM.length) | 0]) : '#252a3a';
+        const lampa = tand ? (r() < 0.12 ? '#9fb8ff' : VARM[(r() * VARM.length) | 0]) : null;
+        if (dag) {                                                    // vit karm och glas som speglar himlen
+          g.fillStyle = '#f2efe8'; g.fillRect(fx - 0.05 * k, fy - 0.05 * k, 0.7 * k, 0.76 * k);
+          g.fillStyle = '#5f7f9f'; g.fillRect(fx, fy, 0.6 * k, 0.66 * k);
+          g.fillStyle = '#f2efe8'; g.fillRect(fx + 0.28 * k, fy, 0.04 * k, 0.66 * k); g.fillRect(fx, fy + 0.31 * k, 0.6 * k, 0.04 * k);
+          continue;
+        }
+        g.fillStyle = lampa || '#252a3a';
         g.globalAlpha = tand ? 0.95 : 0.55;
         g.fillRect(fx, fy, 0.6 * k, 0.66 * k);
         if (tand) { g.fillStyle = 'rgba(20,16,12,0.55)'; g.fillRect(fx + 0.28 * k, fy, 0.04 * k, 0.66 * k); g.fillRect(fx, fy + 0.31 * k, 0.6 * k, 0.04 * k); }
         g.globalAlpha = 1;
       }
       if (!valm && r() < 0.5) {                                       // runt vindsfönster
-        g.fillStyle = r() < 0.5 ? VARM[(r() * VARM.length) | 0] : '#252a3a';
+        const lyser = r() < 0.5, lampa = lyser ? VARM[(r() * VARM.length) | 0] : '#252a3a';
+        g.fillStyle = dag ? '#5f7f9f' : lampa;
         g.beginPath(); g.arc(x + b / 2, bas + h + tak * 0.38, 0.22 * k, 0, 6.283); g.fill();
       }
       const dx = x + b * (0.2 + r() * 0.15);                          // dörr och verandalampa
-      g.fillStyle = '#0e0f14'; g.fillRect(dx, bas, 0.55 * k, 1.05 * k);
+      g.fillStyle = F('#0e0f14', '#5a3b2a'); g.fillRect(dx, bas, 0.55 * k, 1.05 * k);
       if (r() < 0.75) lampor.push({ x: dx + 0.27 * k, y: bas + 1.25 * k, rad: (0.22 + r() * 0.12) * k, rgb: [255, 205, 140], a: 0.75 });
       return b;
     };
-    for (let x = -45 + r() * 2; x < 45;) x += hus(x, -1.75 + r() * 0.2, 0.62, ['#1d1a20', '#1a1d26', '#201c1c', '#1c2024'], 0.4) + 0.8 + r() * 1.8;
-    g.fillStyle = '#0a0d10';                                          // buskar framför bakre raden
+    for (let x = -45 + r() * 2; x < 45;) x += hus(x, -1.75 + r() * 0.2, 0.62, F(['#1d1a20', '#1a1d26', '#201c1c', '#1c2024'], ['#9a6f66', '#b9b08e', '#cfcdc6', '#8f9eaf']), 0.4) + 0.8 + r() * 1.8;
+    g.fillStyle = F('#0a0d10', '#3a6136');                            // buskar framför bakre raden
     for (let hx = -45; hx < 45; hx += 0.9 + r() * 1.0) { g.beginPath(); g.ellipse(hx, -1.8, 0.7 + r() * 0.5, 0.3 + r() * 0.18, 0, 0, 6.283); g.fill(); }
-    // främre raden: falurött, gult, vitt, blågrått och grönt, nedtonat av natten
-    for (let x = -45 + r() * 2; x < 45;) x += hus(x, -3.3 + r() * 0.3, 1, ['#3a2224', '#38321f', '#353843', '#272d3b', '#26302b'], 0.48) + (r() < 0.35 ? 1.9 : 0) + 1.3 + r() * 2.2;
-    g.fillStyle = '#090c10';                                          // häckar och staket längs tomterna
+    // främre raden: falurött, gult, vitt, blågrått och grönt (nedtonat av natten)
+    for (let x = -45 + r() * 2; x < 45;) x += hus(x, -3.3 + r() * 0.3, 1, F(['#3a2224', '#38321f', '#353843', '#272d3b', '#26302b'], ['#a5463c', '#d8b65e', '#e6e1d6', '#7f95ab', '#86a184']), 0.48) + (r() < 0.35 ? 1.9 : 0) + 1.3 + r() * 2.2;
+    g.fillStyle = F('#090c10', '#2f5a30');                            // häckar och staket längs tomterna
     for (let hx = -45; hx < 45; hx += 1.1 + r() * 1.2) { g.beginPath(); g.ellipse(hx, -3.35, 0.9 + r() * 0.6, 0.32 + r() * 0.2, 0, 0, 6.283); g.fill(); }
     for (let lx = -40 + r() * 6; lx < 45; lx += 11 + r() * 5) {       // gatlyktor
-      g.fillStyle = '#0b0d12'; g.fillRect(lx, -6, 0.12, 5.2);
+      g.fillStyle = F('#0b0d12', '#55595f'); g.fillRect(lx, -6, 0.12, 5.2);
       lampor.push({ x: lx + 0.06, y: -0.75, rad: 0.45 + r() * 0.15, rgb: [255, 176, 90], a: 0.8 });
     }
-  }, g => { for (const l of lampor) bokehPrick(g, l.x, l.y, l.rad, l.rgb, l.a); });
+  }, g => { if (!dag) for (const l of lampor) bokehPrick(g, l.x, l.y, l.rad, l.rgb, l.a); });
   return tex;
 }
 
-function villaNara() {
+function villaNara(dag = false) {
   const r = slump(2718);
   return villaLager(62, 18, 1, 3, g => {
-    g.fillStyle = '#05080a';                                          // stor trädkrona till vänster
+    g.fillStyle = dag ? '#3b2c22' : '#05080a';                        // stor trädkrona till vänster
     g.fillRect(-17.6, -8, 0.5, 9);
+    if (dag) g.fillStyle = '#2e5530';
     for (let i = 0; i < 26; i++) {
       const a = r() * 6.283, d = r() * 3.4;
+      if (dag) g.fillStyle = i % 3 ? '#2e5530' : '#3d6a3a';
       g.beginPath(); g.ellipse(-17.2 + Math.cos(a) * d * 1.2, 4.2 + Math.sin(a) * d * 0.9, 1.3 + r() * 1.3, 1.1 + r() * 1.1, 0, 0, 6.283); g.fill();
     }
-    g.fillStyle = '#070a0b';                                          // häcktoppar precis ovanför fönsterbänken
+    g.fillStyle = dag ? '#294d2a' : '#070a0b';                        // häcktoppar precis ovanför fönsterbänken
     for (let hx = -31; hx < 31; hx += 0.9 + r() * 0.9) { g.beginPath(); g.ellipse(hx, -1.5 + r() * 0.35, 0.8 + r() * 0.5, 0.75 + r() * 0.3, 0, 0, 6.283); g.fill(); }
-    g.fillStyle = '#0a0c11';                                          // gatlykta till höger
+    g.fillStyle = dag ? '#4d5157' : '#0a0c11';                        // gatlykta till höger
     g.fillRect(12.4, -8, 0.22, 11.4);
     g.fillRect(11.3, 3.25, 1.3, 0.14);
     g.fillRect(11.05, 3.0, 0.55, 0.3);
   }, g => {
+    if (dag) return;
     const glod = g.createRadialGradient(11.32, 2.9, 0.1, 11.32, 2.9, 2.0);
     glod.addColorStop(0, 'rgba(255,170,80,0.2)'); glod.addColorStop(1, 'rgba(255,170,80,0)');
     g.fillStyle = glod; g.beginPath(); g.arc(11.32, 2.9, 2.0, 0, 6.283); g.fill();
@@ -499,24 +543,46 @@ function urTextur() {
   return textur(c);
 }
 
-function rutigTextur() {
-  const [c, g] = yta(256, 256);
-  g.fillStyle = '#f4efe6'; g.fillRect(0, 0, 256, 256);
-  const n = 10, s = 256 / n;
-  for (let i = 0; i < n; i++) {
-    g.fillStyle = 'rgba(204,48,52,0.55)'; g.fillRect(i * s, 0, s / 2, 256); g.fillRect(0, i * s, 256, s / 2);
+function flaggMonster() {                    // Union Jack två varv runt pennburken, en hel flagga mitt fram
+  const W = 1024, H = 416, B = W / 2;
+  const [c, g] = yta(W, H);
+  for (const x0 of [-B / 2, B / 2, B * 1.5]) {
+    g.save(); g.beginPath(); g.rect(x0, 0, B, H); g.clip();
+    g.fillStyle = '#012169'; g.fillRect(x0, 0, B, H);
+    g.lineCap = 'butt';
+    g.strokeStyle = '#fff'; g.lineWidth = H * 0.2; g.beginPath(); g.moveTo(x0, 0); g.lineTo(x0 + B, H); g.moveTo(x0 + B, 0); g.lineTo(x0, H); g.stroke();
+    g.strokeStyle = '#C8102E'; g.lineWidth = H * 0.07; g.beginPath(); g.moveTo(x0, 0); g.lineTo(x0 + B, H); g.moveTo(x0 + B, 0); g.lineTo(x0, H); g.stroke();
+    g.fillStyle = '#fff'; g.fillRect(x0 + B / 2 - H * 0.17, 0, H * 0.34, H); g.fillRect(x0, H / 2 - H * 0.17, B, H * 0.34);
+    g.fillStyle = '#C8102E'; g.fillRect(x0 + B / 2 - H * 0.1, 0, H * 0.2, H); g.fillRect(x0, H / 2 - H * 0.1, B, H * 0.2);
+    g.restore();
   }
   return textur(c);
 }
 
-function flaggTextur() {
-  const [c, g] = yta(240, 120);
-  g.fillStyle = '#012169'; g.fillRect(0, 0, 240, 120);
-  g.lineCap = 'butt';
-  g.strokeStyle = '#fff'; g.lineWidth = 24; g.beginPath(); g.moveTo(0, 0); g.lineTo(240, 120); g.moveTo(240, 0); g.lineTo(0, 120); g.stroke();
-  g.strokeStyle = '#C8102E'; g.lineWidth = 9; g.beginPath(); g.moveTo(0, 0); g.lineTo(240, 120); g.moveTo(240, 0); g.lineTo(0, 120); g.stroke();
-  g.fillStyle = '#fff'; g.fillRect(100, 0, 40, 120); g.fillRect(0, 40, 240, 40);
-  g.fillStyle = '#C8102E'; g.fillRect(108, 0, 24, 120); g.fillRect(0, 48, 240, 24);
+function strumpTextur(sort) {                // två olika strumpor: randig och prickig
+  const [c, g] = yta(128, 64);
+  if (sort === 'rand') {
+    for (let i = 0; i < 8; i++) { g.fillStyle = i % 2 ? '#2f8f8a' : '#f2c14e'; g.fillRect(0, i * 8, 128, 8); }
+  } else {
+    g.fillStyle = '#e8649a'; g.fillRect(0, 0, 128, 64);
+    g.fillStyle = '#fff4c2';
+    for (let y = 0; y < 4; y++) for (let x = 0; x < 8; x++) { g.beginPath(); g.arc(x * 16 + (y % 2) * 8 + 4, y * 16 + 8, 3.6, 0, 6.283); g.fill(); }
+  }
+  const t = textur(c); t.wrapS = t.wrapT = T.RepeatWrapping;
+  return t;
+}
+
+function globTextur(bild) {                  // jonasgeografis Mercator-karta omräknad rad för rad till en klotkarta
+  const W = LAG ? 1024 : 2048, H = W / 2;
+  const [c, g] = yta(W, H);
+  g.fillStyle = '#14304f'; g.fillRect(0, 0, W, H);
+  if (bild) {
+    for (let y = 0; y < H; y++) {
+      const lat = Math.max(-1.4835, Math.min(1.4835, (0.5 - (y + 0.5) / H) * Math.PI));
+      const v = 0.5 - Math.log(Math.tan(Math.PI / 4 + lat / 2)) / (2 * Math.PI);
+      g.drawImage(bild, 0, Math.min(bild.height - 1, Math.max(0, v * bild.height)), bild.width, 1, 0, y, W, 1);
+    }
+  }
   return textur(c);
 }
 
@@ -577,11 +643,13 @@ function zTextur() {
 
 /* ————— vänta in typsnitten innan något ritas med dem ————— */
 const bilderLaddas = Promise.all(['/assets/img/foto-siffervagg-md.webp', '/assets/img/jonas_pkm-md.webp', '/assets/img/foto-scen-md.webp'].map(laddaBild));
+const globBildLaddas = laddaBild('/assets/img/glob-textur.webp');
 await Promise.race([
   Promise.all(['700 64px Caveat', '500 20px "JetBrains Mono"', '600 20px "JetBrains Mono"'].map(f => document.fonts.load(f))),
   new Promise(r => setTimeout(r, 2500)),
 ]);
 const bilder = await Promise.race([bilderLaddas, new Promise(r => setTimeout(() => r([]), 3000))]);
+const globBild = await Promise.race([globBildLaddas, new Promise(r => setTimeout(() => r(null), 1500))]);
 
 /* ————— rummet ————— */
 const BORD_Y = 0;
@@ -600,24 +668,23 @@ scen.add(fonsterbank);
 scen.add(nat(new T.BoxGeometry(34, 0.24, 0.32), karmMat, { x: 0, y: 1.62, z: -4.5 }));
 for (const x of [-2.75, 5.0, -9.6, 10.4]) scen.add(nat(new T.BoxGeometry(0.3, 18, 0.36), karmMat, { x, y: 10.6, z: -4.5 }));
 
-if (UTSIKT === 'villa') {
-  for (const [tex, w, h, y, z, ljus, genom] of [
-    [villaHimmel(), 120, 34, 6, -62, 1.15, false],
-    [villaHus(), 90, 16, -1, -34, 1.35, true],
-    [villaNara(), 62, 18, 1, -17, 1.3, true],
-  ]) {
-    const m = new T.Mesh(new T.PlaneGeometry(w, h), new T.MeshBasicMaterial({ map: tex, transparent: genom, depthWrite: !genom }));
+// utsikten byggs i natt- och dagversion; dagen ritas först när någon vrider på klockan
+function byggUtsikt(dag) {
+  const ut = [];
+  const lagg = (tex, w, h, y, z, ljus, genom) => {
+    const m = new T.Mesh(new T.PlaneGeometry(w, h), new T.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: !genom }));
     m.material.color.setScalar(ljus);
     m.position.set(0.5, y, z);
-    scen.add(m);
-  }
-} else {
-  const stad = new T.Mesh(new T.PlaneGeometry(130, 32.5),
-    new T.MeshBasicMaterial({ map: stadTextur(), toneMapped: true }));
-  stad.material.color.setScalar(1.3);
-  stad.position.set(0.5, 4.2, -42);
-  scen.add(stad);
+    scen.add(m); ut.push(m);
+  };
+  if (UTSIKT === 'villa') {
+    lagg(villaHimmel(dag), 120, 34, 6, -62, dag ? 1.0 : 1.15, false);
+    lagg(villaHus(dag), 90, 16, -1, -34, dag ? 1.02 : 1.35, true);
+    lagg(villaNara(dag), 62, 18, 1, -17, dag ? 1.0 : 1.3, true);
+  } else lagg(stadTextur(dag), 130, 32.5, 4.2, -42, dag ? 1.0 : 1.3, false);
+  return ut;
 }
+const utsikt = { natt: byggUtsikt(false), dag: null };
 document.querySelectorAll('[data-utsikt]').forEach(a => { if (a.dataset.utsikt === UTSIKT) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); });
 
 const SKIVA = skivTextur(true), PRICK = skivTextur(false);
@@ -662,7 +729,11 @@ scen.add(lampFyll);
 const fonsterljus = new T.DirectionalLight(UTSIKT === 'villa' ? '#a4b8ff' : '#8ea3ff', 0.9);
 fonsterljus.position.set(-2, 1.2, -16);
 scen.add(fonsterljus);
-scen.add(new T.HemisphereLight('#2c3656', '#2b1b10', 0.16));
+const himmelLjus = new T.HemisphereLight('#2c3656', '#2b1b10', 0.16);
+scen.add(himmelLjus);
+const dagsljus = new T.DirectionalLight('#fff4e6', 0);          // dagsljus från rummet bakom kameran, utan skugga
+dagsljus.position.set(3, 9, 12);
+scen.add(dagsljus);
 const LAMP_SPOT = 140, LAMP_FYLL = 10, LAMP_GLOB = 1.5;
 let lampNiva = direkt ? 1 : 0;
 function satLampa(n) {
@@ -752,12 +823,25 @@ const minnen = [], rymlingar = [];
 scen.add(burk);
 sak('kurs', burk, { etikett: 'Kurs', under: 'Skaffa ett superminne!', panel: 'kurs', yta: new T.CylinderGeometry(0.85, 0.85, 2.3, 16), ytaPos: new T.Vector3(0, 1.1, 0) });
 
-// locket med rutigt tyg ligger bredvid, som på referensbilden
-const lock = grupp({ x: -3.0, y: 0, z: 1.75, ry: 0.4 });
-lock.add(nat(new T.CylinderGeometry(0.86, 0.86, 0.09, 48), std('#b9bcc4', { metalness: 0.7, roughness: 0.35 }), { y: 0.045 }));
-lock.add(nat(new T.CylinderGeometry(0.98, 0.94, 0.05, 48), [std('#c9373c', { roughness: 0.8 }), std('#ffffff', { map: rutigTextur(), roughness: 0.85 }), std('#ffffff', { map: rutigTextur() })], { y: 0.115 }));
-skugga(lock, 2.4, 2.4, 0, 0, 0.5)
-scen.add(lock);
+// en liten jordglob med jonasgeografis handritade länder → geografi
+const glob = grupp({ x: -3.0, y: 0, z: 1.75, ry: 0.4 });
+let jordklot;
+{
+  const tra = std('#4a3020', { roughness: 0.5 });
+  const massing = std('#c9a24a', { metalness: 0.85, roughness: 0.3 });
+  glob.add(nat(new T.CylinderGeometry(0.3, 0.36, 0.08, 40), tra, { y: 0.04 }));
+  glob.add(nat(new T.CylinderGeometry(0.035, 0.05, 0.28, 16), tra, { y: 0.22 }));
+  const axel = grupp({ y: 0.82, rz: 0.41 });                      // jordaxelns lutning
+  jordklot = nat(new T.SphereGeometry(0.42, 48, 32), std('#ffffff', { map: globTextur(globBild), roughness: 0.5 }));
+  jordklot.rotation.y = -1.2;                                     // Europa och Afrika mot kameran
+  axel.add(jordklot);
+  axel.add(nat(new T.TorusGeometry(0.5, 0.018, 8, 64, Math.PI), massing, { rz: Math.PI / 2 }));   // meridianbåge
+  for (const sy of [-1, 1]) axel.add(nat(new T.SphereGeometry(0.03, 12, 8), massing, { y: sy * 0.5, kasta: false }));
+  glob.add(axel);
+  skugga(glob, 1.3, 1.3, 0, 0, 0.5)
+}
+scen.add(glob);
+sak('geografi', glob, { etikett: 'Geografi', under: 'Hela världen i dina händer', panel: 'geografi', yta: new T.SphereGeometry(0.62, 12, 8), ytaPos: new T.Vector3(0, 0.75, 0) });
 
 // figuren av Jonas → om Jonas
 const jonas = grupp({ x: -1.45, y: 0, z: 0.35, ry: 0.55 });
@@ -767,16 +851,19 @@ const jonasDelar = {};
   const rod = std('#d8394a', { roughness: 0.72 });
   const marin = std('#2f3a5c', { roughness: 0.75 });
   const har = std('#6a4024', { roughness: 0.85 });
+  const strumpor = [strumpTextur('rand'), strumpTextur('prick')];
   for (const sx of [-1, 1]) {
     jonas.add(nat(lada(0.22, 0.13, 0.34, 0.05), std('#3b2a20'), { x: sx * 0.13, y: 0.065, z: 0.04 }));
-    jonas.add(nat(new T.CapsuleGeometry(0.095, 0.42, 6, 12), marin, { x: sx * 0.13, y: 0.43 }));
+    jonas.add(nat(new T.CylinderGeometry(0.09, 0.092, 0.2, 18), std('#ffffff', { map: strumpor[sx < 0 ? 0 : 1], roughness: 0.85 }), { x: sx * 0.13, y: 0.2 }));   // olika strumpor
+    jonas.add(nat(new T.CapsuleGeometry(0.095, 0.3, 6, 12), marin, { x: sx * 0.13, y: 0.5 }));
   }
   const kroppProfil = [[0, 0], [0.33, 0], [0.38, 0.09], [0.38, 0.7], [0.31, 0.86], [0.16, 0.93], [0, 0.94]].map(([x, y]) => new T.Vector2(x, y));
   jonas.add(nat(new T.LatheGeometry(kroppProfil, 40), rod, { y: 0.66 }));
   const armar = [];
   for (const sx of [-1, 1]) {
     const axel = grupp({ x: sx * 0.39, y: 1.46, rz: sx * 0.14 });
-    axel.add(nat(new T.CapsuleGeometry(0.085, 0.42, 6, 12), rod, { y: -0.3 }));
+    axel.add(nat(new T.CapsuleGeometry(0.095, 0.12, 6, 12), rod, { y: -0.1 }));     // kort t-shirtärm
+    axel.add(nat(new T.CapsuleGeometry(0.07, 0.38, 6, 12), hud, { y: -0.36 }));     // bar arm
     axel.add(nat(new T.SphereGeometry(0.095, 16, 12), hud, { y: -0.62 }));
     jonas.add(axel); armar.push(axel);
   }
@@ -787,18 +874,52 @@ const jonasDelar = {};
   const kalott = nat(new T.SphereGeometry(0.448, 40, 20, 0, Math.PI * 2, 0, 1.3), har, { rx: -0.32 });
   huvud.add(kalott);
   const r = slump(3);
-  for (let i = 0; i < 7; i++) {
-    const a = -1.1 + i * 0.37;
-    huvud.add(nat(new T.SphereGeometry(0.1 + r() * 0.05, 14, 10), har, { x: Math.sin(a) * 0.3, y: 0.32 + r() * 0.06, z: Math.cos(a) * 0.12 + 0.08 }));
+  {                                                                // vilt, rufsigt hår åt alla håll, men inte i ansiktet
+    const upp = new T.Vector3(0, 1, 0), n = new T.Vector3(), d = new T.Vector3();
+    const riktning = (az, pol) => n.set(Math.sin(pol) * Math.sin(az), Math.cos(pol), Math.sin(pol) * Math.cos(az));
+    const iAnsiktet = (az, pol) => Math.abs(az) < 0.85 && pol > 0.72;
+    for (let i = 0; i < 26; i++) {
+      const az = (r() * 2 - 1) * Math.PI, pol = 0.08 + r() * 1.12;
+      if (iAnsiktet(az, pol)) continue;
+      riktning(az, pol);
+      const t = nat(new T.SphereGeometry(0.085 + r() * 0.075, 14, 10), har);
+      t.position.copy(n).multiplyScalar(0.4 + r() * 0.05).add(d.set(0, 0.02, -0.02));
+      huvud.add(t);
+    }
+    for (let i = 0; i < 16; i++) {                                 // tofsar som spretar
+      const az = (r() * 2 - 1) * Math.PI, pol = 0.05 + r() * 1.0;
+      if (iAnsiktet(az, pol - 0.12)) continue;
+      riktning(az, pol);
+      d.set(r() - 0.5, r() - 0.5, r() - 0.5).multiplyScalar(0.7).add(n).normalize();
+      const l = 0.18 + r() * 0.17;
+      const t = nat(new T.ConeGeometry(0.05 + r() * 0.035, l, 8), har);
+      t.quaternion.setFromUnitVectors(upp, d);
+      t.position.copy(n).multiplyScalar(0.42).addScaledVector(d, l * 0.35).add(new T.Vector3(0, 0.02, -0.02));
+      huvud.add(t);
+    }
   }
+  const vitt = std('#fbf8f2', { roughness: 0.35 }), pupill = std('#2b211c', { roughness: 0.25 });
+  const glans = new T.MeshBasicMaterial({ color: '#ffffff' });
   for (const sx of [-1, 1]) {
     huvud.add(nat(new T.SphereGeometry(0.075, 14, 10), hud, { x: sx * 0.41, y: -0.02, s: [0.6, 1, 0.9] }));
-    const oga = nat(new T.SphereGeometry(0.046, 14, 10), std('#18171d', { roughness: 0.3 }), { x: sx * 0.14, y: 0.03, z: 0.385, kasta: false });
+    const oga = grupp({ x: sx * 0.14, y: 0.03, z: 0.37 });           // stora, mjuka ögon med glans
+    oga.add(nat(new T.SphereGeometry(0.068, 18, 12), vitt, { s: [1, 1.12, 0.55], kasta: false }));
+    oga.add(nat(new T.SphereGeometry(0.044, 16, 12), pupill, { y: -0.006, z: 0.024, s: [1, 1.08, 0.6], kasta: false }));
+    oga.add(nat(new T.SphereGeometry(0.012, 8, 6), glans, { x: sx * 0.012 + 0.006, y: 0.016, z: 0.05, kasta: false }));
     huvud.add(oga); (jonasDelar.ogon ||= []).push(oga);
-    huvud.add(nat(new T.CapsuleGeometry(0.018, 0.09, 4, 8), har, { x: sx * 0.145, y: 0.14, z: 0.38, rz: Math.PI / 2 + sx * 0.12, kasta: false }));
+    huvud.add(nat(new T.CapsuleGeometry(0.017, 0.09, 4, 8), har, { x: sx * 0.15, y: 0.165, z: 0.375, rz: Math.PI / 2 - sx * 0.16, kasta: false }));   // vänliga ögonbryn, höjda inåt
+    huvud.add(nat(new T.SphereGeometry(0.06, 12, 8), new T.MeshStandardMaterial({ color: '#f29a8c', transparent: true, opacity: 0.45, roughness: 0.8 }), { x: sx * 0.25, y: -0.1, z: 0.32, s: [1, 0.6, 0.4], kasta: false }));   // rosiga kinder
   }
   huvud.add(nat(new T.SphereGeometry(0.055, 14, 10), std('#e8b28a'), { y: -0.05, z: 0.42, kasta: false }));
-  huvud.add(nat(new T.TorusGeometry(0.085, 0.018, 8, 18, Math.PI), std('#7a2e2a'), { y: -0.14, z: 0.39, rz: Math.PI, kasta: false }));
+  {                                                                // brett leende som följer ansiktets rundning
+    const punkter = [];
+    for (let i = 0; i <= 12; i++) {
+      const t = i / 6 - 1, x = 0.155 * t, y = -0.13 - 0.065 * (1 - t * t);
+      const z = Math.sqrt(Math.max(0, 1 - (x / 0.42) ** 2 - (y / 0.428) ** 2)) * 0.403 + 0.01;
+      punkter.push(new T.Vector3(x, y, z));
+    }
+    huvud.add(nat(new T.TubeGeometry(new T.CatmullRomCurve3(punkter), 32, 0.019, 8), std('#7a2e2a'), { kasta: false }));
+  }
   jonas.add(huvud);
   jonasDelar.huvud = huvud;
   skugga(jonas, 1.1, 1.1, 0, 0.02, 0.7)
@@ -903,12 +1024,12 @@ sak('nyhetsbrev', plan, { etikett: 'Nyhetsbrev', under: 'Ett ovanligt minnesvär
 const kuvert = grupp({ x: 4.25, y: 0, z: 1.95, ry: -0.3 });
 {
   const papper = std('#efe4cd', { roughness: 0.85 });
-  kuvert.add(nat(new T.BoxGeometry(1.7, 0.05, 1.1), [papper, papper, std('#ffffff', { map: kuvertTextur(), roughness: 0.85 }), papper, papper, papper], { y: 0.025 }));
-  kuvert.add(nat(new T.CylinderGeometry(0.15, 0.16, 0.05, 24), std('#a8262c', { roughness: 0.45 }), { y: 0.07, z: 0.05 }));
+  kuvert.add(nat(new T.BoxGeometry(1.7, 0.014, 1.1), [papper, papper, std('#ffffff', { map: kuvertTextur(), roughness: 0.85 }), papper, papper, papper], { y: 0.007 }));
+  kuvert.add(nat(new T.CylinderGeometry(0.13, 0.135, 0.016, 28), std('#a8262c', { roughness: 0.45 }), { y: 0.022, z: 0.05 }));
   skugga(kuvert, 2.2, 1.6, 0, 0, 0.4)
 }
 scen.add(kuvert);
-sak('kontakt', kuvert, { etikett: 'Kontakt', under: 'Boka föreläsning eller säg hej', panel: 'kontakt', yta: new T.BoxGeometry(1.9, 0.5, 1.3), ytaPos: new T.Vector3(0, 0.15, 0) });
+sak('kontakt', kuvert, { etikett: 'Kontakt', under: 'Boka föreläsning eller säg hej', panel: 'kontakt', yta: new T.BoxGeometry(1.9, 0.4, 1.3), ytaPos: new T.Vector3(0, 0.1, 0) });
 
 // kortleken: en minnesmästares självklara verktyg
 const kort = grupp({ x: 1.95, y: 0, z: 1.95, ry: 0.22 });
@@ -946,12 +1067,15 @@ const anga = [];
   skugga(mugg, 1.7, 1.7, 0, 0, 0.6)
 }
 scen.add(mugg);
+sak('piafton', mugg, { etikett: 'Piafton', under: 'Kvällen före pidagen', panel: 'piafton', yta: new T.CylinderGeometry(0.75, 0.75, 1.5, 12), ytaPos: new T.Vector3(0.15, 0.7, 0) });
 
 // pennburken
 const pennor = grupp({ x: -6.5, y: 0, z: -2.95 });
 {
-  pennor.add(nat(new T.CylinderGeometry(0.44, 0.4, 1.05, 32, 1, true), std('#24272f', { roughness: 0.5, side: T.DoubleSide }), { y: 0.525 }));
-  pennor.add(nat(new T.CylinderGeometry(0.4, 0.4, 0.04, 32), std('#24272f'), { y: 0.02 }));
+  pennor.add(nat(new T.CylinderGeometry(0.44, 0.4, 1.05, 48, 1, true), std('#ffffff', { map: flaggMonster(), roughness: 0.45 }), { y: 0.525 }));
+  pennor.add(nat(new T.CylinderGeometry(0.43, 0.39, 1.04, 48, 1, true), std('#132a5c', { side: T.BackSide, roughness: 0.6 }), { y: 0.525, kasta: false }));
+  pennor.add(nat(new T.TorusGeometry(0.435, 0.014, 8, 48), std('#f4f1ea', { roughness: 0.5 }), { y: 1.05, rx: Math.PI / 2, kasta: false }));
+  pennor.add(nat(new T.CylinderGeometry(0.4, 0.4, 0.04, 32), std('#132a5c'), { y: 0.02 }));
   const r = slump(21);
   const farger = ['#f2c14e', '#e8833a', '#d64545', '#3f8f8a', '#4466aa', '#f2c14e', '#93d69a'];
   farger.forEach((f, i) => {
@@ -966,6 +1090,7 @@ const pennor = grupp({ x: -6.5, y: 0, z: -2.95 });
   skugga(pennor, 1.4, 1.4, 0, 0, 0.6)
 }
 scen.add(pennor);
+sak('en', pennor, { etikett: 'In English', under: 'jonasvonessen.se/en', panel: null, yta: new T.CylinderGeometry(0.55, 0.55, 2.2, 12), ytaPos: new T.Vector3(0, 1.0, 0) });
 
 // klockan på fönsterbänken visar riktig tid
 const klocka = grupp({ x: 3.15, y: 1.5, z: -4.05, ry: -0.18 });
@@ -986,23 +1111,22 @@ const visare = {};
   for (const sx of [-1, 1]) klocka.add(nat(new T.SphereGeometry(0.11, 12, 8), std('#c9a24a', { metalness: 0.8, roughness: 0.35 }), { x: sx * 0.5, y: 0.07 }));
 }
 scen.add(klocka);
-
-// flaggan på fönsterbänken → engelska
-const flagga = grupp({ x: -5.75, y: 1.5, z: -4.0, ry: 0.15 });
-let flaggDuk;
-{
-  flagga.add(nat(new T.CylinderGeometry(0.2, 0.22, 0.07, 24), std('#2a2a30', { metalness: 0.5 })));
-  flagga.add(nat(new T.CylinderGeometry(0.022, 0.022, 1.25, 8), std('#c9a24a', { metalness: 0.8, roughness: 0.3 }), { y: 0.62 }));
-  const geo = new T.PlaneGeometry(0.78, 0.44, 14, 6); geo.translate(0.39, 0, 0);
-  flaggDuk = nat(geo, std('#ffffff', { map: flaggTextur(), side: T.DoubleSide, roughness: 0.8 }), { y: 1.0 });
-  flaggDuk.userData.bas = geo.attributes.position.array.slice();
-  flagga.add(flaggDuk);
-}
-scen.add(flagga);
-sak('en', flagga, { etikett: 'In English', under: 'jonasvonessen.se/en', panel: null, yta: new T.BoxGeometry(1.0, 1.4, 0.4), ytaPos: new T.Vector3(0.35, 0.75, 0) });
+sak('klocka', klocka, { etikett: 'Klockan', under: () => dagMal ? 'Klicka så blir det natt' : 'Klicka så blir det dag', panel: null, yta: new T.BoxGeometry(2.1, 2.1, 0.5), ytaPos: new T.Vector3(0, 1.0, 0) });
 
 // lapp med pi på fönsterrutan
 scen.add(nat(new T.PlaneGeometry(1.05, 1.05), std('#ffffff', { map: lappTextur('#f4a7c0', ['π = 3,14159', '26535 89793', '23846 26433…'], 34, 0.02), roughness: 0.85 }), { x: -1.55, y: 3.7, z: -4.66, rz: 0.06, kasta: false }));
+
+/* ————— natt och dag: klockan vrider på dygnet ————— */
+let dagMal = DAG_FRAN_START ? 1 : 0, dagNiva = dagMal;
+const NATT = { fonster: new T.Color(UTSIKT === 'villa' ? '#a4b8ff' : '#8ea3ff'), himmel: new T.Color('#2c3656'), mark: new T.Color('#2b1b10'), bak: new T.Color('#06070c') };
+const DAG = { fonster: new T.Color('#fff1dc'), himmel: new T.Color('#d8e8ff'), mark: new T.Color('#7a5638'), bak: new T.Color('#9cc6ec') };
+function byggDag() { if (!utsikt.dag) { utsikt.dag = byggUtsikt(true); satDag(dagNiva); } }
+function vaxlaDag() {
+  byggDag();
+  dagMal = dagMal ? 0 : 1;
+  if (reducerad) dagNiva = dagMal;
+  if (hovrad === 'klocka') lapp.innerHTML = 'Klockan<small>' + saker.get('klocka').under() + '</small>';
+}
 
 /* ————— efterbehandling: glöd, vinjett och lite filmkorn ————— */
 const rt = new T.WebGLRenderTarget(1, 1, { type: T.HalfFloatType, samples: (LAG || renderer.getPixelRatio() >= 1.5) ? 0 : 4 });
@@ -1010,6 +1134,21 @@ const komp = new T.EffectComposer(renderer, rt);
 komp.addPass(new T.RenderPass(scen, kam));
 const glod = new T.UnrealBloomPass(new T.Vector2(512, 512), 0.5, 0.5, 0.9);
 komp.addPass(glod);
+function satDag(n) {                                              // 0 = natt, 1 = dag
+  fonsterljus.color.copy(NATT.fonster).lerp(DAG.fonster, n); fonsterljus.intensity = 0.9 - n * 0.35;               // fönsterljuset speglas i bordet; på dagen lyser himlen i stället
+  himmelLjus.color.copy(NATT.himmel).lerp(DAG.himmel, n); himmelLjus.groundColor.copy(NATT.mark).lerp(DAG.mark, n);
+  himmelLjus.intensity = 0.16 + n * 0.75;
+  dagsljus.intensity = n * 0.85;
+  scen.environmentIntensity = 0.14;                              // mer miljöljus ger ett vitt sken i den blanka bordsskivan
+  renderer.toneMappingExposure = 1 - n * 0.08;
+  scen.background.copy(NATT.bak).lerp(DAG.bak, n);
+  glod.strength = 0.5 - n * 0.3;
+  for (const m of utsikt.natt) { m.material.opacity = 1 - n; m.visible = n < 1; }
+  if (utsikt.dag) for (const m of utsikt.dag) { m.material.opacity = n; m.visible = n > 0; }
+}
+satDag(dagNiva);
+if (DAG_FRAN_START) byggDag();                                     // annars ritas dagen i lugn och ro efter starten
+else if ('requestIdleCallback' in window) requestIdleCallback(() => setTimeout(byggDag, 4000), { timeout: 8000 });
 const vinjett = new T.ShaderPass({
   uniforms: { tDiffuse: { value: null }, tid: { value: 0 }, fokusY: { value: 0.42 }, oskarpa: { value: LAG ? 0 : 1 } },
   vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
@@ -1099,7 +1238,8 @@ function setHover(id, fran) {
   document.querySelectorAll('.topp button[data-sak]').forEach(b => b.classList.toggle('lyst', b.dataset.sak === id));
   if (id) {
     const s = saker.get(id);
-    lapp.innerHTML = s.etikett + (s.under ? `<small>${s.under}</small>` : '');
+    const under = typeof s.under === 'function' ? s.under() : s.under;
+    lapp.innerHTML = s.etikett + (under ? `<small>${under}</small>` : '');
   }
   duk.classList.toggle('pekar', !!id && fran !== 'nav');
   lapp.classList.toggle('syns', !!id && fran === 'mus');
@@ -1156,6 +1296,7 @@ function klicka(id) {
   if (!s) return;
   if (id === 'en') { location.href = '/en/'; return; }
   if (id === 'kort') { vandKort(); return; }
+  if (id === 'klocka') { vaxlaDag(); return; }
   if (id === 'om') vinka();
   if (id === 'nyhetsbrev' && !reducerad && planFlyg.t === 0) planFlyg.t = 0.001;
   oppna(id);
@@ -1217,7 +1358,7 @@ const planFlyg = { t: 0 };
 let tid = 0, forra = performance.now(), forstaBild = true, senastRitad = 0, skuggBild = 0;
 const tmp = new T.Vector3();
 function bild(nu) {
-  const aktiv = hovrad || oppenId || vinkT > 0 || planFlyg.t > 0 || kortVand.t > 0 || intro.t < 3 ||
+  const aktiv = hovrad || oppenId || vinkT > 0 || planFlyg.t > 0 || kortVand.t > 0 || intro.t < 3 || Math.abs(dagMal - dagNiva) > 0.001 ||
     Math.abs(panMal - panorering) > 0.01 || Math.abs(mus.mx - mus.x) > 0.002 || Math.abs(mus.my - mus.y) > 0.002;
   const grans = 1000 / (aktiv ? (LAG ? 40 : 60) : (LAG ? 24 : 30));
   if (nu - senastRitad < grans - 2) return;
@@ -1230,7 +1371,11 @@ function bild(nu) {
     const flimmer = t < 0.35 ? 0 : t < 0.55 ? 0.6 : t < 0.85 ? 0.12 : t < 1.05 ? 0.7 : t < 1.3 ? 0.3 : Math.min(1, 0.6 + (t - 1.3) * 0.45);  // högst tre ryck per sekund
     lampNiva = flimmer;
   } else lampNiva = 1;
-  satLampa(lampNiva);
+  if (dagNiva !== dagMal) {
+    dagNiva += Math.sign(dagMal - dagNiva) * Math.min(Math.abs(dagMal - dagNiva), dt / 1.4);
+    satDag(dagNiva);
+  }
+  satLampa(lampNiva * (1 - 0.88 * dagNiva));                      // på dagen är lampan nästan släckt
 
   // svävar och lyft för sakerna man pekar på
   for (const s of saker.values()) {
@@ -1319,16 +1464,8 @@ function bild(nu) {
   visare.min.rotation.z = -min / 60 * Math.PI * 2;
   visare.tim.rotation.z = -tim / 12 * Math.PI * 2;
 
-  // flaggan vajar
-  {
-    const p = flaggDuk.geometry.attributes.position, b = flaggDuk.userData.bas;
-    for (let i = 0; i < p.count; i++) {
-      const x = b[i * 3];
-      p.array[i * 3 + 2] = Math.sin(x * 9 - tid * 4) * 0.045 * (x / 0.78) + Math.sin(b[i * 3 + 1] * 6 + tid * 3) * 0.01;
-    }
-    p.needsUpdate = true;
-    flaggDuk.geometry.computeVertexNormals();
-  }
+  // jordgloben snurrar sakta, fortare när man pekar på den
+  if (!reducerad || saker.get('geografi').lyft > 0.01) jordklot.rotation.y += dt * (0.12 + saker.get('geografi').lyft * 1.4);
 
   // ånga, damm och bokeh
   anga.forEach(s => {
@@ -1346,11 +1483,12 @@ function bild(nu) {
       p.array[i * 3 + 2] += Math.sin(tid * 0.2 + b) * v * dt;
     }
     p.needsUpdate = true;
-    damm.material.opacity = 0.55 * lampNiva;
+    damm.material.opacity = 0.55 * lampNiva * (1 - 0.6 * dagNiva);
   }
   bokeh.forEach(s => {
     const u = s.userData;
-    s.material.opacity = u.bas * (0.7 + Math.sin(tid * u.fart + u.fas) * 0.3);
+    s.material.opacity = u.bas * (0.7 + Math.sin(tid * u.fart + u.fas) * 0.3) * (1 - dagNiva);
+    s.visible = dagNiva < 1;
     s.position.x = u.x0 + Math.sin(tid * 0.05 + u.fas) * 0.4;
   });
 
