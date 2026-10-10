@@ -883,7 +883,7 @@ let jordklot;
   const massing = std('#c9a24a', { metalness: 0.85, roughness: 0.3 });
   glob.add(nat(new T.CylinderGeometry(0.3, 0.36, 0.08, 40), tra, { y: 0.04 }));
   glob.add(nat(new T.CylinderGeometry(0.035, 0.05, 0.28, 16), tra, { y: 0.22 }));
-  const axel = grupp({ x: -0.2, y: 0.82, rz: 0.41 });             // jordaxelns lutning; bågens nedre ände vilar på pelaren
+  const axel = grupp({ x: -0.070, y: 0.855, rz: 0.14 });         // lätt lutning; bågens nedre ände vilar på pelaren
   jordklot = nat(new T.SphereGeometry(0.42, 48, 32), std('#ffffff', { map: globTextur(globBild), roughness: 0.5 }));
   jordklot.rotation.y = -1.2;                                     // Europa och Afrika mot kameran
   axel.add(jordklot);
