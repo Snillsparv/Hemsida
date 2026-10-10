@@ -586,22 +586,72 @@ function globTextur(bild) {                  // jonasgeografis Mercator-karta om
   return textur(c);
 }
 
-function kortTextur(text, farg) {
-  const [c, g] = yta(256, 356);
-  g.fillStyle = '#fbf8f1'; rundRekt(g, 0, 0, 256, 356, 22); g.fill();
-  g.fillStyle = farg; g.textAlign = 'center'; g.textBaseline = 'middle';
-  const [valor, farg2] = text;
-  g.font = `600 44px ${MONO}`; g.fillText(valor, 34, 40); g.save(); g.translate(222, 316); g.rotate(Math.PI); g.fillText(valor, 0, 0); g.restore();
-  g.font = '40px serif'; g.fillText(farg2, 34, 86);
-  g.font = '150px serif'; g.fillText(farg2, 128, 186);
-  return textur(c);
-}
-function kortbaksida() {
-  const [c, g] = yta(256, 356);
-  g.fillStyle = '#fbf8f1'; rundRekt(g, 0, 0, 256, 356, 22); g.fill();
-  g.fillStyle = '#b7343a'; rundRekt(g, 14, 14, 228, 328, 14); g.fill();
-  g.strokeStyle = 'rgba(255,255,255,0.35)'; g.lineWidth = 3;
-  for (let i = -356; i < 356; i += 18) { g.beginPath(); g.moveTo(14, 14 + i); g.lineTo(242, 242 + i); g.stroke(); g.beginPath(); g.moveTo(242, 14 + i); g.lineTo(14, 242 + i); g.stroke(); }
+function hpTextur(sida) {                    // ett A4-ark ur ett övningsprov; sida 0 överst, 1 och 2 under
+  const W = 1024, H = 1448;
+  const [c, g] = yta(W, H);
+  g.fillStyle = '#f6f3ea'; g.fillRect(0, 0, W, H);
+  const r = slump(77 + sida * 13);
+  const SERIF = 'Georgia, "Times New Roman", serif';
+  g.fillStyle = '#1d1c22';
+  g.font = `700 46px ${MONO}`; g.textBaseline = 'alphabetic';
+  g.fillText('HÖGSKOLEPROVET', 80, 120);
+  g.font = `500 30px ${MONO}`; g.textAlign = 'right';
+  g.fillText('ÖVNINGSPROV', W - 80, 120);
+  g.textAlign = 'left';
+  g.fillStyle = '#55514a'; g.font = `500 28px ${MONO}`;
+  g.fillText(sida === 0 ? 'Provpass 2 · Kvantitativ del' : 'Provpass 1 · Verbal del', 80, 172);
+  g.fillStyle = '#1d1c22'; g.fillRect(80, 196, W - 160, 4);
+  let y = 270;
+  if (sida === 0) {
+    const uppgifter = [
+      ['1.', 'Vad är x om 3x + 7 = 22?', ['A  3', 'B  4', 'C  5', 'D  6'], 2, '3x = 15, x = 5'],
+      ['2.', 'Hur många procent är 18 av 72?', ['A  18 %', 'B  25 %', 'C  30 %', 'D  36 %'], 1, '18/72 = 1/4'],
+      ['3.', 'Medelvärdet av fem tal är 8. Vad är deras summa?', ['A  13', 'B  32', 'C  40', 'D  48'], 2, null],
+    ];
+    for (const [nr, fraga, svar, ratt, anteckning] of uppgifter) {
+      g.fillStyle = '#1d1c22'; g.font = `700 34px ${SERIF}`; g.fillText(nr, 80, y);
+      g.font = `400 34px ${SERIF}`; g.fillText(fraga, 130, y);
+      if (anteckning) {                                           // blyertsanteckning i marginalen
+        g.save(); g.fillStyle = 'rgba(60,60,70,0.78)'; g.font = `700 42px ${HAND}`;
+        g.translate(130 + g.measureText(fraga).width + 50, y + 4); g.rotate(-0.05); g.fillText(anteckning, 0, 0); g.restore();
+        g.font = `400 34px ${SERIF}`;
+      }
+      y += 58;
+      svar.forEach((t, i) => {
+        const x = 150 + i * 200; g.fillStyle = '#1d1c22'; g.fillText(t, x, y);
+        if (i === ratt) {                                         // rätt svar inringat med blyerts
+          const w = g.measureText(t).width;
+          g.strokeStyle = 'rgba(60,60,70,0.75)'; g.lineWidth = 4;
+          g.beginPath(); g.ellipse(x + w / 2, y - 11, w / 2 + 22, 30, -0.05, 0, 6.283); g.stroke();
+        }
+      });
+      y += 96;
+    }
+  }
+  // fler uppgifter som gråa textrader
+  g.fillStyle = 'rgba(29,28,34,0.28)';
+  while (y < 1010) {
+    g.fillRect(80, y - 24, 30, 26);
+    const rader = 2 + ((r() * 2) | 0);
+    for (let i = 0; i < rader; i++) { g.fillRect(130, y - 24 + i * 46, (W - 230) * (i === rader - 1 ? 0.35 + r() * 0.4 : 0.85 + r() * 0.15), 22); }
+    y += rader * 46 + 70;
+  }
+  // svarsblanketten längst ned: rutor att fylla i, några ifyllda med blyerts
+  g.fillStyle = '#1d1c22'; g.fillRect(80, 1050, W - 160, 3);
+  g.font = `600 26px ${MONO}`; g.fillText('SVAR', 80, 1100);
+  for (let rad = 0; rad < 2; rad++) for (let k = 0; k < 6; k++) {
+    const nr = rad * 6 + k + 1, x0 = 80 + k * 145, y0 = 1160 + rad * 120;
+    g.fillStyle = '#55514a'; g.font = `500 22px ${MONO}`; g.fillText(String(nr), x0, y0 + 8);
+    const ratt = sida === 0 && nr <= 3 ? [2, 1, 2][nr - 1] : (r() < 0.55 ? (r() * 4) | 0 : -1);
+    for (let a = 0; a < 4; a++) {
+      const cx = x0 + 42 + a * 24, cy = y0;
+      g.strokeStyle = '#55514a'; g.lineWidth = 2; g.beginPath(); g.arc(cx, cy, 9, 0, 6.283); g.stroke();
+      if (a === ratt) { g.fillStyle = 'rgba(55,55,65,0.85)'; g.beginPath(); g.arc(cx, cy, 8, 0, 6.283); g.fill(); }
+    }
+  }
+  g.fillStyle = '#8a857a'; g.font = `500 22px ${MONO}`; g.textAlign = 'right';
+  g.fillText('hpakuten.se', W - 80, H - 60);
+  g.textAlign = 'left';
   return textur(c);
 }
 
@@ -824,7 +874,8 @@ scen.add(burk);
 sak('kurs', burk, { etikett: 'Kurs', under: 'Skaffa ett superminne!', panel: 'kurs', yta: new T.CylinderGeometry(0.85, 0.85, 2.3, 16), ytaPos: new T.Vector3(0, 1.1, 0) });
 
 // en liten jordglob med jonasgeografis handritade länder → geografi
-const glob = grupp({ x: -3.0, y: 0, z: 1.75, ry: 0.4 });
+const glob = grupp({ x: -2.9, y: 0, z: 3.0, ry: 0.4 });
+glob.scale.setScalar(1.4);                                        // större och närmare kameran
 let jordklot;
 {
   const tra = std('#4a3020', { roughness: 0.5 });
@@ -1031,22 +1082,26 @@ const kuvert = grupp({ x: 4.25, y: 0, z: 1.95, ry: -0.3 });
 scen.add(kuvert);
 sak('kontakt', kuvert, { etikett: 'Kontakt', under: 'Boka föreläsning eller säg hej', panel: 'kontakt', yta: new T.BoxGeometry(1.9, 0.4, 1.3), ytaPos: new T.Vector3(0, 0.1, 0) });
 
-// kortleken: en minnesmästares självklara verktyg
-const kort = grupp({ x: 1.95, y: 0, z: 1.95, ry: 0.22 });
-const kortDelar = {};
+// träningspapper för högskoleprovet i A4 (1 enhet ≈ 8 cm) med en blyertspenna ovanpå → hpakuten.se
+const hp = grupp({ x: 1.55, y: 0, z: 2.8, ry: 0.14 });
 {
-  const kant = std('#f3efe6', { roughness: 0.8 });
-  kort.add(nat(lada(0.74, 0.22, 1.02, 0.03), [kant, kant, std('#ffffff', { map: kortbaksida(), roughness: 0.7 }), kant, kant, kant], { x: -0.55, y: 0.11 }));
-  const ansikten = [[['7', '♠'], '#22212a'], [['K', '♦'], '#c0303a'], [['A', '♥'], '#c0303a']];
-  kortDelar.solfjader = ansikten.map(([t, f], i) => {
-    const pivot = grupp({ x: 0.15, y: 0.004 + i * 0.006, z: 0.4, ry: 0.5 - i * 0.42 });
-    const k = nat(new T.BoxGeometry(0.72, 0.005, 1.0), [kant, kant, std('#ffffff', { map: kortTextur(t, f), roughness: 0.6 }), std('#ffffff', { map: kortbaksida() }), kant, kant], { z: -0.42 });
-    pivot.add(k); kort.add(pivot); return pivot;
+  const kant = std('#efebe1', { roughness: 0.92 });
+  const ark = [[0, 0.004, 0, 0.0], [0.12, 0.011, -0.06, -0.05], [-0.06, 0.018, 0.04, 0.035]];   // [x, y, z, vridning]; överst sist
+  ark.forEach(([x, y, z, v], i) => {
+    const sida = ark.length - 1 - i;
+    hp.add(nat(new T.BoxGeometry(2.6, 0.006, 3.68), [kant, kant, std('#ffffff', { map: hpTextur(sida), roughness: 0.9 }), kant, kant, kant], { x, y, z, ry: v, kasta: i === 0 }));
   });
-  skugga(kort, 2.2, 1.8, -0.1, 0, 0.35)
+  const penna = grupp({ x: 0.55, y: 0.075, z: -0.25, ry: -0.55, rz: Math.PI / 2 });
+  penna.add(nat(new T.CylinderGeometry(0.052, 0.052, 1.75, 6), std('#f2c14e', { roughness: 0.5 }), {}));
+  penna.add(nat(new T.ConeGeometry(0.052, 0.18, 6), std('#e7c79a'), { y: -0.965, rx: Math.PI }));
+  penna.add(nat(new T.ConeGeometry(0.02, 0.06, 6), std('#2b2b30'), { y: -1.06, rx: Math.PI }));
+  penna.add(nat(new T.CylinderGeometry(0.055, 0.055, 0.1, 12), std('#b9bcc4', { metalness: 0.7, roughness: 0.35 }), { y: 0.925 }));
+  penna.add(nat(new T.CylinderGeometry(0.05, 0.05, 0.12, 12), std('#e8838f', { roughness: 0.8 }), { y: 1.035 }));
+  hp.add(penna);
+  skugga(hp, 3.2, 4.3, 0, 0, 0.32)
 }
-scen.add(kort);
-sak('kort', kort, { etikett: 'Kortleken', under: 'Vänd ett kort', panel: null, yta: new T.BoxGeometry(1.9, 0.5, 1.5), ytaPos: new T.Vector3(-0.1, 0.15, 0) });
+scen.add(hp);
+sak('hp', hp, { etikett: 'Högskoleprovet', under: 'Plugga smartare med HPakuten', panel: 'hp', yta: new T.BoxGeometry(2.8, 0.3, 3.8), ytaPos: new T.Vector3(0, 0.1, 0) });
 
 // muggen med π, ånga och allt
 const mugg = grupp({ x: 6.35, y: 0, z: 0.85, ry: -0.5 });
@@ -1295,7 +1350,6 @@ function klicka(id) {
   const s = saker.get(id);
   if (!s) return;
   if (id === 'en') { location.href = '/en/'; return; }
-  if (id === 'kort') { vandKort(); return; }
   if (id === 'klocka') { vaxlaDag(); return; }
   if (id === 'om') vinka();
   if (id === 'nyhetsbrev' && !reducerad && planFlyg.t === 0) planFlyg.t = 0.001;
@@ -1350,15 +1404,13 @@ function kopplaNyhetsbrev(form) {
 /* ————— små händelser ————— */
 let vinkT = 0, bubblaT = 0;
 function vinka() { vinkT = 2.4; bubblaT = 2.8; }
-const kortVand = { t: 0, vand: false };
-function vandKort() { if (kortVand.t <= 0) { kortVand.t = 1; kortVand.vand = !kortVand.vand; } }
 const planFlyg = { t: 0 };
 
 /* ————— animationen ————— */
 let tid = 0, forra = performance.now(), forstaBild = true, senastRitad = 0, skuggBild = 0;
 const tmp = new T.Vector3();
 function bild(nu) {
-  const aktiv = hovrad || oppenId || vinkT > 0 || planFlyg.t > 0 || kortVand.t > 0 || intro.t < 3 || Math.abs(dagMal - dagNiva) > 0.001 ||
+  const aktiv = hovrad || oppenId || vinkT > 0 || planFlyg.t > 0 || intro.t < 3 || Math.abs(dagMal - dagNiva) > 0.001 ||
     Math.abs(panMal - panorering) > 0.01 || Math.abs(mus.mx - mus.x) > 0.002 || Math.abs(mus.my - mus.y) > 0.002;
   const grans = 1000 / (aktiv ? (LAG ? 40 : 60) : (LAG ? 24 : 30));
   if (nu - senastRitad < grans - 2) return;
@@ -1435,15 +1487,6 @@ function bild(nu) {
   }
   bubbla.classList.toggle('syns', bubblaT > 0);
 
-  // kortleken: översta kortet vänds
-  if (kortVand.t > 0) {
-    kortVand.t = Math.max(0, kortVand.t - dt * 1.6);
-    const p = 1 - kortVand.t, top = kortDelar.solfjader[2];
-    const a = kortVand.vand ? p * Math.PI : (1 - p) * Math.PI;
-    top.rotation.z = a;
-    top.position.y = 0.016 + Math.sin(p * Math.PI) * 0.5;
-  }
-
   // pappersplanet: lyfter lite när man pekar, flyger en lov när man klickar
   const pl = saker.get('nyhetsbrev').lyft;
   if (planFlyg.t > 0) {
@@ -1492,7 +1535,7 @@ function bild(nu) {
     s.position.x = u.x0 + Math.sin(tid * 0.05 + u.fas) * 0.4;
   });
 
-  const rorelse = vinkT > 0 || planFlyg.t > 0 || kortVand.t > 0 ||
+  const rorelse = vinkT > 0 || planFlyg.t > 0 ||
     [...saker.values()].some(s => Math.abs(((s.id === hovrad || s.id === oppenId) ? 1 : 0) - s.lyft) > 0.002);
   if (rorelse || ++skuggBild % 8 === 0) renderer.shadowMap.needsUpdate = true;
 
