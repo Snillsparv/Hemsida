@@ -876,14 +876,14 @@ sak('kurs', burk, { etikett: 'Kurs', under: 'Skaffa ett superminne!', panel: 'ku
 
 // en liten jordglob med jonasgeografis handritade länder → geografi
 const glob = grupp({ x: -2.9, y: 0, z: 3.0, ry: 0.4 });
-glob.scale.setScalar(1.4);                                        // större och närmare kameran
+glob.scale.setScalar(1.6);                                        // större och närmare kameran
 let jordklot;
 {
   const tra = std('#4a3020', { roughness: 0.5 });
   const massing = std('#c9a24a', { metalness: 0.85, roughness: 0.3 });
   glob.add(nat(new T.CylinderGeometry(0.3, 0.36, 0.08, 40), tra, { y: 0.04 }));
   glob.add(nat(new T.CylinderGeometry(0.035, 0.05, 0.28, 16), tra, { y: 0.22 }));
-  const axel = grupp({ x: -0.070, y: 0.855, rz: 0.14 });         // lätt lutning; bågens nedre ände vilar på pelaren
+  const axel = grupp({ y: 0.86 });                                // rak axel; bågens nedre ände vilar på pelaren
   jordklot = nat(new T.SphereGeometry(0.42, 48, 32), std('#ffffff', { map: globTextur(globBild), roughness: 0.5 }));
   jordklot.rotation.y = -1.2;                                     // Europa och Afrika mot kameran
   axel.add(jordklot);
