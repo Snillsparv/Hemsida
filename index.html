@@ -4,13 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>
-  /* Valskärmen (nya eller klassiska sidan) visas en gång per besök. Inte vid djuplänkar
-     (#kontakt), inte när man kommer från en annan sida på sajten, inte i redigeringsläget
-     och aldrig utan JS. ?val tvingar fram den, ?klassisk hoppar över den. */
+  /* Valskärmen (nya eller klassiska sidan). TESTLÄGE: visas bara med ?val i adressen.
+     När den ska gälla alla: sätt TESTLAGE till false. Då visas den en gång per besök, men inte
+     vid djuplänkar (#kontakt), inte när man kommer från en annan sida på sajten, inte i
+     redigeringsläget och aldrig utan JS; ?klassisk hoppar över den. */
   (function(){
+    var TESTLAGE = true;
     var q = location.search, d = document.documentElement;
     function lagra(v){ try { if (v) sessionStorage.setItem('jve-startval', v); else return sessionStorage.getItem('jve-startval'); } catch (e) { return null; } }
     if (/[?&]val(=|&|$)/.test(q)) { d.classList.add('valjer'); return; }
+    if (TESTLAGE) return;
     if (/[?&]klassisk(=|&|$)/.test(q)) {
       q = q.replace(/([?&])klassisk(=[^&]*)?(&|$)/, '$1').replace(/[?&]$/, '');
       try { history.replaceState(null, '', location.pathname + q + location.hash); } catch (e) {}
@@ -1030,7 +1033,6 @@
 
 <footer>
   <div class="rad" style="margin-bottom:1.2rem">
-    <a href="/forslag/skrivbordet/">Nya sidan: mitt skrivbord i 3D</a>
     <a href="https://jonasgeografi.se" target="_blank" rel="noopener">jonasgeografi.se</a>
     <a href="https://hpakuten.se" target="_blank" rel="noopener">hpakuten.se</a>
     <a href="https://www.gångertabellen.se" target="_blank" rel="noopener">gångertabellen.se</a>
