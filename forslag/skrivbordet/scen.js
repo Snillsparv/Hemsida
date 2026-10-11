@@ -659,8 +659,6 @@ function hpTextur(sida) {                    // ett A4-ark ur ett övningsprov; 
 function kuvertTextur() {
   const [c, g] = yta(512, 332);
   g.fillStyle = '#efe4cd'; g.fillRect(0, 0, 512, 332);
-  g.strokeStyle = 'rgba(120,96,70,0.35)'; g.lineWidth = 3;
-  g.beginPath(); g.moveTo(0, 0); g.lineTo(256, 190); g.lineTo(512, 0); g.stroke();
   g.fillStyle = '#d9cfbb'; g.fillRect(410, 200, 78, 92);
   g.strokeStyle = '#b7343a'; g.setLineDash([4, 4]); g.strokeRect(414, 204, 70, 84); g.setLineDash([]);
   g.fillStyle = '#b7343a'; g.font = `700 52px ${HAND}`; g.textAlign = 'center'; g.fillText('π', 449, 258);
@@ -669,14 +667,22 @@ function kuvertTextur() {
   return textur(c);
 }
 
-function brevkortTextur() {
-  const [c, g] = yta(512, 320);
-  g.fillStyle = '#fbf8f1'; g.fillRect(0, 0, 512, 320);
+function flikTextur() {                      // kuvertfliken utifrån, med vikningslinjen längs kanterna
+  const [c, g] = yta(512, 211);
+  g.fillStyle = '#e9ddc3'; g.fillRect(0, 0, 512, 211);
+  g.strokeStyle = 'rgba(120,96,70,0.4)'; g.lineWidth = 4; g.lineJoin = 'round';
+  g.beginPath(); g.moveTo(4, 2); g.lineTo(256, 205); g.lineTo(508, 2); g.stroke();
+  return textur(c);
+}
+
+function brevkortTextur() {                  // texten sitter i övre halvan, den del som glider upp ur kuvertet
+  const [c, g] = yta(512, 344);
+  g.fillStyle = '#fbf8f1'; g.fillRect(0, 0, 512, 344);
   g.strokeStyle = 'rgba(60,90,140,0.18)'; g.lineWidth = 2;
-  for (let y = 96; y < 320; y += 44) { g.beginPath(); g.moveTo(40, y); g.lineTo(472, y); g.stroke(); }
+  for (let y = 108; y < 344; y += 46) { g.beginPath(); g.moveTo(40, y); g.lineTo(472, y); g.stroke(); }
   g.fillStyle = '#2a2433'; g.font = `700 64px ${HAND}`; g.textAlign = 'center'; g.textBaseline = 'middle';
-  g.fillText('Säg hej!', 256, 150);
-  g.font = `700 40px ${HAND}`; g.fillText('/ Jonas', 330, 232);
+  g.fillText('Säg hej!', 256, 66);
+  g.font = `700 40px ${HAND}`; g.fillText('/ Jonas', 330, 130);
   return textur(c);
 }
 
@@ -937,40 +943,44 @@ const jonasDelar = {};
   const huvud = grupp({ y: 2.04 });
   huvud.add(nat(new T.SphereGeometry(0.42, 40, 28), hud, { s: [1, 1.02, 0.96] }));
   const r = slump(3);
-  {                                                                // rufsigt, halvlångt hår: ett deformerat skal med lugg och lockar
+  {                                                                // kort, rufsigt hår som spretar uppåt: ett deformerat skal med tofsar
     const geo = new T.SphereGeometry(0.47, 96, 64);
     const pos = geo.attributes.position, v = new T.Vector3();
-    const harfaste = az => {                                       // höjden där håret slutar: pannan, öronen, nacken
+    const harfaste = az => {                                       // höjden där håret slutar: pannan, ovanför öronen, nacken
       const fram = Math.max(0, Math.cos(az)), bak = Math.max(0, -Math.cos(az));
-      return 0.43 * fram ** 1.6 - 0.3 * (1 - fram) - 0.3 * bak + 0.05 * Math.sin(az * 9) + 0.035 * Math.sin(az * 23 + 1);
+      return 0.49 * fram ** 1.6 - 0.04 * (1 - fram) - 0.16 * bak + 0.04 * Math.sin(az * 9) + 0.03 * Math.sin(az * 23 + 1);
     };
     for (let i = 0; i < pos.count; i++) {
       v.fromBufferAttribute(pos, i).normalize();
-      const az = Math.atan2(v.x, v.z);
-      const rufs = 1 + 0.035 * Math.sin(az * 7 + v.y * 9) + 0.025 * Math.sin(az * 15 - v.y * 5) + 0.02 * Math.cos(v.y * 21 + az * 3);
+      const az = Math.atan2(v.x, v.z), topp = Math.max(0, v.y);
+      const rufs = 1 + (0.035 * Math.sin(az * 7 + v.y * 9) + 0.025 * Math.sin(az * 15 - v.y * 5) + 0.02 * Math.cos(v.y * 21 + az * 3)) * (1 + topp);
       if (v.y < harfaste(az)) v.multiplyScalar(0.34);             // under hårfästet: gömt inne i huvudet
-      else v.multiplyScalar(0.455 * rufs * (1 + 0.07 * Math.max(0, v.y)));
+      else v.multiplyScalar(0.452 * rufs * (1 + 0.1 * topp * topp));   // lite extra volym upptill
       pos.setXYZ(i, v.x, v.y, v.z);
     }
     geo.computeVertexNormals();
     huvud.add(nat(geo, har));
     const upp = new T.Vector3(0, 1, 0), n = new T.Vector3(), d = new T.Vector3();
-    const lock = (az, langd, bred, utat, nedat) => {               // en spretig lock som hänger ned från hårfästet
-      const y = harfaste(az) + 0.06;
-      n.set(Math.sin(az) * Math.sqrt(1 - y * y), y, Math.cos(az) * Math.sqrt(1 - y * y));
-      d.set(n.x * utat, -nedat, n.z * utat).normalize();
+    const tofs = (az, y, langd, bred, ut, uppat, fram) => {        // en spretig tofs ur skalet: ut längs ytan, uppåt och lite framåt
+      const ry = Math.sqrt(1 - y * y);
+      n.set(Math.sin(az) * ry, y, Math.cos(az) * ry);
+      d.set(n.x * ut + (r() - 0.5) * 0.35, n.y * ut + uppat, n.z * ut + fram + (r() - 0.5) * 0.35).normalize();
       const t = nat(new T.ConeGeometry(bred, langd, 7), har);
       t.quaternion.setFromUnitVectors(upp, d);
-      t.position.copy(n).multiplyScalar(0.44).addScaledVector(d, langd * 0.42);
+      t.position.copy(n).multiplyScalar(0.43).addScaledVector(d, langd * 0.4);
       huvud.add(t);
     };
-    for (let i = 0; i < 26; i++) {                                 // sidor och nacke
-      const az = 0.75 + (i / 25) * (2 * Math.PI - 1.5) + (r() - 0.5) * 0.12;
-      lock(az, 0.14 + r() * 0.12, 0.045 + r() * 0.03, 0.35 + r() * 0.35, 1);
+    for (let i = 0; i < 18; i++) {                                 // korta flikar runt sidor och nacke som spretar utåt
+      const az = 0.95 + (i / 17) * (2 * Math.PI - 1.9) + (r() - 0.5) * 0.14;
+      tofs(az, harfaste(az) + 0.08, 0.06 + r() * 0.04, 0.04 + r() * 0.02, 1, 0.45 + r() * 0.4, 0);
     }
-    for (let i = 0; i < 9; i++) {                                  // lugg som faller snett över pannan
-      const az = -0.62 + i * 0.155 + (r() - 0.5) * 0.06;
-      lock(az, 0.07 + r() * 0.05, 0.035 + r() * 0.02, 0.6, 1);
+    for (let i = 0; i < 22; i++) {                                 // hjässan: tofsar som står upp åt olika håll
+      const az = i * 2.4 + (r() - 0.5) * 0.4, y = 0.5 + (i / 21) * 0.42 + (r() - 0.5) * 0.06;
+      tofs(az, Math.min(0.97, y), 0.15 + r() * 0.09, 0.05 + r() * 0.025, 0.55, 1.0 + r() * 0.6, 0);
+    }
+    for (let i = 0; i < 7; i++) {                                  // luggen: borstad upp och framåt i stället för ned över pannan
+      const az = -0.5 + i * 0.166 + (r() - 0.5) * 0.06;
+      tofs(az, harfaste(az) + 0.1, 0.12 + r() * 0.05, 0.045 + r() * 0.02, 0.35, 1.1, 0.25);
     }
   }
   const vitt = std('#fbf8f2', { roughness: 0.35 }), pupill = std('#2b211c', { roughness: 0.25 });
@@ -1102,14 +1112,16 @@ const kuvertDelar = {};
   const papper = std('#efe4cd', { roughness: 0.85 });
   const inre = grupp();
   inre.add(nat(new T.BoxGeometry(1.7, 0.014, 1.1), [papper, papper, std('#ffffff', { map: kuvertTextur(), roughness: 0.85 }), papper, papper, papper], { y: 0.007 }));
-  const brev = nat(new T.BoxGeometry(1.5, 0.004, 0.94), [papper, papper, std('#ffffff', { map: brevkortTextur(), roughness: 0.8 }), papper, papper, papper], { y: 0.007, z: 0.03, kasta: false });
+  const brev = nat(new T.BoxGeometry(1.4, 0.004, 0.94), [papper, papper, std('#ffffff', { map: brevkortTextur(), roughness: 0.8 }), papper, papper, papper], { y: 0.007, z: 0.03, kasta: false });
   inre.add(brev);
   const flik = grupp({ y: 0.0145, z: -0.55 });                    // gångjärnet längs kuvertets bakkant
   const tri = new T.BufferGeometry();
-  tri.setAttribute('position', new T.Float32BufferAttribute([-0.85, 0, 0, 0, 0, 0.63, 0.85, 0, 0], 3));
+  tri.setAttribute('position', new T.Float32BufferAttribute([-0.85, 0, 0, 0, 0, 0.7, 0.85, 0, 0], 3));
+  tri.setAttribute('uv', new T.Float32BufferAttribute([0, 1, 0.5, 0, 1, 1], 2));
   tri.computeVertexNormals();
-  flik.add(nat(tri, std('#e8dbc0', { roughness: 0.85, side: T.DoubleSide }), { y: 0.001 }));
-  flik.add(nat(new T.CylinderGeometry(0.13, 0.135, 0.016, 28), std('#a8262c', { roughness: 0.45 }), { y: 0.009, z: 0.58 }));
+  flik.add(nat(tri, std('#ffffff', { map: flikTextur(), roughness: 0.85 }), { y: 0.002 }));                     // utsidan
+  flik.add(nat(tri, std('#d9ccae', { roughness: 0.9, side: T.BackSide }), { y: 0.002, kasta: false }));        // insidan, syns när fliken är öppen
+  flik.add(nat(new T.CylinderGeometry(0.13, 0.135, 0.016, 28), std('#a8262c', { roughness: 0.45 }), { y: 0.013, z: 0.64 }));   // sigillet; botten en bit ovanför fliken så att de inte flimrar mot varandra
   inre.add(flik);
   kuvert.add(inre);
   Object.assign(kuvertDelar, { inre, flik, brev, t: 0 });
@@ -1133,8 +1145,8 @@ const PENNA_REDO = { p: new T.Vector3(0.2, 1.12, 0.55), r: [0.2, -0.35, 0.16] };
   const penna = grupp({ x: 0.55, y: 0.075, z: -0.25, ry: -0.55, rz: Math.PI / 2 });
   pennDelar.penna = penna;
   penna.add(nat(new T.CylinderGeometry(0.052, 0.052, 1.75, 6), std('#f2c14e', { roughness: 0.5 }), {}));
-  penna.add(nat(new T.ConeGeometry(0.052, 0.18, 6), std('#e7c79a'), { y: -0.965, rx: Math.PI }));
-  penna.add(nat(new T.ConeGeometry(0.02, 0.06, 6), std('#2b2b30'), { y: -1.06, rx: Math.PI }));
+  penna.add(nat(new T.CylinderGeometry(0.052, 0.018, 0.118, 6), std('#e7c79a'), { y: -0.934 }));      // vässat trä
+  penna.add(nat(new T.ConeGeometry(0.018, 0.062, 6), std('#2b2b30'), { y: -1.024, rx: Math.PI }));     // grafitspetsen i samma lutning
   penna.add(nat(new T.CylinderGeometry(0.055, 0.055, 0.1, 12), std('#b9bcc4', { metalness: 0.7, roughness: 0.35 }), { y: 0.925 }));
   penna.add(nat(new T.CylinderGeometry(0.05, 0.05, 0.12, 12), std('#e8838f', { roughness: 0.8 }), { y: 1.035 }));
   hp.add(penna);
@@ -1178,8 +1190,8 @@ const pennor = grupp({ x: -6.5, y: 0, z: -2.95 });
     const p = grupp({ x: Math.cos(a) * rr, y: 0.08, z: Math.sin(a) * rr, rx: (r() - 0.5) * 0.45, rz: (r() - 0.5) * 0.45 });
     const l = 1.35 + r() * 0.35;
     p.add(nat(new T.CylinderGeometry(0.052, 0.052, l, 6), std(f, { roughness: 0.55 }), { y: l / 2 }));
-    p.add(nat(new T.ConeGeometry(0.052, 0.15, 6), std('#e7c79a'), { y: l + 0.075, kasta: false }));
-    p.add(nat(new T.ConeGeometry(0.018, 0.05, 6), std('#2b2b30'), { y: l + 0.14, kasta: false }));
+    p.add(nat(new T.CylinderGeometry(0.018, 0.052, 0.098, 6), std('#e7c79a'), { y: l + 0.049, kasta: false }));
+    p.add(nat(new T.ConeGeometry(0.018, 0.052, 6), std('#2b2b30'), { y: l + 0.124, kasta: false }));
     pennor.add(p);
   });
   skugga(pennor, 1.4, 1.4, 0, 0, 0.6)
@@ -1561,7 +1573,7 @@ function bild(nu) {
     f.inre.position.y = 0.8 * res;
     f.inre.rotation.x = 1.15 * res;
     f.flik.rotation.x = -3.3 * opp;                                // fliken fälls hela vägen bakåt så att kortet syns
-    f.brev.position.z = 0.03 - 0.6 * ut;
+    f.brev.position.z = 0.03 - 0.56 * ut;                          // kortet sticker upp lagom mycket för att fliken ska synas bakom
   }
 
   // pappersplanet: lyfter lite när man pekar, flyger en lov när man klickar
