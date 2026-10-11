@@ -676,13 +676,13 @@ function flikTextur() {                      // kuvertfliken utifrån, med vikni
 }
 
 function brevkortTextur() {                  // texten sitter i övre halvan, den del som glider upp ur kuvertet
-  const [c, g] = yta(512, 344);
-  g.fillStyle = '#fbf8f1'; g.fillRect(0, 0, 512, 344);
+  const [c, g] = yta(512, 401);
+  g.fillStyle = '#fbf8f1'; g.fillRect(0, 0, 512, 401);
   g.strokeStyle = 'rgba(60,90,140,0.18)'; g.lineWidth = 2;
-  for (let y = 108; y < 344; y += 46) { g.beginPath(); g.moveTo(40, y); g.lineTo(472, y); g.stroke(); }
-  g.fillStyle = '#2a2433'; g.font = `700 64px ${HAND}`; g.textAlign = 'center'; g.textBaseline = 'middle';
-  g.fillText('Säg hej!', 256, 66);
-  g.font = `700 40px ${HAND}`; g.fillText('/ Jonas', 330, 130);
+  for (let y = 114; y < 401; y += 50) { g.beginPath(); g.moveTo(40, y); g.lineTo(472, y); g.stroke(); }
+  g.fillStyle = '#2a2433'; g.font = `700 66px ${HAND}`; g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.fillText('Säg hej!', 256, 72);
+  g.font = `700 42px ${HAND}`; g.fillText('/ Jonas', 330, 142);
   return textur(c);
 }
 
@@ -948,14 +948,14 @@ const jonasDelar = {};
     const pos = geo.attributes.position, v = new T.Vector3();
     const harfaste = az => {                                       // höjden där håret slutar: pannan, ovanför öronen, nacken
       const fram = Math.max(0, Math.cos(az)), bak = Math.max(0, -Math.cos(az));
-      return 0.49 * fram ** 1.6 - 0.04 * (1 - fram) - 0.16 * bak + 0.04 * Math.sin(az * 9) + 0.03 * Math.sin(az * 23 + 1);
+      return 0.53 * fram ** 1.6 - 0.04 * (1 - fram) - 0.16 * bak + 0.2 * Math.sin(az) ** 2 + 0.04 * Math.sin(az * 9) + 0.03 * Math.sin(az * 23 + 1);
     };
     for (let i = 0; i < pos.count; i++) {
       v.fromBufferAttribute(pos, i).normalize();
       const az = Math.atan2(v.x, v.z), topp = Math.max(0, v.y);
       const rufs = 1 + (0.035 * Math.sin(az * 7 + v.y * 9) + 0.025 * Math.sin(az * 15 - v.y * 5) + 0.02 * Math.cos(v.y * 21 + az * 3)) * (1 + topp);
       if (v.y < harfaste(az)) v.multiplyScalar(0.34);             // under hårfästet: gömt inne i huvudet
-      else v.multiplyScalar(0.452 * rufs * (1 + 0.1 * topp * topp));   // lite extra volym upptill
+      else v.multiplyScalar(Math.max(0.44, 0.452 * rufs * (1 + 0.1 * topp * topp)));   // lite extra volym upptill, men aldrig innanför huvudet
       pos.setXYZ(i, v.x, v.y, v.z);
     }
     geo.computeVertexNormals();
@@ -1112,7 +1112,9 @@ const kuvertDelar = {};
   const papper = std('#efe4cd', { roughness: 0.85 });
   const inre = grupp();
   inre.add(nat(new T.BoxGeometry(1.7, 0.014, 1.1), [papper, papper, std('#ffffff', { map: kuvertTextur(), roughness: 0.85 }), papper, papper, papper], { y: 0.007 }));
-  const brev = nat(new T.BoxGeometry(1.4, 0.004, 0.94), [papper, papper, std('#ffffff', { map: brevkortTextur(), roughness: 0.8 }), papper, papper, papper], { y: 0.007, z: 0.03, kasta: false });
+  const osynlig = new T.MeshBasicMaterial({ visible: false });   // kortets kanter skulle annars skymta genom kuvertet
+  const brev = nat(new T.BoxGeometry(1.2, 0.004, 0.94), [osynlig, osynlig, std('#ffffff', { map: brevkortTextur(), roughness: 0.8 }), papper, osynlig, osynlig], { y: 0.007, z: 0.03, kasta: false });
+  brev.visible = false;
   inre.add(brev);
   const flik = grupp({ y: 0.0145, z: -0.55 });                    // gångjärnet längs kuvertets bakkant
   const tri = new T.BufferGeometry();
@@ -1121,7 +1123,7 @@ const kuvertDelar = {};
   tri.computeVertexNormals();
   flik.add(nat(tri, std('#ffffff', { map: flikTextur(), roughness: 0.85 }), { y: 0.002 }));                     // utsidan
   flik.add(nat(tri, std('#d9ccae', { roughness: 0.9, side: T.BackSide }), { y: 0.002, kasta: false }));        // insidan, syns när fliken är öppen
-  flik.add(nat(new T.CylinderGeometry(0.13, 0.135, 0.016, 28), std('#a8262c', { roughness: 0.45 }), { y: 0.013, z: 0.64 }));   // sigillet; botten en bit ovanför fliken så att de inte flimrar mot varandra
+  flik.add(nat(new T.CylinderGeometry(0.13, 0.135, 0.016, 28), std('#a8262c', { roughness: 0.45 }), { y: 0.02, z: 0.64 }));    // sigillet; botten en bit ovanför fliken så att de inte flimrar mot varandra
   inre.add(flik);
   kuvert.add(inre);
   Object.assign(kuvertDelar, { inre, flik, brev, t: 0 });
@@ -1574,6 +1576,7 @@ function bild(nu) {
     f.inre.rotation.x = 1.15 * res;
     f.flik.rotation.x = -3.3 * opp;                                // fliken fälls hela vägen bakåt så att kortet syns
     f.brev.position.z = 0.03 - 0.56 * ut;                          // kortet sticker upp lagom mycket för att fliken ska synas bakom
+    f.brev.visible = ut > 0;
   }
 
   // pappersplanet: lyfter lite när man pekar, flyger en lov när man klickar
@@ -1588,7 +1591,6 @@ function bild(nu) {
     planKropp.rotation.x = -pl * 0.25; planKropp.rotation.z = Math.sin(tid * 3) * 0.04 * pl;
   }
 
-  // kuvertet öppnar sig inte, men sigillet blänker till
   // klockan visar riktig tid
   const d = new Date();
   const sek = d.getSeconds() + d.getMilliseconds() / 1000, min = d.getMinutes() + sek / 60, tim = (d.getHours() % 12) + min / 60;
