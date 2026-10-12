@@ -42,8 +42,7 @@
   if (document.documentElement.classList.contains('valjer')) {
     var vsp = document.createElement('link');
     vsp.rel = 'preload'; vsp.as = 'image'; vsp.fetchPriority = 'high';
-    if (matchMedia('(max-aspect-ratio:1/1) and (min-width:601px)').matches) { vsp.imageSrcset = 'assets/img/val-skrivbord-900.webp 900w, assets/img/val-skrivbord-1600.webp 1600w'; vsp.imageSizes = '100vw'; }
-    else { vsp.imageSrcset = 'assets/img/val-skrivbord-staende-1000.webp 1000w, assets/img/val-skrivbord-staende-1500.webp 1500w'; vsp.imageSizes = '(max-aspect-ratio:1/1) 100vw, 50vw'; }
+    vsp.imageSrcset = 'assets/img/val-skrivbord-staende-1000.webp 1000w, assets/img/val-skrivbord-staende-1500.webp 1500w'; vsp.imageSizes = '56vw';
     document.head.appendChild(vsp);
   }
 </script>
@@ -547,8 +546,9 @@
   }
 
   /* ================================================================
-     VALSKÄRMEN: nya sidan (3D-skrivbordet) eller klassiska sidan.
-     Två halvor delade av en söm; --vs-sida styr var sömmen går.
+     VALSKÄRMEN: nya sidan (3D-skrivbordet) eller den klassiska.
+     Vänster halva i skrivbordets stil, höger i den klassiska. Namnet går över
+     sömmen och landar exakt på den riktiga rubriken när man väljer.
      ================================================================ */
   @property --vs-sida{syntax:'<percentage>';inherits:true;initial-value:50%}
   .vs-lager{display:none}
@@ -557,6 +557,7 @@
     display:block;position:fixed;inset:0;height:100vh;height:100dvh;z-index:1000;
     background:var(--bg);color:var(--ink);font-family:var(--sans);
     --vs-sida:50%;--vs-mjuk:cubic-bezier(.2,.75,.15,1);
+    --vs-botten:calc(clamp(6.4rem,14vh,8rem) + env(safe-area-inset-bottom));
     transition:--vs-sida .8s var(--vs-mjuk) .12s,opacity .45s ease;
   }
   .vs-lager:focus{outline:none}
@@ -565,62 +566,60 @@
   .vs-val{
     position:relative;min-width:0;min-height:0;overflow:hidden;
     display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
-    padding:4.5rem 0 var(--vs-botten,clamp(3.6rem,9vh,6rem));
+    padding:0 0 var(--vs-botten);
     color:var(--ink);text-decoration:none;cursor:pointer;
     background:var(--bg);border:0;font:inherit;text-align:center;
-    container-type:size;
+    container-type:inline-size;
   }
   .vs-val:focus-visible{outline:none}
-  /* vänster: det nya skrivbordet */
+  /* vänster: skrivbordet */
   .vs-val--ny picture,.vs-val--ny img{position:absolute;inset:0;width:100%;height:100%}
-  .vs-val--ny img{object-fit:cover;object-position:50% 62%;transition:transform 1.2s var(--vs-mjuk),filter .6s ease}
+  .vs-val--ny img{object-fit:cover;object-position:var(--vs-bildx,50%) 58%;transition:transform 1.2s var(--vs-mjuk),filter .6s ease}
   .vs-val--ny::before{
-    content:"";position:absolute;inset:auto 0 0 0;height:52%;z-index:1;pointer-events:none;
-    background:linear-gradient(to top,rgba(10,9,9,.95) 0%,rgba(10,9,9,.82) 36%,rgba(10,9,9,.38) 70%,rgba(10,9,9,0) 100%);
+    content:"";position:absolute;inset:auto 0 0 0;height:48%;z-index:1;pointer-events:none;
+    background:linear-gradient(to top,rgba(10,9,9,.95) 0%,rgba(10,9,9,.8) 38%,rgba(10,9,9,.32) 72%,rgba(10,9,9,0) 100%);
   }
-  /* höger: den klassiska sidan återskapad i riktig text, skalad med halvan (cqi) */
-  .vs-forhand{
-    flex:1;position:relative;z-index:1;width:100%;min-height:0;overflow:hidden;
-    display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
-    padding:0 2rem calc(9vh + 1.1rem);padding:0 clamp(1.25rem,5cqi,2.5rem) calc(9vh + 1.1rem);pointer-events:none;
-    transition:opacity .3s ease;
+  .vs-dimma{position:absolute;inset:0;z-index:1;pointer-events:none;
+    background:radial-gradient(ellipse 165% var(--vs-dimma-h,24%) at 100% var(--vs-dimma-y,40%),rgba(8,8,10,.7),rgba(8,8,10,.38) 55%,rgba(8,8,10,0) 80%)}
+  /* texten om varje val */
+  .vs-text{position:relative;z-index:4;max-width:calc(100% - 1.6rem);display:flex;flex-direction:column;align-items:center;gap:.6rem}
+  .vs-namn{display:inline-flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:.3em .45em;font-size:clamp(1.3rem,.75rem + 4.6cqi,3.1rem);font-weight:400;letter-spacing:.02em;line-height:1.1}
+  .vs-pil{flex:none;display:inline-grid;place-items:center;width:1.05em;height:1.05em;border-radius:50%;border:1px solid rgba(255,209,102,.7);color:var(--accent);transition:background-color .35s ease,color .35s ease,border-color .35s ease,transform .5s var(--vs-mjuk)}
+  .vs-pil svg{width:46%;height:46%;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .vs-rad{display:block;max-width:30ch;min-height:3em;font-size:clamp(.95rem,.82rem + .5cqi,1.12rem);line-height:1.5;color:var(--mist);text-wrap:balance}
+  .vs-rad b{font-weight:500;color:var(--ink)}
+  @container (max-width:330px){   /* smala halvor (mobil): bara Roligare. / Tydligare., pilen under namnet */
+    .vs-mer{display:none}
+    .vs-rad{min-height:0}
+    .vs-namn{flex-direction:column;gap:.55rem;font-size:1.3rem}
   }
-  .vs-f-h1{display:block;opacity:.86;font-size:calc(clamp(2.65rem,1.5rem + 2.85vw,5.3rem) * var(--vs-fs,1));font-size:calc(clamp(2.65rem,1.5rem + 5.7cqi,5.3rem) * var(--vs-fs,1));font-weight:400;letter-spacing:.055em;line-height:1.1;text-wrap:balance}
-  .vs-f-tag{display:block;opacity:.86;margin-top:calc(1.4rem * var(--vs-fs,1));font-size:calc(clamp(1.7rem,1.1rem + 1.45vw,3.05rem) * var(--vs-fs,1));font-size:calc(clamp(1.7rem,1.1rem + 2.9cqi,3.05rem) * var(--vs-fs,1));line-height:1.38;letter-spacing:.015em;max-width:24ch;text-wrap:balance}
-  .vs-f-meta{display:block;margin-top:1.6rem;max-width:46rem;font-family:var(--mono);font-size:calc(.66rem * var(--mini));letter-spacing:.3em;text-transform:uppercase;color:var(--mist);line-height:2.1;text-wrap:balance}
-  .vs-f-meta i{font-style:normal;padding-inline:.55em}
-  .vs-lager.valt-klassisk .vs-f-h1,.vs-lager.valt-klassisk .vs-f-tag{opacity:1;transition:opacity .4s ease}
-  /* "Roligare." kan inte stå still när man pekar på den. "Tydligare." står still. */
   .vs-hopp{display:inline-block}
   .vs-hopp span{display:inline-block}
   @media (prefers-reduced-motion:no-preference){
     .vs-val--ny:hover .vs-hopp span,.vs-val--ny:focus-visible .vs-hopp span{animation:vs-hopp .6s var(--vs-mjuk) calc(var(--i) * 45ms) both}
   }
   @keyframes vs-hopp{0%,100%{transform:none}40%{transform:translateY(-.32em) rotate(-6deg)}70%{transform:translateY(.04em)}}
-  .vs-text{
-    position:relative;z-index:4;max-width:calc(100% - 2.5rem);max-width:calc(100% - 2 * clamp(1.25rem,6cqi,3.5rem));
-    display:flex;flex-direction:column;align-items:center;gap:.75rem;
-    transition:opacity .45s ease;
-  }
-  .vs-namn{display:inline-flex;align-items:center;gap:.5em;font-size:clamp(2rem,1rem + 2.1vw,3.25rem);font-size:clamp(2rem,1rem + 4.2cqi,3.25rem);font-weight:400;letter-spacing:.02em;line-height:1.05}
-  .vs-pil{flex:none;display:inline-grid;place-items:center;width:1.05em;height:1.05em;border-radius:50%;border:1px solid rgba(255,209,102,.7);color:var(--accent);transition:background-color .35s ease,color .35s ease,border-color .35s ease,transform .5s var(--vs-mjuk)}
-  .vs-pil svg{width:46%;height:46%;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-  .vs-rad{display:block;max-width:31ch;min-height:var(--vs-rad-h,3em);font-size:clamp(.98rem,.85rem + .45cqi,1.15rem);line-height:1.5;color:var(--mist);text-wrap:balance}
-  .vs-rad b{font-weight:500;color:var(--ink)}
-  /* slöjan som dämpar den halva man inte pekar på, och fokusringen (överst) */
+  /* slöjan som dämpar bilden i den halva man inte pekar på; fokusringen runt valtexten */
   .vs-val::after{content:"";position:absolute;inset:0;z-index:3;background:#060606;opacity:0;pointer-events:none;transition:opacity .5s ease}
-  .vs-val:focus-visible .vs-text{outline:2px solid var(--ink);outline-offset:.8rem;border-radius:2px}
-  .vs-som{position:absolute;z-index:4;top:0;bottom:0;left:var(--vs-sida);width:1px;margin-left:-.5px;background:rgba(234,230,220,.16);pointer-events:none;transition:opacity .3s ease}
+  .vs-val:focus-visible .vs-text{outline:2px solid var(--ink);outline-offset:.75rem;border-radius:2px}
+  .vs-som{position:absolute;z-index:5;top:0;bottom:0;left:var(--vs-sida);width:1px;margin-left:-.5px;background:rgba(234,230,220,.18);pointer-events:none;transition:opacity .3s ease}
+  /* namnet över sömmen: två likadana lager, vart och ett klippt till sin halva */
+  .vs-namnlager{position:absolute;inset:0;z-index:4;pointer-events:none}
+  .vs-namnlager--ny{clip-path:inset(0 calc(100% - var(--vs-sida)) 0 0)}
+  .vs-namnlager--kl{clip-path:inset(0 0 0 var(--vs-sida));color:var(--ink)}
+  .vs-rubrik,.vs-under{position:absolute;margin:0;font-weight:400;text-align:center;text-wrap:balance}
+  .vs-rubrik{top:var(--t,30vh);left:var(--l,5vw);width:var(--w,90vw);font-size:var(--fs,clamp(2.65rem,1.5rem + 5.7vw,5.3rem));letter-spacing:var(--ls,.055em);line-height:var(--lh,1.1)}
+  .vs-under{top:var(--t2,48vh);left:var(--l2,10vw);width:var(--w2,80vw);font-size:var(--fs2,clamp(1.7rem,1.1rem + 2.9vw,3.05rem));letter-spacing:var(--ls2,.015em);line-height:var(--lh2,1.38)}
+  /* skrivbordets stil: varma bokstäver med djup, som lera i lampans sken */
+  .vs-namnlager--ny .vs-rubrik{color:#fff2d8;text-shadow:0 .012em 0 #efd5a6,0 .024em 0 #e2c189,0 .036em 0 #d4ad70,0 .048em 0 #be9455,0 .06em 0 #a27c41,0 .08em .02em rgba(0,0,0,.45),0 .15em .25em rgba(0,0,0,.55),0 0 .55em rgba(255,188,105,.4)}
+  .vs-namnlager--ny .vs-under{color:#ffeccc;text-shadow:0 .02em 0 #dcba80,0 .04em 0 #bd9455,0 .06em .02em rgba(0,0,0,.45),0 .12em .28em rgba(0,0,0,.6),0 0 .6em rgba(255,188,105,.32)}
   /* flikar på sömmen: hälsningen uppe, kontakt nere */
-  .vs-flik{position:absolute;left:var(--vs-sida);z-index:5;transform:translateX(-50%);background:var(--bg);border:1px solid var(--hair);transition:opacity .35s ease}
+  .vs-flik{position:absolute;left:var(--vs-sida);z-index:6;transform:translateX(-50%);background:var(--bg);border:1px solid var(--hair);transition:opacity .35s ease}
   .vs-flik--fraga{top:-1px;border-top:0;padding:calc(1rem + env(safe-area-inset-top)) 1.7rem 1.1rem;text-align:center;white-space:nowrap}
-  .vs-flik--fraga h2{font-size:clamp(1.2rem,.95rem + .7vw,1.55rem);font-weight:400;letter-spacing:.02em;line-height:1.2;margin:0}
+  .vs-flik--fraga h2{font-size:clamp(1.15rem,.95rem + .7vw,1.55rem);font-weight:400;letter-spacing:.02em;line-height:1.2;margin:0}
   .vs-flik--fraga h2 span{color:var(--mist)}
   .vs-flik--kontakt{bottom:-1px;border-bottom:0;padding:0}
-  .vs-kontakt{
-    display:flex;align-items:center;gap:.9rem;padding:1rem 1.7rem calc(1.1rem + env(safe-area-inset-bottom));white-space:nowrap;
-    color:var(--ink);text-decoration:none;text-align:left;
-  }
+  .vs-kontakt{display:flex;align-items:center;gap:.9rem;padding:1rem 1.6rem calc(1.1rem + env(safe-area-inset-bottom));white-space:nowrap;color:var(--ink);text-decoration:none;text-align:left}
   .vs-kontakt svg{width:1.7rem;height:1.7rem;flex:none;overflow:visible;stroke:currentColor;fill:none;stroke-width:1.4;stroke-linejoin:round;stroke-linecap:round;transition:transform .5s var(--vs-mjuk)}
   .vs-kontakt .vs-sigill{fill:#c8323c;stroke:none}
   .vs-k1{display:block;font-size:.95rem;line-height:1.3;color:var(--mist)}
@@ -629,86 +628,42 @@
   .vs-kontakt:hover .vs-k2,.vs-kontakt:focus-visible .vs-k2{color:var(--accent)}
   .vs-kontakt:focus-visible{outline:2px solid var(--ink);outline-offset:-6px}
   .vs-flik--kontakt:has(.vs-kontakt:hover){border-color:rgba(255,209,102,.5)}
-  /* peka/fokusera: halvan växer lite, den andra dämpas lätt */
-  .vs-lager:has(.vs-val--ny:hover),.vs-lager:has(.vs-val--ny:focus-visible){--vs-sida:55%}
-  .vs-lager:has(.vs-val--klassisk:hover),.vs-lager:has(.vs-val--klassisk:focus-visible){--vs-sida:45%}
-  .vs-lager:has(.vs-val--ny:hover) .vs-val--klassisk::after,
-  .vs-lager:has(.vs-val--ny:focus-visible) .vs-val--klassisk::after,
+  /* peka/fokusera: halvan växer lite och namnet byter stil i takt med sömmen */
+  .vs-lager:has(.vs-val--ny:hover),.vs-lager:has(.vs-val--ny:focus-visible){--vs-sida:56%}
+  .vs-lager:has(.vs-val--klassisk:hover),.vs-lager:has(.vs-val--klassisk:focus-visible){--vs-sida:44%}
   .vs-lager:has(.vs-val--klassisk:hover) .vs-val--ny::after,
   .vs-lager:has(.vs-val--klassisk:focus-visible) .vs-val--ny::after{opacity:.32}
   .vs-val--ny:hover img,.vs-val--ny:focus-visible img{transform:scale(1.03);filter:brightness(1.06)}
   .vs-val:hover .vs-pil,.vs-val:focus-visible .vs-pil{background:var(--accent);border-color:var(--accent);color:#0c0c0d;transform:translateX(.12em)}
   @media (hover:none){
     .vs-lager:has(.vs-val--ny:hover),.vs-lager:has(.vs-val--klassisk:hover){--vs-sida:50%}
-    .vs-lager:has(.vs-val--ny:hover) .vs-val--klassisk::after,.vs-lager:has(.vs-val--klassisk:hover) .vs-val--ny::after{opacity:0}
+    .vs-lager:has(.vs-val--klassisk:hover) .vs-val--ny::after{opacity:0}
     .vs-val--ny:hover img{transform:none;filter:none}
     .vs-val:hover .vs-pil{background:transparent;border-color:rgba(255,209,102,.7);color:var(--accent);transform:none}
   }
-  /* när man har valt: halvan tar hela skärmen */
+  /* när man har valt: halvan tar hela skärmen, namnet får dess stil */
   html.valjer .vs-lager.valt{transition:--vs-sida .8s var(--vs-mjuk),opacity .45s ease}
   html.valjer .vs-lager.valt.valt-ny{--vs-sida:100%}
   html.valjer .vs-lager.valt.valt-klassisk{--vs-sida:0%}
   .vs-lager.valt .vs-som,.vs-lager.valt .vs-flik,.vs-lager.valt .vs-text{opacity:0}
-  .vs-lager.valt-ny .vs-forhand{opacity:0}
   .vs-lager.valt .vs-val::after{opacity:0!important}
   .vs-lager.stanger{opacity:0}
   .vs-lager.valt,.vs-lager.stanger{pointer-events:none}   /* inga klick under svepningen */
-  /* stående skärmar (mobil, surfplatta): halvorna ovanpå varandra */
-  @media (max-aspect-ratio:1/1){
-    .vs-delad{grid-template-columns:100%;grid-template-rows:var(--vs-sida) 1fr}
-    .vs-flik{left:50%}
-    .vs-som{left:0;right:0;bottom:auto;top:var(--vs-sida);width:auto;height:1px;margin:-.5px 0 0}
-    .vs-flik--fraga{padding:calc(.8rem + env(safe-area-inset-top)) 1.4rem .9rem}
-    .vs-val{padding-top:0}
-    .vs-val--ny{--vs-botten:clamp(1.4rem,5cqh,2.6rem)}
-    .vs-val--klassisk{--vs-botten:calc(clamp(6.2rem,18cqh,7.4rem) + env(safe-area-inset-bottom))}
-    .vs-val--ny img{object-position:50% 52%}
-    .vs-val--ny::before{height:64%;background:linear-gradient(to top,rgba(10,9,9,.96) 0%,rgba(10,9,9,.86) 42%,rgba(10,9,9,.4) 74%,rgba(10,9,9,0) 100%)}
-    .vs-rad{--vs-rad-h:0}
-    .vs-forhand{--vs-fs:.8;justify-content:safe center;padding-top:1.2rem;padding-bottom:1.2rem}
-    .vs-f-tag{max-width:none}
-    .vs-f-meta{margin-top:1.3rem}
-    .vs-namn{font-size:clamp(1.9rem,1rem + 3.4cqi,2.9rem)}
+  /* smala skärmar (mobil): skrivbordshalvan visar Jonas-figuren */
+  @media (max-width:700px){
+    html.valjer .vs-lager{--vs-bildx:9%}
+    .vs-flik--fraga{padding:calc(.8rem + env(safe-area-inset-top)) 1.3rem .9rem}
+    .vs-kontakt{gap:.75rem;padding:.85rem 1.25rem calc(.95rem + env(safe-area-inset-bottom))}
+    .vs-k1{font-size:.88rem}
   }
-  @media (max-aspect-ratio:1/1) and (max-width:600px){
-    html.valjer .vs-lager{--vs-sida:54%}
-    .vs-forhand{--vs-fs:.74}
-    .vs-f-tag{margin-top:.5em}
-    .vs-f-meta{display:none}
-    .vs-rad{font-size:.95rem}
-    .vs-kontakt{padding:.85rem 1.35rem calc(.95rem + env(safe-area-inset-bottom))}
-  }
-  @media (min-aspect-ratio:1/1) and (max-height:560px){
-    .vs-val{padding-top:3.4rem;--vs-botten:5.2rem}
-    .vs-forhand{--vs-fs:.62;padding-bottom:.8rem}
-    .vs-f-tag{margin-top:.4em;max-width:none}
-    .vs-f-meta{display:none}
-    .vs-namn{font-size:clamp(1.6rem,.8rem + 3.4cqi,2.4rem)}
-    .vs-rad{--vs-rad-h:3em;font-size:.92rem}
-    .vs-text{gap:.5rem}
-    .vs-flik--fraga{padding:.6rem 1.2rem .7rem}
-    .vs-flik--fraga h2{font-size:1.1rem}
-    .vs-kontakt{padding:.65rem 1.3rem calc(.7rem + env(safe-area-inset-bottom))}
-    .vs-k1{font-size:.85rem}
-    .vs-val--ny::before{height:90%;background:linear-gradient(to top,rgba(10,9,9,.96) 0%,rgba(10,9,9,.88) 45%,rgba(10,9,9,.5) 75%,rgba(10,9,9,0) 100%)}
-  }
-
-  /* låg höjd i halvan: hellre ingen förhandsvisning än en avklippt */
-  @container (max-height:420px){ .vs-f-meta{display:none} }
-  @container (max-height:330px){ .vs-f-tag{display:none} }
-  @container (max-height:250px){ .vs-forhand{display:none} }
-  /* smala liggande halvor: håll texten borta från kontaktfliken på sömmen */
-  @media (min-aspect-ratio:1/1){
-    @container (max-width:560px){
-      .vs-val--ny .vs-text{margin-right:150px;max-width:calc(100% - 150px - 1.25rem)}
-      .vs-val--klassisk .vs-text{margin-left:150px;max-width:calc(100% - 150px - 1.25rem)}
-    }
-  }
-  @media (min-aspect-ratio:1/1) and (max-height:480px){ .vs-forhand{display:none} }
-  /* mycket låga fönster (stor zoom): bara valen */
-  @media (max-height:320px){
-    .vs-rad,.vs-forhand{display:none}
-    .vs-val{padding-top:2.6rem}
+  /* låga fönster: undertexten bort, valen närmare kanten */
+  @media (max-height:520px){
+    html.valjer .vs-lager{--vs-botten:calc(5rem + env(safe-area-inset-bottom))}
+    .vs-under{display:none}
+    .vs-flik--fraga{display:none}
+    .vs-kontakt{padding:.6rem 1.2rem calc(.65rem + env(safe-area-inset-bottom))}
+    .vs-k1{font-size:.82rem}
+    .vs-rad{display:none}
   }
   .scene--hero h1:focus{outline:none}   /* fokus landar här efter valet, bara för skärmläsaren */
   @media (prefers-reduced-motion:reduce){
@@ -732,29 +687,26 @@
   <div class="vs-delad">
     <a class="vs-val vs-val--ny" href="/forslag/skrivbordet/" aria-labelledby="vs-namn-ny" aria-describedby="vs-rad-ny">
       <picture>
-        <source media="(max-aspect-ratio:1/1) and (min-width:601px)" data-srcset="assets/img/val-skrivbord-900.webp 900w, assets/img/val-skrivbord-1600.webp 1600w" sizes="100vw">
-        <img data-srcset="assets/img/val-skrivbord-staende-1000.webp 1000w, assets/img/val-skrivbord-staende-1500.webp 1500w" sizes="(max-aspect-ratio:1/1) 100vw, 50vw" width="1000" height="1250" alt="" decoding="async" fetchpriority="high">
+        <img data-srcset="assets/img/val-skrivbord-staende-1000.webp 1000w, assets/img/val-skrivbord-staende-1500.webp 1500w" sizes="56vw" width="1000" height="1250" alt="" decoding="async" fetchpriority="high">
       </picture>
       <script>  /* bilden hämtas bara när valskärmen faktiskt visas (aldrig utan JS) */
         if (document.documentElement.classList.contains('valjer')) [].forEach.call(document.currentScript.previousElementSibling.querySelectorAll('[data-srcset]'), function(el){ el.srcset = el.getAttribute('data-srcset'); });
       </script>
+      <span class="vs-dimma" aria-hidden="true"></span>
       <span class="vs-text">
         <span class="vs-namn"><span id="vs-namn-ny">Nya sidan</span> <span class="vs-pil" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6.5 18.5 12 13 17.5"/></svg></span></span>
-        <span class="vs-rad" id="vs-rad-ny"><b><span class="vs-sr">Roligare.</span><span class="vs-hopp" aria-hidden="true"><span style="--i:0">R</span><span style="--i:1">o</span><span style="--i:2">l</span><span style="--i:3">i</span><span style="--i:4">g</span><span style="--i:5">a</span><span style="--i:6">r</span><span style="--i:7">e</span><span style="--i:8">.</span></span></b> Klicka runt på mitt skrivbord och se vad du hittar.</span>
+        <span class="vs-rad" id="vs-rad-ny"><b><span class="vs-sr">Roligare.</span><span class="vs-hopp" aria-hidden="true"><span style="--i:0">R</span><span style="--i:1">o</span><span style="--i:2">l</span><span style="--i:3">i</span><span style="--i:4">g</span><span style="--i:5">a</span><span style="--i:6">r</span><span style="--i:7">e</span><span style="--i:8">.</span></span></b><span class="vs-mer"> Klicka runt på mitt skrivbord och se vad du hittar.</span></span>
       </span>
     </a>
     <button class="vs-val vs-val--klassisk" type="button" aria-labelledby="vs-namn-klassisk" aria-describedby="vs-rad-klassisk">
-      <span class="vs-forhand" aria-hidden="true">
-        <span class="vs-f-h1">Jonas von Essen</span>
-        <span class="vs-f-tag">Världsmästare i att komma ihåg.</span>
-        <span class="vs-f-meta">Tvåfaldig världsmästare i minne<i>·</i>Femfaldig svensk mästare i pubquiz<i>·</i>Vinnare SM i Poetry Slam 2026<i>·</i>Göteborgsmästare i ordvitsar</span>
-      </span>
       <span class="vs-text">
         <span class="vs-namn"><span id="vs-namn-klassisk">Klassiska sidan</span> <span class="vs-pil" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6.5 18.5 12 13 17.5"/></svg></span></span>
-        <span class="vs-rad" id="vs-rad-klassisk"><b>Tydligare.</b> Allt på ett ställe, rakt på sak.</span>
+        <span class="vs-rad" id="vs-rad-klassisk"><b>Tydligare.</b><span class="vs-mer"> Allt på ett ställe, rakt på sak.</span></span>
       </span>
     </button>
   </div>
+  <div class="vs-namnlager vs-namnlager--ny" aria-hidden="true"><p class="vs-rubrik">Jonas von Essen</p><p class="vs-under">Världsmästare i att komma ihåg.</p></div>
+  <div class="vs-namnlager vs-namnlager--kl" aria-hidden="true"><p class="vs-rubrik">Jonas von Essen</p><p class="vs-under">Världsmästare i att komma ihåg.</p></div>
   <span class="vs-som" aria-hidden="true"></span>
   <div class="vs-flik vs-flik--kontakt">
     <a class="vs-kontakt" href="#kontakt">
@@ -1388,7 +1340,8 @@
 
 
   /* ————— valskärmen: nya sidan, klassiska sidan eller kontakt.
-     Öppnas av head-skriptet (klassen valjer). Valet sparas för besöket. ————— */
+     Öppnas av head-skriptet (klassen valjer). Namnet över sömmen mäts mot den
+     riktiga rubriken så att det landar exakt när den klassiska sidan tar över. ————— */
   (function(){
     var lager = document.getElementById('valskarm');
     if (!lager) return;
@@ -1397,6 +1350,20 @@
     var upptagen = false;
     function sidan(aktiv){
       [].forEach.call(document.body.children, function(el){ if (el !== lager && el.tagName !== 'SCRIPT') el.inert = !aktiv; });
+    }
+    function matt(){
+      [['.scene--hero h1', ''], ['.scene--hero .tagline', '2']].forEach(function(p){
+        var el = document.querySelector(p[0]);
+        if (!el) return;
+        var r = el.getBoundingClientRect(), cs = getComputedStyle(el), n = p[1];
+        if (!r.width) return;
+        var st = lager.style;
+        st.setProperty('--t' + n, r.top + 'px'); st.setProperty('--l' + n, r.left + 'px'); st.setProperty('--w' + n, r.width + 'px');
+        st.setProperty('--fs' + n, cs.fontSize); st.setProperty('--ls' + n, cs.letterSpacing); st.setProperty('--lh' + n, cs.lineHeight);
+        if (!n) st.setProperty('--vs-dimma-top', r.top);
+        var t0 = parseFloat(st.getPropertyValue('--vs-dimma-top')) || r.top, b = r.bottom;
+        st.setProperty('--vs-dimma-y', ((t0 + b) / 2) + 'px'); st.setProperty('--vs-dimma-h', Math.max(120, (b - t0) * 0.95) + 'px');
+      });
     }
     function spara(val){
       try { sessionStorage.setItem('jve-startval', val); } catch(e){}
@@ -1410,20 +1377,24 @@
         lager.classList.remove('stanger', 'valt', 'valt-ny', 'valt-klassisk');
         sidan(true);
         valAktiv = false;
+        removeEventListener('resize', matt);
         if (typeof scenes === 'object' && scenes.length) update();
       });
     }
     sidan(false);
+    matt();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(matt);
+    addEventListener('resize', matt);
     requestAnimationFrame(function(){ lager.focus({ preventScroll: true }); });
 
-    // klassiska sidan: den svarta halvan sveper över skärmen och landar där sidan har sin text
+    // klassiska sidan: den svarta halvan sveper över skärmen tills hela namnet är klassiskt,
+    // och lagret tonar bort över den riktiga rubriken på exakt samma plats
     lager.querySelector('.vs-val--klassisk').addEventListener('click', function(){
       if (upptagen) return; upptagen = true;
       spara('klassisk');
-      // svepningen landar där sidans text ligger på breda skärmar; på stående och låga tonar lagret bara bort
-      var svep = !matchMedia('(max-aspect-ratio:1/1), (max-height:560px)').matches;
-      if (svep) lager.classList.add('valt', 'valt-klassisk');
-      vanta(svep ? 700 : 0).then(function(){ return stang(); }).then(function(){
+      matt();
+      lager.classList.add('valt', 'valt-klassisk');
+      vanta(750).then(function(){ return stang(); }).then(function(){
         var h1 = document.querySelector('.scene--hero h1');
         if (h1) { h1.setAttribute('tabindex', '-1'); h1.focus({ preventScroll: true }); }
         upptagen = false;
@@ -1442,7 +1413,9 @@
       if (lugn.matches) return;
       e.preventDefault();
       lager.classList.add('valt', 'valt-ny');
-      vanta(650).then(function(){ location.href = ny.href; });
+      // tillbaka från skrivbordet ska ge den klassiska sidan, inte valet igen (även i testläget med ?val)
+      try { history.replaceState(null, '', location.pathname + location.search.replace(/([?&])val(=[^&]*)?(&|$)/, '$1').replace(/[?&]$/, '') + location.hash); } catch(err){}
+      vanta(700).then(function(){ location.href = ny.href; });
     });
 
     // kontakt: lagret stängs och man landar i kontaktformuläret
