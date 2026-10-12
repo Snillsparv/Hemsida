@@ -1305,7 +1305,15 @@ const RIKTNING = new T.Vector3(0, 0.235, 1).normalize();
 let avstand = 16.7, malY = VILA_MAL.y;
 const kamPos = new T.Vector3(), kamMal = VILA_MAL.clone();
 const mus = { x: 0, y: 0, mx: 0, my: 0 };
-let panorering = 0, panMal = 0, fokus = null;
+let fokus = null;
+// svep på pekskärm: kameran står kvar och vrider huvudet åt sidan (gir, radianer, + = åt höger)
+let gir = 0, girMal = 0, girFart = 0, fokusK = 0;
+const UPP = new T.Vector3(0, 1, 0);
+const synfaltBredd = () => 2 * Math.atan(Math.tan(T.MathUtils.degToRad(kam.fov / 2)) * kam.aspect);
+function girGranser() {                                   // lika långt åt sidorna som skrivbordet räcker
+  const hd = Math.hypot(kamMal.x - kamPos.x, kamMal.z - kamPos.z) || avstand;
+  return [Math.atan(-5.0 / hd), Math.atan(4.6 / hd)];
+}
 const PORTRATT = () => innerWidth / innerHeight < 0.85;
 
 function anpassa() {
@@ -1333,12 +1341,11 @@ const intro = { t: direkt ? 9 : 0 };
 function uppdateraKamera(dt) {
   mus.x += (mus.mx - mus.x) * Math.min(1, dt * 3);
   mus.y += (mus.my - mus.y) * Math.min(1, dt * 3);
-  panorering += (panMal - panorering) * Math.min(1, dt * 6);
-  const mal = new T.Vector3(VILA_MAL.x + panorering, malY, VILA_MAL.z);
+  const mal = new T.Vector3(VILA_MAL.x, malY, VILA_MAL.z);
   let d = avstand;
   if (fokus && !reducerad) {
     mal.lerp(fokus, 0.6);
-    mal.x = T.MathUtils.lerp(VILA_MAL.x + panorering, fokus.x, PORTRATT() ? 1 : 0.85);
+    mal.x = T.MathUtils.lerp(VILA_MAL.x, fokus.x, PORTRATT() ? 1 : 0.85);
     d *= PORTRATT() ? 0.8 : 0.66;
     if (!PORTRATT() && innerWidth > 640) mal.x += d * 0.12;   // lämna plats åt panelen till höger
     if (innerWidth <= 640) mal.y -= 1.1;                       // och åt panelen nedtill på mobil
@@ -1349,7 +1356,19 @@ function uppdateraKamera(dt) {
   if (k < 1) pos.add(new T.Vector3(0, 2.2, 7.5).multiplyScalar(1 - k));
   const f = reducerad ? 1 : 1 - Math.exp(-dt * (k < 1 ? 20 : 3.2));
   kamPos.lerp(pos, f); kamMal.lerp(mal, f);
-  kam.position.copy(kamPos); kam.lookAt(kamMal);
+  // vrid huvudet: följer fingret direkt, glider ut efter en snärt och fjädrar tillbaka vid kanterna
+  const [gmin, gmax] = girGranser();
+  if (!ned) {
+    girMal += girFart * dt;
+    girFart *= Math.exp(-dt * 4.5);
+    const utanfor = girMal < gmin ? gmin - girMal : girMal > gmax ? gmax - girMal : 0;
+    if (utanfor) { girMal += utanfor * Math.min(1, dt * 10); girFart *= Math.exp(-dt * 12); }
+  }
+  gir = reducerad ? girMal : gir + (girMal - gir) * (1 - Math.exp(-dt * 22));
+  fokusK += ((fokus && !reducerad ? 1 : 0) - fokusK) * f;      // när en sak är öppen tittar kameran rakt på den
+  const g = gir * (1 - fokusK);
+  kam.position.copy(kamPos);
+  kam.lookAt(g ? kamMal.clone().sub(kamPos).applyAxisAngle(UPP, -g).add(kamPos) : kamMal);
 }
 kamPos.copy(VILA_MAL).setY(malY).addScaledVector(RIKTNING, avstand);
 if (!direkt) kamPos.add(new T.Vector3(0, 2.2, 7.5));
@@ -1390,18 +1409,27 @@ duk.addEventListener('pointermove', e => {
   if (ned && e.pointerId === ned.id && e.pointerType !== 'mouse') {
     const dx = e.clientX - ned.x;
     if (Math.abs(dx) > 6) ned.drog = true;
-    panMal = T.MathUtils.clamp(ned.pan - dx / innerWidth * 7, -5.0, 4.6);
+    const [gmin, gmax] = girGranser();
+    let nyMal = ned.gir - dx / innerWidth * synfaltBredd();   // ett helt svep vrider lika mycket som skärmen visar: bilden följer fingret
+    if (nyMal < gmin) nyMal = gmin - (gmin - nyMal) * 0.35;   // lite gummiband vid kanterna
+    if (nyMal > gmax) nyMal = gmax + (nyMal - gmax) * 0.35;
+    const nu = performance.now(), sek = Math.max(0.008, (nu - ned.t) / 1000);
+    girFart = girFart * 0.6 + ((nyMal - girMal) / sek) * 0.4;
+    girMal = nyMal; ned.t = nu;
   }
 });
 duk.addEventListener('pointerdown', e => {
   if (!e.isPrimary) { if (ned) ned.drog = true; return; }
-  ned = { id: e.pointerId, x: e.clientX, y: e.clientY, pan: panMal, drog: false };
+  ned = { id: e.pointerId, x: e.clientX, y: e.clientY, gir: girMal, t: performance.now(), drog: false };
+  girFart = 0;
 });
 duk.addEventListener('pointercancel', () => { ned = null; });
 duk.addEventListener('pointerup', e => {
   if (e.pointerType === 'mouse' && e.button !== 0) { ned = null; return; }
   if (!ned || e.pointerId !== ned.id) return;
   const drog = ned.drog || Math.hypot(e.clientX - ned.x, e.clientY - ned.y) > 8;
+  if (performance.now() - ned.t > 90) girFart = 0;          // stod fingret still innan det släpptes blir det ingen glidning
+  girFart = T.MathUtils.clamp(girFart, -2.5, 2.5);
   ned = null;
   if (drog) return;
   const id = traff(e.clientX, e.clientY);
@@ -1485,7 +1513,7 @@ let tid = 0, forra = performance.now(), forstaBild = true, senastRitad = 0, skug
 const tmp = new T.Vector3();
 function bild(nu) {
   const aktiv = hovrad || oppenId || vinkT > 0 || planFlyg.t > 0 || intro.t < 3 || Math.abs(dagMal - dagNiva) > 0.001 || kuvertDelar.t > 0 || pennDelar.t > 0 ||
-    Math.abs(panMal - panorering) > 0.01 || Math.abs(mus.mx - mus.x) > 0.002 || Math.abs(mus.my - mus.y) > 0.002;
+    Math.abs(girMal - gir) > 0.0004 || Math.abs(girFart) > 0.003 || !!ned || Math.abs(mus.mx - mus.x) > 0.002 || Math.abs(mus.my - mus.y) > 0.002;
   const grans = 1000 / (aktiv ? (LAG ? 40 : 60) : (LAG ? 24 : 30));
   if (nu - senastRitad < grans - 2) return;
   senastRitad = nu;
