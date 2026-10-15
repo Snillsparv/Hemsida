@@ -342,6 +342,10 @@ Vänliga hälsningar
         form.querySelector('.brevtack').style.display = 'block';
       } else if (svar && /captcha|robot/i.test(svar.msg || '')) {
         HTMLFormElement.prototype.submit.call(form);   /* kräver Mailchimp captcha: deras egen sida tar över */
+      } else if (fel && svar && /already subscribed|redan/i.test(svar.msg || '')) {
+        /* adressen finns redan på listan (t.ex. via minnesbrevet); då kan formuläret inte lägga till AI-brevet */
+        fel.innerHTML = 'Du finns redan på min nyhetsbrevslista. Vill du ha AI-brevet också? Mejla <a href="mailto:info@jonasvonessen.se?subject=AI-brevet">info@jonasvonessen.se</a> så lägger jag till dig.';
+        if (window.statistik) window.statistik.handelse('brev_redan', { lista: 'ai-brevet' });
       } else if (fel) {
         fel.textContent = 'Något gick fel. Kontrollera adressen och försök igen.';
       }
