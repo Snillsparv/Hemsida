@@ -311,6 +311,33 @@
     margin:clamp(2.6rem,6vh,3.6rem) 0 0;
   }
 
+  /* videon: ett omslag ur filmen (Andrei på skärmen); YouTube-spelaren laddas först vid klick,
+     från youtube-nocookie, som på startsidan */
+  .tillvideo{margin:1.5rem 0 0}
+  .tillvideo .knapp{margin-right:0}
+  .video{margin-top:clamp(4rem,9vh,5.5rem);scroll-margin-top:1.5rem}
+  .vplayer{margin:1.6rem 0 0}
+  .vram{position:relative;aspect-ratio:16/9;background:var(--bla);overflow:hidden}
+  .vram iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
+  .vfasad{position:absolute;inset:0;display:block;cursor:pointer}
+  .vfasad img{display:block;width:100%;height:100%;object-fit:cover}
+  /* uppspelningsknappen: en krämvit papperslapp i skärmens tomma vänstra del, bredvid Andrei */
+  .vspela{
+    position:absolute;left:25%;top:45%;transform:translate(-50%,-50%);
+    width:4.75rem;height:4.75rem;border-radius:50%;background:var(--ink);
+    display:grid;place-items:center;box-shadow:0 2px 0 rgba(0,0,0,.22),0 8px 18px rgba(0,0,0,.22);
+    transition:transform .15s ease,background-color .15s ease;
+  }
+  .vspela svg{width:1.7rem;height:1.7rem;fill:var(--bla);margin-left:.25rem}
+  .vfasad:hover .vspela,.vfasad:focus-visible .vspela{background:var(--accent);transform:translate(-50%,-50%) scale(1.06)}
+  .vfasad:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+  .vmeta{
+    display:block;margin-top:.8rem;
+    font-family:var(--mono);font-size:calc(.62rem * var(--mini));letter-spacing:.24em;text-transform:uppercase;color:var(--mist);
+  }
+  .vmeta a{color:var(--mist);text-decoration:none;border-bottom:1px solid var(--hair);padding-bottom:.1rem}
+  .vmeta a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+
   .slut{text-align:center;margin:clamp(5rem,12vh,7rem) auto clamp(4rem,9vh,5rem)}
   .slut .s2{font-size:clamp(1.5rem,1.2rem + 2vw,2.3rem);color:var(--accent);letter-spacing:.03em;margin:0}
   .kalla{font-size:1.125rem}
@@ -351,6 +378,9 @@
     .ingress{font-size:1.0625rem}
     .bild--topp{width:calc(100vw - 2rem);margin-top:1.8rem}
     .bild{margin-bottom:1.4rem}
+    .tillvideo{margin-top:1rem}
+    .vspela{width:3.75rem;height:3.75rem}
+    .vspela svg{width:1.35rem;height:1.35rem}
     .verktyg{margin-top:.9rem;margin-bottom:.1rem}
     .steg > summary{padding-block:.85rem .95rem}
     .steg h2{text-wrap:wrap}
@@ -401,7 +431,8 @@
     .tips{--ink:#141414;--mist:#4a4740;--hair:#c9c5bb;--accent:#6b5000;--streck:#a39d90;background:none;border:1px solid var(--hair)}
     .tips-etikett,.tips[open] .tips-etikett{background:none;color:var(--ink);border:1px solid var(--ink)}
     .tips > summary,.tips[open] > summary{padding-block:.9rem .6rem;break-inside:avoid;break-after:avoid}
-    .bild{display:none}
+    .bild,.vram,.tillvideo{display:none}
+    .vmeta a::after{content:" (youtu.be/h1lFEYyZOM8)";text-transform:none;letter-spacing:0}
     .steg > summary,.rader > div{break-inside:avoid}
   }
 </style>
@@ -414,6 +445,7 @@
   <p class="label">Cybersäkerhet för privatpersoner</p>
   <h1>Digitalt självförsvar</h1>
   <p class="ingress">Cyberattacker lär bli vanligare framöver, och det är viktigare än någonsin att vara förberedd. Nedan har jag listat de åtgärder Electronic Frontier Foundation anser är de viktigaste att vidta.</p>
+  <p class="tillvideo"><a class="knapp" href="#video">Se videon med Andrei Sabelfeld ↓</a></p>
   <figure class="bild bild--topp"><picture><source media="(max-width:34rem)" srcset="/assets/img/cyber/topp-mobil.webp" width="1000" height="560"><img src="/assets/img/cyber/topp.webp" width="1800" height="640" alt="" fetchpriority="high"></picture></figure>
 </header>
 
@@ -698,6 +730,21 @@
 
   </ol>
 
+  <section class="video" id="video" aria-labelledby="video-rubrik">
+    <p class="nr">Videon</p>
+    <h2 id="video-rubrik">Se intervjun med Andrei Sabelfeld</h2>
+    <p>I min video om <span class="hel">AI-drivna</span> hackerattacker intervjuar jag Andrei Sabelfeld, professor i cybersäkerhet på Chalmers.</p>
+    <figure class="vplayer">
+      <div class="vram">
+        <a class="vfasad" href="https://youtu.be/h1lFEYyZOM8" data-yt="h1lFEYyZOM8" target="_blank" rel="noopener" aria-label="Spela upp videon med Andrei Sabelfeld (YouTube)">
+          <img src="/assets/img/cyber/video.webp" width="1600" height="900" alt="" loading="lazy">
+          <span class="vspela" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"></path></svg></span>
+        </a>
+      </div>
+      <figcaption class="vmeta"><a href="https://youtu.be/h1lFEYyZOM8" target="_blank" rel="noopener">Öppna på YouTube ↗</a></figcaption>
+    </figure>
+  </section>
+
   <div class="slut">
     <p class="s2">Varje steg gör dig säkrare.</p>
   </div>
@@ -709,14 +756,6 @@
     <p>Bra ställen att börja på, båda på engelska, är EFF:s startpaket och deras <em>Seven Steps to Digital Security</em>:</p>
     <a class="knapp" href="https://ssd.eff.org/playlist/want-security-starter-pack" target="_blank" rel="noopener">Startpaketet →</a>
     <a class="knapp" href="https://ssd.eff.org/module/seven-steps-digital-security" target="_blank" rel="noopener">Seven Steps →</a>
-    <!-- Filmerna är inte publicerade än: fyll i länkarna nedan och ta bort hidden när de är ute. -->
-    <div hidden>
-      <p class="vidare">Se också min film om <span class="hel">AI-drivna</span> hackerattacker och hela intervjun med Andrei Sabelfeld på YouTube.</p>
-      <!-- LÄNK: filmen om AI-drivna hackerattacker (ej publicerad än) -->
-      <a class="knapp" href="#">Se filmen →</a>
-      <!-- LÄNK: hela intervjun med Andrei Sabelfeld på YouTube (ej publicerad än) -->
-      <a class="knapp" href="#">Se hela intervjun →</a>
-    </div>
   </section>
 
 </main>
@@ -771,8 +810,24 @@
     fore = null;
   });
 
+  /* Videon: bädda in spelaren först när man klickar (utan JS öppnas YouTube).
+     Inte i redigeringsläget, där omslaget ska sparas som det är. */
+  var redigerar = /[?&]redigera(=|&|$)/.test(location.search);
+  [].forEach.call(document.querySelectorAll('.vfasad'), function(fasad){
+    fasad.addEventListener('click', function(ev){
+      ev.preventDefault();
+      if (redigerar) return;
+      var ifr = document.createElement('iframe');
+      ifr.src = 'https://www.youtube-nocookie.com/embed/' + fasad.getAttribute('data-yt') + '?autoplay=1&rel=0';
+      ifr.title = fasad.getAttribute('aria-label') || 'Videospelare';
+      ifr.setAttribute('allow', 'autoplay; fullscreen; encrypted-media; picture-in-picture');
+      ifr.setAttribute('allowfullscreen', '');
+      fasad.parentNode.replaceChild(ifr, fasad);
+    });
+  });
+
   /* Sajtens redigeringsläge, som på /agera: /cyber/?redigera */
-  if (/[?&]redigera(=|&|$)/.test(location.search)) {
+  if (redigerar) {
     var rs = document.createElement('script');
     rs.src = '/assets/redigera.js';
     document.body.appendChild(rs);
