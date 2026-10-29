@@ -9,7 +9,10 @@
 <meta property="og:description" content="Sju steg för att skydda dig på nätet, baserat på EFF:s guide Surveillance Self-Defense.">
 <meta property="og:url" content="https://www.jonasvonessen.se/cyber/">
 <meta property="og:type" content="website">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://www.jonasvonessen.se/assets/img/cyber-delning.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 22 22' shape-rendering='crispEdges'%3E%3Crect width='22' height='22' rx='4' fill='%23ffd166'%2F%3E%3Crect x='8' y='3' width='1' height='1' fill='%237a4a24'%2F%3E%3Crect x='10' y='3' width='2' height='1' fill='%237a4a24'%2F%3E%3Crect x='13' y='3' width='1' height='1' fill='%237a4a24'%2F%3E%3Crect x='8' y='4' width='6' height='1' fill='%237a4a24'%2F%3E%3Crect x='7' y='5' width='8' height='1' fill='%237a4a24'%2F%3E%3Crect x='7' y='6' width='8' height='1' fill='%237a4a24'%2F%3E%3Crect x='7' y='7' width='2' height='1' fill='%237a4a24'%2F%3E%3Crect x='9' y='7' width='6' height='1' fill='%23f6c99f'%2F%3E%3Crect x='7' y='8' width='1' height='1' fill='%237a4a24'%2F%3E%3Crect x='8' y='8' width='2' height='1' fill='%23f6c99f'%2F%3E%3Crect x='10' y='8' width='1' height='1' fill='%2322242e'%2F%3E%3Crect x='11' y='8' width='2' height='1' fill='%23f6c99f'%2F%3E%3Crect x='13' y='8' width='1' height='1' fill='%2322242e'%2F%3E%3Crect x='14' y='8' width='1' height='1' fill='%23f6c99f'%2F%3E%3Crect x='9' y='9' width='2' height='1' fill='%23f6c99f'%2F%3E%3Crect x='11' y='9' width='3' height='1' fill='%23803024'%2F%3E%3Crect x='14' y='9' width='1' height='1' fill='%23f6c99f'%2F%3E%3Crect x='10' y='10' width='4' height='1' fill='%23f6c99f'%2F%3E%3Crect x='8' y='11' width='6' height='1' fill='%23e23b4e'%2F%3E%3Crect x='7' y='12' width='8' height='1' fill='%23e23b4e'%2F%3E%3Crect x='7' y='13' width='1' height='1' fill='%23f6c99f'%2F%3E%3Crect x='8' y='13' width='6' height='1' fill='%23e23b4e'%2F%3E%3Crect x='14' y='13' width='1' height='1' fill='%23f6c99f'%2F%3E%3Crect x='7' y='14' width='1' height='1' fill='%23f6c99f'%2F%3E%3Crect x='8' y='14' width='6' height='1' fill='%23e23b4e'%2F%3E%3Crect x='14' y='14' width='1' height='1' fill='%23f6c99f'%2F%3E%3Crect x='7' y='15' width='1' height='1' fill='%23f6c99f'%2F%3E%3Crect x='8' y='15' width='6' height='1' fill='%233a4468'%2F%3E%3Crect x='14' y='15' width='1' height='1' fill='%23f6c99f'%2F%3E%3Crect x='8' y='16' width='6' height='1' fill='%233a4468'%2F%3E%3Crect x='8' y='17' width='2' height='1' fill='%233a4468'%2F%3E%3Crect x='12' y='17' width='2' height='1' fill='%233a4468'%2F%3E%3Crect x='8' y='18' width='2' height='1' fill='%233a4468'%2F%3E%3Crect x='12' y='18' width='2' height='1' fill='%233a4468'%2F%3E%3Crect x='8' y='19' width='2' height='1' fill='%233a4468'%2F%3E%3Crect x='12' y='19' width='2' height='1' fill='%233a4468'%2F%3E%3Crect x='8' y='20' width='3' height='1' fill='%238a5a2b'%2F%3E%3Crect x='12' y='20' width='3' height='1' fill='%238a5a2b'%2F%3E%3C%2Fsvg%3E">
 <link rel="stylesheet" href="/assets/fonts.css">
 <style>
@@ -26,6 +29,10 @@
     --sans:'Space Grotesk',system-ui,sans-serif;
     --mono:'JetBrains Mono',ui-monospace,monospace;
     --serif:'Fraunces',Georgia,serif;
+    /* videons typsnitt: Archivo, bred och fet, som på de klippta papperslapparna */
+    --bred:'Archivo','Space Grotesk',system-ui,sans-serif;
+    /* videons diazoblå */
+    --bla:#2440a8;
     /* checklistans kolumner: nummer | text | plus/minus */
     --nrkol:3.6rem;
     --kolgap:1rem;
@@ -185,25 +192,21 @@
     background:var(--accent);margin-right:.65em;vertical-align:.2em;
   }
 
-  /* Tipsrutan: en fördjupning inuti steget, i sajtens system fast i negativ. Vitt papper,
-     svart text och en kraftig svart linje överst, som en faktaruta i en tidning.
-     Färgerna byts inne i rutan, så att .rader, .punkter, .vag och .kallor följer med av sig själva.
-     Gult syns inte på vitt, så accenten är sidans gula mörkat till bärnsten. Kontrast mot papperet:
-     text 18,7:1, --mist 7,3:1, --accent 7,2:1. */
+  /* Tipsrutan: en fördjupning inuti steget, i videons stil: ett blått papper med krämvit text och
+     en papperslapp som etikett, som de klippta lapparna i filmen. Färgerna byts inne i rutan, så att
+     .rader, .punkter, .vag och .kallor följer med av sig själva. Accenten är sajtens gula.
+     Kontrast mot det blå: text 7,6:1, --mist 6,1:1, --accent 6,1:1. */
   .tips{
-    --ink:#0c0c0d;
-    --mist:#57534a;
-    --hair:#d6d1c4;
-    --accent:#6b5000;
-    --papper:#fbfaf6;
+    --ink:#f2ecda;
+    --mist:#d3d6ea;
+    --hair:#4f64bd;
+    --papper:var(--bla);
     /* rubrikens storlek, som plus/minus ställer sig efter */
-    --trfs:1.3125rem;
+    --trfs:1.1875rem;
     position:relative;margin:2.4rem 0 1.8rem;scroll-margin-top:2rem;
-    /* källornas understrykning: mellangrå, syns på papperet men står tillbaka för texten */
-    --streck:#a39d90;
-    color-scheme:light;background:var(--papper);color:var(--ink);
-    /* mörkt på ljust: vanlig kantutjämning, annars blir texten för tunn på Mac */
-    -webkit-font-smoothing:auto;
+    /* källornas understrykning: syns på det blå men står tillbaka för texten */
+    --streck:#8d9bd6;
+    background:var(--papper) url(/assets/img/cyber/papper.webp);color:var(--ink);
   }
   .tips + .tips{margin-top:1.6rem}
   .tips + .lankar{margin-top:2.2rem}
@@ -211,46 +214,47 @@
     display:grid;grid-template-columns:minmax(0,1fr) .85rem;column-gap:1rem;align-items:start;
     padding:1rem 1.25rem 1.15rem;
   }
-  /* den kraftiga linjen: rutans enda tunga grafik, i båda lägena. En kantlinje och ingen bakgrund,
-     så att den kommer med på papper och i Windows kontrastläge. */
-  .tips > summary::before{content:"";grid-column:1 / -1;margin-bottom:.6rem;border-top:3px solid var(--ink)}
+  /* etiketten är en krämvit papperslapp med blå text; gul när rutan är utfälld */
   .tips-etikett{
-    grid-column:1 / -1;justify-self:start;margin-bottom:.3rem;
-    font-family:var(--mono);font-size:calc(.62rem * var(--mini));font-weight:500;line-height:1.5;
-    letter-spacing:.26em;text-transform:uppercase;color:var(--mist);
-    transition:color .15s ease;
+    grid-column:1 / -1;justify-self:start;margin-bottom:.75rem;
+    padding:.3em .62em .24em;background:var(--ink);color:var(--papper);
+    font-family:var(--bred);font-stretch:118%;font-size:.75rem;font-weight:800;line-height:1.2;
+    letter-spacing:.12em;text-transform:uppercase;
+    transition:background-color .15s ease;
   }
-  /* rubriken i Fraunces, som ingressen: en mellanrubrik i tryck, inte en knapp */
+  /* rubriken i Archivo, som texten i videon: lite bred och halvfet */
   .tips-rubrik{
-    grid-column:1;grid-row:3;min-width:0;
-    font-family:var(--serif);font-size:var(--trfs);font-weight:400;line-height:1.3;
+    grid-column:1;grid-row:2;min-width:0;
+    font-family:var(--bred);font-stretch:108%;font-size:var(--trfs);font-weight:600;line-height:1.3;
     color:var(--ink);text-wrap:balance;
     /* understrykningen finns alltid men är genomskinlig; vid hover får den färg */
-    text-decoration:underline 1px transparent;text-underline-offset:.2em;
+    text-decoration:underline 1px transparent;text-underline-offset:.22em;
     transition:color .15s ease,text-decoration-color .15s ease;
   }
   /* grid-row: stegets .tecken-regel gäller även här, så raden måste anges */
-  .tips > summary .tecken{grid-column:2;grid-row:3;width:.85rem;height:.85rem;margin-top:calc(var(--trfs) * .65 - .425rem)}
+  .tips > summary .tecken{grid-column:2;grid-row:2;width:.85rem;height:.85rem;margin-top:calc(var(--trfs) * .65 - .425rem)}
   .tips > summary .tecken::before,.tips > summary .tecken::after{height:2px;margin-top:-1px}
   /* utfälld: lite mer luft under rubriken, så att den läses som rubrik över texten */
   .tips[open] > summary{padding-bottom:1.4rem}
-  .tips[open] .tips-etikett{color:var(--accent)}
+  .tips[open] .tips-etikett{background:var(--accent)}
   @media (hover:hover){
-    .tips > summary:hover .tips-etikett,.tips > summary:hover .tips-rubrik{color:var(--accent)}
+    .tips > summary:hover .tips-etikett{background:var(--accent)}
+    .tips > summary:hover .tips-rubrik{color:var(--accent)}
     .tips > summary:hover .tips-rubrik{text-decoration-color:currentColor}
   }
-  /* fokus utan :has: en mörk ram inne i papperet (bärnsten ute på det svarta syns inte) */
+  /* fokus utan :has: en ljus ram inne i papperet */
   .tips > summary:focus-visible{outline-color:var(--ink);outline-offset:-5px}
   /* fokus: en gul ring utanför papperet, på sidans svarta botten, som fokus i resten av sidan */
   @supports selector(:has(*)){
     .tips > summary:focus-visible{outline:none}
     .tips:has(> summary:focus-visible){outline:2px solid var(--gul);outline-offset:3px}
-    .tips:has(> summary:focus-visible) .tips-etikett{color:var(--accent)}
+    .tips:has(> summary:focus-visible) .tips-etikett{background:var(--accent)}
     @media (forced-colors:active){ .tips:has(> summary:focus-visible){outline:3px solid Highlight} }
   }
-  /* kontrastläge: papperet försvinner, så rutan får en ram */
+  /* kontrastläge: papperet försvinner, så rutan och etiketten får en ram */
   @media (forced-colors:active){
     .tips{border:1px solid CanvasText}
+    .tips-etikett{border:1px solid CanvasText}
     /* där blir den genomskinliga understrykningen synlig, så den visas bara vid hover */
     .tips-rubrik{text-decoration-line:none}
     .tips > summary:hover .tips-rubrik{text-decoration-line:underline}
@@ -298,6 +302,15 @@
     letter-spacing:.24em;text-transform:uppercase;color:var(--mist);margin:0 0 .35rem;
   }
 
+  /* bilderna: klippt papper på videons blå, som stillbilder ur filmen */
+  .bild{margin:0 0 1.8rem}
+  .bild img{display:block;width:100%;height:auto;background:var(--bla)}
+  /* toppbilden är bredare än textspalten på stora skärmar */
+  .bild--topp{
+    width:min(60rem,calc(100vw - 3rem));position:relative;left:50%;transform:translateX(-50%);
+    margin:clamp(2.6rem,6vh,3.6rem) 0 0;
+  }
+
   .slut{text-align:center;margin:clamp(5rem,12vh,7rem) auto clamp(4rem,9vh,5rem)}
   .slut .s2{font-size:clamp(1.5rem,1.2rem + 2vw,2.3rem);color:var(--accent);letter-spacing:.03em;margin:0}
   .kalla{font-size:1.125rem}
@@ -336,12 +349,14 @@
     .label{margin-bottom:1.1rem;letter-spacing:.2em}
     h1{margin-bottom:1.1rem}
     .ingress{font-size:1.0625rem}
+    .bild--topp{width:calc(100vw - 2rem);margin-top:1.8rem}
+    .bild{margin-bottom:1.4rem}
     .verktyg{margin-top:.9rem;margin-bottom:.1rem}
     .steg > summary{padding-block:.85rem .95rem}
     .steg h2{text-wrap:wrap}
     .steg .kort{grid-column:2 / -1;margin-top:.3rem;font-size:1.0625rem;line-height:1.5}
     .innehall{padding-left:0}
-    .tips{margin-top:2rem;--trfs:1.1875rem}
+    .tips{margin-top:2rem;--trfs:1.0625rem}
     .tips > summary{padding:.95rem 1rem 1.05rem}
     .tips[open] > summary{padding-bottom:1.2rem}
     .tips-text{padding:0 1rem 1.25rem}
@@ -382,10 +397,11 @@
     :root{color-scheme:light;--bg:#fff;--ink:#141414;--mist:#4a4740;--hair:#c9c5bb;--accent:#6b5000;--siffra:#6f6a60}
     .verktyg .knapp,.tecken{display:none}
     details[open] > .innehall,details[open] > .tips-text{animation:none}
-    /* på papper: ingen fyllning, bara en hårlinje runt rutan och en smalare svart linje */
-    .tips{--hair:#c9c5bb;background:none;border:1px solid var(--hair)}
+    /* på papper: inget blått, mörk text och en hårlinje runt rutan; etiketten får en ram */
+    .tips{--ink:#141414;--mist:#4a4740;--hair:#c9c5bb;--accent:#6b5000;--streck:#a39d90;background:none;border:1px solid var(--hair)}
+    .tips-etikett,.tips[open] .tips-etikett{background:none;color:var(--ink);border:1px solid var(--ink)}
     .tips > summary,.tips[open] > summary{padding-block:.9rem .6rem;break-inside:avoid;break-after:avoid}
-    .tips > summary::before{border-top-width:2px}
+    .bild{display:none}
     .steg > summary,.rader > div{break-inside:avoid}
   }
 </style>
@@ -398,6 +414,7 @@
   <p class="label">Cybersäkerhet för privatpersoner</p>
   <h1>Digitalt självförsvar</h1>
   <p class="ingress">Cyberattacker lär bli vanligare framöver, och det är viktigare än någonsin att vara förberedd. Nedan har jag listat de åtgärder Electronic Frontier Foundation anser är de viktigaste att vidta.</p>
+  <figure class="bild bild--topp"><picture><source media="(max-width:34rem)" srcset="/assets/img/cyber/topp-mobil.webp" width="1000" height="560"><img src="/assets/img/cyber/topp.webp" width="1800" height="640" alt="" fetchpriority="high"></picture></figure>
 </header>
 
 <main class="wrap">
@@ -417,6 +434,7 @@
         <span class="tecken" aria-hidden="true"></span>
       </summary>
       <div class="innehall">
+        <figure class="bild"><img src="/assets/img/cyber/losenord.webp" width="1400" height="560" alt="" loading="lazy"></figure>
         <ul class="punkter">
           <li>Ha ett unikt lösenord för varje tjänst. Läcker ett lösenord någonstans ska det inte gå att använda någon annanstans.</li>
           <li>Låt en lösenordshanterare skapa och komma ihåg lösenorden. Då behöver du bara kunna ett enda riktigt starkt lösenord.</li>
@@ -465,6 +483,7 @@
         <span class="tecken" aria-hidden="true"></span>
       </summary>
       <div class="innehall">
+        <figure class="bild"><img src="/assets/img/cyber/tvasteg.webp" width="1400" height="560" alt="" loading="lazy"></figure>
         <p>Tvåstegsverifiering (eller flerfaktorsinloggning) betyder att ett lösenord inte räcker för att logga in. Du måste också bekräfta med något du har, till exempel telefonen. EFF rangordnar metoderna så här, säkrast först:</p>
         <ol class="rang" role="list">
           <li><span><span class="metod">Passkeys</span><span class="meta">Nyckel i stället för lösenord.</span></span></li>
@@ -502,6 +521,7 @@
         <span class="tecken" aria-hidden="true"></span>
       </summary>
       <div class="innehall">
+        <figure class="bild"><img src="/assets/img/cyber/uppdatera.webp" width="1400" height="560" alt="" loading="lazy"></figure>
         <p>Uppdateringarna täpper till just de säkerhetshål som angriparna använder. Gamla enheter som inte längre får uppdateringar är en risk.</p>
         <details class="tips" id="tips-uppdatera">
           <summary><span class="tips-etikett">Tips</span><span class="tips-rubrik">Så slår du på automatiska uppdateringar</span><span class="tecken" aria-hidden="true"></span></summary>
@@ -539,6 +559,7 @@
         <span class="tecken" aria-hidden="true"></span>
       </summary>
       <div class="innehall">
+        <figure class="bild"><img src="/assets/img/cyber/chatt.webp" width="1400" height="560" alt="" loading="lazy"></figure>
         <p>Med end-to-end-kryptering kan ingen annan än du och mottagaren läsa meddelandena, inte ens företaget bakom appen. Så här ser det ut enligt EFF:</p>
         <dl class="grupper">
           <div class="ja"><dt>Påslaget som standard</dt><dd>Signal, WhatsApp</dd></div>
@@ -576,6 +597,7 @@
         <span class="tecken" aria-hidden="true"></span>
       </summary>
       <div class="innehall">
+        <figure class="bild"><img src="/assets/img/cyber/spar.webp" width="1400" height="560" alt="" loading="lazy"></figure>
         <ul class="punkter">
           <li>Installera en spårningsblockerare i webbläsaren. EFF har gjort en egen, <span class="hel">Privacy Badger</span>, som stoppar de dolda spårare som kartlägger vad du gör på nätet.</li>
           <li>Stäng av eller nollställ <span class="hel">reklam-id:t</span> i telefonen.</li>
@@ -610,6 +632,7 @@
         <span class="tecken" aria-hidden="true"></span>
       </summary>
       <div class="innehall">
+        <figure class="bild"><img src="/assets/img/cyber/installera.webp" width="1400" height="560" alt="" loading="lazy"></figure>
         <ul class="punkter">
           <li>Installera bara appar och tillägg du vet vad de är, och kontrollera att det verkligen är rätt app.</li>
           <li>Gå igenom vilka behörigheter apparna har: plats, kontakter, bilder, kamera och mikrofon. Ge bara det som behövs.</li>
@@ -640,6 +663,7 @@
         <span class="tecken" aria-hidden="true"></span>
       </summary>
       <div class="innehall">
+        <figure class="bild"><img src="/assets/img/cyber/natfiske.webp" width="1400" height="560" alt="" loading="lazy"></figure>
         <ul class="punkter">
           <li>Titta på adressfältet att du är på rätt sida innan du skriver in ett lösenord. En logga bevisar ingenting.</li>
           <li>Om lösenordshanteraren inte vill fylla i lösenordet automatiskt kan det vara för att sidan är falsk.</li>
