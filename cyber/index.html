@@ -1,0 +1,759 @@
+<!doctype html>
+<html lang="sv"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Digitalt självförsvar · Jonas von Essen</title>
+<meta name="description" content="Digitalt självförsvar: sju steg för att skydda dig på nätet, på svenska, baserat på EFF:s guide Surveillance Self-Defense.">
+<link rel="canonical" href="https://www.jonasvonessen.se/cyber/">
+<meta property="og:title" content="Digitalt självförsvar">
+<meta property="og:description" content="Sju steg för att skydda dig på nätet, baserat på EFF:s guide Surveillance Self-Defense.">
+<meta property="og:url" content="https://www.jonasvonessen.se/cyber/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 22 22' shape-rendering='crispEdges'%3E%3Crect width='22' height='22' rx='4' fill='%23ffd166'%2F%3E%3Crect x='8' y='3' width='1' height='1' fill='%237a4a24'%2F%3E%3Crect x='10' y='3' width='2' height='1' fill='%237a4a24'%2F%3E%3Crect x='13' y='3' width='1' height='1' fill='%237a4a24'%2F%3E%3Crect x='8' y='4' width='6' height='1' fill='%237a4a24'%2F%3E%3Crect x='7' y='5' width='8' height='1' fill='%237a4a24'%2F%3E%3Crect x='7' y='6' width='8' height='1' fill='%237a4a24'%2F%3E%3Crect x='7' y='7' width='2' height='1' fill='%237a4a24'%2F%3E%3Crect x='9' y='7' width='6' height='1' fill='%23f6c99f'%2F%3E%3Crect x='7' y='8' width='1' height='1' fill='%237a4a24'%2F%3E%3Crect x='8' y='8' width='2' height='1' fill='%23f6c99f'%2F%3E%3Crect x='10' y='8' width='1' height='1' fill='%2322242e'%2F%3E%3Crect x='11' y='8' width='2' height='1' fill='%23f6c99f'%2F%3E%3Crect x='13' y='8' width='1' height='1' fill='%2322242e'%2F%3E%3Crect x='14' y='8' width='1' height='1' fill='%23f6c99f'%2F%3E%3Crect x='9' y='9' width='2' height='1' fill='%23f6c99f'%2F%3E%3Crect x='11' y='9' width='3' height='1' fill='%23803024'%2F%3E%3Crect x='14' y='9' width='1' height='1' fill='%23f6c99f'%2F%3E%3Crect x='10' y='10' width='4' height='1' fill='%23f6c99f'%2F%3E%3Crect x='8' y='11' width='6' height='1' fill='%23e23b4e'%2F%3E%3Crect x='7' y='12' width='8' height='1' fill='%23e23b4e'%2F%3E%3Crect x='7' y='13' width='1' height='1' fill='%23f6c99f'%2F%3E%3Crect x='8' y='13' width='6' height='1' fill='%23e23b4e'%2F%3E%3Crect x='14' y='13' width='1' height='1' fill='%23f6c99f'%2F%3E%3Crect x='7' y='14' width='1' height='1' fill='%23f6c99f'%2F%3E%3Crect x='8' y='14' width='6' height='1' fill='%23e23b4e'%2F%3E%3Crect x='14' y='14' width='1' height='1' fill='%23f6c99f'%2F%3E%3Crect x='7' y='15' width='1' height='1' fill='%23f6c99f'%2F%3E%3Crect x='8' y='15' width='6' height='1' fill='%233a4468'%2F%3E%3Crect x='14' y='15' width='1' height='1' fill='%23f6c99f'%2F%3E%3Crect x='8' y='16' width='6' height='1' fill='%233a4468'%2F%3E%3Crect x='8' y='17' width='2' height='1' fill='%233a4468'%2F%3E%3Crect x='12' y='17' width='2' height='1' fill='%233a4468'%2F%3E%3Crect x='8' y='18' width='2' height='1' fill='%233a4468'%2F%3E%3Crect x='12' y='18' width='2' height='1' fill='%233a4468'%2F%3E%3Crect x='8' y='19' width='2' height='1' fill='%233a4468'%2F%3E%3Crect x='12' y='19' width='2' height='1' fill='%233a4468'%2F%3E%3Crect x='8' y='20' width='3' height='1' fill='%238a5a2b'%2F%3E%3Crect x='12' y='20' width='3' height='1' fill='%238a5a2b'%2F%3E%3C%2Fsvg%3E">
+<link rel="stylesheet" href="/assets/fonts.css">
+<style>
+  :root{
+    color-scheme:dark;
+    --bg:#0c0c0d;
+    --ink:#eae6dc;
+    --mist:#b7b1a4;
+    --hair:#3f3d37;
+    --accent:#ffd166;
+    /* sidans gula även där --accent är mörkat (fokusringen runt tipsrutan) */
+    --gul:var(--accent);
+    --mini:1.15;
+    --sans:'Space Grotesk',system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+    --serif:'Fraunces',Georgia,serif;
+    /* checklistans kolumner: nummer | text | plus/minus */
+    --nrkol:3.6rem;
+    --kolgap:1rem;
+    /* stegrubrikens storlek och stegsiffrornas (stora, i Fraunces) */
+    --h2fs:clamp(1.4rem,1.1rem + 1.3vw,1.8rem);
+    --snrfs:4.75rem;
+    /* siffrorna i vila: mellan --mist och bakgrunden, så att rubriken läses först */
+    --siffra:#8b867d;
+    /* summarys luft ovanför rubriken, och avståndet från en hängande siffra till textspalten */
+    --sumtopp:1.35rem;
+    --hang:2rem;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth;background:var(--bg)}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:var(--sans);font-weight:400;line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit}
+  a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+  .topp{
+    position:absolute;top:1.4rem;left:max(1.4rem, env(safe-area-inset-left, 0px));z-index:5;
+    font-family:var(--mono);font-size:calc(.66rem * var(--mini));
+    letter-spacing:.24em;text-transform:uppercase;color:var(--mist);
+    text-decoration:none;border-bottom:1px solid transparent;padding-bottom:.2rem;
+  }
+  .topp:hover{color:var(--accent);border-bottom-color:var(--accent)}
+  .wrap{
+    max-width:42rem;margin:0 auto;
+    padding-left:max(1.5rem, env(safe-area-inset-left, 0px));
+    padding-right:max(1.5rem, env(safe-area-inset-right, 0px));
+  }
+
+  /* hero: samma delar som /agera men kort, så att listan syns direkt */
+  .hero{text-align:center;padding-block:clamp(5rem,11vh,7rem) 0}
+  .label{
+    font-family:var(--mono);font-size:calc(.66rem * var(--mini));font-weight:400;
+    letter-spacing:.44em;text-transform:uppercase;color:var(--mist);margin:0 0 1.8rem;
+  }
+  h1{
+    font-size:clamp(2.3rem,1.4rem + 4.6vw,4.4rem);
+    font-weight:400;letter-spacing:.055em;line-height:1.12;text-wrap:balance;margin:0 0 1.9rem;
+  }
+  .ingress{font-family:var(--serif);font-size:clamp(1.08rem,1rem + .5vw,1.3rem);line-height:1.6;color:var(--ink);max-width:34rem;margin:0 auto;text-wrap:balance}
+
+  .nr{
+    font-family:var(--mono);font-size:calc(.66rem * var(--mini));
+    letter-spacing:.44em;text-transform:uppercase;color:var(--mist);margin:0 0 1rem;
+  }
+  h2{font-weight:400;font-size:clamp(1.45rem,1.1rem + 1.8vw,2.1rem);letter-spacing:.03em;line-height:1.25;text-wrap:balance;margin:0 0 1.1rem}
+  p{margin:0 0 1.15rem;text-wrap:pretty}
+  .meta{color:var(--mist);font-size:1.0625rem}
+  .hel{white-space:nowrap}
+  .dold{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+  .knapp{
+    display:inline-block;padding:.45rem .15rem;margin-right:1.6rem;
+    background:transparent;color:var(--accent);border:none;cursor:pointer;
+    font-family:var(--mono);font-size:calc(.7rem * var(--mini));font-weight:500;
+    letter-spacing:.24em;text-transform:uppercase;text-decoration:none;
+    border-bottom:1px solid transparent;
+  }
+  .knapp:hover{border-bottom-color:var(--accent)}
+  .knapp[hidden]{display:none}
+  .vidare{margin-top:2rem}
+
+  /* öppna/stäng-tecknet: ett tunt plus i accentfärgen; det lodräta strecket vrids ner till ett minus */
+  .tecken{position:relative;display:block;width:1.05rem;height:1.05rem;flex:none;color:var(--accent)}
+  .tecken::before,.tecken::after{
+    content:"";position:absolute;left:0;right:0;top:50%;height:2px;margin-top:-1px;
+    background:currentColor;transition:transform .18s ease;
+  }
+  .tecken::after{transform:rotate(90deg)}
+  details[open] > summary .tecken::after{transform:rotate(0deg)}
+  summary{list-style:none;cursor:pointer}
+  summary::-webkit-details-marker{display:none}
+
+  /* checklistan */
+  .verktyg{
+    display:flex;justify-content:space-between;align-items:center;gap:1rem;
+    margin-top:clamp(2.6rem,6vh,4rem);margin-bottom:.5rem;
+  }
+  .verktyg .nr{margin:0}
+  .verktyg .knapp{margin:0}
+  .lista{list-style:none;margin:0;padding:0;border-top:1px solid var(--hair)}
+  .lista > li{border-bottom:1px solid var(--hair)}
+  .steg > summary{
+    position:relative;
+    display:grid;grid-template-columns:var(--nrkol) minmax(0,1fr) 1.05rem;column-gap:var(--kolgap);
+    align-items:start;padding-block:var(--sumtopp) 1.4rem;
+  }
+  /* Stegsiffran: en stor Fraunces-siffra vars överkant står i höjd med rubrikens versaler.
+     .27em = från radens överkant till versalhöjden i Space Grotesk (radhöjd 1.25),
+     .15em = samma sak för Fraunces-siffrorna med radhöjd 1. */
+  .steg .snr{
+    grid-column:1;grid-row:1 / span 2;align-self:start;margin:0;
+    margin-top:calc(var(--h2fs) * .27 - var(--snrfs) * .15);
+    font-family:var(--serif);font-size:var(--snrfs);font-weight:400;line-height:1;
+    font-variant-numeric:lining-nums proportional-nums;letter-spacing:-.01em;
+    color:var(--siffra);transition:color .18s ease;
+  }
+  .steg h2{
+    grid-column:2;grid-row:1;align-self:start;margin:0;
+    font-size:var(--h2fs);line-height:1.25;
+  }
+  .steg .kort{
+    grid-column:2;grid-row:2;display:block;margin-top:.45rem;
+    font-size:1.125rem;line-height:1.55;color:var(--mist);text-wrap:pretty;
+  }
+  .steg .tecken{grid-column:3;grid-row:1;align-self:start;margin-top:calc(var(--h2fs) * .625 - .525rem)}
+  .steg[open] .snr,.steg > summary:focus-visible .snr{color:var(--accent)}
+  .steg[open] .kort{color:var(--ink)}
+  @media (hover:hover){
+    .steg > summary:hover h2{color:var(--accent)}
+    .steg:not([open]) > summary:hover .snr{color:var(--mist)}
+  }
+  .steg > summary:focus-visible{outline-offset:2px}
+
+  .innehall{padding:0 0 2.4rem calc(var(--nrkol) + var(--kolgap));font-size:1.125rem}
+  .innehall > :first-child{margin-top:.2rem}
+  @media (prefers-reduced-motion: no-preference){
+    details[open] > .innehall,details[open] > .tips-text{animation:fram .18s ease-out}
+    @keyframes fram{from{opacity:.25;transform:translateY(-4px)}}
+  }
+  .under{
+    font-family:var(--sans);font-size:1.2rem;font-weight:500;
+    letter-spacing:.02em;color:var(--ink);margin:2.1rem 0 .7rem;line-height:1.35;
+  }
+
+  .punkter{list-style:disc;margin:0 0 1.15rem;padding-left:1.2rem;line-height:1.6}
+  .punkter li{margin-bottom:.65rem;padding-left:.2rem;text-wrap:pretty}
+  .punkter li::marker{color:var(--accent)}
+  .punkter .meta{display:block}
+
+  /* rangordning (tvåstegsverifiering): numrerade rader med hårlinjer */
+  .rang{list-style:none;counter-reset:rang;margin:1.6rem 0 1.8rem;padding:0;border-top:1px solid var(--hair)}
+  .rang li{
+    counter-increment:rang;display:grid;grid-template-columns:1.9rem minmax(0,1fr);
+    padding:.8rem 0 .85rem;border-bottom:1px solid var(--hair);line-height:1.5;
+  }
+  .rang li::before{
+    content:counter(rang) ".";
+    font-size:1.15rem;font-weight:400;color:var(--accent);
+  }
+  .rang .metod{display:block;font-size:1.15rem;letter-spacing:.02em}
+  .rang .meta{display:block}
+
+  /* chattappar i fyra grupper */
+  .grupper{margin:1.6rem 0 1.8rem;border-top:1px solid var(--hair)}
+  .grupper > div{padding:.95rem 0 1rem;border-bottom:1px solid var(--hair)}
+  .grupper dt{
+    font-size:1.0625rem;color:var(--mist);margin:0 0 .2rem;line-height:1.5;
+  }
+  .grupper dd{margin:0;font-size:1.2rem;letter-spacing:.02em;line-height:1.45}
+  .grupper .ja dd::before{
+    content:"";display:inline-block;width:.34em;height:.34em;border-radius:50%;
+    background:var(--accent);margin-right:.65em;vertical-align:.2em;
+  }
+
+  /* Tipsrutan: en fördjupning inuti steget, i sajtens system fast i negativ. Vitt papper,
+     svart text och en kraftig svart linje överst, som en faktaruta i en tidning.
+     Färgerna byts inne i rutan, så att .rader, .punkter, .vag och .kallor följer med av sig själva.
+     Gult syns inte på vitt, så accenten är sidans gula mörkat till bärnsten. Kontrast mot papperet:
+     text 18,7:1, --mist 7,3:1, --accent 7,2:1. */
+  .tips{
+    --ink:#0c0c0d;
+    --mist:#57534a;
+    --hair:#d6d1c4;
+    --accent:#6b5000;
+    --papper:#fbfaf6;
+    /* rubrikens storlek, som plus/minus ställer sig efter */
+    --trfs:1.3125rem;
+    position:relative;margin:2.4rem 0 1.8rem;scroll-margin-top:2rem;
+    /* källornas understrykning: mellangrå, syns på papperet men står tillbaka för texten */
+    --streck:#a39d90;
+    color-scheme:light;background:var(--papper);color:var(--ink);
+    /* mörkt på ljust: vanlig kantutjämning, annars blir texten för tunn på Mac */
+    -webkit-font-smoothing:auto;
+  }
+  .tips + .tips{margin-top:1.6rem}
+  .tips + .lankar{margin-top:2.2rem}
+  .tips > summary{
+    display:grid;grid-template-columns:minmax(0,1fr) .85rem;column-gap:1rem;align-items:start;
+    padding:1rem 1.25rem 1.15rem;
+  }
+  /* den kraftiga linjen: rutans enda tunga grafik, i båda lägena. En kantlinje och ingen bakgrund,
+     så att den kommer med på papper och i Windows kontrastläge. */
+  .tips > summary::before{content:"";grid-column:1 / -1;margin-bottom:.6rem;border-top:3px solid var(--ink)}
+  .tips-etikett{
+    grid-column:1 / -1;justify-self:start;margin-bottom:.3rem;
+    font-family:var(--mono);font-size:calc(.62rem * var(--mini));font-weight:500;line-height:1.5;
+    letter-spacing:.26em;text-transform:uppercase;color:var(--mist);
+    transition:color .15s ease;
+  }
+  /* rubriken i Fraunces, som ingressen: en mellanrubrik i tryck, inte en knapp */
+  .tips-rubrik{
+    grid-column:1;grid-row:3;min-width:0;
+    font-family:var(--serif);font-size:var(--trfs);font-weight:400;line-height:1.3;
+    color:var(--ink);text-wrap:balance;
+    /* understrykningen finns alltid men är genomskinlig; vid hover får den färg */
+    text-decoration:underline 1px transparent;text-underline-offset:.2em;
+    transition:color .15s ease,text-decoration-color .15s ease;
+  }
+  /* grid-row: stegets .tecken-regel gäller även här, så raden måste anges */
+  .tips > summary .tecken{grid-column:2;grid-row:3;width:.85rem;height:.85rem;margin-top:calc(var(--trfs) * .65 - .425rem)}
+  .tips > summary .tecken::before,.tips > summary .tecken::after{height:2px;margin-top:-1px}
+  /* utfälld: lite mer luft under rubriken, så att den läses som rubrik över texten */
+  .tips[open] > summary{padding-bottom:1.4rem}
+  .tips[open] .tips-etikett{color:var(--accent)}
+  @media (hover:hover){
+    .tips > summary:hover .tips-etikett,.tips > summary:hover .tips-rubrik{color:var(--accent)}
+    .tips > summary:hover .tips-rubrik{text-decoration-color:currentColor}
+  }
+  /* fokus utan :has: en mörk ram inne i papperet (bärnsten ute på det svarta syns inte) */
+  .tips > summary:focus-visible{outline-color:var(--ink);outline-offset:-5px}
+  /* fokus: en gul ring utanför papperet, på sidans svarta botten, som fokus i resten av sidan */
+  @supports selector(:has(*)){
+    .tips > summary:focus-visible{outline:none}
+    .tips:has(> summary:focus-visible){outline:2px solid var(--gul);outline-offset:3px}
+    .tips:has(> summary:focus-visible) .tips-etikett{color:var(--accent)}
+    @media (forced-colors:active){ .tips:has(> summary:focus-visible){outline:3px solid Highlight} }
+  }
+  /* kontrastläge: papperet försvinner, så rutan får en ram */
+  @media (forced-colors:active){
+    .tips{border:1px solid CanvasText}
+    /* där blir den genomskinliga understrykningen synlig, så den visas bara vid hover */
+    .tips-rubrik{text-decoration-line:none}
+    .tips > summary:hover .tips-rubrik{text-decoration-line:underline}
+  }
+  .tips-text{padding:0 1.25rem 1.4rem;font-size:1.0625rem;line-height:1.6}
+  /* börjar texten med rader räcker summarys luft; annars blir glappet dubbelt */
+  .tips-text > .rader:first-child{margin-top:0}
+  .tips-text > :last-child{margin-bottom:0}
+  .tips-text p{margin-bottom:1rem}
+  .tips-text .punkter{margin-bottom:1rem}
+  .tips-text .punkter li{margin-bottom:.45rem}
+  /* rader: plattform eller metod till vänster, vad du gör till höger; på mobil under varandra */
+  .rader{
+    display:grid;grid-template-columns:fit-content(10rem) minmax(0,1fr);column-gap:1.4rem;
+    margin:1.2rem 0 1.1rem;border-top:1px solid var(--hair);
+  }
+  .rader > div{
+    grid-column:1 / -1;display:grid;grid-template-columns:subgrid;
+    padding:.7rem 0 .75rem;border-bottom:1px solid var(--hair);
+  }
+  .rader dt{font-weight:500;line-height:1.55;color:var(--ink)}
+  .rader dd{margin:0;line-height:1.55;color:var(--mist);text-wrap:pretty}
+  /* menyvägar: ljusare och lite fetare än texten runt, så att ögat hittar dem */
+  .vag{color:var(--ink);font-weight:500}
+  /* källor: diskret rad med etiketten hängande till vänster, så att länkarna radbryts i linje */
+  .kallor{
+    margin:1.4rem 0 0;padding-left:4.6rem;
+    font-size:.9375rem;line-height:1.5;color:var(--mist);
+  }
+  .kallor-etikett{
+    float:left;width:4.6rem;margin-left:-4.6rem;padding-top:.1rem;
+    font-family:var(--mono);font-size:calc(.58rem * var(--mini));line-height:1.40625rem;
+    letter-spacing:.24em;text-transform:uppercase;
+  }
+  .kallor a{
+    display:block;width:fit-content;max-width:100%;margin:0 0 .3rem;
+    color:var(--mist);text-decoration:underline 1px var(--streck,var(--hair));text-underline-offset:.3em;
+  }
+  .kallor a:hover{color:var(--accent);text-decoration-color:var(--accent)}
+
+  /* länkarna till EFF: först vart de leder, sedan knapparna */
+  .lankar{margin-top:1.9rem}
+  .lankar .vart{
+    font-family:var(--mono);font-size:calc(.66rem * var(--mini));
+    letter-spacing:.24em;text-transform:uppercase;color:var(--mist);margin:0 0 .35rem;
+  }
+
+  .slut{text-align:center;margin:clamp(5rem,12vh,7rem) auto clamp(4rem,9vh,5rem)}
+  .slut .s2{font-size:clamp(1.5rem,1.2rem + 2vw,2.3rem);color:var(--accent);letter-spacing:.03em;margin:0}
+  .kalla{font-size:1.125rem}
+
+  footer{
+    border-top:1px solid var(--hair);margin-top:4rem;padding-block:2.2rem 3rem;text-align:center;
+    padding-left:max(1.5rem, env(safe-area-inset-left, 0px));
+    padding-right:max(1.5rem, env(safe-area-inset-right, 0px));
+    font-family:var(--mono);font-size:calc(.66rem * var(--mini));letter-spacing:.2em;line-height:2.2;color:var(--mist);
+  }
+  footer a{color:var(--mist);text-decoration:none;border-bottom:1px solid var(--hair);white-space:nowrap}
+  footer a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+  footer .sep{margin:0 .9em}
+
+  /* breda skärmar: siffran hänger i vänstermarginalen, utanför textspalten, och texten
+     får hela spaltens bredd */
+  @media (min-width:60rem){
+    :root{--snrfs:5.75rem;--hang:2.2rem}
+    .steg > summary{grid-template-columns:minmax(0,1fr) 1.05rem}
+    .steg h2,.steg .kort{grid-column:1}
+    .steg .tecken{grid-column:2}
+    .steg .snr{
+      position:absolute;grid-area:auto;right:calc(100% + var(--hang));
+      top:calc(var(--sumtopp) + var(--h2fs) * .27 - var(--snrfs) * .15);margin:0;text-align:right;
+    }
+    .innehall{padding-left:0}
+  }
+  @media (min-width:80rem){
+    :root{--snrfs:6.5rem;--hang:2.5rem}
+  }
+
+  /* mobil: kortare hero, siffran i en egen kolumn bredvid rubriken; detaljtexten får hela bredden */
+  @media (max-width:34rem){
+    :root{--nrkol:2.5rem;--kolgap:.75rem;--snrfs:3.75rem}
+    .hero{padding-block:3.6rem 0}
+    .label{margin-bottom:1.1rem;letter-spacing:.2em}
+    h1{margin-bottom:1.1rem}
+    .ingress{font-size:1.0625rem}
+    .verktyg{margin-top:.9rem;margin-bottom:.1rem}
+    .steg > summary{padding-block:.85rem .95rem}
+    .steg h2{text-wrap:wrap}
+    .steg .kort{grid-column:2 / -1;margin-top:.3rem;font-size:1.0625rem;line-height:1.5}
+    .innehall{padding-left:0}
+    .tips{margin-top:2rem;--trfs:1.1875rem}
+    .tips > summary{padding:.95rem 1rem 1.05rem}
+    .tips[open] > summary{padding-bottom:1.2rem}
+    .tips-text{padding:0 1rem 1.25rem}
+    .rader{display:block}
+    .rader > div{display:block;padding:.65rem 0 .7rem}
+    /* staplat: plattformen är det enda fetstilta i raden, menyvägen syns ändå på den ljusa färgen */
+    .rader dt{margin-bottom:.15rem}
+    .rader .vag{font-weight:400}
+    .tips-text .kallor{padding-left:0}
+    .kallor .kallor-etikett{float:none;display:block;width:auto;margin:0;padding-top:0}
+  }
+  /* klickytor på pekskärm: minst 44 px höga, utan att ändra sajtens grundklass .knapp */
+  @media (max-width:34rem), (pointer:coarse){
+    .lankar .knapp,.kalla .knapp{display:block;width:fit-content;padding-block:.8rem;margin-right:0}
+    .lankar .vart{margin-bottom:0}
+    #allaknapp{padding-block:.8rem}
+    .kallor{margin-top:.6rem}
+    .kallor a{padding-block:.7rem}
+    .kallor-etikett{padding-top:.8rem}
+    .topp{top:.65rem;padding-block:.75rem}
+    .topp:hover{border-bottom-color:transparent}
+    footer a{
+      padding-block:.55rem;border-bottom:none;
+      text-decoration:underline 1px var(--hair);text-underline-offset:.4em;
+    }
+    footer a:hover{text-decoration-color:var(--accent)}
+  }
+  @media (max-width:30rem){
+    footer .sep{display:none}
+    footer a{display:table;margin:0 auto}
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    .tecken::before,.tecken::after,.steg .snr,.tips-etikett,.tips-rubrik{transition:none}
+  }
+  @media print{
+    /* på papper: mörk text på vitt i stället för sajtens mörka skärmfärger */
+    :root{color-scheme:light;--bg:#fff;--ink:#141414;--mist:#4a4740;--hair:#c9c5bb;--accent:#6b5000;--siffra:#6f6a60}
+    .verktyg .knapp,.tecken{display:none}
+    details[open] > .innehall,details[open] > .tips-text{animation:none}
+    /* på papper: ingen fyllning, bara en hårlinje runt rutan och en smalare svart linje */
+    .tips{--hair:#c9c5bb;background:none;border:1px solid var(--hair)}
+    .tips > summary,.tips[open] > summary{padding-block:.9rem .6rem;break-inside:avoid;break-after:avoid}
+    .tips > summary::before{border-top-width:2px}
+    .steg > summary,.rader > div{break-inside:avoid}
+  }
+</style>
+<script defer src="/assets/statistik.js"></script>
+</head>
+<body>
+<a class="topp" href="/">Jonas von Essen</a>
+
+<header class="hero wrap">
+  <p class="label">Cybersäkerhet för privatpersoner</p>
+  <h1>Digitalt självförsvar</h1>
+  <p class="ingress">Cyberattacker lär bli vanligare framöver, och det är viktigare än någonsin att vara förberedd. Nedan har jag listat de åtgärder Electronic Frontier Foundation anser är de viktigaste att vidta.</p>
+</header>
+
+<main class="wrap">
+
+  <div class="verktyg">
+    <p class="nr" id="lista-rubrik">Sju steg</p>
+    <button class="knapp" type="button" id="allaknapp" aria-controls="losenord tvasteg uppdatera chatt spar installera natfiske" hidden="">Fäll ut alla</button>
+  </div>
+
+  <ol class="lista" role="list" aria-labelledby="lista-rubrik">
+
+    <li><details class="steg" id="losenord">
+      <summary>
+        <span class="snr"><span class="dold">Steg </span>1</span>
+        <h2>Använd en lösenordshanterare</h2>
+        <span class="kort">Låt inte ett läckt lösenord avslöja alla de andra.</span>
+        <span class="tecken" aria-hidden="true"></span>
+      </summary>
+      <div class="innehall">
+        <ul class="punkter">
+          <li>Ha ett unikt lösenord för varje tjänst. Läcker ett lösenord någonstans ska det inte gå att använda någon annanstans.</li>
+          <li>Låt en lösenordshanterare skapa och komma ihåg lösenorden. Då behöver du bara kunna ett enda riktigt starkt lösenord.</li>
+          <li>Det lösenordet, och lösenordet till din mejl och din dator, kan vara en lösenfras: minst sex slumpvis valda ord. EFF föreslår att man slår tärning för att välja orden ur en ordlista. Om du behöver kan du förstås sedan använda minnestekniker för att komma ihåg dem.</li>
+          <li>Svara INTE sanningsenligt på säkerhetsfrågor som ”mammas flicknamn”. Svaren går ofta att hitta på nätet. Hitta på ett svar och spara det i lösenordshanteraren.</li>
+          <li>Lösenordshanteraren blir en nyckel till allt, så skydda den också med <a href="#tvasteg">tvåstegsverifiering</a>.</li>
+        </ul>
+        <details class="tips" id="tips-losenord">
+          <summary><span class="tips-etikett">Tips</span><span class="tips-rubrik">Vilka finns och hur funkar de?</span><span class="tecken" aria-hidden="true"></span></summary>
+          <div class="tips-text">
+            <p>En lösenordshanterare är ett krypterat valv som du låser upp med ett enda huvudlösenord. Den skapar unika lösenord, fyller i dem och synkar dem mellan dina enheter. Den fyller bara i på rätt adress, så om den vägrar kan sidan vara falsk. Många kan också spara nycklar (passkeys) och tvåstegskoder.</p>
+            <p>De inbyggda duger för många:</p>
+            <dl class="rader">
+              <div><dt>Apple</dt><dd>Appen <em>Lösenord</em> på iPhone, iPad och Mac, och appen <em><span class="hel">iCloud-lösenord</span></em> i iCloud för Windows. Krypterad hela vägen som standard.</dd></div>
+              <div><dt>Google</dt><dd><em>Google Lösenordshantering</em> i Android och Chrome. EFF råder dig att slå på <em>Kryptering på enheten</em> under <span class="vag">Inställningar</span> på <a href="https://passwords.google.com" target="_blank" rel="noopener">passwords.google.com</a>. Då kan bara du läsa lösenorden, och det går inte att ångra.</dd></div>
+            </dl>
+            <p>De fristående finns för Windows, Mac och Linux, och alla utom KeePassXC även för iPhone och Android:</p>
+            <dl class="rader">
+              <div><dt>1Password</dt><dd>Bara betalversion, gratis att prova i 14 dagar. <a href="https://1password.com" target="_blank" rel="noopener">1password.com</a></dd></div>
+              <div><dt>Bitwarden</dt><dd>Gratisversion, öppen källkod. <a href="https://bitwarden.com" target="_blank" rel="noopener">bitwarden.com</a></dd></div>
+              <div><dt>KeePassXC</dt><dd>Gratis, öppen källkod. Valvet är en krypterad fil hos dig. Synkning och mobilapp ordnar du själv. <a href="https://keepassxc.org" target="_blank" rel="noopener">keepassxc.org</a></dd></div>
+              <div><dt>Proton Pass</dt><dd>Gratisversion, öppen källkod. <a href="https://proton.me/pass" target="_blank" rel="noopener">proton.me/pass</a></dd></div>
+            </dl>
+            <p>Så kommer du igång:</p>
+            <ul class="punkter">
+              <li>Har hanteraren ett eget huvudlösenord, gör det till en lösenfras på minst sex slumpvisa ord. Den skyddar valvet även om företaget bakom hackas.</li>
+              <li>Slå på tvåstegsverifiering för hanteraren, eller för ditt <span class="hel">Apple-</span> eller <span class="hel">Google-konto</span>.</li>
+              <li>Flytta in dina sparade lösenord och radera sedan exportfilen, som ofta är okrypterad.</li>
+              <li>Byt svaga, återanvända och läckta lösenord, mejlen först. Apple visar dem under <span class="vag">Säkerhet</span> och Google under <span class="vag">Lösenordskontroll</span>.</li>
+            </ul>
+            <p class="kallor"><span class="kallor-etikett">Källor</span> <a href="https://ssd.eff.org/module/choosing-the-password-manager-that-s-right-for-you" target="_blank" rel="noopener">Så väljer du lösenordshanterare (EFF, på engelska)</a> <a href="https://support.apple.com/sv-se/120758" target="_blank" rel="noopener">Använd appen Lösenord (Apples hjälp)</a> <a href="https://support.apple.com/sv-se/guide/icloud-windows/icw2babf5e03/icloud" target="_blank" rel="noopener">iCloud-lösenord på en Windows-dator (Apples hjälp)</a> <a href="https://support.google.com/accounts/answer/6197437?hl=sv" target="_blank" rel="noopener">Google Lösenordshantering (Googles hjälp)</a> <a href="https://support.google.com/accounts/answer/11350823?hl=sv" target="_blank" rel="noopener">Kryptering på enheten (Googles hjälp)</a></p>
+          </div>
+        </details>
+        <div class="lankar">
+          <p class="vart">Originaltexten hos EFF:</p>
+          <a class="knapp" href="https://ssd.eff.org/module/creating-strong-passwords" target="_blank" rel="noopener">Skapa starka lösenord →</a>
+        </div>
+      </div>
+    </details></li>
+
+    <li><details class="steg" id="tvasteg">
+      <summary>
+        <span class="snr"><span class="dold">Steg </span>2</span>
+        <h2>Slå på tvåstegsverifiering</h2>
+        <span class="kort">Ett lösenord ska inte räcka för att logga in. Börja med din mejl.</span>
+        <span class="tecken" aria-hidden="true"></span>
+      </summary>
+      <div class="innehall">
+        <p>Tvåstegsverifiering (eller flerfaktorsinloggning) betyder att ett lösenord inte räcker för att logga in. Du måste också bekräfta med något du har, till exempel telefonen. EFF rangordnar metoderna så här, säkrast först:</p>
+        <ol class="rang" role="list">
+          <li><span><span class="metod">Passkeys</span><span class="meta">Nyckel i stället för lösenord.</span></span></li>
+          <li><span><span class="metod">Säkerhetsnyckel</span><span class="meta">En liten fysisk nyckel.</span></span></li>
+          <li><span><span class="metod">Godkännande i en app</span><span class="meta">Pushnotis.</span></span></li>
+          <li><span><span class="metod">Autentiseringsapp</span><span class="meta">Visar sexsiffriga koder.</span></span></li>
+          <li><span><span class="metod hel">Sms-kod</span><span class="meta">Den svagaste, eftersom sms kan avlyssnas och nummer kan kapas.</span></span></li>
+        </ol>
+        <p>Börja med din mejl, eftersom den används för att återställa alla andra lösenord. Ta sedan dina molnkonton (Apple, Google, Microsoft) och därefter sociala medier och chattappar.</p>
+        <p>Skriv ut reservkoderna och förvara dem säkert, så att du inte blir utelåst om du tappar telefonen.</p>
+        <details class="tips" id="tips-tvasteg">
+          <summary><span class="tips-etikett">Tips</span><span class="tips-rubrik">Vad är passkeys, säkerhetsnycklar och autentiseringsappar?</span><span class="tecken" aria-hidden="true"></span></summary>
+          <div class="tips-text">
+            <dl class="rader">
+              <div><dt>Passkeys</dt><dd>En passkey bygger på ett nyckelpar och ersätter både lösenordet och det andra steget. Den hemliga delen stannar i din telefon, dator eller lösenordshanterare, och du låser upp den med ansikte, fingeravtryck eller pinkod. Den fungerar bara på rätt sajt och skyddar därför mot nätfiske. Google, Microsoft, Amazon och Facebook har stöd. I svenska menyer heter det oftast nyckel. Prova med <a href="https://myaccount.google.com/signinoptions/passkeys" target="_blank" rel="noopener">nycklar i ditt <span class="hel">Google-konto</span></a>.</dd></div>
+              <div><dt>Säkerhetsnyckel</dt><dd>En liten fysisk nyckel som du sätter i en <span class="hel">USB-C-</span> eller <span class="hel">USB-A-port</span> eller håller mot telefonen (NFC). Välj en med FIDO2, så kan den även lagra passkeys. Exempel är YubiKey från Yubico, för flera hundra kronor, och Googles Titan Security Key. Registrera två, så har du en reserv. Använder du dem för ditt <span class="hel">Apple-konto</span> kräver Apple minst två.</dd></div>
+              <div><dt>Autentiseringsapp</dt><dd>Appen visar en sexsiffrig kod som byts var 30:e sekund. Google Authenticator och Microsoft Authenticator är gratis. Även 2FAS, Ente Auth och Aegis är gratis, och alla tre har öppen källkod. Aegis finns bara för Android. Även lösenordshanterare som Apples app <em>Lösenord</em> och 1Password kan visa koderna.</dd></div>
+            </dl>
+            <p>Byter du telefon? Radera inte den gamla förrän koderna fungerar på den nya. Slå först på säkerhetskopiering eller synk, annars får du flytta koderna för hand. Enligt EFF bör säkerhetskopian vara krypterad hela vägen, och Google uppger inte att synken i Google Authenticator är det.</p>
+            <p class="kallor"><span class="kallor-etikett">Källor</span> <a href="https://support.google.com/accounts/answer/13548313?hl=sv" target="_blank" rel="noopener">Googles hjälp: logga in med en nyckel i stället för lösenord</a> <a href="https://support.apple.com/sv-se/102637" target="_blank" rel="noopener">Apple: om säkerhetsnycklar för ditt Apple-konto</a> <a href="https://support.google.com/accounts/answer/1066447?hl=sv" target="_blank" rel="noopener">Googles hjälp om appen Google Authenticator</a> <a href="https://www.passkeycentral.org/introduction-to-passkeys/how-passkeys-work" target="_blank" rel="noopener">FIDO Alliance: så fungerar passkeys (engelska)</a></p>
+          </div>
+        </details>
+        <div class="lankar">
+          <p class="vart">Originaltexten hos EFF:</p>
+          <a class="knapp" href="https://ssd.eff.org/module/how-enable-two-factor-authentication" target="_blank" rel="noopener">Slå på tvåstegsverifiering →</a>
+        </div>
+      </div>
+    </details></li>
+
+    <li><details class="steg" id="uppdatera">
+      <summary>
+        <span class="snr"><span class="dold">Steg </span>3</span>
+        <h2>Uppdatera allt</h2>
+        <span class="kort">Installera uppdateringar direkt, i telefon, dator och webbläsare. Det är i glappet mellan att en uppdatering kommit och att den implementeras som hackarna har ett försprång.</span>
+        <span class="tecken" aria-hidden="true"></span>
+      </summary>
+      <div class="innehall">
+        <p>Uppdateringarna täpper till just de säkerhetshål som angriparna använder. Gamla enheter som inte längre får uppdateringar är en risk.</p>
+        <details class="tips" id="tips-uppdatera">
+          <summary><span class="tips-etikett">Tips</span><span class="tips-rubrik">Så slår du på automatiska uppdateringar</span><span class="tecken" aria-hidden="true"></span></summary>
+          <div class="tips-text">
+            <dl class="rader">
+              <div><dt>iPhone och iPad</dt><dd><span class="vag">Inställningar › Allmänt › Programuppdatering › Automatiska uppdateringar</span>, slå på Installera automatiskt. Då installeras uppdateringar över natten när enheten laddas och har wifi.</dd></div>
+              <div><dt>Android</dt><dd>På Pixel: <span class="vag">Inställningar › System › Programvaruuppdatering</span>. På andra märken kan menyerna heta något annat. Telefoner får säkerhetsuppdateringar i ett begränsat antal år, Pixel 8 och senare i sju. Datumet för den senaste står under <span class="vag">Inställningar › Om telefonen › <span class="hel">Android-version</span></span>.</dd></div>
+              <div><dt>Samsung</dt><dd><span class="vag">Inställningar › Programvaruuppdatering</span>, slå på automatisk hämtning via wifi. Senaste säkerhetsuppdateringen ser du under <span class="vag">Inställningar › Säkerhet och sekretess › Uppdateringar</span>.</dd></div>
+              <div><dt>Mac</dt><dd><span class="vag">Systeminställningar › Allmänt › Programuppdatering</span>. Klicka på infoknappen bredvid Uppdatera automatiskt och slå på alla reglage. En bärbar Mac måste sitta i laddaren för att hämta uppdateringar automatiskt.</dd></div>
+              <div><dt>Windows 11</dt><dd>Windows 11 laddar ned och installerar uppdateringar automatiskt. Sök efter nya under <span class="vag">Start › Inställningar › Windows Update</span> och starta om datorn när den ber om det.</dd></div>
+              <div><dt>Windows 10</dt><dd>Supporten upphörde den 14 oktober 2025. Med version 22H2 kan du ändå få utökade säkerhetsuppdateringar till den 12 oktober 2027, gratis i Sverige så länge du loggar in med ett <span class="hel">Microsoft-konto</span>. Välj Registrera nu under <span class="vag">Inställningar › Uppdatering och säkerhet › Windows Update</span>.</dd></div>
+              <div><dt>Webbläsare</dt><dd>Chrome, Edge och Firefox uppdaterar sig själva, men den nya versionen gäller först när du startar om webbläsaren. Kolla i menyn under <span class="vag">Hjälp › Om Google Chrome</span>, <span class="vag">Hjälp och feedback › Om Microsoft Edge</span> eller <span class="vag">Hjälp › Om Firefox</span>. Safari uppdateras med systemet.</dd></div>
+              <div><dt>Appar</dt><dd>På iPhone och iPad: <span class="vag">Inställningar › Appar › App Store</span>, slå på Appuppdateringar. På Mac: <span class="vag">App Store › Inställningar</span>, markera Automatiska uppdateringar. I Google Play: tryck på profilbilden och välj <span class="vag">Inställningar › Nätverksinställningar › Uppdatera appar automatiskt</span>.</dd></div>
+            </dl>
+            <p class="kallor"><span class="kallor-etikett">Källor</span> <a href="https://support.apple.com/sv-se/118575" target="_blank" rel="noopener">Apple: uppdatera iPhone eller iPad</a> <a href="https://support.apple.com/sv-se/guide/mac-help/mchlpx1065/mac" target="_blank" rel="noopener">Apple: hålla Macen uppdaterad</a> <a href="https://support.google.com/android/answer/7680439?hl=sv" target="_blank" rel="noopener">Google: kontrollera och uppdatera Android-versionen</a> <a href="https://support.microsoft.com/sv-se/windows/deployment/updates-lifecycle/install-windows-updates" target="_blank" rel="noopener">Microsoft: installera Windows-uppdateringar</a> <a href="https://www.microsoft.com/sv-se/windows/extended-security-updates" target="_blank" rel="noopener">Microsoft: utökade säkerhetsuppdateringar för Windows 10</a></p>
+          </div>
+        </details>
+        <p>Kryptera också dina enheter. På iPhone sker det automatiskt när du har en kod, och på Android, Windows och Mac kan du slå på det i inställningarna.</p>
+        <h3 class="under">Om du är ett troligt mål</h3>
+        <p>Är du journalist, aktivist eller av andra skäl ett troligt mål kan du gå längre. På iPhone finns Låst läge (Lockdown Mode) och på Android Avancerat skydd (Advanced Protection). De stänger av funktioner som ofta används för att ta sig in, mot att en del saker slutar fungera.</p>
+        <div class="lankar">
+          <p class="vart">LÄS mer på EFF:</p>
+          <a class="knapp" href="https://ssd.eff.org/module/how-to-enable-lockdown-mode-on-iphone" target="_blank" rel="noopener">Låst läge på iPhone →</a>
+          <a class="knapp" href="https://ssd.eff.org/module/how-to-get-to-know-iphone-privacy-and-security-settings" target="_blank" rel="noopener">iPhone-inställningar →</a>
+          <a class="knapp" href="https://ssd.eff.org/module/how-to-get-to-know-android-privacy-and-security-settings" target="_blank" rel="noopener">Android-inställningar →</a>
+        </div>
+      </div>
+    </details></li>
+
+    <li><details class="steg" id="chatt">
+      <summary>
+        <span class="snr"><span class="dold">Steg </span>4</span>
+        <h2>Välj en chatt som är krypterad hela vägen</h2>
+        <span class="kort">Använd en app som krypterar som standard, till exempel Signal eller WhatsApp.</span>
+        <span class="tecken" aria-hidden="true"></span>
+      </summary>
+      <div class="innehall">
+        <p>Med end-to-end-kryptering kan ingen annan än du och mottagaren läsa meddelandena, inte ens företaget bakom appen. Så här ser det ut enligt EFF:</p>
+        <dl class="grupper">
+          <div class="ja"><dt>Påslaget som standard</dt><dd>Signal, WhatsApp</dd></div>
+          <div><dt>Bara om du slår på det i varje chatt</dt><dd>Telegram</dd></div>
+          <div><dt>Bara när alla i samtalet har iPhone</dt><dd>iMessage</dd></div>
+          <div><dt>Inte påslaget som standard</dt><dd>Snapchat, Discord, Slack, WeChat</dd></div>
+        </dl>
+        <p>Krypteringen skyddar innehållet, men inte vem du pratar med och när. Den informationen kan också säga mycket.</p>
+        <details class="tips" id="tips-chatt">
+          <summary><span class="tips-etikett">Tips</span><span class="tips-rubrik">Är Messenger och Instagram krypterade?</span><span class="tecken" aria-hidden="true"></span></summary>
+          <div class="tips-text">
+            <p>I december 2023 började Meta göra <span class="hel">end-to-end-kryptering</span> till standard för personliga chattar och samtal i Messenger, först i chattar mellan två personer. Meta skriver att arbetet fortfarande pågår, så kolla själv, särskilt i gruppchattar.</p>
+            <dl class="rader">
+              <div><dt>Så ser du det</dt><dd>Leta efter texten <em><span class="hel">End-to-end-krypterad</span></em> i chattinställningarna.</dd></div>
+              <div><dt>Inte krypterat</dt><dd>Chattar med företag, <span class="hel">Marketplace-chattar</span>, det du skriver till Meta AI samt smeknamn, chatteman och reaktioner. Anmäler du eller någon annan en krypterad chatt skickas de senaste meddelandena till Meta.</dd></div>
+              <div><dt>Säker lagring</dt><dd>Den krypterade chatthistoriken följer bara med till en ny enhet om du har slagit på säker lagring. Du skyddar den med en sexsiffrig pinkod eller med ditt <span class="hel">Apple-</span> eller <span class="hel">Google-konto</span>. Messenger kan inte återställa pinkoden åt dig. I Messenger hittar du inställningen under <span class="vag">Inställningar › Integritet och säkerhet › <span class="hel">End-to-end-krypterade</span> chattar › Meddelandelagring</span>.</dd></div>
+              <div><dt>Instagram</dt><dd>Direktmeddelanden på Instagram är inte <span class="hel">end-to-end-krypterade</span>. Krypteringen gick bara att slå på själv, och den möjligheten tog Meta bort den 8 maj 2026.</dd></div>
+            </dl>
+            <p>Kolla märkningen i viktiga chattar, slå på säker lagring och spara pinkoden i lösenordshanteraren. Skriv inget känsligt till Meta AI eller på Instagram. Vill du slippa kolla, välj Signal eller WhatsApp, som krypterar som standard.</p>
+            <p class="kallor"><span class="kallor-etikett">Källor</span> <a href="https://www.facebook.com/help/messenger-app/786613221989782" target="_blank" rel="noopener">Meta: Vad end-to-end-kryptering på Messenger innebär</a> <a href="https://www.facebook.com/help/messenger-app/479091330683112" target="_blank" rel="noopener">Meta: Återställa krypterade chattar med pinkod</a> <a href="https://messengernews.fb.com/2024/03/28/end-to-end-encryption-what-you-need-to-know" target="_blank" rel="noopener">Messenger: Det här behöver du veta om kryptering (engelska, 2024)</a> <a href="https://help.instagram.com/491565145294150" target="_blank" rel="noopener">Instagram: Krypterade meddelanden upphörde 8 maj 2026</a> <a href="https://www.eff.org/deeplinks/2023/12/meta-announces-end-end-encryption-default-messenger" target="_blank" rel="noopener">EFF om Messengers kryptering (engelska, 2023)</a></p>
+          </div>
+        </details>
+        <div class="lankar">
+          <p class="vart">Originaltexten på eff:</p>
+          <a class="knapp" href="https://ssd.eff.org/module/communicating-others" target="_blank" rel="noopener">Kommunicera med andra →</a>
+        </div>
+      </div>
+    </details></li>
+
+    <li><details class="steg" id="spar">
+      <summary>
+        <span class="snr"><span class="dold">Steg </span>5</span>
+        <h2>Lämna färre spår</h2>
+        <span class="kort">Blockera spårare, stäng av <span class="hel">reklam-id:t</span> och städa bland gamla konton.</span>
+        <span class="tecken" aria-hidden="true"></span>
+      </summary>
+      <div class="innehall">
+        <ul class="punkter">
+          <li>Installera en spårningsblockerare i webbläsaren. EFF har gjort en egen, <span class="hel">Privacy Badger</span>, som stoppar de dolda spårare som kartlägger vad du gör på nätet.</li>
+          <li>Stäng av eller nollställ <span class="hel">reklam-id:t</span> i telefonen.</li>
+          <li>Googla dig själv i ett privat fönster och se vad som syns. Gå igenom gamla konton du inte använder och gör dem privata eller ta bort dem.</li>
+        </ul>
+        <details class="tips" id="tips-spar">
+          <summary><span class="tips-etikett">Tips</span><span class="tips-rubrik">Så stänger du av <span class="hel">reklam-id:t</span></span><span class="tecken" aria-hidden="true"></span></summary>
+          <div class="tips-text">
+            <p><span class="hel">Reklam-id:t</span> är en kod som pekar ut just din telefon, så att appar och spårare kan koppla ihop det du gör i olika appar. Utan det blir det svårare för annonsörer och datamäklare att följa dig.</p>
+            <dl class="rader">
+              <div><dt>Android</dt><dd><span class="vag">Inställningar › Google › Alla tjänster › Annonser</span>, tryck på <em>Radera <span class="hel">reklam-id</span></em> och bekräfta. Appar som frågar efter id:t får då bara nollor. <em>Återställ</em> ger dig bara ett nytt id. Vägen fungerar på både Pixel och Samsung.</dd></div>
+              <div><dt>iPhone</dt><dd><span class="vag">Inställningar › Integritet och säkerhet › Spårning</span>, stäng av <em>Tillåt att appar begär att få spåra</em> (i EU kan reglaget heta något annat i nyare iOS). Har du redan godkänt några appar, välj att be dem sluta spåra. Då får ingen app använda <span class="hel">reklam-id:t</span>, och du slipper frågorna.</dd></div>
+              <div><dt>Apples annonser</dt><dd><span class="vag">Inställningar › Integritet och säkerhet › <span class="hel">Apple-reklam</span></span>, stäng av <em>Personliga annonser</em>.</dd></div>
+            </dl>
+            <p>Mängden reklam minskar inte, men den kan bli mindre träffsäker. Appar kan fortfarande spåra dig på andra sätt, så se det här som ett första steg.</p>
+            <p class="kallor"><span class="kallor-etikett">Källor</span> <a href="https://www.eff.org/deeplinks/2022/05/how-disable-ad-id-tracking-ios-and-android-and-why-you-should-do-it-now" target="_blank" rel="noopener">EFF: Så stänger du av reklam-id:t och därför bör du göra det (på engelska)</a> <a href="https://support.google.com/android/answer/12461628?hl=sv" target="_blank" rel="noopener">Google: Annonser och annonserings-id på Android</a> <a href="https://support.apple.com/sv-se/102420" target="_blank" rel="noopener">Apple: Om en app vill spåra din aktivitet</a> <a href="https://www.apple.com/legal/privacy/data/sv/apple-advertising/" target="_blank" rel="noopener">Apple: Apple-reklam och integritet</a></p>
+          </div>
+        </details>
+        <div class="lankar">
+          <p class="vart">Originaltexten på EFF:</p>
+          <a class="knapp" href="https://privacybadger.org" target="_blank" rel="noopener">Privacy Badger →</a>
+          <a class="knapp" href="https://ssd.eff.org/module/how-to-manage-your-digital-footprint" target="_blank" rel="noopener">Ditt digitala fotavtryck →</a>
+        </div>
+      </div>
+    </details></li>
+
+    <li><details class="steg" id="installera">
+      <summary>
+        <span class="snr"><span class="dold">Steg </span>6</span>
+        <h2>Tänk efter innan du installerar eller kopplar upp något</h2>
+        <span class="kort">Ge appar och <span class="hel">AI-agenter</span> bara den åtkomst de verkligen behöver.</span>
+        <span class="tecken" aria-hidden="true"></span>
+      </summary>
+      <div class="innehall">
+        <ul class="punkter">
+          <li>Installera bara appar och tillägg du vet vad de är, och kontrollera att det verkligen är rätt app.</li>
+          <li>Gå igenom vilka behörigheter apparna har: plats, kontakter, bilder, kamera och mikrofon. Ge bara det som behövs.</li>
+          <li>Var extra försiktig med <span class="hel">AI-assistenter</span> och <span class="hel">AI-agenter</span> som vill komma åt din mejl, dina meddelanden eller hela datorn. Allt agenten kommer åt kan läcka om tjänsten hackas eller missbrukas. Ge dem bara det de verkligen behöver.</li>
+          <li>Stäng av inställningar som låter <span class="hel">AI-tjänster</span> träna på det du skriver, och dela inte känsliga saker i chattar med AI.</li>
+          <li>Behöver tvättmaskinen vara uppkopplad? Varje sak du kopplar till nätet är en dörr till.</li>
+        </ul>
+        <h3 class="under">EFF:s råd för att bedöma en app</h3>
+        <ul class="punkter">
+          <li>Är koden öppen och granskad av utomstående?</li>
+          <li>Är företaget ärligt om begränsningarna, eller lovar det ”militär säkerhet”?</li>
+          <li>Uppdateras appen regelbundet?</li>
+          <li>Har den fått kritik?</li>
+        </ul>
+        <div class="lankar">
+          <p class="vart">Originaltexten på EFF:</p>
+          <a class="knapp" href="https://ssd.eff.org/module/privacy-considerations-with-ai-tools" target="_blank" rel="noopener">AI-verktyg och integritet →</a>
+          <a class="knapp" href="https://ssd.eff.org/module/choosing-your-tools" target="_blank" rel="noopener">Välj dina verktyg →</a>
+        </div>
+      </div>
+    </details></li>
+
+    <li><details class="steg" id="natfiske">
+      <summary>
+        <span class="snr"><span class="dold">Steg </span>7</span>
+        <h2>Se upp för nätfiske</h2>
+        <span class="kort">Gå själv till sidan i stället för att klicka på en länk, och kontrollera ovanliga förfrågningar på annat sätt.</span>
+        <span class="tecken" aria-hidden="true"></span>
+      </summary>
+      <div class="innehall">
+        <ul class="punkter">
+          <li>Titta på adressfältet att du är på rätt sida innan du skriver in ett lösenord. En logga bevisar ingenting.</li>
+          <li>Om lösenordshanteraren inte vill fylla i lösenordet automatiskt kan det vara för att sidan är falsk.</li>
+          <li>Klicka inte på länken i ett mejl eller sms du är osäker på. Gå själv till sidan.</li>
+          <li>Är du tveksam, kontakta avsändaren på annat sätt, till exempel genom att ringa.</li>
+          <li>Rösten i telefonen kan vara AI. Om ”ditt barn” eller ”din chef” ringer och ber om pengar eller något ovanligt, bekräfta på ett annat sätt.</li>
+        </ul>
+        <details class="tips" id="tips-natfiske">
+          <summary><span class="tips-etikett">Tips</span><span class="tips-rubrik">Kan jag kolla om sajten är säker?</span><span class="tecken" aria-hidden="true"></span></summary>
+          <div class="tips-text">
+            <p>Tjänsterna nedan visar om en länk redan är känd som farlig. Klicka inte på länken för att testa den. Håll fingret på den (på datorn: högerklicka), välj kopiera och klistra in i tjänsten.</p>
+            <dl class="rader">
+              <div><dt>Googles webbplatsstatus</dt><dd>Visar om Googles Säker webbsökning har flaggat sajten. Chrome och andra webbläsare varnar med samma tjänst. <a href="https://transparencyreport.google.com/safe-browsing/search?hl=sv" target="_blank" rel="noopener">Kolla hos Google</a></dd></div>
+              <div><dt>VirusTotal</dt><dd>Kollar länken mot fler än 70 antivirusprogram och spärrlistor. Andra kan se det du klistrar in, så undvik länkar med personliga uppgifter. <a href="https://www.virustotal.com/gui/home/url" target="_blank" rel="noopener">Kolla på VirusTotal</a></dd></div>
+              <div><dt>Scamadviser</dt><dd>För webbutiker. Ger ett automatiskt betyg utifrån bland annat domänens ålder och omdömen. <a href="https://www.scamadviser.com/" target="_blank" rel="noopener">Kolla på Scamadviser</a> och läs Konsumentverkets <a href="https://www.konsumentverket.se/konsumentratt/ar-foretaget-seriost/" target="_blank" rel="noopener">Är företaget seriöst?</a></dd></div>
+              <div><dt>FI:s varningslista</dt><dd>För investeringserbjudanden. Kolla också att företaget har tillstånd i <a href="https://www.fi.se/sv/vara-register/foretagsregistret/" target="_blank" rel="noopener">FI:s företagsregister</a>. <a href="https://www.fi.se/sv/vara-register/fis-varningslista/" target="_blank" rel="noopener">Till varningslistan</a></dd></div>
+            </dl>
+            <ul class="punkter">
+              <li>Nya falska sajter är ofta inte flaggade än, och många finns bara i några minuter. Ett rent resultat bevisar inget.</li>
+              <li>Ett hänglås eller https i adressen betyder bara att anslutningen är krypterad. Nästan alla nätfiskesajter har det.</li>
+            </ul>
+            <p>Har du lämnat ut kortuppgifter eller förlorat pengar? Ring banken direkt, på ett nummer du letat upp själv, och spärra kort och BankID. Polisanmäl sedan på <span class="hel">114 14</span>. Har du skrivit in ett lösenord på en falsk sajt, byt det. Avbryt kontakten om någon vill ha betalt för att få tillbaka pengarna. Mer hjälp steg för steg finns i <a href="https://internetkunskap.se/guider/bluffmejl-eller-bluff-sms/" target="_blank" rel="noopener">Internetstiftelsens guider om bluffmejl och <span class="hel">bluff-sms</span></a>.</p>
+            <p class="kallor"><span class="kallor-etikett">Källor</span> <a href="https://polisen.se/utsatt-for-brott/polisanmalan/bedragerier/bedragerier/natfiske-phishing/" target="_blank" rel="noopener">Polisen om nätfiske</a> <a href="https://polisen.se/3816fd901a881fc04e8b69e8b4069dc7/contentassets/ce7ea6253a414087989272be8f285c72/stod-vid-bedragerier_broschyr-a5.pdf" target="_blank" rel="noopener">Polisen: stöd vid bedrägerier (pdf)</a> <a href="https://www.konsumentverket.se/konsumentratt/bankbedragerier-och-kortbedragerier/" target="_blank" rel="noopener">Konsumentverket om bank- och kortbedrägerier</a> <a href="https://blog.chromium.org/2023/05/an-update-on-lock-icon.html" target="_blank" rel="noopener">Chrome-teamet om hänglåset (på engelska)</a> <a href="https://security.googleblog.com/2024/03/blog-post.html" target="_blank" rel="noopener">Google om sajter som bara finns i minuter (på engelska)</a></p>
+          </div>
+        </details>
+        <div class="lankar">
+          <p class="vart">Originaltexten på EFF:</p>
+          <a class="knapp" href="https://ssd.eff.org/module/how-avoid-phishing-attacks" target="_blank" rel="noopener">Undvik nätfiske →</a>
+        </div>
+      </div>
+    </details></li>
+
+  </ol>
+
+  <div class="slut">
+    <p class="s2">Varje steg gör dig säkrare.</p>
+  </div>
+
+  <section class="kalla" id="kalla">
+    <p class="nr">Källa · CC BY 4.0</p>
+    <h2>Läs mer</h2>
+    <p>Stegen är en bearbetning av EFF:s guide <a href="https://ssd.eff.org" target="_blank" rel="noopener" class="hel">Surveillance Self-Defense</a> (ssd.eff.org), licensierad under <a href="https://creativecommons.org/licenses/by/4.0/deed.sv" target="_blank" rel="noopener" class="hel">CC BY 4.0</a> (<a href="https://www.eff.org/copyright" target="_blank" rel="noopener">EFF:s villkor</a>). Tipsrutorna har jag lagt till själv, med källorna i varje ruta.</p>
+    <p>Bra ställen att börja på, båda på engelska, är EFF:s startpaket och deras <em>Seven Steps to Digital Security</em>:</p>
+    <a class="knapp" href="https://ssd.eff.org/playlist/want-security-starter-pack" target="_blank" rel="noopener">Startpaketet →</a>
+    <a class="knapp" href="https://ssd.eff.org/module/seven-steps-digital-security" target="_blank" rel="noopener">Seven Steps →</a>
+    <!-- Filmerna är inte publicerade än: fyll i länkarna nedan och ta bort hidden när de är ute. -->
+    <div hidden>
+      <p class="vidare">Se också min film om <span class="hel">AI-drivna</span> hackerattacker och hela intervjun med Andrei Sabelfeld på YouTube.</p>
+      <!-- LÄNK: filmen om AI-drivna hackerattacker (ej publicerad än) -->
+      <a class="knapp" href="#">Se filmen →</a>
+      <!-- LÄNK: hela intervjun med Andrei Sabelfeld på YouTube (ej publicerad än) -->
+      <a class="knapp" href="#">Se hela intervjun →</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <a href="/">jonasvonessen.se</a><span class="sep" aria-hidden="true">·</span><a href="/agera/">AI: Vad kan jag göra?</a>
+</footer>
+
+<script>
+(function(){
+  var steg = [].slice.call(document.querySelectorAll('details.steg'));
+  var knapp = document.getElementById('allaknapp');
+
+  function allaOppna(){ return steg.every(function(d){ return d.open; }); }
+  function uppdatera(){ knapp.textContent = allaOppna() ? 'Fäll ihop alla' : 'Fäll ut alla'; }
+
+  /* Knappen syns bara när JS körs; utan JS fungerar varje steg ändå för sig. */
+  knapp.hidden = false;
+  knapp.addEventListener('click', function(){
+    var oppna = !allaOppna();
+    steg.forEach(function(d){ d.open = oppna; });
+    uppdatera();
+  });
+  steg.forEach(function(d){ d.addEventListener('toggle', uppdatera); });
+
+  /* Länk eller adress med #ankare till ett steg eller en tipsruta: fäll ut den och allt runt den. */
+  function oppnaMal(id){
+    if (!id) return;
+    var d = document.getElementById(id);
+    for (; d; d = d.parentElement) if (d.tagName === 'DETAILS' && !d.open) d.open = true;
+  }
+  function franAdress(){ try { oppnaMal(decodeURIComponent(location.hash.slice(1))); } catch(e) {} }
+  franAdress();
+  window.addEventListener('hashchange', franAdress);
+  document.addEventListener('click', function(ev){
+    var a = ev.target.closest && ev.target.closest('a[href^="#"]');
+    if (!a) return;
+    /* platshållarlänkarna (href="#") ska inte hoppa till toppen */
+    if (a.getAttribute('href') === '#') { ev.preventDefault(); return; }
+    oppnaMal(a.getAttribute('href').slice(1));
+  });
+
+  /* Utskrift: allt utfällt (även introt), sedan tillbaka som det var. */
+  var alla = [].slice.call(document.querySelectorAll('details'));
+  var fore = null;
+  window.addEventListener('beforeprint', function(){
+    fore = alla.map(function(d){ return d.open; });
+    alla.forEach(function(d){ d.open = true; });
+  });
+  window.addEventListener('afterprint', function(){
+    if (fore) alla.forEach(function(d, i){ d.open = fore[i]; });
+    fore = null;
+  });
+
+  /* Sajtens redigeringsläge, som på /agera: /cyber/?redigera */
+  if (/[?&]redigera(=|&|$)/.test(location.search)) {
+    var rs = document.createElement('script');
+    rs.src = '/assets/redigera.js';
+    document.body.appendChild(rs);
+  }
+})();
+</script>
+
+</body></html>

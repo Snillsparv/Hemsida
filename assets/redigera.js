@@ -15,7 +15,8 @@
     'justify-content:center;flex-wrap:wrap;font-family:var(--mono);font-size:calc(.62rem * var(--mini));' +
     'letter-spacing:.14em;color:var(--mist)}' +
     '#redigeringsverktyg .knapp{margin:0}' +
-    'body.redigerar{padding-bottom:6rem}';
+    'body.redigerar{padding-bottom:6rem}' +
+    'body.redigerar summary{cursor:text}body.redigerar #allaknapp{visibility:hidden}';
   document.head.appendChild(stil);
 
   document.body.classList.add('redigerar');
@@ -24,6 +25,12 @@
     if (e) e.contentEditable = 'true';
   });
   [].forEach.call(document.querySelectorAll('[data-reveal]'), function (e) { e.classList.add('syns'); });
+  /* utfällbara delar (som på /cyber): allt utfällt så att all text går att ändra, och ett klick i
+     en rubrik flyttar markören i stället för att fälla ihop */
+  [].forEach.call(document.querySelectorAll('details'), function (e) { e.open = true; });
+  document.addEventListener('click', function (ev) {
+    if (ev.target.closest && ev.target.closest('summary')) ev.preventDefault();
+  }, true);
 
   var tb = document.createElement('div');
   tb.id = 'redigeringsverktyg';
@@ -43,6 +50,9 @@
       if (e.getAttribute('class') === '') e.removeAttribute('class');
     });
     var dg = doc.querySelector('#brevdialog'); if (dg) dg.removeAttribute('open');
+    [].forEach.call(doc.querySelectorAll('details[open]'), function (e) { e.removeAttribute('open'); });
+    var ak = doc.querySelector('#allaknapp');
+    if (ak) { ak.setAttribute('hidden', ''); ak.textContent = 'Fäll ut alla'; }
     [].forEach.call(doc.querySelectorAll('.partier a[data-adress]'), function (e) { e.removeAttribute('href'); });
     [].forEach.call(doc.querySelectorAll('script[src*="list-manage"], script[src*="posthog"], script[src*="redigera"]'), function (e) { e.remove(); });
     /* sådant som webbläsartillägg (mörkt läge, markeringsverktyg m.m.) stoppar in vid körning */
