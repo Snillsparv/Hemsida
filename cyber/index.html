@@ -28,7 +28,6 @@
     --mini:1.15;
     --sans:'Space Grotesk',system-ui,sans-serif;
     --mono:'JetBrains Mono',ui-monospace,monospace;
-    --serif:'Fraunces',Georgia,serif;
     /* videons typsnitt: Archivo, bred och fet, som på de klippta papperslapparna */
     --bred:'Archivo','Space Grotesk',system-ui,sans-serif;
     /* videons diazoblå */
@@ -36,9 +35,9 @@
     /* checklistans kolumner: nummer | text | plus/minus */
     --nrkol:3.6rem;
     --kolgap:1rem;
-    /* stegrubrikens storlek och stegsiffrornas (stora, i Fraunces) */
+    /* stegrubrikens storlek och stegsiffrornas (stora, i Archivo som siffrorna i videon) */
     --h2fs:clamp(1.4rem,1.1rem + 1.3vw,1.8rem);
-    --snrfs:4.75rem;
+    --snrfs:4.25rem;
     /* siffrorna i vila: mellan --mist och bakgrunden, så att rubriken läses först */
     --siffra:#8b867d;
     /* summarys luft ovanför rubriken, och avståndet från en hängande siffra till textspalten */
@@ -77,7 +76,7 @@
     font-size:clamp(2.3rem,1.4rem + 4.6vw,4.4rem);
     font-weight:400;letter-spacing:.055em;line-height:1.12;text-wrap:balance;margin:0 0 1.9rem;
   }
-  .ingress{font-family:var(--serif);font-size:clamp(1.08rem,1rem + .5vw,1.3rem);line-height:1.6;color:var(--ink);max-width:34rem;margin:0 auto;text-wrap:balance}
+  .ingress{font-family:var(--bred);font-stretch:108%;font-size:clamp(1.06rem,1rem + .45vw,1.25rem);line-height:1.6;color:var(--ink);max-width:34rem;margin:0 auto;text-wrap:balance}
 
   .nr{
     font-family:var(--mono);font-size:calc(.66rem * var(--mini));
@@ -124,13 +123,14 @@
     display:grid;grid-template-columns:var(--nrkol) minmax(0,1fr) 1.05rem;column-gap:var(--kolgap);
     align-items:start;padding-block:var(--sumtopp) 1.4rem;
   }
-  /* Stegsiffran: en stor Fraunces-siffra vars överkant står i höjd med rubrikens versaler.
+  /* Stegsiffran: en stor, bred och fet Archivo-siffra, som "6 DAGAR" i videon, vars överkant står
+     i höjd med rubrikens versaler.
      .27em = från radens överkant till versalhöjden i Space Grotesk (radhöjd 1.25),
-     .15em = samma sak för Fraunces-siffrorna med radhöjd 1. */
+     .14em = samma sak för Archivo-siffrorna med radhöjd 1. */
   .steg .snr{
     grid-column:1;grid-row:1 / span 2;align-self:start;margin:0;
-    margin-top:calc(var(--h2fs) * .27 - var(--snrfs) * .15);
-    font-family:var(--serif);font-size:var(--snrfs);font-weight:400;line-height:1;
+    margin-top:calc(var(--h2fs) * .27 - var(--snrfs) * .14);
+    font-family:var(--bred);font-stretch:112%;font-size:var(--snrfs);font-weight:760;line-height:1;
     font-variant-numeric:lining-nums proportional-nums;letter-spacing:-.01em;
     color:var(--siffra);transition:color .18s ease;
   }
@@ -328,23 +328,23 @@
   /* breda skärmar: siffran hänger i vänstermarginalen, utanför textspalten, och texten
      får hela spaltens bredd */
   @media (min-width:60rem){
-    :root{--snrfs:5.75rem;--hang:2.2rem}
+    :root{--snrfs:5rem;--hang:2.2rem}
     .steg > summary{grid-template-columns:minmax(0,1fr) 1.05rem}
     .steg h2,.steg .kort{grid-column:1}
     .steg .tecken{grid-column:2}
     .steg .snr{
       position:absolute;grid-area:auto;right:calc(100% + var(--hang));
-      top:calc(var(--sumtopp) + var(--h2fs) * .27 - var(--snrfs) * .15);margin:0;text-align:right;
+      top:calc(var(--sumtopp) + var(--h2fs) * .27 - var(--snrfs) * .14);margin:0;text-align:right;
     }
     .innehall{padding-left:0}
   }
   @media (min-width:80rem){
-    :root{--snrfs:6.5rem;--hang:2.5rem}
+    :root{--snrfs:5.75rem;--hang:2.5rem}
   }
 
   /* mobil: kortare hero, siffran i en egen kolumn bredvid rubriken; detaljtexten får hela bredden */
   @media (max-width:34rem){
-    :root{--nrkol:2.5rem;--kolgap:.75rem;--snrfs:3.75rem}
+    :root{--nrkol:2.5rem;--kolgap:.75rem;--snrfs:3.125rem}
     .hero{padding-block:3.6rem 0}
     .label{margin-bottom:1.1rem;letter-spacing:.2em}
     h1{margin-bottom:1.1rem}
