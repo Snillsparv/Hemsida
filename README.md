@@ -16,7 +16,7 @@ om, minnestips, bocker, blogg, forelasningar, kontakt
                     gamla adresser som skickar vidare
 404.html            fångar övriga gamla adresser
 assets/
-  fonts.css, fonts/ självhostade typsnitt (Space Grotesk, JetBrains Mono, Fraunces)
+  fonts.css, fonts/ självhostade typsnitt (Space Grotesk, JetBrains Mono, Fraunces, Archivo)
   img/              bilder (webp)
   *.js              jordglob, tabellspel, larmspel, pixelfigur, statistik
 sitemap.xml, robots.txt
