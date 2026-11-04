@@ -1,7 +1,8 @@
 /* Skrivbordet: jonasvonessen.se som ett leksaksaktigt skrivbord en sen kväll.
    Allt modelleras här av enkla former (rundade lådor, svarvade profiler) och
    allt mönster ritas på canvas, så det finns inga modellfiler att ladda.
-   ?direkt hoppar över intron, ?utsikt=villa byter utsikt och ?dag börjar på dagen. */
+   ?direkt hoppar över intron, ?utsikt=villa byter utsikt och ?dag börjar på dagen.
+   Från valskärmen (klassen resa) lyser lampan redan och kameran glider bara sista biten. */
 import * as T from './three.js';
 
 const param = new URLSearchParams(location.search);
@@ -12,6 +13,7 @@ const DAG_FRAN_START = param.has('dag');
 const grov = matchMedia('(pointer: coarse)').matches;
 const LAG = grov || Math.min(innerWidth, innerHeight) < 600;
 const rot = document.documentElement;
+const franVal = rot.classList.contains('resa');
 const laddar = document.getElementById('laddar');
 
 const duk = document.getElementById('duk');
@@ -804,7 +806,7 @@ dagsljus.position.set(3, 9, 12);
 scen.add(dagsljus);
 const LAMP_SPOT = 140, LAMP_FYLL = 10, LAMP_GLOB = 1.5;
 const LAMPA_VARM = new T.Color('#ffd59a'), LAMPA_DAG = new T.Color('#e6ebf0');
-let lampNiva = direkt ? 1 : 0;
+let lampNiva = direkt || franVal ? 1 : 0;
 function satLampa(n) {
   spot.intensity = LAMP_SPOT * n; lampFyll.intensity = LAMP_FYLL * n; lampMat.emissiveIntensity = LAMP_GLOB * n;
 }
@@ -1338,6 +1340,8 @@ anpassa();
 addEventListener('resize', anpassa);
 
 const intro = { t: direkt ? 9 : 0 };
+// var kameran börjar: uppifrån och långt bakom, eller från valskärmen bara en bit längre bort längs blicken
+const introFran = () => franVal ? RIKTNING.clone().multiplyScalar(avstand * 0.05) : new T.Vector3(0, 2.2, 7.5);
 function uppdateraKamera(dt) {
   mus.x += (mus.mx - mus.x) * Math.min(1, dt * 3);
   mus.y += (mus.my - mus.y) * Math.min(1, dt * 3);
@@ -1353,7 +1357,7 @@ function uppdateraKamera(dt) {
   const pos = mal.clone().addScaledVector(RIKTNING, d);
   if (!reducerad) { pos.x += mus.x * 0.75; pos.y += mus.y * 0.4; }
   const k = intro.t < 2.6 ? T.MathUtils.smootherstep(intro.t / 2.6, 0, 1) : 1;
-  if (k < 1) pos.add(new T.Vector3(0, 2.2, 7.5).multiplyScalar(1 - k));
+  if (k < 1) pos.add(introFran().multiplyScalar(1 - k));
   const f = reducerad ? 1 : 1 - Math.exp(-dt * (k < 1 ? 20 : 3.2));
   kamPos.lerp(pos, f); kamMal.lerp(mal, f);
   // vrid huvudet: följer fingret direkt, glider ut efter en snärt och fjädrar tillbaka vid kanterna
@@ -1371,7 +1375,7 @@ function uppdateraKamera(dt) {
   kam.lookAt(g ? kamMal.clone().sub(kamPos).applyAxisAngle(UPP, -g).add(kamPos) : kamMal);
 }
 kamPos.copy(VILA_MAL).setY(malY).addScaledVector(RIKTNING, avstand);
-if (!direkt) kamPos.add(new T.Vector3(0, 2.2, 7.5));
+if (!direkt) kamPos.add(introFran());
 kamMal.setY(malY);
 
 /* ————— pekare, lappen och klick ————— */
@@ -1509,7 +1513,7 @@ function vinka() { vinkT = 2.4; }
 const planFlyg = { t: 0 };
 
 /* ————— animationen ————— */
-let tid = 0, forra = performance.now(), forstaBild = true, senastRitad = 0, skuggBild = 0;
+let tid = 0, forra = performance.now(), forstaBild = true, bildNr = 0, senastRitad = 0, skuggBild = 0;
 const tmp = new T.Vector3();
 function bild(nu) {
   const aktiv = hovrad || oppenId || vinkT > 0 || planFlyg.t > 0 || intro.t < 3 || Math.abs(dagMal - dagNiva) > 0.001 || kuvertDelar.t > 0 || pennDelar.t > 0 ||
@@ -1520,7 +1524,7 @@ function bild(nu) {
   const dt = Math.min(0.05, (nu - forra) / 1000); forra = nu;
   tid += dt; intro.t += dt;
 
-  if (!direkt && intro.t < 2.2) {
+  if (!direkt && !franVal && intro.t < 2.2) {
     const t = intro.t;
     const flimmer = t < 0.35 ? 0 : t < 0.55 ? 0.6 : t < 0.85 ? 0.12 : t < 1.05 ? 0.7 : t < 1.3 ? 0.3 : Math.min(1, 0.6 + (t - 1.3) * 0.45);  // högst tre ryck per sekund
     lampNiva = flimmer;
@@ -1662,6 +1666,7 @@ function bild(nu) {
   vinjett.uniforms.tid.value = tid % 100;
   komp.render(dt);
 
-  if (forstaBild) { forstaBild = false; laddar.classList.add('borta'); window.__skrivbordKlart = true; }
+  if (forstaBild) { forstaBild = false; window.__skrivbordKlart = true; if (!franVal) laddar.classList.add('borta'); }
+  else if (franVal && ++bildNr === 3) laddar.classList.add('borta');   // låt scenen komma i gång innan den suddiga bilden tonar bort
 }
 renderer.setAnimationLoop(bild);
