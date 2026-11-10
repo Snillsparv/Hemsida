@@ -571,11 +571,24 @@
     --vs-topp:min(clamp(3.6rem,11vh,6.5rem),var(--vs-topp-rum,6.5rem));--vs-kant:max(1rem,4vw,calc((100vw - 74rem) / 2));
     --vs-fot:clamp(3.4rem,10vh,6rem);--vs-rund:1.4rem;
     --vs-botten:calc(var(--vs-fot) + clamp(5.2rem,10vh,6.6rem));
-    perspective:1600px;
     transition:--vs-sida .8s var(--vs-mjuk) .12s,opacity .45s ease;
   }
   .vs-lager:focus{outline:none}
   .vs-sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  /* intåget: kortet tonar fram och glider upp när bilden är klar, sedan glider flikarna ut från
+     kanterna och valen tonar fram (klassen inne sätts i skriptet) */
+  .vs-in{position:absolute;inset:0;perspective:1600px;opacity:0;animation:vs-in-lugn .4s ease 2.5s both}   /* reserv om skriptet dröjer */
+  .vs-lager.inne .vs-in{animation:vs-in 1.2s var(--vs-mjuk) both}
+  .vs-lager.inne .vs-namnlager{animation:vs-tona 1s ease .3s backwards}
+  .vs-lager.inne .vs-flik--fraga{animation:vs-flik-ned .8s var(--vs-mjuk) .55s backwards}
+  .vs-lager.inne .vs-flik--kontakt{animation:vs-flik-upp .8s var(--vs-mjuk) .7s backwards}
+  .vs-lager.inne .vs-text{animation:vs-text-upp .8s var(--vs-mjuk) .6s backwards}
+  .vs-lager.inne .vs-val--klassisk .vs-text{animation-delay:.72s}
+  @keyframes vs-in{from{opacity:0;transform:translateY(2rem) scale(.95)}to{opacity:1;transform:none}}
+  @keyframes vs-tona{from{opacity:0}}
+  @keyframes vs-flik-ned{from{transform:translate(-50%,-105%)}}
+  @keyframes vs-flik-upp{from{transform:translate(-50%,105%)}}
+  @keyframes vs-text-upp{from{opacity:0;translate:0 .8rem}}
   /* kortet svävar: lite upp och ner och en lätt vaggning; på datorn lutar pekaren det också */
   .vs-svav{position:absolute;inset:0;will-change:transform;
     transform:rotateY(calc(var(--vs-lx,0) * 1.4deg)) rotateX(calc(var(--vs-ly,0) * -1.1deg));transition:transform 1s cubic-bezier(.2,.7,.2,1)}
@@ -642,7 +655,7 @@
   .vs-val:focus-visible .vs-text{outline:2px solid var(--ink);outline-offset:.75rem;border-radius:2px}
   .vs-som{position:absolute;z-index:5;top:0;bottom:0;left:var(--vs-sida);width:1px;margin-left:-.5px;background:rgba(234,230,220,.18);pointer-events:none;transition:opacity .3s ease}
   /* namnet över sömmen: två likadana lager, vart och ett klippt till sin halva */
-  .vs-namnlager{position:absolute;inset:0;z-index:4;pointer-events:none;transition:opacity .5s ease,filter .7s ease}
+  .vs-namnlager{position:absolute;inset:0;z-index:4;pointer-events:none;transition:opacity .5s ease}
   .vs-namnlager--ny{clip-path:inset(0 calc(100% - var(--vs-sida)) 0 0)}
   .vs-namnlager--kl{clip-path:inset(0 0 0 var(--vs-sida));color:var(--ink)}
   .vs-rubrik,.vs-under{position:absolute;margin:0;font-weight:400;text-align:center;text-wrap:balance}
@@ -652,11 +665,11 @@
   .vs-namnlager--ny .vs-rubrik{color:#fff2d8;text-shadow:0 .012em 0 #efd5a6,0 .024em 0 #e2c189,0 .036em 0 #d4ad70,0 .048em 0 #be9455,0 .06em 0 #a27c41,0 .08em .02em rgba(0,0,0,.45),0 .15em .25em rgba(0,0,0,.55),0 0 .55em rgba(255,188,105,.4)}
   .vs-namnlager--ny .vs-under{color:#ffeccc;text-shadow:0 .02em 0 #dcba80,0 .04em 0 #bd9455,0 .06em .02em rgba(0,0,0,.45),0 .12em .28em rgba(0,0,0,.6),0 0 .6em rgba(255,188,105,.32)}
   /* flikar på sömmen: hälsningen hänger från kortets överkant, kontakt står på underkanten */
-  .vs-flik{position:absolute;left:var(--vs-sida);z-index:6;transform:translateX(-50%);background:var(--bg);border:1px solid var(--hair);transition:opacity .35s ease}
+  .vs-flik{position:absolute;left:var(--vs-sida);z-index:6;transform:translateX(-50%);background:var(--bg);border:1px solid var(--hair);transition:opacity .35s ease,transform .45s var(--vs-mjuk),border-color .35s ease}
   .vs-flik--fraga{top:calc(var(--vs-topp) - 1px);border-top:0;border-radius:0 0 .9rem .9rem;padding:1rem 1.7rem 1.1rem;text-align:center;white-space:nowrap}
   .vs-flik--fraga h2{font-size:clamp(1.15rem,.95rem + .7vw,1.55rem);font-weight:400;letter-spacing:.02em;line-height:1.2;margin:0}
   .vs-flik--fraga h2 span{color:var(--mist)}
-  .vs-flik--kontakt{bottom:calc(var(--vs-fot) - 1px);border-bottom:0;border-radius:.9rem .9rem 0 0;padding:0}
+  .vs-flik--kontakt{bottom:calc(var(--vs-fot) - 1px);border-bottom:0;border-radius:.9rem .9rem 0 0;padding:0;transform-origin:50% 100%}
   .vs-kontakt{display:flex;align-items:center;gap:.9rem;padding:1rem 1.6rem 1.1rem;white-space:nowrap;color:var(--ink);text-decoration:none;text-align:left;border-radius:inherit}
   .vs-kontakt svg{width:1.7rem;height:1.7rem;flex:none;overflow:visible;stroke:currentColor;fill:none;stroke-width:1.4;stroke-linejoin:round;stroke-linecap:round;transition:transform .5s var(--vs-mjuk)}
   .vs-kontakt .vs-sigill{fill:#c8323c;stroke:none}
@@ -681,6 +694,19 @@
     .vs-val--ny:hover img{transform:none;filter:none}
     .vs-val:hover .vs-pil{background:transparent;border-color:rgba(255,209,102,.7);color:var(--accent);transform:none}
   }
+  /* nedre delen av kortet hör till kontakt (med mus): halvorna ställer sig på mitten, valen dämpas och
+     kontaktfliken växer, så att den står still när man siktar på den */
+  .vs-kontaktzon{display:none}
+  @media (hover:hover) and (pointer:fine){
+    .vs-kontaktzon{display:block;position:absolute;z-index:5;left:var(--vs-kant);right:var(--vs-kant);bottom:var(--vs-fot);
+      height:calc(var(--vs-botten) - var(--vs-fot) - .5rem);cursor:pointer}
+    .vs-lager:has(.vs-kontaktzon:hover,.vs-flik--kontakt:hover,.vs-kontakt:focus-visible){--vs-sida:50%}
+    .vs-lager:has(.vs-kontaktzon:hover,.vs-flik--kontakt:hover,.vs-kontakt:focus-visible) .vs-val::after{opacity:.38}
+    .vs-lager:has(.vs-kontaktzon:hover,.vs-flik--kontakt:hover,.vs-kontakt:focus-visible) .vs-text{opacity:.45}
+    .vs-lager:has(.vs-kontaktzon:hover,.vs-flik--kontakt:hover,.vs-kontakt:focus-visible) .vs-flik--kontakt{transform:translateX(-50%) scale(1.16);border-color:rgba(255,209,102,.75)}
+    .vs-lager:has(.vs-kontaktzon:hover) .vs-kontakt svg{transform:translateY(-2px) rotate(-9deg)}
+    .vs-lager:has(.vs-kontaktzon:hover) .vs-k2{color:var(--accent)}
+  }
   /* när man har valt: kortet öppnas till hela skärmen och den valda halvan tar över */
   html.valjer .vs-lager.valt{
     --vs-topp:0px;--vs-kant:0px;--vs-fot:0px;--vs-rund:0px;
@@ -694,26 +720,6 @@
   .vs-lager.valt .vs-bild img{transform:none;filter:none}
   .vs-lager.stanger{opacity:0}
   .vs-lager.valt,.vs-lager.stanger{pointer-events:none}   /* inga klick under övergången */
-  /* skrivbordet tonar över till sin laddning: suddig bild som glider närmare, samma som på skrivbordssidan */
-  .vs-sudd{position:absolute;inset:0;opacity:0;transition:opacity .7s ease;
-    background:#5d4f4d url(data:image/webp;base64,UklGRgYDAABXRUJQVlA4IPoCAABwIQCdASqAAGAAPrlKoUonJCOhsVHdcOAXCWUAw2i9TbHQnj/yQpLEH2zEabX1mFosA0u4DaTfzvNxMFRHIb+ZNnDi2AMH+6VDNKg1YAFOIHPlzYVoWnaSJbPCGgeP+PCoAKVBwG6LA3wTR0pGoYemt9FzEMnrEyT6kgtkL1xzd3qeyTfG4zKE4fUqQ9wUk3BnrG31wzMDrb3y0i05/BC+VQshcRom8zTpmtf/LHw4yGgqiFEq70c709WSuBoAW+qG7Vg0hubCRxd1haLofGBvN1e2NgCxIVz2cW+c7w4IvbyNMJ08ikCxXiAFTCC7Qt86/w9a+zH9YcaonfRw8d8ZTNGGUjee8R27UqgXG0GjWoRPDwAA/v0B0/QJOQbw7OsTf2jG5bQpQCDh11fxwwfFlcGpgTvTkwaDLJGPsg5p1FaGhv3Qoi1ZFAh+0WfWd13+xzeoMrkNU1f+ZKLbtbS+c1aZNA/sfVFOiKnh7ey/EGJ4fVaBpJh/B3esdi4GNU2pnuKnPoJWW2GJ5QiYk2COxNJ54arl39TaJPzEotslzIZPGSkwUPF4LdGgk2XO0s4ZNj7D0gyBmuIkEY69DAypaQ/8Yv0BBsOq2Q2/TbDCZ4Kl4uSNx0k8no7C6Hx/SN6pjrf2BlMlenTx9rSUfV+ilnizBnuc8I2vBhCHNXnH680JrkAjv0zxE2Kgl10vxvWP+r8TNGe71+qgEGOOFfHyke77VXp5UvBCXUIgZ3vkbCxU70euGyKuTvAbpxtVFnGCYpECPGKxCbNtGEq2A5lpNLJEFdp2inMCncsoLdk+gQYzgnCEBbCeg2WwG/PaPUBbsfyGcMQFECBAYTCjoE6zmKlj8qgf+tTRb0Z/Rx3ZsUzr9giFf6m9bAvO7XQ5+qNhtinLNmUFfMZjP5+nnUAWVbkdIcPsn68gtafp1TnWE/sJuAFAMK3Do5qBzSXnrV+qpEnGndU+XCI8tWIvKxNLPZEUVNPGSRCnwYD8DKZzSCop7N7eWgr4AAA=) 50% 50%/cover no-repeat}
-  @media (max-aspect-ratio:17/20){ .vs-sudd{background-color:#705f5a;background-image:url(data:image/webp;base64,UklGRhoDAABXRUJQVlA4IA4DAAAQIACdASpIAKgAPq1GnUomJ6yhuHJM6ZAViWMAxuw9ESh0TURD9PcIMMs8BqQMzViwQkifJRM8BhlOQ+4IFo1UL2dN8H/XT016SZ9ntAS3RJhsMXu7AnWX83I3VW2H+HfzdjUJSSfn3gVwNDOvSxJUY7KkeC3UDEzu/LHqFUpu2H1Cl5jRRALbXdtyNSLqoRILhGuT0z+MSWp6QHJZDseT927JjK1MwA7DBCvhZMbsrVt0jc3uJYJIzL72XqejsfkmlZgXgcRTaBY94SNcR1tO4k2mK7vdUBzPUVKrCRwEoqGj6ebCVFvYOrU9xLOZnwg3WXPqn9kebQT+rwhrH42q6CxNb7XwUmAAAP7ytAD0nyEKrDnM6rK72ih/U4KLE+3Zb7Uloxt0b69AeH/+ki6ezo8pSup5yVyqRkETvMww8LROotG/1Dd8J31aiycAaWpf9+L/uRczhpePpCzTVzv0JH4uw9tNUiGJaa4QycS2R8Rt2tKWx51PeiS+Gcoh13Z/cS218JBF5AcSspsuIkJixV/5gyP79Hdp66BUohRhekcTOaiEEA+a5kg7mKX9lrs8wvnW72HZ7ocLMvvePPpAgs32Qov1XVKD+PaO2g8LwrIhhkcHSWVqBwORyio0YKzZ42xcU7qzWci6IZiNDNbw1LVfwJfSYHo55zkfJiBF1qkKEPrs5sR74gITsooKmjF67Z3rQIE2DzoiIZtebAvNpwIZ7s0bGtMuybkJzmAPQlpgXkaK+jT9QT9yjRM/DSQ98eF8AKneDIuidmPcey22KKtVqt8+uU3vRxELL5rw4vOlLgwvzIyjiWQy2udV4S1x/uTVhqy4mEK2TG+MlTYkWi0LuioUlvEwrcs4nT7T/CokAWm01nCvlRLR+LvJNpX2eMOF9Wo0lXcfjKfE/mTLZwt5K7APgvLMcG03nt8szjUFtE0uRh+dkks/zvYjWGoTsn4UchpeXpsivL/mTXgqRxlnbk3+wDN/Jatei3vzM/UFg3e+Kn1ZucM7EAsheaSi+oULT/bCNWepJsAAAA==)} }
-  .vs-sudd::after{content:"";position:absolute;inset:0;background:radial-gradient(closest-side,rgba(7,8,13,.55),rgba(7,8,13,0)) 50% 50%/min(30rem,92vw) 9rem no-repeat rgba(7,8,13,.34)}
-  .vs-tander{position:fixed;inset:0;z-index:8;display:grid;place-items:center;margin:0;pointer-events:none;opacity:0;transition:opacity .6s ease .15s;
-    font-family:var(--mono);font-size:.7rem;line-height:1.5;letter-spacing:.3em;text-transform:uppercase;color:var(--mist)}
-  .vs-lager.laddar .vs-sudd,.vs-lager.laddar .vs-tander{opacity:1}
-  .vs-lager.laddar .vs-bild{animation:vs-resa 9s cubic-bezier(.2,.6,.3,1) both}
-  @keyframes vs-resa{to{transform:scale(1.07)}}
-  /* den klassiska sidan tonar över till räknaren: lagret tonar bort över den riktiga sidan, som är suddig
-     medan laddaren räknar och blir skarp när man är framme */
-  .vs-lager.laddar.valt-klassisk{opacity:0}
-  .vs-lager.laddar.valt-klassisk .vs-namnlager{filter:blur(10px)}
-  html.vs-fokus .scene--hero,html.vs-fokus .nav{filter:blur(10px);scale:.985;transition:filter .7s ease,scale .9s var(--vs-mjuk)}
-  html.vs-skarp .scene--hero,html.vs-skarp .nav{transition:filter .9s ease,scale 1.1s var(--vs-mjuk)}
-  html.vs-fokus .nav,html.vs-skarp .nav{transform-origin:50% 50vh}
-  html.vs-fokus .aft{transition:none!important}
-  #loader.ur-val{z-index:1001;opacity:0;background:radial-gradient(closest-side,rgba(12,12,13,.9),rgba(12,12,13,0)) 50% 50%/min(40rem,98vw) 18rem no-repeat}
-  #loader.ur-val.syns:not(.borta){opacity:1}
   /* smala skärmar (mobil): kortet nästan ända ut till kanterna */
   @media (max-width:700px){
     html.valjer .vs-lager{--vs-rund:1.25rem}
@@ -732,13 +738,18 @@
     .vs-rad{display:none}
   }
   .scene--hero h1:focus{outline:none}   /* fokus landar här efter valet, bara för skärmläsaren */
+  @keyframes vs-in-lugn{from{opacity:0}to{opacity:1}}
+  /* till och från skrivbordssidan tonar sidorna mjukt över i varandra (den sidan gör likadant) */
+  @media (prefers-reduced-motion:no-preference){ @view-transition{navigation:auto} }
   @media (prefers-reduced-motion:reduce){
     html.valjer .vs-lager,html.valjer .vs-lager.valt{transition:opacity .2s ease}
     .vs-kontakt svg{transition:none}
     .vs-kontakt:hover svg,.vs-kontakt:focus-visible svg{transform:none}
     .vs-lager:has(.vs-val--ny:hover),.vs-lager:has(.vs-val--ny:focus-visible),
     .vs-lager:has(.vs-val--klassisk:hover),.vs-lager:has(.vs-val--klassisk:focus-visible){--vs-sida:50%}
-    .vs-bild img,.vs-text,.vs-pil,.vs-svav{transition:none}
+    .vs-bild img,.vs-text,.vs-pil,.vs-svav,.vs-flik{transition:none}
+    .vs-lager.inne .vs-in{animation:vs-in-lugn .4s ease both}
+    .vs-lager.inne .vs-namnlager,.vs-lager.inne .vs-flik,.vs-lager.inne .vs-text{animation:none}
     .vs-val--ny:hover img,.vs-val--ny:focus-visible img{transform:none}
     .vs-val:hover .vs-pil,.vs-val:focus-visible .vs-pil{transform:none}
   }
@@ -749,7 +760,7 @@
 
 <!-- valskärm: nya sidan (3D-skrivbordet) eller den klassiska. Visas bara med JS, se skriptet i head. -->
 <div class="vs-lager" id="valskarm" role="dialog" aria-modal="true" aria-labelledby="vs-rubrik" tabindex="-1" data-nosnippet>
-  <div class="vs-svav">
+  <div class="vs-in"><div class="vs-svav">
     <span class="vs-skugga" aria-hidden="true"></span>
     <div class="vs-kort">
       <div class="vs-flik vs-flik--fraga"><h2 id="vs-rubrik"><span>Hej!</span> Välj sida.</h2></div>
@@ -758,9 +769,8 @@
           <span class="vs-bild" aria-hidden="true">
             <picture>
               <source media="(max-aspect-ratio:17/20)" data-srcset="assets/img/val-bord-hog-780.webp 780w, assets/img/val-bord-hog-1170.webp 1170w" sizes="100vw">
-              <img data-srcset="assets/img/val-bord-bred-1200.webp 1200w, assets/img/val-bord-bred-1800.webp 1800w, assets/img/val-bord-bred-2400.webp 2400w" sizes="100vw" width="1200" height="900" alt="" decoding="async" fetchpriority="high">
+              <img data-srcset="assets/img/val-bord-bred-1200.webp 1200w, assets/img/val-bord-bred-1800.webp 1800w, assets/img/val-bord-bred-2400.webp 2400w" sizes="100vw" width="1200" height="750" alt="" decoding="async" fetchpriority="high">
             </picture>
-            <span class="vs-sudd"></span>
           </span>
           <script>  /* bilden hämtas bara när valskärmen faktiskt visas (aldrig utan JS) */
             if (document.documentElement.classList.contains('valjer')) [].forEach.call(document.currentScript.previousElementSibling.querySelectorAll('[data-srcset]'), function(el){ el.srcset = el.getAttribute('data-srcset'); });
@@ -781,6 +791,7 @@
       <div class="vs-namnlager vs-namnlager--ny" aria-hidden="true"><p class="vs-rubrik">Jonas von Essen</p><p class="vs-under">Världsmästare i att komma ihåg.</p></div>
       <div class="vs-namnlager vs-namnlager--kl" aria-hidden="true"><p class="vs-rubrik">Jonas von Essen</p><p class="vs-under">Världsmästare i att komma ihåg.</p></div>
       <span class="vs-som" aria-hidden="true"></span>
+      <span class="vs-kontaktzon" aria-hidden="true"></span>
       <div class="vs-flik vs-flik--kontakt">
         <a class="vs-kontakt" href="#kontakt">
           <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="M3.6 5.9 12 12.5l8.4-6.6"/><circle class="vs-sigill" cx="12" cy="12.6" r="2.3"/></svg>
@@ -789,8 +800,7 @@
       </div>
       <span class="vs-kantlinje" aria-hidden="true"></span>
     </div>
-  </div>
-  <p class="vs-tander" aria-hidden="true">Tänder lampan</p>
+  </div></div>
 </div>
 
 <!-- laddskärm: räknaren går 0 → 100 000 decimaler, sedan "Välkommen in." -->
@@ -1092,15 +1102,15 @@
   function seen(){ try { return sessionStorage.getItem('jve-tyst2'); } catch(e){ return false; } }
   function markSeen(){ try { sessionStorage.setItem('jve-tyst2','1'); } catch(e){} }
   var valAktiv = docEl.classList.contains('valjer');   // valskärmen är öppen (se head)
-  var skipLoader = reduced || seen() || /[?&]noloader/.test(location.search);
-  if (valAktiv) markSeen();             // laddaren väntar på valskärmen och körs bara om man väljer den klassiska sidan
+  if (valAktiv) markSeen();             // valskärmen ersätter laddaren det här besöket
+  var skipLoader = reduced || seen() || valAktiv || /[?&]noloader/.test(location.search);
   var laddarKlar = skipLoader && !valAktiv;   // .aft-texterna väntar tills laddaren (och valskärmen) är borta
 
   function endLoader(now){
     timers.forEach(clearTimeout); timers = [];
     if (raf) { cancelAnimationFrame(raf); raf = 0; }
     docEl.classList.remove('noscroll');
-    if (!introAktiv) laddarKlar = true;
+    if (!introAktiv && !valAktiv) laddarKlar = true;
     if (typeof scenes === 'object' && scenes.length) update();
     if (!loader) return;
     if (now) { loader.remove(); loader = null; }
@@ -1158,9 +1168,13 @@
     introTimers.push(setTimeout(klart, 3050));   // 4) resten tonar fram som vanligt
   }
 
-  /* räknaren och "Välkommen in.", sedan klar(). Vid första besöket, och ovanpå
-     valskärmen när man väljer den klassiska sidan. */
-  function rakna(klar){
+  if (skipLoader) { endLoader(true); }
+  else {
+    markSeen();
+    docEl.classList.add('noscroll');
+    window.addEventListener('keydown', skipNow);
+    window.addEventListener('pointerdown', skipNow);
+
     var TOTAL = 100000;
     var DUR = 1800;                       // räkningen
     function fmt(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
@@ -1192,7 +1206,13 @@
                 timers.push(setTimeout(typa, 34));
               }
             } else {
-              timers.push(setTimeout(function(){ if (loader) klar(); }, 900));   // kort andrum
+              timers.push(setTimeout(function(){            // kort andrum …
+                if (!loader) return;
+                startaIntro();                               // rubriken tar över mitt på skärmen
+                docEl.classList.add('mjukin');               // … sidan tonar mjukt in …
+                endLoader(false);                            // … medan laddaren tonar bort
+                setTimeout(function(){ docEl.classList.remove('mjukin'); }, 1400);
+              }, 900));
             }
           }
           typa();
@@ -1200,22 +1220,6 @@
       }
     }
     raf = requestAnimationFrame(frame);
-  }
-
-  if (!valAktiv) {                      // med valskärmen öppen väntar laddaren på valet (se valskärmen nedan)
-    if (skipLoader) endLoader(true);
-    else {
-      markSeen();
-      docEl.classList.add('noscroll');
-      window.addEventListener('keydown', skipNow);
-      window.addEventListener('pointerdown', skipNow);
-      rakna(function(){
-        startaIntro();                               // rubriken tar över mitt på skärmen
-        docEl.classList.add('mjukin');               // … sidan tonar mjukt in …
-        endLoader(false);                            // … medan laddaren tonar bort
-        setTimeout(function(){ docEl.classList.remove('mjukin'); }, 1400);
-      });
-    }
   }
 
   /* ————— teleprompter ————— */
@@ -1423,10 +1427,9 @@
 
 
   /* ————— valskärmen: nya sidan, klassiska sidan eller kontakt.
-     Öppnas av head-skriptet (klassen valjer). Kortet svävar; när man väljer öppnas
-     den halvan till hela skärmen och tonar över till den sidans laddning. Namnet över
-     sömmen mäts mot den riktiga rubriken så att det ligger exakt där när den klassiska
-     sidan tar över. ————— */
+     Öppnas av head-skriptet (klassen valjer). Kortet tonar fram och svävar; när man väljer
+     öppnas den halvan till hela skärmen och tar över. Namnet över sömmen mäts mot den
+     riktiga rubriken så att det ligger exakt där när den klassiska sidan tar över. ————— */
   (function(){
     var lager = document.getElementById('valskarm');
     if (!lager) return;
@@ -1462,8 +1465,8 @@
     function stang(direkt){
       if (!direkt) lager.classList.add('stanger');
       return vanta(direkt ? 0 : 450).then(function(){
-        docEl.classList.remove('valjer', 'vs-fokus', 'vs-skarp');
-        lager.classList.remove('stanger', 'valt', 'valt-ny', 'valt-klassisk', 'laddar');
+        docEl.classList.remove('valjer');
+        lager.classList.remove('stanger', 'valt', 'valt-ny', 'valt-klassisk');
         svav.removeAttribute('style');
         sidan(true);
         valAktiv = false;
@@ -1489,6 +1492,13 @@
     addEventListener('resize', matt);
     requestAnimationFrame(function(){ lager.focus({ preventScroll: true }); });
 
+    // intåget börjar när skrivbordsbilden är avkodad, så att kortet inte tonar fram halvtomt
+    // (men väntar högst en dryg sekund)
+    var bild = lager.querySelector('.vs-bild img');
+    function inne(){ lager.classList.add('inne'); }
+    if (bild && bild.decode) bild.decode().then(inne, inne);
+    setTimeout(inne, 1200);
+
     // på datorn lutar kortet lite mot pekaren
     if (!lugn.matches && matchMedia('(hover: hover) and (pointer: fine)').matches) {
       lager.addEventListener('pointermove', function(e){
@@ -1501,41 +1511,22 @@
       });
     }
 
-    // klassiska sidan: den svarta halvan tar hela skärmen med namnet där rubriken ligger.
-    // Sedan tonar lagret bort över den riktiga sidan, som är suddig medan laddaren räknar
-    // och blir skarp när man är framme. Klick eller tangent hoppar fram direkt.
+    // klassiska sidan: kortet öppnas, den svarta halvan tar hela skärmen med namnet där rubriken
+    // ligger, och lagret tonar bort över den riktiga rubriken på exakt samma plats
     lager.querySelector('.vs-val--klassisk').addEventListener('click', function(){
       if (upptagen) return; upptagen = true;
       spara('klassisk');
       matt();
-      if (lugn.matches || !loader) { stang().then(function(){ fokusRubrik(); upptagen = false; }); return; }
       landa();
       lager.classList.add('valt', 'valt-klassisk');
-      var framme = false;
-      function fram(){
-        if (framme) return; framme = true;
-        removeEventListener('pointerdown', fram); removeEventListener('keydown', fram);
-        docEl.classList.add('vs-skarp'); docEl.classList.remove('vs-fokus');
-        endLoader(false);                                  // laddaren tonar bort medan sidan blir skarp
-        vanta(1000).then(function(){ return stang(true); }).then(function(){
-          docEl.classList.remove('vs-skarp');
-          fokusRubrik();
-          upptagen = false;
-        });
-      }
-      vanta(880).then(function(){
-        docEl.classList.add('vs-fokus');
-        laddarKlar = true; if (scenes.length) update();   // meriterna och knapparna finns där bakom, suddiga
-        lager.classList.add('laddar');
-        loader.classList.add('ur-val');
-        requestAnimationFrame(function(){ requestAnimationFrame(function(){ if (loader) loader.classList.add('syns'); }); });
-        addEventListener('pointerdown', fram); addEventListener('keydown', fram);
-        timers.push(setTimeout(function(){ rakna(fram); }, 400));
+      vanta(880).then(function(){ return stang(); }).then(function(){
+        fokusRubrik();
+        upptagen = false;
       });
     });
 
-    // nya sidan: riktig länk. Kortet öppnas till skrivbordet, som blir suddigt och glider närmare
-    // medan sidan laddas. Skrivbordssidan tar över samma bild (jve-resa) tills scenen är klar.
+    // nya sidan: riktig länk. Kortet öppnas till skrivbordet, och skrivbordssidan visar samma bild
+    // (jve-resa) tills 3D-scenen är igång, så att det inte blir någon laddskärm emellan
     var ny = lager.querySelector('.vs-val--ny'), forladdad = false;
     function forladda(){
       if (forladdad) return; forladdad = true;
@@ -1559,11 +1550,8 @@
       lager.classList.add('valt', 'valt-ny');
       // tillbaka från skrivbordet ska ge den klassiska sidan, inte valet igen (även i testläget med ?val)
       try { history.replaceState(null, '', location.pathname + location.search.replace(/([?&])val(=[^&]*)?(&|$)/, '$1').replace(/[?&]$/, '') + location.hash); } catch(err){}
-      vanta(880).then(function(){
-        lager.classList.add('laddar');
-        try { sessionStorage.setItem('jve-resa', String(Date.now())); } catch(err){}
-        return vanta(750);
-      }).then(function(){ location.href = ny.href; });
+      try { sessionStorage.setItem('jve-resa', String(Date.now())); } catch(err){}
+      vanta(880).then(function(){ location.href = ny.href; });
     });
 
     // kontakt: lagret stängs och man landar i kontaktformuläret
@@ -1579,6 +1567,9 @@
         upptagen = false;
       });
     });
+
+    // kontaktzonen i nedre delen av kortet gör samma sak som kontaktfliken
+    lager.querySelector('.vs-kontaktzon').addEventListener('click', function(){ lager.querySelector('.vs-kontakt').click(); });
 
     // Esc ger den klassiska sidan: valskärmen är ett erbjudande, aldrig en fälla
     document.addEventListener('keydown', function(e){
