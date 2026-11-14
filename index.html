@@ -647,7 +647,7 @@
   .vs-hopp{display:inline-block}
   .vs-hopp span{display:inline-block}
   @media (prefers-reduced-motion:no-preference){
-    .vs-val--ny:hover .vs-hopp span,.vs-val--ny:focus-visible .vs-hopp span{animation:vs-hopp .6s var(--vs-mjuk) calc(var(--i) * 45ms) both}
+    .vs-lager.rord .vs-val--ny:hover .vs-hopp span,.vs-val--ny:focus-visible .vs-hopp span{animation:vs-hopp .6s var(--vs-mjuk) calc(var(--i) * 45ms) both}
   }
   @keyframes vs-hopp{0%,100%{transform:none}40%{transform:translateY(-.32em) rotate(-6deg)}70%{transform:translateY(.04em)}}
   /* slöjan som dämpar bilden i den halva man inte pekar på; fokusringen runt valtexten */
@@ -679,33 +679,30 @@
   .vs-kontakt:hover .vs-k2,.vs-kontakt:focus-visible .vs-k2{color:var(--accent)}
   .vs-kontakt:focus-visible{outline:2px solid var(--ink);outline-offset:-6px}
   .vs-flik--kontakt:has(.vs-kontakt:hover){border-color:rgba(255,209,102,.5)}
-  /* peka/fokusera: halvan växer lite, namnet byter stil i takt med sömmen och pilen fylls */
-  .vs-lager:has(.vs-val--ny:hover),.vs-lager:has(.vs-val--ny:focus-visible){--vs-sida:56%}
-  .vs-lager:has(.vs-val--klassisk:hover),.vs-lager:has(.vs-val--klassisk:focus-visible){--vs-sida:44%}
-  .vs-lager:has(.vs-val--klassisk:hover) .vs-val--ny::after,
+  /* peka/fokusera: sömmen glider en aning åt den halvan, namnet byter stil i takt med den och pilen fylls.
+     Pekaren räknas först när man har rört musen (klassen rord sätts i skriptet), så att inget rör sig av
+     sig självt om pekaren redan står över kortet när sidan öppnas. Pekskärmar får aldrig rord */
+  .vs-lager.rord:has(.vs-val--ny:hover),.vs-lager:has(.vs-val--ny:focus-visible){--vs-sida:52.5%}
+  .vs-lager.rord:has(.vs-val--klassisk:hover),.vs-lager:has(.vs-val--klassisk:focus-visible){--vs-sida:47.5%}
+  .vs-lager.rord:has(.vs-val--klassisk:hover) .vs-val--ny::after,
   .vs-lager:has(.vs-val--klassisk:focus-visible) .vs-val--ny::after{opacity:.32}
-  .vs-val--ny:hover img,.vs-val--ny:focus-visible img{transform:scale(1.03);filter:brightness(1.06)}
-  .vs-val:hover .vs-pil,.vs-val:focus-visible .vs-pil{background:var(--accent);border-color:var(--accent);color:#0c0c0d;animation:none}
-  .vs-val--ny:hover .vs-pil,.vs-val--ny:focus-visible .vs-pil{transform:translateX(-.12em)}
-  .vs-val--klassisk:hover .vs-pil,.vs-val--klassisk:focus-visible .vs-pil{transform:translateX(.12em)}
-  @media (hover:none){
-    .vs-lager:has(.vs-val--ny:hover),.vs-lager:has(.vs-val--klassisk:hover){--vs-sida:50%}
-    .vs-lager:has(.vs-val--klassisk:hover) .vs-val--ny::after{opacity:0}
-    .vs-val--ny:hover img{transform:none;filter:none}
-    .vs-val:hover .vs-pil{background:transparent;border-color:rgba(255,209,102,.7);color:var(--accent);transform:none}
-  }
+  .vs-lager.rord .vs-val--ny:hover img,.vs-val--ny:focus-visible img{transform:scale(1.03);filter:brightness(1.06)}
+  .vs-lager.rord .vs-val:hover .vs-pil,.vs-val:focus-visible .vs-pil{background:var(--accent);border-color:var(--accent);color:#0c0c0d;animation:none}
+  .vs-lager.rord .vs-val--ny:hover .vs-pil,.vs-val--ny:focus-visible .vs-pil{transform:translateX(-.12em)}
+  .vs-lager.rord .vs-val--klassisk:hover .vs-pil,.vs-val--klassisk:focus-visible .vs-pil{transform:translateX(.12em)}
   /* nedre delen av kortet hör till kontakt (med mus): halvorna ställer sig på mitten, valen dämpas och
      kontaktfliken växer, så att den står still när man siktar på den */
   .vs-kontaktzon{display:none}
   @media (hover:hover) and (pointer:fine){
     .vs-kontaktzon{display:block;position:absolute;z-index:5;left:var(--vs-kant);right:var(--vs-kant);bottom:var(--vs-fot);
       height:calc(var(--vs-botten) - var(--vs-fot) - .5rem);cursor:pointer}
-    .vs-lager:has(.vs-kontaktzon:hover,.vs-flik--kontakt:hover,.vs-kontakt:focus-visible){--vs-sida:50%}
-    .vs-lager:has(.vs-kontaktzon:hover,.vs-flik--kontakt:hover,.vs-kontakt:focus-visible) .vs-val::after{opacity:.38}
-    .vs-lager:has(.vs-kontaktzon:hover,.vs-flik--kontakt:hover,.vs-kontakt:focus-visible) .vs-text{opacity:.45}
-    .vs-lager:has(.vs-kontaktzon:hover,.vs-flik--kontakt:hover,.vs-kontakt:focus-visible) .vs-flik--kontakt{transform:translateX(-50%) scale(1.16);border-color:rgba(255,209,102,.75)}
-    .vs-lager:has(.vs-kontaktzon:hover) .vs-kontakt svg{transform:translateY(-2px) rotate(-9deg)}
-    .vs-lager:has(.vs-kontaktzon:hover) .vs-k2{color:var(--accent)}
+    .vs-lager.rord:has(.vs-kontaktzon:hover,.vs-flik--kontakt:hover),.vs-lager:has(.vs-kontakt:focus-visible){--vs-sida:50%}
+    .vs-lager.rord:has(.vs-kontaktzon:hover,.vs-flik--kontakt:hover) .vs-val::after,.vs-lager:has(.vs-kontakt:focus-visible) .vs-val::after{opacity:.38}
+    .vs-lager.rord:has(.vs-kontaktzon:hover,.vs-flik--kontakt:hover) .vs-text,.vs-lager:has(.vs-kontakt:focus-visible) .vs-text{opacity:.45}
+    .vs-lager.rord:has(.vs-kontaktzon:hover,.vs-flik--kontakt:hover) .vs-flik--kontakt,
+    .vs-lager:has(.vs-kontakt:focus-visible) .vs-flik--kontakt{transform:translateX(-50%) scale(1.16);border-color:rgba(255,209,102,.75)}
+    .vs-lager.rord:has(.vs-kontaktzon:hover) .vs-kontakt svg{transform:translateY(-2px) rotate(-9deg)}
+    .vs-lager.rord:has(.vs-kontaktzon:hover) .vs-k2{color:var(--accent)}
   }
   /* när man har valt: kortet öppnas till hela skärmen och den valda halvan tar över */
   html.valjer .vs-lager.valt{
@@ -714,10 +711,10 @@
   }
   html.valjer .vs-lager.valt.valt-ny{--vs-sida:100%}
   html.valjer .vs-lager.valt.valt-klassisk{--vs-sida:0%}
-  .vs-lager.valt .vs-som,.vs-lager.valt .vs-flik,.vs-lager.valt .vs-text,.vs-lager.valt .vs-skugga,.vs-lager.valt .vs-kantlinje{opacity:0}
+  .vs-lager.valt .vs-som,.vs-lager.valt .vs-flik,.vs-lager.valt .vs-text,.vs-lager.valt .vs-skugga,.vs-lager.valt .vs-kantlinje{opacity:0!important}
   .vs-lager.valt .vs-val::after{opacity:0!important}
   .vs-lager.valt-ny .vs-namnlager,.vs-lager.valt-ny .vs-dimma,.vs-lager.valt-ny .vs-val--ny::before{opacity:0}
-  .vs-lager.valt .vs-bild img{transform:none;filter:none}
+  .vs-lager.valt .vs-val--ny .vs-bild img{transform:none;filter:none}
   .vs-lager.stanger{opacity:0}
   .vs-lager.valt,.vs-lager.stanger{pointer-events:none}   /* inga klick under övergången */
   /* smala skärmar (mobil): kortet nästan ända ut till kanterna */
@@ -745,13 +742,13 @@
     html.valjer .vs-lager,html.valjer .vs-lager.valt{transition:opacity .2s ease}
     .vs-kontakt svg{transition:none}
     .vs-kontakt:hover svg,.vs-kontakt:focus-visible svg{transform:none}
-    .vs-lager:has(.vs-val--ny:hover),.vs-lager:has(.vs-val--ny:focus-visible),
-    .vs-lager:has(.vs-val--klassisk:hover),.vs-lager:has(.vs-val--klassisk:focus-visible){--vs-sida:50%}
+    .vs-lager.rord:has(.vs-val--ny:hover),.vs-lager:has(.vs-val--ny:focus-visible),
+    .vs-lager.rord:has(.vs-val--klassisk:hover),.vs-lager:has(.vs-val--klassisk:focus-visible){--vs-sida:50%}
     .vs-bild img,.vs-text,.vs-pil,.vs-svav,.vs-flik{transition:none}
     .vs-lager.inne .vs-in{animation:vs-in-lugn .4s ease both}
     .vs-lager.inne .vs-namnlager,.vs-lager.inne .vs-flik,.vs-lager.inne .vs-text{animation:none}
-    .vs-val--ny:hover img,.vs-val--ny:focus-visible img{transform:none}
-    .vs-val:hover .vs-pil,.vs-val:focus-visible .vs-pil{transform:none}
+    .vs-lager.rord .vs-val--ny:hover img,.vs-val--ny:focus-visible img{transform:none}
+    .vs-lager.rord .vs-val:hover .vs-pil,.vs-val:focus-visible .vs-pil{transform:none}
   }
 </style>
 <script defer src="/assets/statistik.js"></script>
@@ -1499,17 +1496,30 @@
     if (bild && bild.decode) bild.decode().then(inne, inne);
     setTimeout(inne, 1200);
 
-    // på datorn lutar kortet lite mot pekaren
-    if (!lugn.matches && matchMedia('(hover: hover) and (pointer: fine)').matches) {
-      lager.addEventListener('pointermove', function(e){
-        if (upptagen) return;
+    // pekaren räknas först när musen faktiskt har flyttat sig en bit (klassen rord): den kan redan stå
+    // över kortet när sidan öppnas, och då ska varken sömmen eller kortet röra sig av sig själva.
+    // Händelser på samma punkt räknas inte, och inte heller det första hoppet (det kan komma från en
+    // gammal position). Sedan lutar kortet också lite mot pekaren på datorn
+    var luta = !lugn.matches && matchMedia('(hover: hover) and (pointer: fine)').matches;
+    var forra = null, hoppat = false, stracka = 0;
+    lager.addEventListener('pointermove', function(e){
+      if (upptagen || e.pointerType === 'touch') return;
+      if (!lager.classList.contains('rord')) {
+        var d = forra ? Math.abs(e.clientX - forra[0]) + Math.abs(e.clientY - forra[1]) : 0;
+        forra = [e.clientX, e.clientY];
+        if (!d) return;
+        if (!hoppat) { hoppat = true; return; }
+        if ((stracka += d) < 6) return;
+        lager.classList.add('rord');
+      }
+      if (luta) {
         svav.style.setProperty('--vs-lx', (e.clientX / innerWidth * 2 - 1).toFixed(3));
         svav.style.setProperty('--vs-ly', (e.clientY / innerHeight * 2 - 1).toFixed(3));
-      });
-      lager.addEventListener('pointerleave', function(){
-        if (!upptagen) { svav.style.removeProperty('--vs-lx'); svav.style.removeProperty('--vs-ly'); }
-      });
-    }
+      }
+    });
+    if (luta) lager.addEventListener('pointerleave', function(){
+      if (!upptagen) { svav.style.removeProperty('--vs-lx'); svav.style.removeProperty('--vs-ly'); }
+    });
 
     // klassiska sidan: kortet öppnas, den svarta halvan tar hela skärmen med namnet där rubriken
     // ligger, och lagret tonar bort över den riktiga rubriken på exakt samma plats
