@@ -69,25 +69,25 @@
     position:fixed;inset:0 0 auto 0;z-index:40;
     display:flex;justify-content:space-between;align-items:baseline;gap:1rem;
     padding:1.1rem clamp(1.1rem,4vw,2.6rem);
-    font-family:var(--mono);font-size:calc(.62rem * var(--mini));letter-spacing:.24em;text-transform:uppercase;
+    font-size:1.02rem;letter-spacing:.01em;
     background:linear-gradient(to bottom,rgba(12,12,13,.92),rgba(12,12,13,0));
     pointer-events:none;
   }
   .nav a{pointer-events:auto;text-decoration:none;color:var(--nav);padding:.2rem 0}
   .nav a:hover{color:var(--ink)}
-  .nav .brand{color:var(--ink);white-space:nowrap}
+  .nav .brand{color:var(--ink);white-space:nowrap;font-weight:500}
   .nav ul{display:flex;gap:clamp(.9rem,2.6vw,1.9rem);list-style:none;flex-wrap:wrap;justify-content:flex-end}
   .nav a.on{color:var(--ink);border-bottom:1px solid var(--ink);padding-bottom:.15rem}
   .nav .flagga{display:inline-block;height:11px;width:auto;vertical-align:-2px;border-radius:2px;opacity:.75;transition:opacity .25s ease}
   .nav a:hover .flagga{opacity:1}
-  @media (max-width:560px){ .nav{font-size:calc(.55rem * var(--mini));letter-spacing:.18em} .nav .brand{display:none} .nav ul{width:100%;justify-content:center} }
+  @media (max-width:560px){ .nav{font-size:.88rem;letter-spacing:0;padding-inline:.9rem} .nav .brand{display:none} .nav ul{width:100%;justify-content:center;gap:.3rem .7rem} }
 
   /* ————— actpuffen: vid första besöket pekar en liten ruta på Act i menyn ————— */
   #actpuff{
     position:fixed;top:0;left:0;z-index:45;              /* flyttas till menylänken av JS */
-    max-width:min(17rem,calc(100vw - 1.5rem));
+    max-width:min(19rem,calc(100vw - 1.5rem));
     background:var(--bg);color:var(--ink);border:1px solid var(--accent);
-    font-family:var(--mono);font-size:calc(.62rem * var(--mini));letter-spacing:.06em;line-height:1.7;
+    font-size:.98rem;line-height:1.5;
     opacity:0;transform:translateY(-8px);transition:opacity .5s ease,transform .5s ease;
     pointer-events:none;
   }
@@ -120,15 +120,18 @@
     font-weight:400;letter-spacing:.055em;line-height:1.1;text-wrap:balance;
   }
   .meta{
-    font-family:var(--mono);font-size:calc(.66rem * var(--mini));font-weight:400;
-    letter-spacing:.3em;text-transform:uppercase;color:var(--mist);
-    margin-top:1.6rem;line-height:2.1;max-width:38rem;
+    font-size:clamp(1rem,.95rem + .25vw,1.12rem);font-weight:400;
+    letter-spacing:.01em;color:var(--mist);
+    margin-top:1.6rem;line-height:1.6;max-width:38rem;
   }
   .label{
-    font-family:var(--mono);font-size:calc(.66rem * var(--mini));font-weight:400;
-    letter-spacing:.44em;text-transform:uppercase;color:var(--mist);
+    font-size:clamp(1.12rem,1rem + .45vw,1.35rem);font-weight:500;
+    letter-spacing:.02em;color:var(--mist);
     text-align:center;margin-bottom:clamp(5rem,14vh,9rem);
   }
+  /* Gratis som en liten skylt i appens färg, i stället för punkter mellan orden */
+  .gratis{display:inline-block;margin-right:.6rem;padding:0 .6rem .05rem;border:1px solid color-mix(in srgb, var(--acc,var(--accent)) 60%, transparent);
+    border-radius:999px;color:var(--acc,var(--accent));font-size:.92em;font-weight:500;line-height:1.5}
 
   /* ————— teleprompter: JS sätter --tp per rad; utan JS/vid reduced motion är allt fullt läsbart ————— */
   html.tp [data-line]{opacity:var(--tp,1);transition:opacity .25s linear;will-change:opacity}
@@ -138,13 +141,9 @@
 
   /* ————— hero ————— */
   .tagline{margin-top:1.4rem;font-size:clamp(1.7rem,1.1rem + 2.9vw,3.05rem)}
-  .merits{max-width:46rem;text-wrap:balance}
-  .merits .dot{padding-inline:.55em;color:var(--mist)}
-  @media (max-width:640px){
-    .merits .mer{display:block}
-    .merits .dot{display:none}
-  }
-  .ctas{display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;margin-top:3rem}
+  .merits{max-width:46rem;line-height:1.7}
+  .merits .mer{display:block}
+  .ctas{display:flex;gap:1rem 2.2rem;justify-content:center;flex-wrap:wrap;margin-top:3rem}
   .cue{width:1px;height:52px;margin-top:5vh;position:relative;
        background:linear-gradient(var(--ink),color-mix(in srgb, var(--ink) 40%, transparent));
        opacity:.5;animation:cue 3.2s ease-in-out infinite}
@@ -157,14 +156,14 @@
   .knapp{
     display:inline-block;padding:.45rem .15rem;
     background:transparent;color:var(--accent);border:none;cursor:pointer;
-    font-family:var(--mono);font-size:calc(.7rem * var(--mini));font-weight:500;letter-spacing:.24em;text-transform:uppercase;
+    font-size:1.12rem;font-weight:500;letter-spacing:.01em;
     text-decoration:none;
     border-bottom:1px solid rgba(255,209,102,.32);
     transition:border-color .3s ease,text-shadow .3s ease,opacity .3s ease;
   }
   .knapp:hover{border-color:var(--accent);text-shadow:0 0 30px rgba(255,209,102,.35)}
   .knapp:active{opacity:.75}
-  @media (max-width:560px){ .knapp{font-size:calc(.66rem * var(--mini))} }
+  @media (max-width:560px){ .knapp{font-size:1.06rem} }
 
   /* ————— saker jag har byggt ————— */
   .proj{display:grid;justify-items:center;text-align:center}
@@ -200,8 +199,8 @@
     border:1px solid color-mix(in srgb, var(--acc) 45%, transparent);color:var(--acc);
     background:color-mix(in srgb, var(--acc) 7%, transparent)}
   .feat .fico svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
-  .feat b{display:block;font-weight:500;font-size:.98rem;letter-spacing:.01em;color:var(--acc)}
-  .feat i{display:block;font-style:normal;color:var(--mist);font-size:.88rem;line-height:1.55;margin-top:.18rem}
+  .feat b{display:block;font-weight:500;font-size:1.04rem;letter-spacing:.01em;color:var(--acc)}
+  .feat i{display:block;font-style:normal;color:var(--mist);font-size:.97rem;line-height:1.55;margin-top:.18rem}
   .globpromo{margin-inline:auto;position:relative}
   /* frilagda objekt — glöden läggs i appens accentfärg och följer silhuetten */
   .globpromo img{width:100%;height:auto;display:block;
@@ -350,7 +349,7 @@
   .pratbubbla{
     position:absolute;left:0;bottom:64px;transform:translate(-50%,4px);
     background:#161614;border:1px solid var(--hair);padding:.32rem .5rem;
-    font:500 10px/1 var(--mono);letter-spacing:.08em;color:var(--ink);
+    font:500 13px/1 var(--mono);letter-spacing:.06em;color:var(--ink);
     white-space:nowrap;pointer-events:none;opacity:0;
     transition:opacity .22s ease,transform .22s ease;
   }
@@ -395,7 +394,7 @@
   .vfasad:is(:hover,:focus-visible) .vspela{border-color:var(--ink);transform:scale(1.07);box-shadow:0 0 44px rgba(234,230,220,.16)}
   .vfasad:focus-visible{outline:1px solid var(--ink);outline-offset:-1px}
   .vtitel{font-size:1.06rem;letter-spacing:.02em;line-height:1.4;display:block}
-  .vmeta{font-family:var(--mono);font-size:calc(.58rem * var(--mini));letter-spacing:.26em;text-transform:uppercase;color:var(--mist);line-height:1.9;display:block;margin-top:.3rem}
+  .vmeta{font-size:.98rem;color:var(--mist);line-height:1.6;display:flex;flex-wrap:wrap;justify-content:center;gap:.15rem 1rem;margin-top:.3rem}
   .vmeta a{color:var(--mist);text-decoration:none;border-bottom:1px solid var(--hair);padding-bottom:.1rem}
   .vmeta a:hover{color:var(--ink);border-color:var(--ink)}
   @media (max-width:760px){ .vgrid{grid-template-columns:1fr;gap:3rem} }
@@ -404,7 +403,7 @@
   .foljmig{margin-top:clamp(5rem,12vh,8rem);text-align:center}
   .soc{display:flex;gap:clamp(2.4rem,7vw,4rem);justify-content:center;flex-wrap:wrap;margin-top:2.4rem}
   .soc a{display:grid;justify-items:center;gap:1rem;text-decoration:none;
-         font-family:var(--mono);font-size:calc(.6rem * var(--mini));letter-spacing:.26em;text-transform:uppercase;color:var(--mist);transition:color .35s ease}
+         font-size:1.02rem;color:var(--mist);transition:color .35s ease}
   .soc a:hover{color:var(--ink)}
   .soc img{width:clamp(74px,12vw,104px);height:auto;display:block;
            transition:transform .35s ease,filter .35s ease}
@@ -412,7 +411,7 @@
 
   /* ————— kontakt ————— */
   form{width:min(100%,30rem);margin-top:3.5rem;text-align:left;display:grid;gap:2.4rem}
-  .falt label{display:block;font-family:var(--mono);font-size:calc(.58rem * var(--mini));letter-spacing:.3em;text-transform:uppercase;color:var(--mist);margin-bottom:.55rem}
+  .falt label{display:block;font-size:1.02rem;color:var(--mist);margin-bottom:.4rem}
   .falt input,.falt textarea{
     width:100%;background:transparent;border:0;border-bottom:1px solid var(--hair);
     color:var(--ink);font-family:var(--sans);font-size:1.05rem;padding:.45rem 0 .65rem;
@@ -433,17 +432,17 @@
   .nbrev .knapp:disabled{opacity:.55;cursor:default}
   form.nbrev.klar{display:none}
   .nbhp{position:absolute;left:-5000px;top:auto}
-  .nbfel{flex-basis:100%;margin:0;font-family:var(--mono);font-size:calc(.66rem * var(--mini));letter-spacing:.14em;color:#ff9d8f;line-height:1.8;text-align:center}
+  .nbfel{flex-basis:100%;margin:0;font-size:1rem;color:#ff9d8f;line-height:1.6;text-align:center}
   .nbfel[hidden]{display:none}
 
   /* ————— footer ————— */
   footer{padding:clamp(5rem,14vh,9rem) 1.5rem 3rem;text-align:center;
-         font-family:var(--mono);font-size:calc(.6rem * var(--mini));letter-spacing:.22em;text-transform:uppercase;color:var(--mist);line-height:2.6}
+         font-size:1rem;color:var(--mist);line-height:1.9}
   footer a{color:var(--mist);text-decoration:none;border-bottom:1px solid var(--hair);padding-bottom:.1rem}
   footer a:hover{color:var(--ink);border-color:var(--ink)}
   footer .rad{display:flex;gap:1.4rem 2rem;justify-content:center;flex-wrap:wrap}
   /* π-strömmen: decimalerna glider förbi ovanför copyrightraden */
-  .pistrom{overflow:hidden;margin:2.4rem auto 0;max-width:min(92vw,64rem);
+  .pistrom{overflow:hidden;margin:2.4rem auto 1rem;max-width:min(92vw,64rem);font-family:var(--mono);font-size:calc(.6rem * var(--mini));letter-spacing:.22em;line-height:2.6;
     -webkit-mask-image:linear-gradient(90deg,transparent,#000 16%,#000 84%,transparent);
     mask-image:linear-gradient(90deg,transparent,#000 16%,#000 84%,transparent)}
   .pispar{display:flex;width:max-content;animation:pirull 90s linear infinite}
@@ -456,7 +455,7 @@
   #intelarm{
     display:inline-block;margin-top:2.8rem;padding:.6rem 1.05rem;
     background:#240b0b;color:#e04747;border:1px solid #571616;border-radius:3px;
-    font-family:var(--mono);font-size:calc(.56rem * var(--mini));letter-spacing:.18em;text-transform:uppercase;
+    font-size:.92rem;
     cursor:pointer;opacity:.4;
     transition:opacity .45s ease,box-shadow .45s ease,border-color .45s ease;
   }
@@ -482,8 +481,7 @@
   #lring{position:relative;transition:opacity .5s ease,transform .5s ease}
   #lsiffror{display:grid;place-content:center;justify-items:center;row-gap:1.1rem}
   #lnum{font-family:var(--mono);font-size:clamp(2.1rem,7vw,3.3rem);letter-spacing:.06em;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1;min-width:7.5ch;text-align:center}
-  .ldec{font-family:var(--mono);font-size:calc(.56rem * var(--mini));letter-spacing:.42em;text-transform:uppercase;color:var(--mist);padding-left:.42em}
-  @media (max-width:480px){ .ldec{letter-spacing:.2em;font-size:calc(.52rem * var(--mini));padding-left:.2em} }
+  .ldec{font-size:1.04rem;color:var(--mist);text-align:center}
   #lfras{
     opacity:0;transform:translateY(9px);
     transition:opacity .6s ease .14s,transform .6s ease .14s;
@@ -512,7 +510,6 @@
     .proj + .proj{margin-top:clamp(4.5rem,11vh,7rem)}
     .paus{height:clamp(4.5rem,13vh,8rem)}
     .paus--stor{height:clamp(6rem,17vh,11rem)}
-    .meta{letter-spacing:.22em;font-size:calc(.6rem * var(--mini))}
   }
 </style>
 <script defer src="/assets/statistik.js"></script>
@@ -553,7 +550,7 @@
       <h1>Jonas von Essen</h1>
       <p class="big tagline" style="margin-inline:auto">World champion of remembering.</p>
     </div>
-    <p class="meta merits aft"><span class="mer">Two-time World Memory Champion</span><span class="dot" aria-hidden="true">·</span><span class="mer">Five-time Swedish pub quiz champion</span><span class="dot" aria-hidden="true">·</span><span class="mer">Swedish Poetry Slam champion 2026</span><span class="dot" aria-hidden="true">·</span><span class="mer">Gothenburg pun champion</span></p>
+    <p class="meta merits aft"><span class="mer">Two-time World Memory Champion</span><span class="mer">Five-time Swedish pub quiz champion</span><span class="mer">Swedish Poetry Slam champion 2026</span><span class="mer">Gothenburg pun champion</span></p>
     <div class="ctas aft">
       <a class="knapp" href="#byggt">Learn to remember</a>
       <a class="knapp" href="#kontakt">Book a talk</a>
@@ -573,7 +570,7 @@
       <div class="ctas" data-line data-min=".4" style="margin-top:2.4rem">
         <a class="knapp" href="https://memoryos.com" target="_blank" rel="noopener">Try memoryOS</a>
       </div>
-      <p class="meta aft">memoryos.com · iOS &amp; Android</p>
+      <p class="meta aft">memoryos.com, for iOS and Android</p>
     </div>
   </section>
 
@@ -608,7 +605,7 @@
           </div>
           <figcaption>
             <span class="vtitel">The million question</span>
-            <span class="vmeta">Postkodmiljonären · <a href="https://www.youtube.com/watch?v=A-oHL2JyIjY" target="_blank" rel="noopener">YouTube ↗</a></span>
+            <span class="vmeta"><span>Postkodmiljonären</span><a href="https://www.youtube.com/watch?v=A-oHL2JyIjY" target="_blank" rel="noopener">YouTube ↗</a></span>
           </figcaption>
         </figure>
         <figure class="vplayer" data-line data-min=".3">
@@ -620,7 +617,7 @@
           </div>
           <figcaption>
             <span class="vtitel">500 names on Sweden’s Got Talent</span>
-            <span class="vmeta">TV4 · <a href="https://www.youtube.com/watch?v=WZwQ-zKBBaA" target="_blank" rel="noopener">YouTube ↗</a></span>
+            <span class="vmeta"><span>TV4</span><a href="https://www.youtube.com/watch?v=WZwQ-zKBBaA" target="_blank" rel="noopener">YouTube ↗</a></span>
           </figcaption>
         </figure>
       </div>

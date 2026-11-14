@@ -755,7 +755,6 @@ function byggUtsikt(dag) {
   return ut;
 }
 const utsikt = { natt: byggUtsikt(false), dag: null };
-document.querySelectorAll('[data-utsikt]').forEach(a => { if (a.dataset.utsikt === UTSIKT) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); });
 
 const SKIVA = skivTextur(true), PRICK = skivTextur(false);
 const bokeh = [];
@@ -842,7 +841,7 @@ function sak(id, g, o) {
 
 // laptopen med kod på skärmen → gratisappar
 const kod = kodSkarm();
-const laptop = grupp({ x: -3.7, y: 0, z: -1.9, ry: 0.3 });
+const laptop = grupp({ x: -3.7, y: 0, z: -1.5, ry: 0.3 });         // så långt fram att locket går fritt från fönsterbänken
 {
   const metall = std('#3a3f4b', { roughness: 0.38, metalness: 0.55 });
   laptop.add(nat(lada(3.4, 0.13, 2.3, 0.06), metall, { y: 0.065 }));
@@ -1240,11 +1239,10 @@ function byggDag() {
   for (const m of utsikt.dag) renderer.initTexture(m.material.map);   // ladda upp nu, inte mitt i övertoningen
   satDag(dagNiva);
 }
-function dagLage() {                                              // adressen, utsiktslänkarna och knappen följer valet
+function dagLage() {                                              // adressen och knappen följer valet
   const knapp = document.querySelector('.topp button[data-sak=klocka]');
   if (knapp) knapp.setAttribute('aria-pressed', String(!!dagMal));
   const andra = u => { dagMal ? u.searchParams.set('dag', '') : u.searchParams.delete('dag'); return u.pathname + u.search.replace(/=(&|$)/g, '$1'); };
-  document.querySelectorAll('[data-utsikt]').forEach(a => { a.setAttribute('href', andra(new URL(a.href))); });
   history.replaceState(null, '', andra(new URL(location.href)));
 }
 function vaxlaDag() {
@@ -1333,7 +1331,7 @@ function anpassa() {
   komp.setSize(w, h);
   komp.setPixelRatio(renderer.getPixelRatio());
   document.getElementById('vink').innerHTML = grov
-    ? 'Tryck på <b>sakerna</b>' + (PORTRATT() ? ' · svep för att se mer' : '')
+    ? 'Tryck på <b>sakerna</b>' + (PORTRATT() ? ' och svep för att se mer' : '')
     : 'Klicka på <b>sakerna</b> på skrivbordet';
 }
 anpassa();
