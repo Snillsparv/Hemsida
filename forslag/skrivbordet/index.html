@@ -49,10 +49,10 @@
   /* sidhuvud: samma tonläge som jonasvonessen.se */
   .topp{position:fixed;inset:0 0 auto 0;z-index:35;display:flex;justify-content:space-between;align-items:baseline;gap:1rem;
     padding:calc(1.1rem + env(safe-area-inset-top,0px)) clamp(1.1rem,4vw,2.6rem) 2.4rem;
-    font-family:var(--mono);font-size:clamp(.78rem,.7rem + .25vw,.9rem);letter-spacing:.18em;text-transform:uppercase;
+    font-size:clamp(1rem,.95rem + .2vw,1.08rem);letter-spacing:.01em;
     background:linear-gradient(to bottom,rgba(7,8,13,.85),rgba(7,8,13,0));pointer-events:none}
   .topp a,.topp button{pointer-events:auto}
-  .topp .namn{color:var(--ink);text-decoration:none;white-space:nowrap;font-size:clamp(1.1rem,.8rem + 1vw,1.55rem);font-weight:500;letter-spacing:.2em}
+  .topp .namn{color:var(--ink);text-decoration:none;white-space:nowrap;font-size:clamp(1.25rem,.9rem + 1vw,1.7rem);font-weight:500;letter-spacing:.02em}
   .topp ul{display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:.4rem clamp(.9rem,2.4vw,1.8rem);list-style:none;margin:0;padding:.55rem 1.4rem;
     background:rgba(7,8,13,.72);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-radius:999px;pointer-events:auto}
   .topp li:has(> .dold-fokus:not(:focus)){position:absolute}
@@ -60,8 +60,8 @@
   .topp button:hover,.topp button.lyst{color:var(--ink);border-bottom-color:var(--accent)}
   .flagga{display:inline-block;height:14px;width:auto;vertical-align:-1px;border-radius:2px;opacity:.8}
   @media (max-width:640px){
-    .topp{flex-direction:column;align-items:center;font-size:.7rem;letter-spacing:.14em;gap:.6rem}
-    .topp .namn{font-size:1.15rem}
+    .topp{flex-direction:column;align-items:center;font-size:.98rem;gap:.6rem}
+    .topp .namn{font-size:1.3rem}
     .topp ul{justify-content:center}
   }
 
@@ -70,24 +70,19 @@
     padding:3rem clamp(1.1rem,4vw,2.6rem) calc(1.2rem + env(safe-area-inset-bottom,0px));
     background:linear-gradient(to top,rgba(7,8,13,.8),rgba(7,8,13,0));pointer-events:none}
   .fot .rad{font-family:var(--serif);font-style:italic;font-size:clamp(1.55rem,1rem + 2.1vw,2.7rem);line-height:1.12;margin:0 0 .5rem;text-wrap:balance}
-  .fot .vink{font-family:var(--mono);font-size:clamp(.72rem,.65rem + .2vw,.82rem);letter-spacing:.2em;text-transform:uppercase;color:var(--mist);margin:0}
+  .fot .vink{font-size:clamp(1rem,.95rem + .2vw,1.08rem);color:var(--mist);margin:0}
   .fot .vink b{color:var(--accent);font-weight:500}
   .fot .klassisk{pointer-events:auto;display:inline-flex;align-items:center;gap:.55rem;padding:.75rem 1.2rem;border:1px solid var(--accent);border-radius:999px;background:rgba(7,8,13,.72);
-    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font-family:var(--mono);font-size:clamp(.74rem,.68rem + .2vw,.84rem);letter-spacing:.16em;text-transform:uppercase;color:var(--ink);text-decoration:none;white-space:nowrap}
+    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font-size:clamp(1rem,.95rem + .2vw,1.08rem);font-weight:500;color:var(--ink);text-decoration:none;white-space:nowrap}
   .fot .klassisk:hover,.fot .klassisk:focus-visible{background:var(--accent);color:#14130f}
-  .fot .hoger{display:flex;flex-direction:column;align-items:flex-end;gap:.7rem}
-  .fot .utsikt{pointer-events:auto;margin:0;font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mist)}
-  .fot .utsikt a{color:var(--mist);text-decoration:none;border-bottom:1px solid transparent}
-  .fot .utsikt a:hover{color:var(--ink)}
-  .fot .utsikt a[aria-current]{color:var(--accent);border-bottom-color:var(--accent)}
-  @media (max-width:640px){ .fot{flex-direction:column;align-items:flex-start;gap:.8rem} .fot .hoger{align-items:flex-start} }
+  @media (max-width:640px){ .fot{flex-direction:column;align-items:flex-start;gap:.8rem} }
 
   /* lappen som följer pekaren */
   #lapp{position:fixed;left:0;top:0;z-index:20;pointer-events:none;opacity:0;transform:translate(-50%,-140%);
-    transition:opacity .18s ease;font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;
+    transition:opacity .18s ease;font-size:1rem;font-weight:500;
     background:rgba(7,8,13,.88);color:var(--ink);border:1px solid var(--accent);padding:.45rem .7rem;white-space:nowrap}
   #lapp.syns{opacity:1}
-  #lapp small{display:block;color:var(--mist);letter-spacing:.08em;text-transform:none;font-size:.66rem;margin-top:.15rem}
+  #lapp small{display:block;color:var(--mist);font-weight:400;font-size:.9rem;margin-top:.1rem}
 
 
   /* panelen: glider in från höger, eller underifrån på mobil */
@@ -105,13 +100,12 @@
     font-family:var(--mono);font-size:.9rem;width:2.4rem;height:2.4rem;cursor:pointer}
   @media (max-width:640px){ #panel .stang{top:.7rem} }
   #panel .stang:hover{color:var(--accent);border-color:var(--accent)}
-  .etikett{font-family:var(--mono);font-size:.66rem;letter-spacing:.32em;text-transform:uppercase;color:var(--mist);margin:0 0 .9rem}
   #panel h2{font-weight:400;font-size:clamp(1.6rem,1.3rem + 1.2vw,2.1rem);letter-spacing:.02em;line-height:1.2;margin:0 0 1rem;text-wrap:balance}
   #panel p{margin:0 0 1rem;color:var(--ink)}
   #panel .ingress{font-family:var(--serif);font-size:1.1rem;line-height:1.55}
   #panel .liten{color:var(--mist);font-size:.92rem}
   .knapp{display:inline-block;margin:.4rem 1.2rem .4rem 0;padding:.7rem 1.1rem;background:var(--accent);color:#0c0c0d;text-decoration:none;
-    font-family:var(--mono);font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;border:0;cursor:pointer}
+    font-size:1rem;font-weight:600;border:0;cursor:pointer}
   .knapp:hover{filter:brightness(1.07)}
   .knapp--lank{background:none;color:var(--accent);padding:.7rem 0;border-bottom:1px solid transparent}
   .knapp--lank:hover{border-bottom-color:var(--accent)}
@@ -122,28 +116,28 @@
   .lista span{color:var(--mist);font-size:.93rem}
   .meriter{list-style:none;margin:1rem 0 1.4rem;padding:0}
   .meriter li{padding:.55rem 0;border-bottom:1px solid var(--hair)}
-  .soc{display:flex;gap:1.4rem;font-family:var(--mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase}
+  .soc{display:flex;gap:1.4rem;font-size:1rem}
   .soc a{color:var(--mist);text-decoration:none;border-bottom:1px solid var(--hair)}
   .soc a:hover{color:var(--accent);border-bottom-color:var(--accent)}
-  .brev label{display:block;font-family:var(--mono);font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:var(--mist);margin:1.4rem 0 .4rem}
+  .brev label{display:block;font-size:1rem;color:var(--mist);margin:1.4rem 0 .4rem}
   .brev input[type=email]{width:100%;background:transparent;border:0;border-bottom:1px solid var(--hair);color:var(--ink);font:inherit;font-size:1.05rem;padding:.5rem .1rem;border-radius:0}
   .brev input[type=email]:focus{outline:none;border-bottom-color:var(--accent)}
   .brev .knapp{margin-top:1.2rem}
   .brevhp{position:absolute;left:-5000px}
-  .brev .svar{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;color:var(--mist);margin-top:.9rem}
+  .brev .svar{font-size:.98rem;color:var(--mist);margin-top:.9rem}
 
   /* laddning och reserv utan WebGL */
   #laddar{position:fixed;inset:0;z-index:40;display:grid;place-items:center;background:var(--bg);transition:opacity .9s ease;
-    font-family:var(--mono);font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:var(--mist)}
+    font-size:1.02rem;color:var(--mist)}
   #laddar.borta{opacity:0;pointer-events:none}
   /* från valskärmen: samma bild av skrivbordet som där, tills scenen tar över. Den suddiga under syns bara
      om bilden inte hunnit avkodas, och texten bara om det dröjer */
   #laddar picture{display:none}
-  html.resa #laddar{background:#5c4d4b url(data:image/webp;base64,UklGRsgCAABXRUJQVlA4ILwCAADQGgCdASqAAFAAPrVInEonJCKht/IsyOAWiWMAwrRzMITxnp3bqv3XslszRcDF4C54YE7klU1y1Vx5lubWPPttvpdsWbhsjJY4+j1JEog3bGr+yPGQmXKHmIV/lLBfqSfHQLgvm1RfewQVKhOspP0TW4r2sbwMkF00To7fc9hO+wrCE7HaYCG9TkVFtydBlxmkmJoFnzQ0p4QAk+ap4tzXS7B7hldLX0ph9LuCg1AuozQcMvkN9Fqw9uziVFYRHB80fpmCJ/WwgbWr5nagmmdG3MoONKav4LXOG+7V+eGAAP7+bYSG9gFI9F01mXyx9XUNCcot6c1utC9UWCrYcEifK7TYrPmtP6plmQwUqEEPYWrygFfyhl/VFjNbGyoKHGz1XoaSeaRPYIHmNg90HuPd6WJe8lovPh0VQAySsmYlpctTXY443C7vy6RHmvosJSl4cWZkprH87k++cUa9agQgXzGwj+FBvc3WgPOcJyg4Q6KS1Rka8TurHvrrJ1SmuKY020w7EMUORyjKn7BG5KH15wF/MIrj5osvCXUl5aaU2nhCZF0WHJzsQY/tMBV9opjNt/WLuIppufBDC2GMwLRGmjOUSCbWUDaulTm3vxptpPcIQ92PsChFfY+7yZx0cCfe2S0q9V/+CBJtcuM3n8/gwFm95T/gLbJlxS7yFA9R8Q3RlJD84vs8E67GO5M30fYaMM6m+4o/30DpixV+a1FdkgGxXvJ3wmICp5Ul7AnN0wam0c0llVMVoX2/G+LrlD8+2yV5rBpNEC9DjCtPePlBi43Im1XyiYbGc90maGNxp4ov7pC4VcQWk0+l5G5SV2xSWLQaueELEoLFVcOf7jPVUxCP26TEgGDFdqGPB/TVNXVJ4SNSB7ix3VADMla2TtVqLsE3BVensgu8J47oAKPbhi3sV8H5otlgqAAA) 50% 50%/cover no-repeat;transition:opacity .6s ease}
-  @media (max-aspect-ratio:17/20){ html.resa #laddar{background-color:#816c62;background-image:url(data:image/webp;base64,UklGRtwCAABXRUJQVlA4INACAADwGwCdASpIAJwAPqlGmkomJCKkuPLuiMAVCWUAyqxNSu99+yIgPL5M9y4OUJvouII51j1YBDZUGrPwrlTVn4Tv7Ivfgd0BjmhJP10wTFiJV8NQJ5QLFRYi+iRYBDiwUMcjI2MGCKQAFTI+s9YJM+FOJt4wgC9BB01OMJoRGuyDFGJX4Dh4qImlvd9BmlZOGwFIyrOIegzLkoxRLtV3DJGmnyCIRn2KFGddgYMeZYWu/+5FhTSd4JeDHMWrK7atwCfoBEUfkEqVWe8O3aOtln/QWBk+GbPD7kHWSARD4/zqIsJvXgepb5YAAP6/Ack6rERek4cwk7bVmRkdDYEF4jLT8OSv8YireM7I8sG7EaSd0i1YhxOGWwFeU4xMM4zSsGu5mhK89I3NMWTzqfRjzdxfSSotG33qkzaHopoV4h57DIPtG3TkEr94E/TjBKn+DXjFPiXsbrK3tSi3tUrtZNoFzDqw1fzhK2QR7TV4xw8Q5x7L8CXi2aeKTpfIiqQLeXDQLUPWRIB324kkp7gtHCzfmI82pkU/64gs1C5a1J2G0C6HmSw7C7Xp77yyXdj7B0kaPLGirSh9F5VINEy14mET31aKA8LGHFm2ovUV35b8OYxh1nXgpMWozOiqe16U/RZJxWglrVkKx+pKuGBLnxKNjvhtlkxwqW7svPbbXPg2dRewkqd1oSiWgjTrN3+P+o50iiTFGb7vW4wAqtrUHEfB7Mo/XS5KLIQDZNHpN3PqD3Ho8UFrJXmexO3rZlUr1d0/lfoPitEVRsN0q9YbAa1kr0rGNIeSnPaQFW4WSpdGMBn+VaP7ZQPqu52EIiIZI1ksjtIEK6wNdg9iiDOUZWKfC6mUlnSXv8y7S7KW2PQzjJ8j8ETntcUgaP4eLzEeHp0/J81nBdNiMH+zOllsm+2CSixCaKqbrKLvXeM+MVQ1bH94gjed/jFGwktjWGmuQAA=)} }
+  html.resa #laddar{background:#5b4d4b url(data:image/webp;base64,UklGRsYCAABXRUJQVlA4ILoCAABQGgCdASqAAFAAPrFInEonJCKht/K8yOAWCWMAvzB9EFXUJ46/gGpEuq/diuvAs5oAdiudWUTKxgK4RLUOU4xvv5CWAv9iWvtmBcdNPHBd5l8K1B8t4/l1X5dgxbHMn12s9+e35QgAJrc960Oc4Z6BMapAJ5Wz3jVbYR4CsetpbdyLBaLvQc5fQf9L6v2uk0fAtOnYE6a5fzZIY/R65SVdenfVRSiNDJmuxU1tUYmYj6+B/mOQQID6ebdEXW9t7Qco+z0vgvUmm0l7trMiQ7xfQBOYCEwu76VVSgAA/v0YL6PAHB+Rh2jlF5xDcmEt5OEX+NYCJXZcwcFGgNXWxWfNaf1TKeAoITE2yF2Ru6Dc+K523LB73RyfUGGLd4RfJ2/gFbr7dcd233+IYDiDVplLlpp8bA1pU9+CBjoX9s6W5fLuw0HDCNbgNXEHpCCNx/qM14BjgqcnXgs6k78gDf5KvKqcIVZP2G5+LEYSlwKLtqBrDPPnsh748U684TTm0uvQrOKyCEBz0BtcgqH0+N/zMEFR7zH/FdwzFeXzkAXIxyKlGyffsKfRTJUNf8kHEzQgOrod0Uynb+XL251ld2keRShTsJsCi/v1+duGk7aSfap23BXhGSwo5kOZXRYBwa5TLXNiw4xqouv5WdXlJmR1sb2nvBrtGHCqT/4r9mz+3WoAy6EBQ+hBuYSah57DxzxAHUhGxgir6cC9MJhJCMigLKdyuqkRFCAii+f4UiIxceTTz4YODCuF2GWGUhZ+Et9aqRIdGVOjYjqN0zlgwRjLKZjGmCdGc5ohRM5BbV/YBBfeLJHPPP4xE1zLWbpZPbseN7ecZIekapCCDXpci55pXYAfgnnvsFHeEEuF/OXgdVViqrqH3CJDWMUEPRk5xJ62jA/nMa4+xTMSxKdKdh84LMwMJjmdWgAAAA==) 50% 50%/cover no-repeat;transition:opacity .6s ease}
+  @media (max-aspect-ratio:17/20){ html.resa #laddar{background-color:#816c62;background-image:url(data:image/webp;base64,UklGRtQCAABXRUJQVlA4IMgCAACwHQCdASpIAJwAPq1GmkomKyKhuPLuiWAViWUIcAFzMV86AI0uAL/cukmR7sCc4PpXuqZSVrkbSNImKclu6bwO9eeoWGc3v1vQtJPPBYvHXimYeKl0bvOYF3NscVRJnVeo/F3MOTw5174fuR5nt5pDnU+299DmqvqxEoylbJMeUMoJbykIV98VcLQzxngBjx6epdqIk7NQyBN2SMlrKPe7pFpHs76BXBLloRuC0aZM85zFiXcEdjpp+1T4BvL5aPVt3R68A7nDkTyD9o4V9PAnW66N6BqVjMiot0MBMN2jcewhwRB5ksUg69vdh2LRK5NCHT/NvwwA/r8Bv/fSfV2HSxWA7a7lYH8LtYdo9eZJbgY+PzVp1FjR2Segtl9x0WzZcGyQiWcX4sqXspZrd5o5+/lupat/29x7QPdsWcivb8BgjQ68zPXBEUqoWge2OwWRbyegsgxp1E7NGGuIUTlPgfmgDlsJH0O6xITdLB5oRcBLpgblxGQ6v+1kSxYCBFNZkCcpdw5GOmJnsZgszTzNw/a47SNqFksfKSwLkV7sfwqByYTmvR36N295bBLvVIzdL0/CaT50lYh953SCN4G0UGvhIM7XuF5odEKayNEcrKt50WBGzGkc/0rcr0GoQvUxIj1eVqHXT8J4EtvJn974i68Qr5b95et/wlT/NU8YjzaIAZkIGzAsN7ti4Nr6sozbgHRgwvx5b4pOEuCUcX7CTp/9YtkVGSwY26QxJMAc0DcSOnvSdq3+OvK6j55Fn2sXBN1zhJM09Uh0fBjzRtJUVLzMhDcGA5Mak9f+GHk9GW5NAUsCjXSOCYKg0tjWzlSNDVrfOxxapk9yZvzOOICaBVznP1o9+MmNnoO4c/u83Nxd0iYvyahTy7/6KDxLAtaJcHipco4xFU+ym2T6UbPmhfe/euexE2TNyYo94gI4sPlqSqxh+WAA)} }
   html.resa #laddar picture,html.resa #laddar img{display:block;position:absolute;inset:0;width:100%;height:100%}
   html.resa #laddar img{object-fit:cover}
-  html.resa #laddar span{position:relative;padding:.55rem 1.1rem .55rem 1.4rem;border-radius:999px;background:rgba(7,8,13,.72);
+  html.resa #laddar span{position:relative;padding:.55rem 1.2rem;border-radius:999px;background:rgba(7,8,13,.72);
     -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);line-height:1.5;opacity:0;animation:droj .6s ease 2.5s forwards}
   @keyframes droj{to{opacity:1}}
   /* till och från startsidan tonar sidorna mjukt över i varandra (startsidan gör likadant) */
@@ -186,10 +180,7 @@
     <p class="rad">Världsmästare i att komma ihåg.</p>
     <p class="vink" id="vink">Klicka på <b>sakerna</b> på skrivbordet</p>
   </div>
-  <div class="hoger">
-    <p class="utsikt">Utsikt: <a href="?direkt" data-utsikt="stad" aria-current="true">Stad</a> · <a href="?utsikt=villa&amp;direkt" data-utsikt="villa">Villor</a></p>
-    <a class="klassisk" href="/">Till den klassiska sidan →</a>
-  </div>
+  <a class="klassisk" href="/">Till den klassiska sidan →</a>
 </footer>
 
 <div id="lapp" aria-hidden="true"></div>
@@ -232,7 +223,6 @@
 
 <!-- innehållet i panelerna -->
 <template id="t-appar">
-  <p class="etikett">På laptopen · gratisappar</p>
   <h2 id="panelrubrik">Saker jag byggt</h2>
   <p class="ingress">Tre gratisappar där minnesknepen gör jobbet.</p>
   <ul class="lista">
@@ -243,7 +233,6 @@
 </template>
 
 <template id="t-kurs">
-  <p class="etikett">Burken med minnen · kurs</p>
   <h2 id="panelrubrik">Skaffa ett superminne!</h2>
   <p class="ingress">Kanske världens mest omfattande onlinekurs i minnesteknik. Lär dig alla metoder Jonas använder helt i din egen takt och skaffa ditt alldeles egna superminne.</p>
   <p class="liten">(Det enda på den här sidan som kostar något, men det är det helt klart värt.)</p>
@@ -251,7 +240,6 @@
 </template>
 
 <template id="t-videor">
-  <p class="etikett">På tv:n · videor</p>
   <h2 id="panelrubrik">Tro dina ögon!</h2>
   <ul class="lista">
     <li><a href="https://www.youtube.com/watch?v=VTyU4WqDDYw" target="_blank" rel="noopener"><b>Testa minnestekniker ↗</b><span>Jonas visar sina förbluffande konster</span></a></li>
@@ -267,7 +255,6 @@
 </template>
 
 <template id="t-nyhetsbrev">
-  <p class="etikett">Pappersplanet · nyhetsbrev</p>
   <h2 id="panelrubrik">Ett ovanligt minnesvärt nyhetsbrev</h2>
   <form class="brev" id="nbrev" action="https://jonasvonessen.us3.list-manage.com/subscribe/post" method="post">
     <input type="hidden" name="u" value="f3c6c9c6a1fa3f7def382e372">
@@ -281,7 +268,6 @@
 </template>
 
 <template id="t-kontakt">
-  <p class="etikett">Kuvertet · kontakt</p>
   <h2 id="panelrubrik">Säg hej!</h2>
   <p class="ingress">Vill du boka en föreläsning för ett oförglömligt event? Eller har du något du funderar på? Skriv en rad eller två.</p>
   <a class="knapp" href="/#kontakt">Till kontaktformuläret</a>
@@ -289,7 +275,6 @@
 </template>
 
 <template id="t-agera">
-  <p class="etikett">Roboten · agera</p>
   <h2 id="panelrubrik">Vad kan jag göra?</h2>
   <p class="ingress">Är du orolig över AI-utvecklingen? Du är inte ensam. Tillsammans kan vi påverka och styra mot en ljusare framtid.</p>
   <p>Jag har samlat några konkreta första steg: mejla en politiker, skriv under uppropet, prata med tre personer och gå med i rörelsen.</p>
@@ -297,7 +282,6 @@
 </template>
 
 <template id="t-om">
-  <p class="etikett">Figuren · om Jonas</p>
   <h2 id="panelrubrik">Världsmästare i att komma ihåg.</h2>
   <ul class="meriter">
     <li>Tvåfaldig världsmästare i minne</li>
@@ -313,7 +297,6 @@
 </template>
 
 <template id="t-geografi">
-  <p class="etikett">Jordgloben · geografi</p>
   <h2 id="panelrubrik">Hela världen i dina händer</h2>
   <p class="ingress">Med färgglada minnestekniker lär du dig all världens geografi lättare och roligare än någonsin.</p>
   <p>Varje land på globen är ett handritat konstverk som hjälper dig att minnas var det ligger. Helt gratis och direkt i webbläsaren.</p>
@@ -321,7 +304,6 @@
 </template>
 
 <template id="t-hp">
-  <p class="etikett">Provpappren · högskoleprovet</p>
   <h2 id="panelrubrik">Plugga smartare till högskoleprovet</h2>
   <p class="ingress">Din genväg till ett högre resultat på högskoleprovet.</p>
   <p>HPakuten är gratis och kommer från Sveriges kanske mest rutinerade HP-skrivare.</p>
@@ -329,7 +311,6 @@
 </template>
 
 <template id="t-podd">
-  <p class="etikett">Lappen på fönstret · AI-podden</p>
   <h2 id="panelrubrik">AI med Jonas &amp; Benjamin</h2>
   <p class="ingress">Tillsammans med AI-utvecklaren och fysikern Benjamin Verbeek försöker jag förstå vart AI-utvecklingen är på väg och vad den innebär för oss människor.</p>
   <p>Börja gärna med avsnitt två. Det handlar om vad man kan göra som privatperson, och vad Sverige kan göra som land.</p>
@@ -338,7 +319,6 @@
 </template>
 
 <template id="t-piafton">
-  <p class="etikett">Muggen · piafton</p>
   <h2 id="panelrubrik">Piafton</h2>
   <p class="ingress">Den 13 mars, kvällen före pidagen, är det piafton.</p>
   <p>På piafton.se finns allt du behöver för att fira: runda semlor, pajer och pannkakor, högläsning ur Pibeln, pisalmer och lite flams och trams. Du kan också träna ditt pi-minne och se hur länge det är kvar till nästa piafton.</p>
